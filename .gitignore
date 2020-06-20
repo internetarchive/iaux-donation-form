@@ -1,0 +1,12 @@
+## testing
+/coverage/
+
+## temp folders
+/.tmp/
+
+# build
+/_site/
+/lib
+
+*.log
+node_modules
