@@ -1,15 +1,11 @@
-import { html } from 'lit-element';
-
 import { PayPalButtonDataSourceInterface, PayPalButtonDataSourceDelegate } from "../../braintree-manager/payment-providers/paypal/paypal-button-datasource";
 import { DonationResponse } from "../../models/response-models/donation-response";
-import { ModalManagerInterface } from "../../modal-manager/modal-manager";
 import { BraintreeManagerInterface } from "../../braintree-manager/braintree-manager";
 import { DonationType } from "../../models/donation-info/donation-type";
 import { DonationPaymentInfo } from "../../models/donation-info/donation-payment-info";
-import { ModalConfig } from '../../modal-manager/modal-template';
 
 import '../../modals/upsell-modal-content';
-import { DonationRequest, DonationRequestCustomFields } from '../../models/request_models/donation-request';
+import { DonationRequest } from '../../models/request_models/donation-request';
 import { SuccessResponse } from '../../models/response-models/success-models/success-response';
 import { CustomerInfo } from '../../models/common/customer-info';
 import { BillingInfo } from '../../models/common/billing-info';
@@ -260,6 +256,7 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
       customer: customerInfo,
       billing: billingInfo,
       customFields: {
+        // eslint-disable-next-line @typescript-eslint/camelcase
         fee_amount_covered: params.donationInfo.feeAmountCovered
       }
     });

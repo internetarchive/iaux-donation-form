@@ -69,6 +69,9 @@
 
   <script type="module">
     import { html, render } from 'lit-html';
+    import { LazyLoaderService } from '@internetarchive/lazy-loader-service';
+    import '@internetarchive/modal-manager';
+
     import { BraintreeEndpointManager } from './braintree-endpoint-manager.js';
 
     import { PaymentClients } from '../lib/braintree-manager/payment-clients.js';
@@ -76,9 +79,7 @@
     import { RecaptchaManager } from '../lib/recaptcha-manager/recaptcha-manager.js';
     import { PaymentFlowHandlers } from '../lib/payment-flow-handlers/payment-flow-handlers.js';
 
-    import { LazyLoaderService } from '@internetarchive/lazy-loader-service';
 
-    import '../lib/modal-manager/modal-manager.js';
     import '../lib/donation-form.js';
 
     const hostedFieldStyle = {

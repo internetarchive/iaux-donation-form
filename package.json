@@ -30,7 +30,6 @@
     "test:bs": "karma start karma.bs.config.js --compatibility all --coverage"
   },
   "dependencies": {
-    "@internetarchive/ia-activity-indicator": "^0.0.1",
     "@internetarchive/lazy-loader-service": "0.0.0-alpha.1",
     "currency.js": "^1.2.2",
     "lit-element": "^2.2.1",

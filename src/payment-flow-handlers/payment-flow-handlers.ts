@@ -1,6 +1,7 @@
+import { ModalManagerInterface } from "@internetarchive/modal-manager";
+
 import { CreditCardFlowHandlerInterface, CreditCardFlowHandler } from "./handlers/creditcard-flow-handler";
 import { PayPalFlowHandlerInterface, PayPalFlowHandler } from "./handlers/paypal-flow-handler";
-import { ModalManagerInterface } from "../modal-manager/modal-manager";
 import { BraintreeManagerInterface } from "../braintree-manager/braintree-manager";
 import { RecaptchaManagerInterface } from "../recaptcha-manager/recaptcha-manager";
 import { ApplePayFlowHandlerInterface, ApplePayFlowHandler } from "./handlers/applepay-flow-handler";

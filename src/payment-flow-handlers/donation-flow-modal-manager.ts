@@ -1,6 +1,4 @@
-import { ModalConfig } from "../modal-manager/modal-template";
-import { ModalManagerInterface } from "../modal-manager/modal-manager";
-import { SuccessResponse } from "../models/response-models/success-models/success-response";
+import { ModalConfig, ModalManagerInterface } from "@internetarchive/modal-manager";
 import { html } from "lit-html";
 import { UpsellModalCTAMode } from "../modals/upsell-modal-content";
 
