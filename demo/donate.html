@@ -79,7 +79,6 @@
     import { RecaptchaManager } from '../lib/recaptcha-manager/recaptcha-manager.js';
     import { PaymentFlowHandlers } from '../lib/payment-flow-handlers/payment-flow-handlers.js';
 
-
     import '../lib/donation-form.js';
 
     const hostedFieldStyle = {
@@ -138,7 +137,7 @@
 
     render(
       html`
-        <modal-manager>
+        <modal-manager @modeChanged=${modalModeChanged}>
           <!--
             The PayPal buttons cannot exist in the shadowDOM so they have to be slotted
             from the top.
@@ -177,6 +176,20 @@
       `,
       document.querySelector('#demo')
     );
+
+    function modalModeChanged(e) {
+      const mode = e.detail.mode;
+      switch (mode) {
+        case 'modal':
+          document.body.style.overflow = 'hidden';
+          break;
+        case 'closed':
+          document.body.style.overflow = 'auto';
+          break;
+        default:
+          break;
+      }
+    }
 
     const modalManager = document.querySelector('modal-manager');
 
