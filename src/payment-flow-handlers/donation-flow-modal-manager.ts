@@ -12,7 +12,7 @@ export interface DonationFlowModalManagerInterface {
     yesSelected?: (amount: number) => void;
     noSelected?: () => void;
     amountChanged?: (amount: number) => void;
-  }): void;
+  }): Promise<void>;
 }
 
 export class DonationFlowModalManager implements DonationFlowModalManagerInterface {
@@ -24,26 +24,26 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     this.modalManager = options.modalManager;
   }
 
-  closeModal() {
+  closeModal(): void {
     this.modalManager.closeModal();
   }
 
-  showProcessingModal() {
+  showProcessingModal(): void {
     const modalConfig = new ModalConfig();
     modalConfig.showProcessingIndicator = true;
-    modalConfig.title = 'Processing...'
+    modalConfig.title = html`Processing...`;
     this.modalManager.showModal(modalConfig, undefined);
   }
 
-  showThankYouModal() {
+  showThankYouModal(): void {
     const modalConfig = new ModalConfig();
     modalConfig.showProcessingIndicator = true;
     modalConfig.processingImageMode = 'complete';
-    modalConfig.title = 'Thank You!';
+    modalConfig.title = html`Thank You!`;
     this.modalManager.showModal(modalConfig, undefined);
   }
 
-  showErrorModal() {
+  showErrorModal(): void {
     const modalConfig = ModalConfig.errorConfig;
     this.modalManager.showModal(modalConfig, undefined);
   }
@@ -53,17 +53,17 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     noSelected?: () => void;
     amountChanged?: (amount: number) => void;
     ctaMode?: UpsellModalCTAMode;
-  }) {
+  }): Promise<void> {
     const modalConfig = new ModalConfig();
     const modalContent = html`
       <upsell-modal-content
         .yesButtonMode=${params.ctaMode ?? UpsellModalCTAMode.YesButton}
-        @yesSelected=${(e: CustomEvent) => params.yesSelected ? params.yesSelected(e.detail.amount) : ''}
+        @yesSelected=${(e: CustomEvent): void => params.yesSelected ? params.yesSelected(e.detail.amount) : undefined}
         @noThanksSelected=${params.noSelected}
-        @amountChanged=${(e: CustomEvent) => params.amountChanged ? params.amountChanged(e.detail.amount) : ''}>
+        @amountChanged=${(e: CustomEvent): void => params.amountChanged ? params.amountChanged(e.detail.amount) : undefined}>
         <slot name="paypal-upsell-button"></slot>
       </upsell-modal-content>
     `;
-    this.modalManager.showModal(modalConfig, modalContent);
+    return this.modalManager.showModal(modalConfig, modalContent);
   }
 }
