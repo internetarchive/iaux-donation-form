@@ -6,15 +6,15 @@ import currency from 'currency.js';
 export interface PayPalButtonDataSourceInterface {
   delegate?: PayPalButtonDataSourceDelegate;
   donationInfo: DonationPaymentInfo;
-  payment(): Promise<any>;
-  onAuthorize(data: any, actions: any): Promise<braintree.PayPalCheckoutTokenizePayload | undefined>;
-  onCancel(data: object): void;
+  payment(): Promise<string>;
+  onAuthorize(data: paypal.AuthorizationData, actions: object): Promise<paypal.TokenizePayload | undefined>;
+  onCancel(data: paypal.CancellationData): void;
   onError(error: string): void;
 }
 
 export interface PayPalButtonDataSourceDelegate {
   payPalPaymentStarted(dataSource: PayPalButtonDataSourceInterface, options: object): Promise<void>;
-  payPalPaymentAuthorized(dataSource: PayPalButtonDataSourceInterface, payload: braintree.PayPalCheckoutTokenizePayload): Promise<void>;
+  payPalPaymentAuthorized(dataSource: PayPalButtonDataSourceInterface, payload: paypal.TokenizePayload): Promise<void>;
   payPalPaymentCancelled(dataSource: PayPalButtonDataSourceInterface, data: object): Promise<void>;
   payPalPaymentError(dataSource: PayPalButtonDataSourceInterface, error: string): Promise<void>;
 }
@@ -34,7 +34,7 @@ export class PayPalButtonDataSource implements PayPalButtonDataSourceInterface {
     this.paypalInstance = options.paypalInstance;
   }
 
-  async payment(): Promise<any> {
+  async payment(): Promise<string> {
     console.log('PayPalButtonDataSource payment, donationInfo', this, this.donationInfo);
 
     const options: any = {};
@@ -42,7 +42,7 @@ export class PayPalButtonDataSource implements PayPalButtonDataSourceInterface {
 
     const donationType = this.donationInfo.donationType;
     const flow = donationType === DonationType.OneTime ? 'checkout' : 'vault';
-    options.flow = flow as braintree.PayPalCheckoutFlowType;
+    options.flow = flow as paypal.FlowType;
 
     if (flow === 'checkout') {
       options.amount = this.donationInfo.total;
@@ -56,8 +56,8 @@ export class PayPalButtonDataSource implements PayPalButtonDataSourceInterface {
     return this.paypalInstance.createPayment(options);
   }
 
-  async onAuthorize(data: any, actions: any): Promise<braintree.PayPalCheckoutTokenizePayload | undefined> {
-    const payload: braintree.PayPalCheckoutTokenizePayload = await this.paypalInstance.tokenizePayment(data);
+  async onAuthorize(data: paypal.AuthorizationData): Promise<paypal.TokenizePayload | undefined> {
+    const payload: paypal.TokenizePayload = await this.paypalInstance.tokenizePayment(data);
 
     console.debug('onAuthorize data', data, 'payload', payload);
 

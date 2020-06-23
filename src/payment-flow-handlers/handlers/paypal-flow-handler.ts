@@ -26,12 +26,12 @@ export interface PayPalFlowHandlerInterface {
  */
 class UpsellDataSourceContainer {
   upsellButtonDataSource: PayPalButtonDataSourceInterface;
-  oneTimePayload: braintree.PayPalCheckoutTokenizePayload;
+  oneTimePayload: paypal.TokenizePayload;
   oneTimeSuccessResponse: SuccessResponse;
 
   constructor(options: {
     upsellButtonDataSource: PayPalButtonDataSourceInterface;
-    oneTimePayload: braintree.PayPalCheckoutTokenizePayload;
+    oneTimePayload: paypal.TokenizePayload;
     oneTimeSuccessResponse: SuccessResponse;
   }) {
     this.upsellButtonDataSource = options.upsellButtonDataSource;
@@ -82,7 +82,7 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
     console.debug('PaymentSector:payPalPaymentStarted options:', dataSource, dataSource.donationInfo, options);
   }
 
-  async payPalPaymentAuthorized(dataSource: PayPalButtonDataSourceInterface, payload: braintree.PayPalCheckoutTokenizePayload): Promise<void> {
+  async payPalPaymentAuthorized(dataSource: PayPalButtonDataSourceInterface, payload: paypal.TokenizePayload): Promise<void> {
     console.debug('PaymentSector:payPalPaymentAuthorized payload,response', dataSource, dataSource.donationInfo, payload);
 
     this.donationFlowModalManager.showProcessingModal();
@@ -154,7 +154,7 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
   }
 
   private async showUpsellModal(
-    oneTimePayload: braintree.PayPalCheckoutTokenizePayload,
+    oneTimePayload: paypal.TokenizePayload,
     oneTimeSuccessResponse: SuccessResponse
   ): Promise<void> {
     console.debug('showUpsellModal', oneTimePayload, oneTimeSuccessResponse);
@@ -194,7 +194,7 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
 
   private async renderUpsellPayPalButton(options: {
     donationInfo: DonationPaymentInfo;
-    oneTimePayload: braintree.PayPalCheckoutTokenizePayload;
+    oneTimePayload: paypal.TokenizePayload;
     oneTimeSuccessResponse: SuccessResponse;
   }): Promise<void> {
     const handler = await this.braintreeManager?.paymentProviders.getPaypalHandler();
@@ -227,7 +227,7 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
 
   private buildDonationRequest(params: {
     donationInfo: DonationPaymentInfo;
-    payload: braintree.PayPalCheckoutTokenizePayload;
+    payload: paypal.TokenizePayload;
   }): DonationRequest {
     const details = params.payload?.details;
 
