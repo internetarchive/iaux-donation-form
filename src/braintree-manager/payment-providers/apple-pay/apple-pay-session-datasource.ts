@@ -26,12 +26,14 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
   donationInfo: DonationPaymentInfo;
 
   private session: ApplePaySession;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private applePayInstance: any;
   private braintreeManager: BraintreeManagerInterface;
 
   constructor(options: {
     donationInfo: DonationPaymentInfo;
     session: ApplePaySession;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     applePayInstance: any;
     braintreeManager: BraintreeManagerInterface;
   }) {
@@ -47,6 +49,7 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
     this.applePayInstance.performValidation({
       validationURL: event.validationURL,
       displayName: 'Internet Archive'
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }, (validationErr: any, validationData: any) => {
       if (validationErr) {
         console.error(validationErr);
@@ -110,6 +113,7 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
     });
 
     const customFields = new DonationRequestCustomFields();
+    // eslint-disable-next-line @typescript-eslint/camelcase
     customFields.fee_amount_covered = this.donationInfo.feeAmountCovered;
 
     const donationRequest = new DonationRequest({

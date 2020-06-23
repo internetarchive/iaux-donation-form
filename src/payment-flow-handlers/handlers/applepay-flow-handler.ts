@@ -10,9 +10,6 @@ import { DonationFlowModalManagerInterface } from "../donation-flow-modal-manage
 
 export interface ApplePayFlowHandlerInterface {
   paymentInitiated(donationInfo: DonationPaymentInfo, e: Event): Promise<void>;
-  // paymentAuthorized(): Promise<void>;
-  // paymentCancelled(): Promise<void>;
-  // paymentError(): Promise<void>;
 }
 
 export class ApplePayFlowHandler implements ApplePayFlowHandlerInterface, ApplePaySessionDataSourceDelegate {
@@ -30,7 +27,6 @@ export class ApplePayFlowHandler implements ApplePayFlowHandlerInterface, AppleP
 
   private applePayDataSource?: ApplePaySessionDataSourceInterface;
 
-  // ApplePayFlowHandlerInterface conformance
   async paymentInitiated(donationInfo: DonationPaymentInfo, e: Event): Promise<void> {
     this.donationFlowModalManager.showProcessingModal();
     const handler = await this.braintreeManager?.paymentProviders.getApplePayHandler()
@@ -93,7 +89,7 @@ export class ApplePayFlowHandler implements ApplePayFlowHandlerInterface, AppleP
     }
   }
 
-  paymentFailed(error: string): void {
+  paymentFailed(): void {
     this.donationFlowModalManager.showErrorModal();
   }
 

@@ -21,7 +21,7 @@ export interface BraintreeEndpointManagerInterface {
    * @returns {Promise<object>}
    * @memberof BraintreeEndpointManagerInterface
    */
-  submitData(request: DonationRequest): Promise<object>;
+  submitData(request: DonationRequest): Promise<DonationResponse>;
 }
 
 export enum HostingEnvironment {
@@ -59,6 +59,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
       this.paymentClients.getBraintreeClient().then((client?: braintree.Client) => {
         client?.create({
           authorization: this.authorizationToken
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }, (clientErr: any | undefined, clientInstance: braintree.Client | undefined) => {
           if (clientErr) {
             return reject(clientErr);

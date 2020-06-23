@@ -58,12 +58,13 @@ export class PaymentSelector extends LitElement {
     `;
   }
 
-  /** inheritdoc */
+  /** @inheritdoc */
   firstUpdated(): void {
     this.dispatchEvent(new Event('firstUpdated'));
   }
 
-  updated(changed: PropertyValues) {
+  /** @inheritdoc */
+  updated(changed: PropertyValues): void {
     console.debug('updated', changed);
     if (changed.has('paymentProviders')) {
       this.setButtonVisibility();

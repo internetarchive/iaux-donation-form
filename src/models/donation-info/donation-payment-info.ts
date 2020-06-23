@@ -19,7 +19,7 @@ export class DonationPaymentInfo {
     return isNaN(total) ? 0 : total;
   }
 
-  static get default() {
+  static get default(): DonationPaymentInfo {
     return new DonationPaymentInfo({
       donationType: DonationType.OneTime,
       amount: 5,

@@ -104,6 +104,7 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
       customer: contactInfo.customer,
       billing: contactInfo.billing,
       customFields: {
+        // eslint-disable-next-line @typescript-eslint/camelcase
         fee_amount_covered: donationInfo.feeAmountCovered
       }
     });
@@ -131,7 +132,7 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
     }
   }
 
-  private handleTokenizationError(tokenizeError: any) {
+  private handleTokenizationError(tokenizeError: braintree.BraintreeError): void {
     console.debug('tokenizeError', tokenizeError);
     // Handle flow errors or premature flow closure
     switch (tokenizeError.code) {

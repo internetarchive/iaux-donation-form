@@ -57,23 +57,23 @@ export class DonationFormHeader extends LitElement {
       </donation-summary>`;
   }
 
-  private donationInfoChanged(e: CustomEvent) {
+  private donationInfoChanged(e: CustomEvent): void {
     console.log('DonationFormHeader frequencyChanged', e.detail.donationInfo);
     this.donationInfo = e.detail.donationInfo as DonationPaymentInfo;
     const event = new CustomEvent('donationInfoChanged', { detail: { donationInfo: this.donationInfo }});
     this.dispatchEvent(event);
   }
 
-  private editDonationError(e: CustomEvent) {
+  private editDonationError(e: CustomEvent): void {
     const event = new CustomEvent('editDonationError', { detail: e.detail });
     this.dispatchEvent(event);
   }
 
-  private summaryEditClicked() {
+  private summaryEditClicked(): void {
     this.mode = DonationFormHeaderMode.Edit;
   }
 
-  private showSummaryClicked() {
+  private showSummaryClicked(): void {
     this.mode = DonationFormHeaderMode.Summary;
   }
 

@@ -37,12 +37,13 @@ export class PayPalButtonDataSource implements PayPalButtonDataSourceInterface {
   async payment(): Promise<string> {
     console.log('PayPalButtonDataSource payment, donationInfo', this, this.donationInfo);
 
-    const options: any = {};
-    options.enableShippingAddress = true;
-
     const donationType = this.donationInfo.donationType;
     const flow = donationType === DonationType.OneTime ? 'checkout' : 'vault';
-    options.flow = flow as paypal.FlowType;
+
+    const options: braintree.PayPalCheckoutCreatePaymentOptions = {
+      flow: flow as paypal.FlowType
+    };
+    options.enableShippingAddress = true;
 
     if (flow === 'checkout') {
       options.amount = this.donationInfo.total;

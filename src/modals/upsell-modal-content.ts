@@ -50,7 +50,7 @@ export class UpsellModalContent extends LitElement {
     }
   }
 
-  private amountChanged(e: Event) {
+  private amountChanged(e: Event): void {
     const amount = (e.target as HTMLFormElement).value;
     console.debug('amountChanged', e, amount);
     this.amount = parseFloat(amount);
@@ -58,12 +58,12 @@ export class UpsellModalContent extends LitElement {
     this.dispatchEvent(event);
   }
 
-  private yesSelected() {
+  private yesSelected(): void {
     const event = new CustomEvent('yesSelected', { detail: { amount: this.amount }});
     this.dispatchEvent(event);
   }
 
-  private noThanksSelected() {
+  private noThanksSelected(): void {
     this.dispatchEvent(new Event('noThanksSelected'));
   }
 

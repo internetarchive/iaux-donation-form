@@ -3,7 +3,7 @@ export interface FieldValidator {
 }
 
 export class CurrencyValidator implements FieldValidator {
-  keydown(e: KeyboardEvent) {
+  keydown(e: KeyboardEvent): void {
     const char = e.key;
 
     console.debug('keydown', char);

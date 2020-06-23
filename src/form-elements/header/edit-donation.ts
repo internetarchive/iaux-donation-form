@@ -198,7 +198,7 @@ export class EditDonation extends LitElement {
     }
   }
 
-  private dispatchEditDonationError(error: DonationInfoError) {
+  private dispatchEditDonationError(error: DonationInfoError): void {
     const event = new CustomEvent('editDonationError', { detail: { error: error } });
     this.dispatchEvent(event);
   }

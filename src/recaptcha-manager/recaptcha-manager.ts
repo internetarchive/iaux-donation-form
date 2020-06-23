@@ -19,11 +19,13 @@ export enum ReCaptchaType {
 }
 
 export class RecaptchaManager {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private grecaptchaLibrary: any;
 
   private siteKey: string;
 
   constructor(options: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     grecaptchaLibrary: any;
     siteKey: string;
   }) {
@@ -71,13 +73,13 @@ export class RecaptchaManager {
     this.isExecuting = true;
     this.grecaptchaLibrary.execute();
     return new Promise((resolve, reject) => {
-      this.executionSuccessBlock = (token: string) => {
+      this.executionSuccessBlock = (token: string): void => {
         console.debug('RecaptchaManager: executionSuccessBlock', token);
         this.finishExecution();
         resolve(token);
       }
 
-      this.executionExpiredBlock = () => {
+      this.executionExpiredBlock = (): void => {
         console.debug('RecaptchaManager: executionExpiredBlock');
         this.finishExecution();
         reject();
@@ -85,7 +87,7 @@ export class RecaptchaManager {
     });
   }
 
-  private finishExecution() {
+  private finishExecution(): void {
     this.isExecuting = false;
     this.grecaptchaLibrary.reset();
   }
@@ -107,6 +109,7 @@ export class RecaptchaManager {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private responseHandler(response: any): void {
     if (this.executionSuccessBlock) {
       this.executionSuccessBlock(response);

@@ -1,7 +1,6 @@
 import { CodedError } from './coded-error.js';
-import { ResponseValueInterface } from '../response-value.js';
 
-export class ErrorResponse implements ResponseValueInterface {
+export class ErrorResponse {
   message: string;
   errors: CodedError[];
 
@@ -10,10 +9,13 @@ export class ErrorResponse implements ResponseValueInterface {
    * @param {message: string, errors: BraintreeError[]} params
    * @memberof ErrorResponse
    */
-  constructor(params: any) {
+  constructor(params: {
+    message: string;
+    errors?: CodedError[];
+  }) {
     this.message = params.message;
 
     const { errors = [] } = params;
-    this.errors = errors.map((error: any) => new CodedError(error));
+    this.errors = errors.map((error: CodedError) => new CodedError(error));
   }
 }

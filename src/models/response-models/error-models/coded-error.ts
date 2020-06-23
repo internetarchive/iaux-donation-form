@@ -10,7 +10,10 @@ export class CodedError {
    * @param {code: int, message: string} params
    * @memberof CodedError
    */
-  constructor(params: any) {
+  constructor(params: {
+    code: number;
+    message: string;
+  }) {
     this.code = params.code;
     this.message = params.message;
   }

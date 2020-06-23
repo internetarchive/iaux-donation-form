@@ -84,6 +84,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       customer: donorContactInfo.customer,
       billing: donorContactInfo.billing,
       customFields: {
+        // eslint-disable-next-line @typescript-eslint/camelcase
         fee_amount_covered: donationInfo.feeAmountCovered
       }
     });
@@ -107,7 +108,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     }
   }
 
-  private handleSuccessfulResponse(donationInfo: DonationPaymentInfo, response: SuccessResponse) {
+  private handleSuccessfulResponse(donationInfo: DonationPaymentInfo, response: SuccessResponse): void {
     console.debug('handleSuccessfulResponse', this);
     switch (donationInfo.donationType) {
       case DonationType.OneTime:

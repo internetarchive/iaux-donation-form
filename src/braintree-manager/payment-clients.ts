@@ -163,6 +163,7 @@ export class PaymentClients implements PaymentClientsInterface {
     return window.braintree.googlePayment;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async loadBraintreeScript(scriptName: string): Promise<any> {
     const extension = this.environment === HostingEnvironment.Production ? 'min.js' : 'js';
     const scriptWithSuffix = `${scriptName}.${extension}`;

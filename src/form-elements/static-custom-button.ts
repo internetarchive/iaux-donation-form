@@ -21,7 +21,7 @@ export class StaticCustomButton extends LitElement {
     `;
   }
 
-  private clicked() {
+  private clicked(): void {
     const event = new CustomEvent('selected', { detail: { value: this.value }});
     this.dispatchEvent(event);
   }

@@ -1,11 +1,9 @@
 import { BraintreeManagerInterface } from '../braintree-manager';
-import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
 
 export interface GooglePayHandlerInterface {
   isBrowserSupported(): Promise<boolean>;
   getPaymentsClient(): Promise<google.payments.api.PaymentsClient>;
   getInstance(): Promise<braintree.GooglePayment>;
-  startPayment(donationInfo: DonationPaymentInfo): Promise<braintree.VenmoTokenizePayload | undefined>;
 }
 
 export class GooglePayHandler implements GooglePayHandlerInterface {
@@ -60,6 +58,7 @@ export class GooglePayHandler implements GooglePayHandlerInterface {
       this.googlePayBraintreeClient.create({
         client: braintreeInstance,
         googlePayVersion: 2, // TODO: add merchant id
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }, (error: any, instance: braintree.GooglePayment) => {
         if (error) {
           return reject(error);
@@ -69,11 +68,5 @@ export class GooglePayHandler implements GooglePayHandlerInterface {
         resolve(instance);
       });
     });
-  }
-
-  async startPayment(donationInfo: DonationPaymentInfo): Promise<braintree.VenmoTokenizePayload | undefined> {
-    const instance = await this.getInstance();
-    // return instance?.tokenize();
-    return undefined;
   }
 }

@@ -1,8 +1,8 @@
-import { BraintreeManagerInterface, BraintreeManager } from "../braintree-manager";
+import { BraintreeManagerInterface } from "../braintree-manager";
 
 export interface CreditCardHandlerInterface {
   setupHostedFields(): Promise<braintree.HostedFields | undefined>;
-  teardownHostedFields(): Promise<any>;
+  teardownHostedFields(): Promise<void>;
   getInstance(): Promise<braintree.HostedFields | undefined>;
   tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined>;
 }
@@ -35,7 +35,7 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
     return await this.getInstance();
   }
 
-  async teardownHostedFields(): Promise<any> {
+  async teardownHostedFields(): Promise<void> {
     console.log('teardownHostedFields', this.hostedFieldsInstance);
     await this.hostedFieldsInstance?.teardown();
     this.hostedFieldsInstance = undefined;

@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { CustomerInfo } from '../../common/customer-info';
 import { BillingInfo } from '../../common/billing-info';
 import { SubscriptionResponse } from './subscription-response';
-import { ResponseValueInterface } from '../response-value';
 
-export class SuccessResponse implements ResponseValueInterface {
+export class SuccessResponse {
   paymentMethodNonce: string;
   amount: string;
   transaction_id: string;

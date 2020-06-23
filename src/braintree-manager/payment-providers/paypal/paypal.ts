@@ -15,6 +15,7 @@ export class PayPalHandler implements PayPalHandlerInterface {
   constructor(
     braintreeManager: BraintreeManagerInterface,
     paypalClient: braintree.PayPalCheckout,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     paypalLibrary: any,
     hostingEnvironment: HostingEnvironment
   ) {
@@ -30,6 +31,7 @@ export class PayPalHandler implements PayPalHandlerInterface {
 
   private paypalClient: braintree.PayPalCheckout;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private paypalLibrary: any;
 
   private hostingEnvironment: HostingEnvironment;
@@ -47,6 +49,7 @@ export class PayPalHandler implements PayPalHandlerInterface {
     return new Promise((resolve, reject) => {
       this.paypalClient.create({
         client: braintreeClient
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }, (error: any, instance: braintree.PayPalCheckout) => {
         // console.log('instance', error, instance, instance.merchantIdentifier);
         if (error) {

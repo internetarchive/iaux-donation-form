@@ -6,7 +6,6 @@ import {
   CSSResult,
   TemplateResult,
   property,
-  PropertyValues,
 } from 'lit-element';
 
 import currency from 'currency.js';
@@ -40,12 +39,8 @@ export class DonationSummary extends LitElement {
     return `${displayAmount} ${monthlyString} Donation`;
   }
 
-  private editClicked() {
+  private editClicked(): void {
     this.dispatchEvent(new Event('editClicked'));
-  }
-
-  updated(changed: PropertyValues) {
-    console.log(changed);
   }
 
   /** @inheritdoc */

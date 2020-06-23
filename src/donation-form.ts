@@ -171,7 +171,7 @@ export class DonationForm extends LitElement {
     this.showInvalidDonationInfoAlert();
   }
 
-  private donateClicked() {
+  private donateClicked(): void {
     if (!this.contactForm) {
       console.error('no contact form');
       alert('Please enter contact info.');
@@ -198,7 +198,8 @@ export class DonationForm extends LitElement {
     alert('Please enter valid donation info.');
   }
 
-  firstUpdated() {
+  /** @inheritdoc */
+  firstUpdated(): void {
     this.readQueryParams();
   }
 
@@ -264,7 +265,7 @@ export class DonationForm extends LitElement {
     }
   }
 
-  private async setupHostedFields() {
+  private async setupHostedFields(): Promise<void> {
     console.debug('setupHostedFields');
     const start = performance.now();
     const handler = await this.braintreeManager?.paymentProviders.getCreditCardHandler();
@@ -275,7 +276,7 @@ export class DonationForm extends LitElement {
     console.debug('setupHostedFields, setup took (ms)', performance.now() - teardown);
   }
 
-  private donationInfoChanged(e: CustomEvent) {
+  private donationInfoChanged(e: CustomEvent): void {
     const donationInfo: DonationPaymentInfo = e.detail.donationInfo;
     console.debug('donationInfoChanged', this.donationInfo, donationInfo, this.donationInfo === donationInfo);
 

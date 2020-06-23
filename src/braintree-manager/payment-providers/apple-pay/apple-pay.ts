@@ -6,6 +6,7 @@ import { DonationPaymentInfo } from '../../../models/donation-info/donation-paym
 
 export interface ApplePayHandlerInterface {
   isAvailable(): Promise<boolean>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getInstance(): Promise<any | undefined>;
   createPaymentRequest(
     e: Event,
@@ -28,6 +29,7 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
 
   private applePaySessionManager: ApplePaySessionManagerInterface;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private applePayInstance: any | undefined;
 
   private applePayClient: braintree.ApplePay;
@@ -42,6 +44,7 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getInstance(): Promise<any | undefined> {
     if (this.applePayInstance) {
       return this.applePayInstance;
@@ -53,6 +56,7 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
     return new Promise((resolve, reject) => {
       this.applePayClient.create({
         client: braintreeClient
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }, (error: any, instance: any) => {
         console.log('instance', error, instance, instance.merchantIdentifier);
         if (error) {

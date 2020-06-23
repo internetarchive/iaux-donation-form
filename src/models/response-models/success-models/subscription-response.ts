@@ -1,7 +1,9 @@
 export class SubscriptionResponse {
   id: string;
 
-  constructor(params: any) {
+  constructor(params: {
+    id: string;
+  }) {
     this.id = params.id;
   }
 }
