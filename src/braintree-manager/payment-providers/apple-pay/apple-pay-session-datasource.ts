@@ -1,5 +1,5 @@
 import { DonationPaymentInfo } from "../../../models/donation-info/donation-payment-info";
-import { BraintreeManagerInterface } from "../../braintree-manager";
+import { BraintreeManagerInterface } from "../../braintree-interfaces";
 import { BillingInfo } from "../../../models/common/billing-info";
 import { CustomerInfo } from "../../../models/common/customer-info";
 import { DonationRequest, DonationRequestCustomFields } from "../../../models/request_models/donation-request";

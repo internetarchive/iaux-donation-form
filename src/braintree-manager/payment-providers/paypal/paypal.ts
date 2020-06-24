@@ -1,4 +1,4 @@
-import { BraintreeManagerInterface, HostingEnvironment } from '../../braintree-manager';
+import { BraintreeManagerInterface, HostingEnvironment } from '../../braintree-interfaces';
 import { DonationPaymentInfo } from '../../../models/donation-info/donation-payment-info';
 import { PayPalButtonDataSourceInterface, PayPalButtonDataSource } from './paypal-button-datasource';
 

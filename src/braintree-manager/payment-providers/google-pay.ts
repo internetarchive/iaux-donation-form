@@ -1,4 +1,4 @@
-import { BraintreeManagerInterface } from '../braintree-manager';
+import { BraintreeManagerInterface } from "../braintree-interfaces";
 
 export interface GooglePayHandlerInterface {
   isBrowserSupported(): Promise<boolean>;

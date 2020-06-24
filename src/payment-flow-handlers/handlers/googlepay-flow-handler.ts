@@ -1,4 +1,4 @@
-import { BraintreeManagerInterface } from '../../braintree-manager/braintree-manager';
+import { BraintreeManagerInterface } from '../../braintree-manager/braintree-interfaces';
 import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
 import { SuccessResponse } from '../../models/response-models/success-models/success-response';
 import { DonationRequest } from '../../models/request_models/donation-request';

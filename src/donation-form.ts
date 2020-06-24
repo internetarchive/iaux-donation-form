@@ -16,7 +16,7 @@ import './form-elements/form-section';
 import './form-elements/header/donation-form-header';
 import './form-elements/contact-form';
 import './form-elements/payment-selector';
-import { BraintreeManagerInterface } from './braintree-manager/braintree-manager';
+import { BraintreeManagerInterface } from './braintree-manager/braintree-interfaces';
 import { DonationRequest } from './models/request_models/donation-request';
 import { ContactForm } from './form-elements/contact-form';
 import { DonationPaymentInfo } from './models/donation-info/donation-payment-info';

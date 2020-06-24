@@ -1,5 +1,5 @@
 import { LazyLoaderServiceInterface } from '@internetarchive/lazy-loader-service';
-import { HostingEnvironment } from './braintree-manager';
+import { HostingEnvironment } from './braintree-interfaces';
 
 export interface PaymentClientsInterface {
   getBraintreeClient(): Promise<braintree.Client>;

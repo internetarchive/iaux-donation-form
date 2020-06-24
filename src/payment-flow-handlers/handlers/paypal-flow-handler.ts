@@ -1,6 +1,6 @@
 import { PayPalButtonDataSourceInterface, PayPalButtonDataSourceDelegate } from "../../braintree-manager/payment-providers/paypal/paypal-button-datasource";
 import { DonationResponse } from "../../models/response-models/donation-response";
-import { BraintreeManagerInterface } from "../../braintree-manager/braintree-manager";
+import { BraintreeManagerInterface } from "../../braintree-manager/braintree-interfaces";
 import { DonationType } from "../../models/donation-info/donation-type";
 import { DonationPaymentInfo } from "../../models/donation-info/donation-payment-info";
 

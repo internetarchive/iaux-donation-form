@@ -1,4 +1,4 @@
-import { BraintreeManagerInterface } from '../../braintree-manager';
+import { BraintreeManagerInterface } from '../../braintree-interfaces';
 import { ApplePaySessionManagerInterface } from './apple-pay-session-manager';
 import { DonationType } from '../../../models/donation-info/donation-type';
 import { ApplePaySessionDataSource } from './apple-pay-session-datasource';

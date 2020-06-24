@@ -2,10 +2,10 @@ import { CreditCardHandlerInterface, CreditCardHandler } from './payment-provide
 import { ApplePayHandlerInterface, ApplePayHandler } from './payment-providers/apple-pay/apple-pay';
 import { VenmoHandlerInterface, VenmoHandler } from './payment-providers/venmo';
 import { PayPalHandlerInterface, PayPalHandler } from './payment-providers/paypal/paypal';
-import { HostingEnvironment, BraintreeManagerInterface } from './braintree-manager';
 import { ApplePaySessionManager } from './payment-providers/apple-pay/apple-pay-session-manager';
 import { PaymentClientsInterface } from './payment-clients';
 import { GooglePayHandlerInterface, GooglePayHandler } from './payment-providers/google-pay';
+import { BraintreeManagerInterface, HostingEnvironment } from './braintree-interfaces';
 
 export interface PaymentProvidersInterface {
   getCreditCardHandler(): Promise<CreditCardHandlerInterface>;

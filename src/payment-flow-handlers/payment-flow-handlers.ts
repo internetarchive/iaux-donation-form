@@ -2,7 +2,7 @@ import { ModalManagerInterface } from "@internetarchive/modal-manager";
 
 import { CreditCardFlowHandlerInterface, CreditCardFlowHandler } from "./handlers/creditcard-flow-handler";
 import { PayPalFlowHandlerInterface, PayPalFlowHandler } from "./handlers/paypal-flow-handler";
-import { BraintreeManagerInterface } from "../braintree-manager/braintree-manager";
+import { BraintreeManagerInterface } from "../braintree-manager/braintree-interfaces";
 import { RecaptchaManagerInterface } from "../recaptcha-manager/recaptcha-manager";
 import { ApplePayFlowHandlerInterface, ApplePayFlowHandler } from "./handlers/applepay-flow-handler";
 import { VenmoFlowHandlerInterface, VenmoFlowHandler } from "./handlers/venmo-flow-handler";
