@@ -7,17 +7,21 @@ export interface VenmoHandlerInterface {
 }
 
 export class VenmoHandler implements VenmoHandlerInterface {
-  constructor(
-    braintreeManager: BraintreeManagerInterface,
-    venmoClient: braintree.Venmo
-  ) {
-    this.braintreeManager = braintreeManager;
-    this.venmoClient = venmoClient;
+  constructor(options: {
+    braintreeManager: BraintreeManagerInterface;
+    venmoClient: braintree.Venmo;
+    venmoProfileId: string;
+  }) {
+    this.braintreeManager = options.braintreeManager;
+    this.venmoClient = options.venmoClient;
+    this.venmoProfileId = options.venmoProfileId;
   }
 
   private braintreeManager: BraintreeManagerInterface;
 
   private venmoClient: braintree.Venmo;
+
+  private venmoProfileId: string;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private venmoInstance?: any;
@@ -37,7 +41,7 @@ export class VenmoHandler implements VenmoHandlerInterface {
     return new Promise((resolve, reject) => {
       this.venmoClient.create({
         client: braintreeInstance,
-        profileId: '1953896702662410263' // TODO: REMOVE HARD CODED VENMO ID
+        profileId: this.venmoProfileId
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }, (error: any, instance: braintree.Venmo) => {
         if (error) {

@@ -257,7 +257,6 @@ export class EditDonation extends LitElement {
   static get styles(): CSSResult {
     const buttonSelectedColorCss = css`var(--buttonSelectedColor, #f9bf3b)`;
     const buttonColorCss = css`var(--buttonColor, #fff)`;
-    const buttonFontSizeCss = css`var(--buttonFontSize, #fff)`;
 
     return css`
       .errors {

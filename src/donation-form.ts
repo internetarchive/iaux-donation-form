@@ -18,7 +18,7 @@ import { BraintreeManagerInterface } from './braintree-manager/braintree-interfa
 import { DonationRequest } from './models/request_models/donation-request';
 import { ContactForm } from './form-elements/contact-form';
 import { DonationPaymentInfo } from './models/donation-info/donation-payment-info';
-import { DonationFormHeader, DonationFormHeaderMode } from './form-elements/header/donation-form-header';
+import { DonationFormHeader } from './form-elements/header/donation-form-header';
 import { DonationType } from './models/donation-info/donation-type';
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
 import { PaymentProvider } from './models/common/payment-provider-name';
@@ -34,9 +34,9 @@ export class DonationForm extends LitElement {
 
   @property({ type: Object }) donationInfo: DonationPaymentInfo = DonationPaymentInfo.default;
 
-  @property({ type: Boolean }) private creditCardVisible = true;
+  @property({ type: Boolean }) private creditCardVisible = false;
 
-  @property({ type: Boolean }) private contactFormVisible = true;
+  @property({ type: Boolean }) private contactFormVisible = false;
 
   @property({ type: Boolean }) private donationInfoValid = true;
 

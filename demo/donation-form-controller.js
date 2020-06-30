@@ -29,6 +29,8 @@ export default class DonationFormController extends LitElement {
     return {
       braintreeAuthToken: { type: String },
       recaptchaSiteKey: { type: String },
+      venmoProfileId: { type: String },
+      googlePayMerchantId: { type: String },
 
       braintreeManager: { type: Object },
       recaptchaManager: { type: Object },
@@ -56,6 +58,8 @@ export default class DonationFormController extends LitElement {
         paymentClients: this.paymentClients,
         endpointManager: this.endpointManager,
         authorizationToken: this.braintreeAuthToken,
+        venmoProfileId: this.venmoProfileId,
+        googlePayMerchantId: this.googlePayMerchantId,
         hostedFieldStyle: this.hostedFieldStyle,
         hostedFieldConfig: this.hostedFieldConfig,
         hostingEnvironment: 'dev'
@@ -231,7 +235,7 @@ export default class DonationFormController extends LitElement {
         }
 
         .braintree-input {
-          height: 30px;
+          height: 25px;
         }
 
       </style>

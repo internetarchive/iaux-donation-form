@@ -87,6 +87,8 @@ export class BraintreeManager implements BraintreeManagerInterface {
     paymentClients: PaymentClientsInterface;
     endpointManager: BraintreeEndpointManagerInterface;
     authorizationToken: string;
+    venmoProfileId?: string;
+    googlePayMerchantId?: string;
     hostedFieldStyle: object;
     hostedFieldConfig: braintree.HostedFieldFieldOptions;
     hostingEnvironment: HostingEnvironment;
@@ -96,12 +98,14 @@ export class BraintreeManager implements BraintreeManagerInterface {
     this.hostingEnvironment = options.hostingEnvironment;
     this.paymentClients = options.paymentClients;
 
-    this.paymentProviders = new PaymentProviders(
-      this,
-      this.paymentClients,
-      options.hostingEnvironment,
-      options.hostedFieldStyle,
-      options.hostedFieldConfig
-    );
+    this.paymentProviders = new PaymentProviders({
+      braintreeManager: this,
+      paymentClients: this.paymentClients,
+      venmoProfileId: options.venmoProfileId,
+      googlePayMerchantId: options.googlePayMerchantId,
+      hostingEnvironment: options.hostingEnvironment,
+      hostedFieldStyle: options.hostedFieldStyle,
+      hostedFieldConfig: options.hostedFieldConfig
+    });
   }
 }

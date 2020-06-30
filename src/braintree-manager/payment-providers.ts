@@ -10,7 +10,7 @@ import { BraintreeManagerInterface, HostingEnvironment } from './braintree-inter
 export interface PaymentProvidersInterface {
   getCreditCardHandler(): Promise<CreditCardHandlerInterface>;
   getApplePayHandler(): Promise<ApplePayHandlerInterface>;
-  getVenmoHandler(): Promise<VenmoHandlerInterface>;
+  getVenmoHandler(): Promise<VenmoHandlerInterface | undefined>;
   getPaypalHandler(): Promise<PayPalHandlerInterface>;
   getGooglePayHandler(): Promise<GooglePayHandlerInterface>;
 }
@@ -65,8 +65,11 @@ export class PaymentProviders implements PaymentProvidersInterface {
     return this.applePayHandlerCache;
   }
 
-  async getVenmoHandler(): Promise<VenmoHandlerInterface> {
+  async getVenmoHandler(): Promise<VenmoHandlerInterface | undefined> {
     console.debug('getVenmoHandler start');
+    if (!this.venmoProfileId) {
+      return undefined;
+    }
 
     if (this.venmoHandlerCache) {
       return this.venmoHandlerCache;
@@ -74,7 +77,11 @@ export class PaymentProviders implements PaymentProvidersInterface {
 
     const client = await this.paymentClients.getVenmo();
 
-    this.venmoHandlerCache = new VenmoHandler(this.braintreeManager, client);
+    this.venmoHandlerCache = new VenmoHandler({
+      braintreeManager: this.braintreeManager,
+      venmoClient: client,
+      venmoProfileId: this.venmoProfileId
+    });
 
     console.debug('getVenmoHandler done', client, this.venmoHandlerCache);
 
@@ -110,6 +117,7 @@ export class PaymentProviders implements PaymentProvidersInterface {
 
     this.googlePayHandlerCache = new GooglePayHandler({
       braintreeManager: this.braintreeManager,
+      googlePayMerchantId: this.googlePayMerchantId,
       googlePayBraintreeClient: braintreeClient,
       googlePaymentsClient: googlePaymentsClient
     })
@@ -120,6 +128,10 @@ export class PaymentProviders implements PaymentProvidersInterface {
   }
 
   private braintreeManager: BraintreeManagerInterface;
+
+  private venmoProfileId?: string;
+
+  private googlePayMerchantId?: string;
 
   private creditCardHandlerCache?: CreditCardHandlerInterface;
 
@@ -139,17 +151,21 @@ export class PaymentProviders implements PaymentProvidersInterface {
 
   private paymentClients: PaymentClientsInterface;
 
-  constructor(
-    braintreeManager: BraintreeManagerInterface,
-    paymentClients: PaymentClientsInterface,
-    hostingEnvironment: HostingEnvironment,
-    hostedFieldStyle: object,
-    hostedFieldConfig: braintree.HostedFieldFieldOptions
-  ) {
-    this.braintreeManager = braintreeManager;
-    this.paymentClients = paymentClients;
-    this.hostingEnvironment = hostingEnvironment;
-    this.hostedFieldStyle = hostedFieldStyle;
-    this.hostedFieldConfig = hostedFieldConfig;
+  constructor(options: {
+    braintreeManager: BraintreeManagerInterface;
+    paymentClients: PaymentClientsInterface;
+    venmoProfileId?: string;
+    googlePayMerchantId?: string;
+    hostingEnvironment: HostingEnvironment;
+    hostedFieldStyle: object;
+    hostedFieldConfig: braintree.HostedFieldFieldOptions;
+  }) {
+    this.braintreeManager = options.braintreeManager;
+    this.venmoProfileId = options.venmoProfileId;
+    this.googlePayMerchantId = options.googlePayMerchantId;
+    this.paymentClients = options.paymentClients;
+    this.hostingEnvironment = options.hostingEnvironment;
+    this.hostedFieldStyle = options.hostedFieldStyle;
+    this.hostedFieldConfig = options.hostedFieldConfig;
   }
 }

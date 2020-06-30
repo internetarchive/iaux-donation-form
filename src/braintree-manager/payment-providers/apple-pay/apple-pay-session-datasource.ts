@@ -44,21 +44,16 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
   }
 
   async onvalidatemerchant(event: ApplePayJS.ApplePayValidateMerchantEvent): Promise<void> {
-    console.log('onvalidatemerchant', event);
-
     this.applePayInstance.performValidation({
       validationURL: event.validationURL,
       displayName: 'Internet Archive'
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }, (validationErr: any, validationData: any) => {
       if (validationErr) {
-        console.error(validationErr);
         this.delegate?.paymentFailed(validationErr);
         this.session.abort();
         return;
       }
-      console.log('validate merchant', validationData);
-
       this.session.completeMerchantValidation(validationData);
     });
   };
@@ -68,8 +63,6 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
   }
 
   async onpaymentauthorized(event: ApplePayJS.ApplePayPaymentAuthorizedEvent): Promise<void> {
-    console.log('onpaymentauthorized, event', event);
-
     let payload;
 
     try {
@@ -77,13 +70,10 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
         token: event.payment.token
       });
     } catch (err) {
-      console.error('Error tokenizing Apple Pay:', err);
       this.delegate?.paymentFailed(err);
       this.session.completePayment(ApplePaySession.STATUS_FAILURE);
       return;
     }
-
-    console.log('payload', payload);
 
     const payment = event.payment;
     const billingContact = payment.billingContact;
@@ -125,10 +115,6 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
       billing: billingInfo,
       customFields: customFields
     });
-
-    console.log('nonce:', payload.nonce);
-
-    console.debug('Apple Pay donationRequest', donationRequest);
 
     try {
       const donationResponse = await this.braintreeManager.submitDataToEndpoint(donationRequest);

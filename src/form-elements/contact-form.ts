@@ -129,7 +129,7 @@ export class ContactForm extends LitElement {
       fieldset {
         border: 0;
         padding: 0;
-        margin: 0 0 1em 0;
+        margin: 0 0 0.5em 0;
       }
 
       .row {
@@ -159,7 +159,7 @@ export class ContactForm extends LitElement {
         width: 100%;
         border: ${borderCss};
         border-top: 0;
-        padding: 5px;
+        padding: 2px 5px;
         padding-left: 2rem;
       }
 

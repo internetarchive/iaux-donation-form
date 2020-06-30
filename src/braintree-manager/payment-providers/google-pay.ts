@@ -9,15 +9,19 @@ export interface GooglePayHandlerInterface {
 export class GooglePayHandler implements GooglePayHandlerInterface {
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;
+    googlePayMerchantId?: string;
     googlePayBraintreeClient: braintree.GooglePayment;
     googlePaymentsClient: google.payments.api.PaymentsClient;
   }) {
     this.braintreeManager = options.braintreeManager;
+    this.googlePayMerchantId = options.googlePayMerchantId;
     this.googlePayBraintreeClient = options.googlePayBraintreeClient;
     this.googlePaymentsClient = options.googlePaymentsClient;
   }
 
   private braintreeManager: BraintreeManagerInterface;
+
+  private googlePayMerchantId?: string;
 
   private googlePayBraintreeClient: braintree.GooglePayment;
 
@@ -57,7 +61,8 @@ export class GooglePayHandler implements GooglePayHandlerInterface {
     return new Promise((resolve, reject) => {
       this.googlePayBraintreeClient.create({
         client: braintreeInstance,
-        googlePayVersion: 2, // TODO: add merchant id
+        googlePayVersion: 2,
+        googleMerchantId: this.googlePayMerchantId
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }, (error: any, instance: braintree.GooglePayment) => {
         if (error) {

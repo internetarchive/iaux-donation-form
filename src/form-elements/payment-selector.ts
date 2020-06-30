@@ -100,27 +100,51 @@ export class PaymentSelector extends LitElement {
 
     this.paymentProviders?.getVenmoHandler().then(handler => {
       console.debug('getVenmo inside')
-      handler?.isBrowserSupported().then(supported => {
+      if (!handler) {
+        console.debug('venmo handler unavailable');
+        this.venmoMode = PaymentButtonMode.Unavailable;
+        return;
+      }
+
+      handler.isBrowserSupported().then(supported => {
         console.debug('venmo: isBrowserSupporter', supported);
         this.venmoMode = supported ? PaymentButtonMode.Available : PaymentButtonMode.Unavailable;
       }).catch(reason => {
         console.error('error loading venmo', reason);
         this.venmoMode = PaymentButtonMode.Unavailable;
       });
+    }).catch(reason => {
+      console.error('venmo unavailable', reason);
+      this.venmoMode = PaymentButtonMode.Unavailable;
     });
 
     this.paymentProviders?.getApplePayHandler().then(handler => {
       console.debug('getApplePayHandler inside')
-      handler?.isAvailable().then(supported => {
+      if (!handler) {
+        console.error('applePayHandler unavailable');
+        this.applePayMode = PaymentButtonMode.Unavailable;
+        return;
+      }
+
+      handler.isAvailable().then(supported => {
         console.debug('applePay: isAvailable', supported);
         this.applePayMode = supported ? PaymentButtonMode.Available : PaymentButtonMode.Unavailable;
       }).catch(reason => {
         console.error('error loading applepay', reason);
         this.applePayMode = PaymentButtonMode.Unavailable;
       });
+    }).catch(reason => {
+      console.error('apple pay unavailable', reason);
+      this.applePayMode = PaymentButtonMode.Unavailable;
     });
 
     this.paymentProviders?.getGooglePayHandler().then(handler => {
+      if (!handler) {
+        console.debug('google pay handler unavailable');
+        this.googlePayMode = PaymentButtonMode.Unavailable;
+        return;
+      }
+
       handler.isBrowserSupported().then(supported => {
         console.debug('googlePay: isAvailable', supported);
         this.googlePayMode = supported ? PaymentButtonMode.Available : PaymentButtonMode.Unavailable;
@@ -128,6 +152,9 @@ export class PaymentSelector extends LitElement {
         console.error('error loading googlepay', reason);
         this.googlePayMode = PaymentButtonMode.Unavailable;
       });
+    }).catch(reason => {
+      console.error('google pay unavailable', reason);
+      this.googlePayMode = PaymentButtonMode.Unavailable;
     });
   }
 
