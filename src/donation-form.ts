@@ -53,8 +53,6 @@ export class DonationForm extends LitElement {
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
-      <h1>Donation Form</h1>
-
       <donation-form-header
         @donationInfoChanged=${this.donationInfoChanged}
         @editDonationError=${this.editDonationError}>
