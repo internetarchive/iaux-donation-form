@@ -9,6 +9,8 @@ import {
   query,
 } from 'lit-element';
 
+import currency from 'currency.js';
+
 import '../form-section';
 import '../static-custom-button';
 import { DonationType } from '../../models/donation-info/donation-type';
@@ -80,6 +82,15 @@ export class EditDonation extends LitElement {
           ${this.error}
         </div>
 
+        <div class="cover-fees-container">
+          <input
+            type="checkbox"
+            id="cover-fees"
+            @input=${this.coverFeesChecked} />
+          <label for="cover-fees">
+            I'll generously add ${currency(this.donationInfo.fee, { formatWithSymbol: true }).format()} to cover the transaction fees so you can keep 100% of my donation.
+          </label>
+        </div>
       </form-section>
       <!-- <button @click=${this.dispatchShowSummaryClickedEvent}>Switch to Summary</button> -->
     `;
@@ -149,6 +160,16 @@ export class EditDonation extends LitElement {
     const parsed = parseFloat(this.customAmountInput.value);
     const amount = isNaN(parsed) ? 0 : parsed;
     this.amountChanged(amount);
+  }
+
+  private coverFeesChecked(e: Event): void {
+    const target = e.target as HTMLInputElement;
+    const coverFees = target.checked;
+    this.donationInfo = new DonationPaymentInfo({
+      amount: this.donationInfo.amount,
+      donationType: this.donationInfo.donationType,
+      coverFees: coverFees
+    });
   }
 
   private customAmountChanged(e: Event): void {
@@ -245,15 +266,18 @@ export class EditDonation extends LitElement {
 
       ul {
         list-style: none;
+        margin: 0;
+        padding: 0;
+        display: inline-block;
       }
 
-      ul, li {
+      li {
         margin: 3px;
         padding: 0;
         display: inline-block;
       }
 
-      label {
+      .selection-button label {
         display: block;
         padding: 7px 10px;
         border: 1px solid black;
@@ -281,6 +305,23 @@ export class EditDonation extends LitElement {
 
       input[type="radio"]:checked + label {
         background-color: ${buttonSelectedColorCss};
+      }
+
+      .cover-fees-container {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .cover-fees-container input {
+        width: 20px;
+      }
+
+      .cover-fees-container label {
+        font-size: 0.75em;
+        font-weight: bold;
+        flex: 1;
       }
 
       .amount-selector {

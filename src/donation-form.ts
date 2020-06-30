@@ -10,8 +10,6 @@ import {
   PropertyValues,
 } from 'lit-element';
 
-import currency from 'currency.js';
-
 import './form-elements/form-section';
 import './form-elements/header/donation-form-header';
 import './form-elements/contact-form';
@@ -63,13 +61,6 @@ export class DonationForm extends LitElement {
       </donation-form-header>
 
       <form-section number=3 headline="Choose a payment method">
-        <input
-          type="checkbox"
-          id="cover-fees"
-          @input=${this.coverFeesChecked} />
-        <label for="cover-fees">
-          I'll generously add ${currency(this.donationInfo.fee, { formatWithSymbol: true }).format()} to cover the transaction fees so you can keep 100% of my donation.
-        </label>
         <payment-selector
           .paymentProviders=${this.braintreeManager?.paymentProviders}
           @firstUpdated=${this.paymentSelectorFirstUpdated}
@@ -81,8 +72,6 @@ export class DonationForm extends LitElement {
           <slot name="paypal-button" slot="paypal-button"></slot>
         </payment-selector>
       </form-section>
-
-      <!-- Total: ${currency(this.donationInfo.total, { formatWithSymbol: true }).format()} -->
 
       <div class="contact-form-section" class="${this.contactFormVisible ? '' : 'hidden'}">
         ${this.contactFormSection}
@@ -100,20 +89,16 @@ export class DonationForm extends LitElement {
       </form-section>
 
       <form-section number=5>
-        <button @click=${this.donateClicked} ?disabled=${this.donationInfoValid === false}>Donate</button>
+        <button
+          id="donate-button"
+          @click=${this.donateClicked}
+          ?disabled=${this.donationInfoValid === false}>
+          Donate
+        </button>
       </form-section>
     `;
   }
 
-  private coverFeesChecked(e: Event): void {
-    const target = e.target as HTMLInputElement;
-    const coverFees = target.checked;
-    this.donationInfo = new DonationPaymentInfo({
-      amount: this.donationInfo.amount,
-      donationType: this.donationInfo.donationType,
-      coverFees: coverFees
-    });
-  }
 
   private editDonationError(e: CustomEvent): void {
     this.donationInfoValid = false;
@@ -300,6 +285,23 @@ export class DonationForm extends LitElement {
 
       .hidden {
         display: none;
+      }
+
+      #donate-button {
+        background-color: #55A283;
+        width: 100%;
+        appearance: none;
+        -webkit-appearance: none;
+        font-size: 1.4rem;
+        font-weight: bold;
+        text-align: center;
+        color: #fff;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        background: #31a481;
+        padding-top: 5px;
+        padding-bottom: 5px;
       }
     `;
   }

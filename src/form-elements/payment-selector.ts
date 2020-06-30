@@ -161,8 +161,8 @@ export class PaymentSelector extends LitElement {
       .payment-container {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
-        column-gap: 10px;
-        row-gap: 5px;
+        column-gap: 1em;
+        row-gap: 1em;
       }
 
       .provider-button {
@@ -206,6 +206,9 @@ export class PaymentSelector extends LitElement {
         border: 1px solid #333;
         border-radius: 4px;
         height: ${paymentButtonHeightCss};
+        cursor: pointer;
+        margin: 0;
+        padding: 3px 6px;
       }
 
       .credit-card-button .cc-background {

@@ -22,7 +22,7 @@ export class FormSection extends LitElement {
           <div class="number">${this.number}</div>
         </div>
         <div class="col right">
-          <div class="title">${this.headline}</div>
+          ${this.headline ? html`<div class="title">${this.headline}</div>` : ''}
           <div class="content">
             <slot></slot>
           </div>
@@ -38,10 +38,12 @@ export class FormSection extends LitElement {
     return css`
       .container {
         display: flex;
+        margin-bottom: 1em;
       }
 
       .right {
         margin-left: 0.5em;
+        flex: 1;
       }
 
       .number {
@@ -58,6 +60,7 @@ export class FormSection extends LitElement {
 
       .title {
         line-height: calc(${numberSize} * 2);
+        margin-bottom: 0.5em;
       }
     `;
   }

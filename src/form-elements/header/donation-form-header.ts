@@ -31,6 +31,12 @@ export class DonationFormHeader extends LitElement {
 
   /** @inheritdoc */
   render(): TemplateResult {
+    return html`
+      ${this.currentTemplate}
+    `;
+  }
+
+  private get currentTemplate(): TemplateResult {
     switch (this.mode) {
       case DonationFormHeaderMode.Summary:
         return this.donationSummaryTemplate;
@@ -39,7 +45,7 @@ export class DonationFormHeader extends LitElement {
     }
   }
 
-  get editDonationTemplate(): TemplateResult {
+  private get editDonationTemplate(): TemplateResult {
     return html`
       <edit-donation
         .donationInfo=${this.donationInfo}
@@ -49,7 +55,7 @@ export class DonationFormHeader extends LitElement {
       </edit-donation>`;
   }
 
-  get donationSummaryTemplate(): TemplateResult {
+  private get donationSummaryTemplate(): TemplateResult {
     return html`
       <donation-summary
         .donationInfo=${this.donationInfo}
