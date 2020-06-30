@@ -21,7 +21,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
   paymentProviders: PaymentProvidersInterface;
 
   async startup(): Promise<void> {
-    console.debug('startup');
+    console.debug('braintree startup');
     this.collectDeviceData();
   }
 

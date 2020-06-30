@@ -51,6 +51,8 @@ export class PaymentProviders implements PaymentProvidersInterface {
 
     const client = await this.paymentClients.getApplePay();
 
+    console.debug('getApplePayHandler, client', client);
+
     const applePaySessionManager = new ApplePaySessionManager();
     this.applePayHandlerCache = new ApplePayHandler(
       this.braintreeManager,

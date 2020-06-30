@@ -37,9 +37,12 @@ export class PaymentClients implements PaymentClientsInterface {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getPaypalLibrary(): Promise<any> {
+    console.debug('getPaypalLibrary start');
     if (window.paypal) {
+      console.debug('getPaypalLibrary window.paypal exists, returning it');
       return window.paypal;
     }
+    console.debug('getPaypalLibrary window.paypal does not exist, loading it');
     await this.lazyLoader.loadScript({
       src: 'https://www.paypalobjects.com/api/checkout.js',
       attributes: [
@@ -47,14 +50,18 @@ export class PaymentClients implements PaymentClientsInterface {
         { key: 'log-level', value: 'warn' }
       ]
     });
+    console.debug('getPaypalLibrary window.paypal finished loading', window.paypal);
     return window.paypal;
   }
 
   async getGooglePaymentsClient(): Promise<google.payments.api.PaymentsClient> {
+    console.debug('getGooglePaymentsClient start');
     await this.lazyLoader.loadScript({ src: 'https://pay.google.com/gp/p/js/pay.js' });
+    console.debug('getGooglePaymentsClient loaded', google.payments.api.PaymentsClient);
     const paymentsClient = new google.payments.api.PaymentsClient({
       environment: 'TEST' // Or 'PRODUCTION'
     });
+    console.debug('getGooglePaymentsClient, paymentsClient', paymentsClient);
     return paymentsClient;
   }
 
@@ -66,10 +73,14 @@ export class PaymentClients implements PaymentClientsInterface {
    * @memberof BraintreeManager
    */
   async getBraintreeClient(): Promise<braintree.Client> {
+    console.debug('getBraintreeClient start');
     if (window.braintree?.client) {
+      console.debug('getBraintreeClient window.braintree?.client exists, returning it');
       return window.braintree.client;
     }
+    console.debug('getBraintreeClient window.braintree?.client does not exist, loading it');
     await this.loadBraintreeScript('client');
+    console.debug('getBraintreeClient window.braintree?.client loaded', window.braintree.client);
     return window.braintree.client;
   }
 

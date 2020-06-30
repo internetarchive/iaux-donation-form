@@ -29,7 +29,7 @@ export enum DonationInfoError {
 export class EditDonation extends LitElement {
   @property({ type: Object }) donationInfo: DonationPaymentInfo = DonationPaymentInfo.default;
 
-  @property({ type: Array }) amountOptions: number[] = [5, 10, 25, 50, 100, 250, 500, 1000];
+  @property({ type: Array }) amountOptions: number[] = [5, 10, 25, 50, 100, 500, 1000];
 
   @query('#custom-amount-button') customAmountButton!: HTMLInputElement;
 
@@ -45,7 +45,7 @@ export class EditDonation extends LitElement {
         number=1
         headline="Choose a frequency">
 
-        <ul>
+        <ul class="frequency-selector">
           <li>
             ${this.getRadioButton({
               group: SelectionGroup.DonationType,
@@ -69,11 +69,11 @@ export class EditDonation extends LitElement {
 
       <form-section
         number=2
-        headline="Choose an amount">
+        headline="Choose an amount (USD)">
 
-        <ul>
+        <ul class="amount-selector">
           ${this.presetAmountsTemplate}
-          <li>${this.customAmountTemplate}</li>
+          <li class="custom-amount">${this.customAmountTemplate}</li>
         </ul>
 
         <div class="errors">
@@ -81,7 +81,7 @@ export class EditDonation extends LitElement {
         </div>
 
       </form-section>
-      <button @click=${this.dispatchShowSummaryClickedEvent}>Switch to Summary</button>
+      <!-- <button @click=${this.dispatchShowSummaryClickedEvent}>Switch to Summary</button> -->
     `;
   }
 
@@ -129,13 +129,12 @@ export class EditDonation extends LitElement {
                @change=${this.customRadioSelected}>
 
         <label for="custom-amount-button">
-          Custom: $
-          <input type="text"
-                 id="custom-amount-input"
-                 value=${value}
-                 @input=${this.customAmountChanged}
-                 @keydown=${this.currencyValidator.keydown}
-                 @focus=${this.customAmountFocused} />
+          Custom: $<input type="text"
+                          id="custom-amount-input"
+                          value=${value}
+                          @input=${this.customAmountChanged}
+                          @keydown=${this.currencyValidator.keydown}
+                          @focus=${this.customAmountFocused} />
         </label>
       </div>
     `;
@@ -235,6 +234,10 @@ export class EditDonation extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
+    const buttonSelectedColorCss = css`var(--buttonSelectedColor, #f9bf3b)`;
+    const buttonColorCss = css`var(--buttonColor, #fff)`;
+    const buttonFontSizeCss = css`var(--buttonFontSize, #fff)`;
+
     return css`
       .errors {
         color: red;
@@ -245,28 +248,53 @@ export class EditDonation extends LitElement {
       }
 
       ul, li {
-        margin: 5px;
+        margin: 3px;
         padding: 0;
         display: inline-block;
       }
 
       label {
         display: block;
-        padding: 10px;
+        padding: 7px 10px;
         border: 1px solid black;
         border-radius: 5px;
         background-color: #ccc;
         color: #202020;
         cursor: pointer;
         text-align: center;
+        font-size: 0.75em;
+        font-weight: bold;
+      }
+
+      label[for="custom-amount-button"] {
+        padding-top: 3px;
+        padding-bottom: 2px;
       }
 
       input[type="radio"] {
         display: none;
       }
 
+      input[type="radio"] + label {
+        background-color: ${buttonColorCss};
+      }
+
       input[type="radio"]:checked + label {
-        background-color: #f9bf3b;
+        background-color: ${buttonSelectedColorCss};
+      }
+
+      .amount-selector {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      }
+
+      .custom-amount {
+        grid-column-start: 3;
+        grid-column-end: 6;
+      }
+
+      #custom-amount-input {
+        width: 50%;
       }
     `;
   }

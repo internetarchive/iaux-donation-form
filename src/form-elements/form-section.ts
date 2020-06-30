@@ -33,20 +33,15 @@ export class FormSection extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const numberSize = css`var(--formSectionNumberRadius, 15px)`;
+    const numberSize = css`var(--formSectionNumberRadius, 10px)`;
 
     return css`
       .container {
         display: flex;
-        background-color: lightblue;
-      }
-
-      .left {
-        background-color: lightcoral;
       }
 
       .right {
-        background-color: lightgreen;
+        margin-left: 0.5em;
       }
 
       .number {
@@ -58,6 +53,7 @@ export class FormSection extends LitElement {
         display: flex;
         justify-content: center;
         align-items: center;
+        font-weight: bold;
       }
 
       .title {

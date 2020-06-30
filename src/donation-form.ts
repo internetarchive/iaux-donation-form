@@ -82,7 +82,7 @@ export class DonationForm extends LitElement {
         </payment-selector>
       </form-section>
 
-      Total: ${currency(this.donationInfo.total, { formatWithSymbol: true }).format()}
+      <!-- Total: ${currency(this.donationInfo.total, { formatWithSymbol: true }).format()} -->
 
       <div class="contact-form-section" class="${this.contactFormVisible ? '' : 'hidden'}">
         ${this.contactFormSection}
@@ -236,8 +236,9 @@ export class DonationForm extends LitElement {
     }
   }
 
-  private renderPayPalButton(): void {
-    this.paymentFlowHandlers?.paypalHandler?.renderPayPalButton(this.donationInfo);
+  private async renderPayPalButton(): Promise<void> {
+    await this.paymentFlowHandlers?.paypalHandler?.renderPayPalButton(this.donationInfo);
+    this.paymentSelector.showPaypalButton();
     this.paypalButtonNeedsRender = false;
   }
 

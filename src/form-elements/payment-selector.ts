@@ -15,17 +15,25 @@ import paypalButtonImage from '../assets/img/payment-providers/paypal';
 import venmoButtonImage from '../assets/img/payment-providers/venmo';
 import { PaymentProvidersInterface } from '../braintree-manager/payment-providers';
 
+enum PaymentButtonMode {
+  Loading = 'loading',
+  Available = 'available',
+  Unavailable = 'unavailable'
+}
+
 @customElement('payment-selector')
 export class PaymentSelector extends LitElement {
   @property({ type: Boolean }) donationInfoValid = true;
 
   @property({ type: Object }) paymentProviders?: PaymentProvidersInterface;
 
-  @property({ type: Boolean }) private applePayVisible = false;
+  @property({ type: String }) private applePayMode: PaymentButtonMode = PaymentButtonMode.Loading;
 
-  @property({ type: Boolean }) private googlePayVisible = false;
+  @property({ type: String }) private googlePayMode: PaymentButtonMode = PaymentButtonMode.Loading;
 
-  @property({ type: Boolean }) private venmoVisible = false;
+  @property({ type: String }) private venmoMode: PaymentButtonMode = PaymentButtonMode.Loading;
+
+  @property({ type: String }) private payPalMode: PaymentButtonMode = PaymentButtonMode.Loading;
 
   /** @inheritdoc */
   render(): TemplateResult {
@@ -33,27 +41,39 @@ export class PaymentSelector extends LitElement {
       <div class="payment-container ${this.donationInfoValid ? 'donation-info-valid' : 'donation-info-invalid'}">
 
         <div
-          class="applepay provider-button ${this.applePayVisible ? '' : 'hidden'}"
-          @click=${this.applePaySelected}>${applePayButtonImage}</div>
+          class="applepay provider-button ${this.applePayMode}"
+          @click=${this.applePaySelected}>
+          <div class="payment-image">${applePayButtonImage}</div>
+        </div>
 
         <div
-          class="googlepay provider-button ${this.googlePayVisible ? '' : 'hidden'}"
-          @click=${this.googlePaySelected}>${googlePayButtonImage}</div>
+          class="googlepay provider-button ${this.googlePayMode}"
+          @click=${this.googlePaySelected}>
+          <div class="payment-image">${googlePayButtonImage}</div>
+        </div>
 
         <div
-          class="venmo provider-button ${this.venmoVisible ? '' : 'hidden'}"
-          @click=${this.venmoSelected}>${venmoButtonImage}</div>
+          class="venmo provider-button ${this.venmoMode}"
+          @click=${this.venmoSelected}>
+          <div class="payment-image">${venmoButtonImage}</div>
+        </div>
 
-        <div class="paypal-container">
-          <div class="provider-button paypal-local-button" @click=${this.localPaypalButtonClicked}>
-            ${paypalButtonImage}
+        <div class="paypal-container provider-button ${this.payPalMode}">
+          <div class="payment-image">
+            <div class="paypal-local-button" @click=${this.localPaypalButtonClicked}>
+              ${paypalButtonImage}
+            </div>
+            <slot name="paypal-button"></slot>
           </div>
-          <slot name="paypal-button"></slot>
         </div>
 
         <button
           @click=${this.creditCardSelected}
-          class="button-style credit-card-button">Credit Card</button>
+          class="button-style credit-card-button">
+          <div class="cc-background">
+            <span class="cc-title">Credit Card</span>
+          </div>
+        </button>
       </div>
     `;
   }
@@ -71,29 +91,42 @@ export class PaymentSelector extends LitElement {
     }
   }
 
+  showPaypalButton(): void {
+    this.payPalMode = PaymentButtonMode.Available;
+  }
+
   private async setButtonVisibility(): Promise<void> {
     console.debug('setButtonVisibility')
 
     this.paymentProviders?.getVenmoHandler().then(handler => {
       console.debug('getVenmo inside')
-      handler?.isBrowserSupported().then(value => {
-        console.debug('venmo: isBrowserSupporter', value);
-        this.venmoVisible = value;
+      handler?.isBrowserSupported().then(supported => {
+        console.debug('venmo: isBrowserSupporter', supported);
+        this.venmoMode = supported ? PaymentButtonMode.Available : PaymentButtonMode.Unavailable;
+      }).catch(reason => {
+        console.error('error loading venmo', reason);
+        this.venmoMode = PaymentButtonMode.Unavailable;
       });
     });
 
     this.paymentProviders?.getApplePayHandler().then(handler => {
       console.debug('getApplePayHandler inside')
-      handler?.isAvailable().then(value => {
-        console.debug('applePay: isAvailable', value);
-        this.applePayVisible = value;
+      handler?.isAvailable().then(supported => {
+        console.debug('applePay: isAvailable', supported);
+        this.applePayMode = supported ? PaymentButtonMode.Available : PaymentButtonMode.Unavailable;
+      }).catch(reason => {
+        console.error('error loading applepay', reason);
+        this.applePayMode = PaymentButtonMode.Unavailable;
       });
     });
 
     this.paymentProviders?.getGooglePayHandler().then(handler => {
-      handler.isBrowserSupported().then(value => {
-        console.debug('googlePay: isAvailable', value);
-        this.googlePayVisible = value;
+      handler.isBrowserSupported().then(supported => {
+        console.debug('googlePay: isAvailable', supported);
+        this.googlePayMode = supported ? PaymentButtonMode.Available : PaymentButtonMode.Unavailable;
+      }).catch(reason => {
+        console.error('error loading googlepay', reason);
+        this.googlePayMode = PaymentButtonMode.Unavailable;
       });
     });
   }
@@ -122,12 +155,9 @@ export class PaymentSelector extends LitElement {
   /** @inheritdoc */
   static get styles(): CSSResult {
     const paymentButtonWidthCss = css`var(--paymentButtonWidth, 50px)`;
+    const paymentButtonHeightCss = css`var(--paymentButtonHeight, 32px)`;
 
     return css`
-      .hidden {
-        display: none;
-      }
-
       .payment-container {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -138,10 +168,26 @@ export class PaymentSelector extends LitElement {
       .provider-button {
         cursor: pointer;
         width: ${paymentButtonWidthCss};
+        height: ${paymentButtonHeightCss};
+        border-radius: 4px;
+      }
+
+      .provider-button.unavailable {
+        display: none;
+      }
+
+      .provider-button.loading {
+        border: 1px solid #ddd;
+      }
+
+      .provider-button.loading .payment-image {
+        display: none;
       }
 
       .paypal-local-button {
         position: absolute;
+        width: ${paymentButtonWidthCss};
+        height: ${paymentButtonHeightCss};
       }
 
       .donation-info-valid .paypal-local-button {
@@ -155,6 +201,24 @@ export class PaymentSelector extends LitElement {
       .credit-card-button {
         grid-column-start: 1;
         grid-column-end: 5;
+
+        background-color: white;
+        border: 1px solid #333;
+        border-radius: 4px;
+        height: ${paymentButtonHeightCss};
+      }
+
+      .credit-card-button .cc-background {
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-image: url(https://archive.org/images/cc_logos.png);
+        background-position: 50% 50%;
+        background-size: contain;
+      }
+
+      .credit-card-button .cc-title {
+        display: none;
       }
     `;
   }
