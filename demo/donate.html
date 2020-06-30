@@ -14,6 +14,7 @@
     body {
       margin: 0;
       padding: 0;
+      font-family: sans-serif;
     }
 
     #demo {
@@ -21,35 +22,10 @@
       padding: 0;
     }
 
-    div[slot='braintree-hosted-fields'] div {
-      height: 30px;
-    }
-
-    modal-manager {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: 250; /* the PayPal button starts off at 200, then drops down to 100 so this is just staying above it */
-    }
-
-    modal-manager[mode='closed'] {
-      display: none;
-    }
-
-    modal-manager[mode='modal'] {
+    donation-form-controller {
       display: block;
-    }
-
-    donation-form {
-      --paymentButtonWidth: 50px;
-      --paymentButtonHeight: 32px;
-    }
-
-    #paypal-button {
-      opacity: 0.001;
-      width: 50px;
-      height: 32px;
-      overflow: hidden;
+      min-width: 320px;
+      max-width: 90%;
     }
   </style>
 
@@ -64,155 +40,13 @@
   </script>
 </head>
 <body>
-  <div id="demo">
-  </div>
-
   <script type="module">
-    import { html, render } from 'lit-html';
-    import { LazyLoaderService } from '@internetarchive/lazy-loader-service';
-    import '@internetarchive/modal-manager';
-
-    import { BraintreeEndpointManager } from './braintree-endpoint-manager.js';
-
-    import { PaymentClients } from '../lib/braintree-manager/payment-clients.js';
-    import { BraintreeManager } from '../lib/braintree-manager/braintree-manager.js';
-    import { RecaptchaManager } from '../lib/recaptcha-manager/recaptcha-manager.js';
-    import { PaymentFlowHandlers } from '../lib/payment-flow-handlers/payment-flow-handlers.js';
-
-    import '../lib/donation-form.js';
-
-    const hostedFieldStyle = {
-      input: {
-        'font-size': '14px',
-        'font-family': '"Helvetica Neue", Helvetica, Arial, sans-serif',
-        'font-weight': '700',
-        color: '#333',
-      },
-      ':focus': {
-        color: '#333',
-      },
-      '.valid': {
-      },
-      '.invalid': {
-        color: '#b00b00',
-      }
-    }
-
-    const hostedFieldConfig = {
-      number: {
-        selector: '#braintree-creditcard',
-        placeholder: 'Card number'
-      },
-      cvv: {
-        selector: '#braintree-cvv',
-        placeholder: 'CVC'
-      },
-      expirationDate: {
-        selector: '#braintree-expiration',
-        placeholder: 'MM / YY'
-      }
-    }
-
-    const lazyLoaderService = new LazyLoaderService();
-
-    const start = performance.now();
-
-    const endpointManager = new BraintreeEndpointManager();
-
-    const paymentClients = new PaymentClients(lazyLoaderService);
-
-    const braintreeManager = new BraintreeManager({
-      paymentClients,
-      endpointManager,
-      authorizationToken: window.config.BRAINTREE_KEY,
-      hostedFieldStyle,
-      hostedFieldConfig,
-      hostingEnvironment: 'dev'
-    });
-
-    const recaptchaManager = new RecaptchaManager({
-      grecaptchaLibrary: window.grecaptcha,
-      siteKey: window.config.RECAPTCHA_KEY
-    });
-
-    render(
-      html`
-        <modal-manager @modeChanged=${modalModeChanged}>
-          <!--
-            The PayPal buttons cannot exist in the shadowDOM so they have to be slotted
-            from the top.
-          -->
-          <div slot="paypal-upsell-button">
-            <div id="paypal-upsell-button"></div>
-          </div>
-        </modal-manager>
-        <donation-form
-          .braintreeManager=${braintreeManager}>
-
-          <!--
-            Why are these slots here?
-
-            Due to the way Braintree & PayPal works, they cannot exist
-            in the shadowDOM so must exist in the clearDOM and get passed
-            in through a <slot>. Their IDs are tied to the hostedFieldConfig
-            configuration above.
-
-            Braintree / PayPal are working on a solution to this. See:
-            - https://github.com/braintree/braintree-web-drop-in/issues/614#issuecomment-616796104
-            - https://github.com/braintree/braintree-web-drop-in/issues/296#issuecomment-616749307
-            - https://github.com/paypal/paypal-checkout-components/issues/353#issuecomment-595956216
-          -->
-          <div slot="braintree-hosted-fields">
-            <div id="braintree-creditcard"></div>
-            <div id="braintree-cvv"></div>
-            <div id="braintree-expiration"></div>
-          </div>
-
-          <div slot="paypal-button">
-            <div id="paypal-button"></div>
-          </div>
-        </donation-form>
-        <div id="recaptcha"></div>
-      `,
-      document.querySelector('#demo')
-    );
-
-    function modalModeChanged(e) {
-      const mode = e.detail.mode;
-      switch (mode) {
-        case 'modal':
-          document.body.style.overflow = 'hidden';
-          break;
-        case 'closed':
-          document.body.style.overflow = 'auto';
-          break;
-        default:
-          break;
-      }
-    }
-
-    const modalManager = document.querySelector('modal-manager');
-
-    const paymentFlowHandlers = new PaymentFlowHandlers({
-      braintreeManager: braintreeManager,
-      modalManager: modalManager,
-      recaptchaManager: recaptchaManager
-    });
-
-    const recaptchaContainer = document.getElementById('recaptcha');
-    const donationForm = document.querySelector('donation-form');
-
-    donationForm.braintreeManager = braintreeManager;
-    donationForm.modalManager = modalManager;
-    donationForm.paymentFlowHandlers = paymentFlowHandlers;
-
-    console.debug('setup recaptcha', window.grecaptcha.render);
-
-    recaptchaManager.setup({ container: recaptchaContainer, theme: 'light', type: 'image' });
-
-    braintreeManager.startup();
-    paymentFlowHandlers.startup();
-
+    import './donation-form-controller';
   </script>
+
+  <donation-form-controller
+    braintreeAuthToken=''
+    recaptchaSiteKey=''>
+  </donation-form-controller>
 </body>
 </html>

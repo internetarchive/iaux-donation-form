@@ -7,9 +7,14 @@ import {
   TemplateResult,
   query
 } from 'lit-element';
+import { unsafeSVG } from 'lit-html/directives/unsafe-svg';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html';
+
 import { BillingInfo } from '../models/common/billing-info';
 import { CustomerInfo } from '../models/common/customer-info';
 import { DonorContactInfo } from '../models/common/donor-contact-info';
+
+import emailImg from '../assets/img/contact-form-icons/email';
 
 @customElement('contact-form')
 export class ContactForm extends LitElement {
@@ -26,16 +31,66 @@ export class ContactForm extends LitElement {
 
   /** @inheritdoc */
   render(): TemplateResult {
+    // console.debug('render', emailImg);
+
+    // style="background-image: url('data:image/svg+xml;utf8,${emailImg.getHTML()}')">
+
+
+    // console.debug('BACKGROUND', background)
+
     return html`
-      <input type="text" id="email" value="foo@bar.com" placeholder="Email" />
-      <input type="text" id="firstName" value="Fooey" placeholder="First name" />
-      <input type="text" id="lastName" value="McBarrison" placeholder="Last name" />
-      <input type="text" id="streetAddress" value="123 Fake St" placeholder="Address Line 1" />
-      <input type="text" id="extendedAddress" value="Apt 2" placeholder="Address Line 2" />
-      <input type="text" id="locality" value="SF" placeholder="City" />
-      <input type="text" id="region" value="CA" placeholder="State / Province" />
-      <input type="text" id="postalCode" value="12345" placeholder="Zip / Postal" />
-      <input type="text" id="countryCodeAlpha2" value="US" placeholder="Country" />
+      <fieldset>
+        <div class="row has-icon email-icon">
+          <div class="input-wrapper email">
+            <input type="text" id="email" placeholder="Email" />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <div class="row has-icon person">
+          <div class="input-wrapper firstName">
+            <input type="text" id="firstName" placeholder="First name" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-wrapper">
+            <input type="text" id="lastName" placeholder="Last name" />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <div class="row">
+          <div class="input-wrapper streetAddress">
+            <input type="text" id="streetAddress" placeholder="Address Line 1" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-wrapper extendedAddress">
+            <input type="text" id="extendedAddress" placeholder="Address Line 2" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-wrapper locality">
+            <input type="text" id="locality" placeholder="City" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-wrapper region">
+            <input type="text" id="region" placeholder="State / Province" />
+          </div>
+          <div class="input-wrapper postalCode">
+            <input type="text" id="postalCode" placeholder="Zip / Postal" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-wrapper countryCodeAlpha2">
+            <input type="text" id="countryCodeAlpha2" placeholder="Country" />
+          </div>
+        </div>
+      </fieldset>
     `;
   }
 
@@ -68,7 +123,67 @@ export class ContactForm extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
+    const borderCss = css`var(--contactFormBorderCss, 1px solid #d9d9d9)`;
+
     return css`
+      fieldset {
+        border: 0;
+        padding: 0;
+        margin: 0 0 1em 0;
+      }
+
+      .row {
+        display: flex;
+      }
+
+      fieldset .row:first-child {
+        border-top: ${borderCss};
+      }
+
+      .email-icon {
+        background-position: 0.75rem 50%;
+        background-repeat: no-repeat;
+      }
+
+      input {
+        width: 100%;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        font-weight: bold;
+        font-size: 0.9em;
+        color: #333;
+      }
+
+      .input-wrapper {
+        width: 100%;
+        border: ${borderCss};
+        border-top: 0;
+        padding: 5px;
+        padding-left: 2rem;
+      }
+
+      .input-wrapper.region {
+        width: 60%;
+      }
+
+      .input-wrapper.postalCode {
+        padding-left: 0.5em;
+        border-left: 0;
+        width: 40%;
+      }
+
+      /* #region {
+        width: 60%;
+      }
+
+      #postalCode {
+        width: 40%;
+      }
+
+      #postalCode {
+        padding-left: 10px;
+      } */
     `;
   }
 }

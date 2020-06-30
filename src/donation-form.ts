@@ -34,9 +34,9 @@ export class DonationForm extends LitElement {
 
   @property({ type: Object }) donationInfo: DonationPaymentInfo = DonationPaymentInfo.default;
 
-  @property({ type: Boolean }) private creditCardVisible = false;
+  @property({ type: Boolean }) private creditCardVisible = true;
 
-  @property({ type: Boolean }) private contactFormVisible = false;
+  @property({ type: Boolean }) private contactFormVisible = true;
 
   @property({ type: Boolean }) private donationInfoValid = true;
 
@@ -214,11 +214,11 @@ export class DonationForm extends LitElement {
 
     this.donationInfo = donationInfo;
 
-    if (amountParam || frequencyParam) {
-      this.donationFormHeader.mode = DonationFormHeaderMode.Summary;
-    } else {
-      this.donationFormHeader.mode = DonationFormHeaderMode.Edit;
-    }
+    // if (amountParam || frequencyParam) {
+    //   this.donationFormHeader.mode = DonationFormHeaderMode.Summary;
+    // } else {
+    //   this.donationFormHeader.mode = DonationFormHeaderMode.Edit;
+    // }
   }
 
   private async renderPayPalButton(): Promise<void> {

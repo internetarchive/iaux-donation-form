@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
 
-const image = html`
+export default html`
   <svg viewBox="0 0 468 300" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fill-rule="nonzero">
       <g>
@@ -20,5 +20,3 @@ const image = html`
     </g>
   </svg>
 `;
-
-export default image;

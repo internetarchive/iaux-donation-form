@@ -23,7 +23,7 @@ export enum DonationFormHeaderMode {
 export class DonationFormHeader extends LitElement {
   @property({ type: Object }) donationInfo: DonationPaymentInfo = DonationPaymentInfo.default;
 
-  @property({ type: String }) mode: DonationFormHeaderMode = DonationFormHeaderMode.Summary;
+  @property({ type: String }) mode: DonationFormHeaderMode = DonationFormHeaderMode.Edit;
 
   @query('edit-donation') editDonation?: EditDonation;
 
