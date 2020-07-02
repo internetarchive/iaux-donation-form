@@ -80,6 +80,7 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
 
   async payPalPaymentStarted(dataSource: PayPalButtonDataSourceInterface, options: object): Promise<void> {
     console.debug('PaymentSector:payPalPaymentStarted options:', dataSource, dataSource.donationInfo, options);
+    // this.donationFlowModalManager.showProcessingModal();
   }
 
   async payPalPaymentAuthorized(dataSource: PayPalButtonDataSourceInterface, payload: paypal.TokenizePayload): Promise<void> {
@@ -107,20 +108,29 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
       return;
     }
 
+    const successResponse = response.value as SuccessResponse;
+
     switch (donationType) {
       case DonationType.OneTime:
         console.debug('ONE TIME, SHOW MODAL');
-        this.showUpsellModal(payload, response.value as SuccessResponse);
+        this.showUpsellModal(payload, successResponse);
         break;
       case DonationType.Monthly:
         console.debug('MONTHLY, SHOW THANKS');
         // show thank you, redirect
-        this.donationFlowModalManager.showThankYouModal()
+        this.showThankYouModal({ successResponse });
         break;
       case DonationType.Upsell:
         console.debug('UPSELL, SHOW THANKS');
-        // show thank you, redirect
-        this.donationFlowModalManager.showThankYouModal()
+        if (this.upsellButtonDataSourceContainer) {
+          this.showThankYouModal({
+            successResponse: this.upsellButtonDataSourceContainer.oneTimeSuccessResponse,
+            upsellSuccessResponse: successResponse
+          });
+        } else {
+          // we're in the upsell flow, but no upsell data source container.. this should not happen
+          this.donationFlowModalManager.showErrorModal();
+        }
         break;
     }
   }
@@ -153,6 +163,14 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
     }
   }
 
+  private showThankYouModal(options: {
+    successResponse: SuccessResponse;
+    upsellSuccessResponse?: SuccessResponse;
+  }): void {
+    this.donationFlowModalManager.showThankYouModal();
+    this.braintreeManager.donationSuccessful(options);
+  }
+
   private async showUpsellModal(
     oneTimePayload: paypal.TokenizePayload,
     oneTimeSuccessResponse: SuccessResponse
@@ -161,8 +179,15 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
 
     this.donationFlowModalManager.showUpsellModal({
       amountChanged: this.upsellAmountChanged.bind(this),
-      noSelected: this.noThanksSelected.bind(this),
-      ctaMode: UpsellModalCTAMode.Slot
+      noSelected: () => {
+        console.debug('noSelected');
+        this.showThankYouModal({ successResponse: oneTimeSuccessResponse });
+      },
+      ctaMode: UpsellModalCTAMode.Slot,
+      userClosedModalCallback: () => {
+        console.debug('userClosedModalCallback');
+        this.showThankYouModal({ successResponse: oneTimeSuccessResponse });
+      }
     });
 
     const upsellDonationInfo = new DonationPaymentInfo({
@@ -185,11 +210,6 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
     if (this.upsellButtonDataSourceContainer) {
       this.upsellButtonDataSourceContainer.upsellButtonDataSource.donationInfo.amount = amount;
     }
-  }
-
-  private noThanksSelected(): void {
-    console.debug('noThanksSelected');
-    this.donationFlowModalManager.closeModal();
   }
 
   private async renderUpsellPayPalButton(options: {

@@ -62,27 +62,37 @@ export class ApplePayFlowHandler implements ApplePayFlowHandlerInterface, AppleP
 
     const response = await this.braintreeManager.submitDataToEndpoint(donationRequest);
 
-    console.debug('yesSelected, UpsellResponse', response);
-
-    this.donationFlowModalManager.showThankYouModal();
+    if (response.success) {
+      this.showThankYouModal({
+        successResponse: oneTimeDonationResponse,
+        upsellSuccessResponse: response.value as SuccessResponse
+      });
+    } else {
+      this.donationFlowModalManager.showErrorModal();
+    }
   }
 
-  private modalNoThanksSelected(): void {
-    console.debug('noThanksSelected');
-    this.donationFlowModalManager.closeModal();
+  private showThankYouModal(options: {
+    successResponse: SuccessResponse;
+    upsellSuccessResponse?: SuccessResponse;
+  }): void {
+    this.donationFlowModalManager.showThankYouModal();
+this.braintreeManager.donationSuccessful(options)
   }
 
   // MARK - ApplePaySessionDataSourceDelegate
   paymentComplete(response: DonationResponse): void {
     console.debug('paymentComplete', response);
     if (response.success) {
+      const successResponse = response.value as SuccessResponse;
       if (this.applePayDataSource?.donationInfo.donationType == DonationType.OneTime) {
         this.donationFlowModalManager.showUpsellModal({
-          yesSelected: this.modalYesSelected.bind(this, response.value as SuccessResponse),
-          noSelected: this.modalNoThanksSelected.bind(this)
+          yesSelected: this.modalYesSelected.bind(this, successResponse),
+          noSelected: this.showThankYouModal.bind(this, { successResponse }),
+          userClosedModalCallback: this.showThankYouModal.bind(this, { successResponse })
         })
       } else {
-        this.donationFlowModalManager.showThankYouModal();
+        this.showThankYouModal({ successResponse });
       }
     } else {
       this.donationFlowModalManager.showErrorModal();

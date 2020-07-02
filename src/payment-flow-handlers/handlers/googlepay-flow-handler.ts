@@ -128,12 +128,16 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
           },
           noSelected: () => {
             console.debug('noSelected');
-            this.modalNoThanksSelected();
+            this.showThankYouModal({ successResponse: response });
+          },
+          userClosedModalCallback: () => {
+            console.debug('modal closed');
+            this.showThankYouModal({ successResponse: response });
           }
         });
         break;
       case DonationType.Monthly:
-        this.donationFlowModalManager.showThankYouModal();
+        this.showThankYouModal({ successResponse: response });
         break;
       // This case will never be reached, it is only here for completeness.
       // The upsell case gets handled in `modalYesSelected()` below
@@ -142,6 +146,14 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
       default:
         break;
     }
+  }
+
+  private showThankYouModal(options: {
+    successResponse: SuccessResponse;
+    upsellSuccessResponse?: SuccessResponse;
+  }): void {
+    this.donationFlowModalManager.showThankYouModal();
+this.braintreeManager.donationSuccessful(options)
   }
 
   private async modalYesSelected(
@@ -172,11 +184,14 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
 
     console.debug('yesSelected, UpsellResponse', response);
 
-    this.donationFlowModalManager.showThankYouModal();
+    if (response.success) {
+      this.showThankYouModal({
+        successResponse: oneTimeDonationResponse,
+        upsellSuccessResponse: response.value as SuccessResponse
+      });
+    } else {
+      this.donationFlowModalManager.showErrorModal();
+    }
   }
 
-  private modalNoThanksSelected(): void {
-    console.debug('noThanksSelected');
-    this.donationFlowModalManager.closeModal();
-  }
 }

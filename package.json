@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/donation-form",
-  "version": "0.0.0-alpha.4",
+  "version": "0.0.0-alpha.6",
   "description": "The Internet Archive Donation Form",
   "license": "AGPL-3.0-only",
   "main": "index.js",
@@ -15,7 +15,7 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "tsc -p tsconfig.build.json",
-    "start": "concurrently \"tsc --watch\" \"es-dev-server --app-index demo/index.html --node-resolve --open --watch --http2 --preserve-symlinks\"",
+    "start": "concurrently \"tsc --watch\" \"es-dev-server --app-index demo/index.html --node-resolve --open --watch --http2 --preserve-symlinks --hostname 192.168.1.160\"",
     "start:compatibility": "concurrently \"tsc --watch\" \"es-dev-server --app-index demo/index.html --node-resolve --open --watch --compatibility all --preserve-symlinks\"",
     "lint:eslint": "eslint --ext .ts . --ignore-path .gitignore",
     "format:eslint": "eslint --ext .ts . --fix --ignore-path .gitignore",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@internetarchive/lazy-loader-service": "0.0.0-alpha.2",
-    "@internetarchive/modal-manager": "0.0.0-alpha.3",
+    "@internetarchive/modal-manager": "0.0.0-alpha.7",
     "currency.js": "^1.2.2",
     "lit-element": "^2.2.1",
     "lit-html": "^1.0.0"

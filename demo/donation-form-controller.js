@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html } from 'lit-element';
 
 // import AnalyticsHandler from '../../analyticsHandler/analyticsHandler.js';
 
@@ -155,6 +155,9 @@ export default class DonationFormController extends LitElement {
           <div id="paypal-upsell-button"></div>
         </div>
       </modal-manager>
+
+      <div id="recaptcha"></div>
+
       <donation-form
         .braintreeManager=${this.braintreeManager}>
 

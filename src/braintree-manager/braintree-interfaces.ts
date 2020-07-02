@@ -1,6 +1,7 @@
 import { PaymentProvidersInterface } from "./payment-providers";
 import { DonationRequest } from "../models/request_models/donation-request";
 import { DonationResponse } from "../models/response-models/donation-response";
+import { SuccessResponse } from "../models/response-models/success-models/success-response";
 
 export interface BraintreeManagerInterface {
   paymentProviders: PaymentProvidersInterface;
@@ -9,6 +10,10 @@ export interface BraintreeManagerInterface {
   startup(): void;
   getInstance(): Promise<braintree.Client | undefined>;
   submitDataToEndpoint(request: DonationRequest): Promise<DonationResponse>;
+  donationSuccessful(options: {
+    successResponse: SuccessResponse;
+    upsellSuccessResponse?: SuccessResponse;
+  }): void;
 }
 
 export interface BraintreeEndpointManagerInterface {
@@ -21,6 +26,16 @@ export interface BraintreeEndpointManagerInterface {
    * @memberof BraintreeEndpointManagerInterface
    */
   submitData(request: DonationRequest): Promise<DonationResponse>;
+
+  /**
+   * Once the user is finished with the donation flow, either after
+   * a monthly donation or an upsell, we notify the endpoint manager
+   * so it can redirect the user to the thank you page.
+   */
+  donationSuccessful(options: {
+    successResponse: SuccessResponse;
+    upsellSuccessResponse?: SuccessResponse;
+  }): void;
 }
 
 export enum HostingEnvironment {
