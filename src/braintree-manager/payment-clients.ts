@@ -171,12 +171,6 @@ export class PaymentClients implements PaymentClientsInterface {
       return window.braintree.googlePayment;
     }
     await this.loadBraintreeScript('google-payment');
-
-    // There seems to be a race condition loading the google payments client where
-    // even though the `onload` event has fired from the script load, the client isn't fully
-    // available. This is introducing a 100ms delay to give the library time to set up.
-    await this.promisedSleep(100);
-
     return window.braintree.googlePayment;
   }
 

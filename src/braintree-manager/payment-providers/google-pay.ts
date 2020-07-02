@@ -42,8 +42,14 @@ export class GooglePayHandler implements GooglePayHandlerInterface {
       // see https://developers.google.com/pay/api/web/reference/object#IsReadyToPayRequest for all options
       apiVersion: 2,
       apiVersionMinor: 0,
-      allowedPaymentMethods: allowedPaymentMethods,
-      existingPaymentMethodRequired: true
+      allowedPaymentMethods: [{
+        "type": "CARD",
+        "parameters": {
+          "allowedAuthMethods": ["PAN_ONLY"],
+          "allowedCardNetworks": ["AMEX", "DISCOVER", "INTERAC", "JCB", "MASTERCARD", "VISA"]
+        }
+      }],
+      existingPaymentMethodRequired: false
     }).then((isReadyToPay) => isReadyToPay.result);
   }
 
