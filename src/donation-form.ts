@@ -191,6 +191,7 @@ export class DonationForm extends LitElement {
 
     const frequencyParam = urlParams.get('frequency');
     const amountParam = urlParams.get('amount');
+    const coverFeesParam = urlParams.get('coverFees');
 
     let frequency = DonationType.OneTime;
     if (frequencyParam === 'monthly') {
@@ -205,7 +206,7 @@ export class DonationForm extends LitElement {
     const donationInfo = new DonationPaymentInfo({
       donationType: frequency,
       amount: amount,
-      coverFees: false
+      coverFees: coverFeesParam === 'true'
     });
 
     console.debug('queryParam donationInfo', donationInfo);
@@ -267,7 +268,7 @@ export class DonationForm extends LitElement {
     this.donationInfo = new DonationPaymentInfo({
       amount: donationInfo.amount,
       donationType: donationInfo.donationType,
-      coverFees: this.donationInfo.coverFees
+      coverFees: donationInfo.coverFees
     });
 
     this.donationInfoValid = true;

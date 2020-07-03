@@ -67,16 +67,6 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
       client: braintreeClient
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }).then(async (instance: any) => {
-      // // console.log('instance', error, instance, instance.merchantIdentifier);
-      // // if (error) {
-      // //   return reject(error);
-      // // }
-
-      // if (!this.applePaySessionManager.canMakePayments()) {
-      //   return reject('Apple Pay unavailable');
-      // }
-
-      // console.debug('canMake?????')
       console.debug('ApplePaySession');
 
       const canMakePayments = await ApplePaySession
@@ -89,60 +79,7 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
       else {
         return undefined;
       }
-
-
-
-      // try {
-      //   const canMakePaymentsWithActiveCard = await canMakePayments;
-      //   console.log('can make payments?', canMakePaymentsWithActiveCard);
-      //   if (canMakePaymentsWithActiveCard) {
-      //     console.log('ApplePay Available');
-      //     this.applePayInstance = instance;
-      //     return this.applePayInstance;
-      //   }
-      //   else {
-      //     console.debug('ApplePay Unavailable');
-      //     return undefined;
-      //   }
-      // }
-      // catch (reason) {
-      //   console.debug('can not make payments', reason);
-      //   return undefined;
-      // }
     });
-
-    // return new Promise((resolve, reject) => {
-    //   console.debug('this.applePayClient');
-    //   this.applePayClient.create({
-    //     client: braintreeClient
-    //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    //   }, (error: any, instance: any) => {
-    //     console.log('instance', error, instance, instance.merchantIdentifier);
-    //     if (error) {
-    //       return reject(error);
-    //     }
-
-    //     if (!this.applePaySessionManager?.canMakePayments()) {
-    //       return reject('Apple Pay unavailable');
-    //     }
-
-    //     console.debug('canMake?????')
-
-    //     const canMakePayments = ApplePaySession.canMakePaymentsWithActiveCard(instance.merchantIdentifier);
-    //     canMakePayments.then((canMakePaymentsWithActiveCard) => {
-    //       console.log('can make payments?', canMakePaymentsWithActiveCard);
-    //       if (canMakePaymentsWithActiveCard) {
-    //         // Set up Apple Pay buttons
-    //       }
-    //     }).catch(reason => {
-    //       return reject(reason);
-    //     });
-
-    //     console.log('ApplePay Available')
-    //     this.applePayInstance = instance;
-    //     resolve(instance);
-    //   });
-    // });
   }
 
   // In order to trigger the Apple Pay flow, you HAVE to pass in the event
@@ -158,6 +95,8 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
     if (donationInfo.donationType === DonationType.OneTime) {
       label = 'Internet Archive';
     }
+
+    console.debug('createPaymentRequest', donationInfo);
 
     const paymentRequest = applePayInstance.createPaymentRequest({
       total: {

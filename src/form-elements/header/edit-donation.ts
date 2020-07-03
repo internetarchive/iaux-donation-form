@@ -170,6 +170,8 @@ export class EditDonation extends LitElement {
       donationType: this.donationInfo.donationType,
       coverFees: coverFees
     });
+    console.debug('coverFeesChecked', this.donationInfo);
+    this.dispatchDonationInfoChangedEvent();
   }
 
   private customAmountChanged(e: Event): void {
@@ -246,7 +248,7 @@ export class EditDonation extends LitElement {
     const newDonationInfo = new DonationPaymentInfo({
       donationType: this.donationInfo.donationType,
       amount: this.donationInfo.amount,
-      coverFees: false
+      coverFees: this.donationInfo.coverFees
     });
 
     const event = new CustomEvent('donationInfoChanged', { detail: { donationInfo: newDonationInfo } });
