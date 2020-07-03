@@ -30,14 +30,6 @@ export class GooglePayHandler implements GooglePayHandlerInterface {
   private googlePaymentsClient: google.payments.api.PaymentsClient;
 
   async isBrowserSupported(): Promise<boolean> {
-    const instance = await this.getInstance();
-    const request = await instance?.createPaymentDataRequest();
-    const allowedPaymentMethods = request?.allowedPaymentMethods;
-
-    if (allowedPaymentMethods === undefined) {
-      return false;
-    }
-
     return this.googlePaymentsClient.isReadyToPay({
       // see https://developers.google.com/pay/api/web/reference/object#IsReadyToPayRequest for all options
       apiVersion: 2,
