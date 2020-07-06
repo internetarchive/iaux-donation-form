@@ -49,13 +49,17 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     try {
       hostedFieldsResponse = await handler?.tokenizeHostedFields()
     } catch {
-      this.donationFlowModalManager.showErrorModal();
+      this.donationFlowModalManager.showErrorModal({
+        message: "Error collecting credit card info"
+      });
       return
     }
     console.debug('paymentInitiated, hostedFieldsResponse', hostedFieldsResponse, 'time from start', performance.now() - start);
 
     if (!hostedFieldsResponse) {
-      this.donationFlowModalManager.showErrorModal();
+      this.donationFlowModalManager.showErrorModal({
+        message: "Error getting credit card response"
+      });
       console.error('no hostedFieldsResponse');
       return;
     }
@@ -65,7 +69,9 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     try {
       recaptchaToken = await this.recaptchaManager.execute();
     } catch {
-      this.donationFlowModalManager.showErrorModal();
+      this.donationFlowModalManager.showErrorModal({
+        message: "Recaptcha failure"
+      });
       console.error('recaptcha failure');
       return
     }
@@ -98,11 +104,15 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       if (response.success) {
         this.handleSuccessfulResponse(donationInfo, response.value as SuccessResponse);
       } else {
-        this.donationFlowModalManager.showErrorModal();
+        this.donationFlowModalManager.showErrorModal({
+          message: "Error setting up donation"
+        });
       }
 
     } catch {
-      this.donationFlowModalManager.showErrorModal();
+      this.donationFlowModalManager.showErrorModal({
+        message: "Error getting a response from the server"
+      });
       console.error('error getting a response')
       return;
     }
@@ -176,7 +186,9 @@ this.braintreeManager.donationSuccessful(options)
         upsellSuccessResponse: response.value as SuccessResponse
       });
     } else {
-      this.donationFlowModalManager.showErrorModal();
+      this.donationFlowModalManager.showErrorModal({
+        message: "Error setting up monthly donation"
+      });
     }
   }
 }

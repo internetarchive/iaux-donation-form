@@ -68,7 +68,9 @@ export class ApplePayFlowHandler implements ApplePayFlowHandlerInterface, AppleP
         upsellSuccessResponse: response.value as SuccessResponse
       });
     } else {
-      this.donationFlowModalManager.showErrorModal();
+      this.donationFlowModalManager.showErrorModal({
+        message: "Error setting up monthly donation"
+      });
     }
   }
 
@@ -95,12 +97,16 @@ this.braintreeManager.donationSuccessful(options)
         this.showThankYouModal({ successResponse });
       }
     } else {
-      this.donationFlowModalManager.showErrorModal();
+      this.donationFlowModalManager.showErrorModal({
+        message: "Error setting up donation"
+      });
     }
   }
 
   paymentFailed(): void {
-    this.donationFlowModalManager.showErrorModal();
+    this.donationFlowModalManager.showErrorModal({
+      message: "Payment failed"
+    });
   }
 
   paymentCancelled(): void {

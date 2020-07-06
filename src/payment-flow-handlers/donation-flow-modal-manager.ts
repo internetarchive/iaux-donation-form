@@ -32,7 +32,8 @@ export interface DonationFlowModalManagerInterface {
    *   }} [options]
    * @memberof DonationFlowModalManagerInterface
    */
-  showErrorModal(options?: {
+  showErrorModal(options: {
+    message: string;
     userClosedModalCallback?: () => void;
   }): void;
 
@@ -98,10 +99,12 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
   }
 
   /** @inheritdoc */
-  showErrorModal(options?: {
+  showErrorModal(options: {
+    message: string;
     userClosedModalCallback?: () => void;
   }): void {
     const modalConfig = ModalConfig.errorConfig;
+    modalConfig.message = html`${options?.message}`;
     this.modalManager.showModal({
       config: modalConfig,
       userClosedModalCallback: options?.userClosedModalCallback

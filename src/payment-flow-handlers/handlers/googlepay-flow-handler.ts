@@ -105,7 +105,9 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
       if (response.success) {
         this.handleSuccessfulResponse(donationInfo, response.value as SuccessResponse);
       } else {
-        this.donationFlowModalManager.showErrorModal();
+        this.donationFlowModalManager.showErrorModal({
+          message: "Error setting up donation"
+        });
       }
 
       console.debug('result', paymentData, result);
@@ -190,7 +192,9 @@ this.braintreeManager.donationSuccessful(options)
         upsellSuccessResponse: response.value as SuccessResponse
       });
     } else {
-      this.donationFlowModalManager.showErrorModal();
+      this.donationFlowModalManager.showErrorModal({
+        message: "Error setting up monthly donation"
+      });
     }
   }
 

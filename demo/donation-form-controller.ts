@@ -86,7 +86,6 @@ export default class DonationFormController extends LitElement {
   }
 
   setupPaymentFlowHandlers(): void {
-    // const modalManager = document.querySelector('modal-manager');
     if (!this.braintreeManager || !this.recaptchaManager) { return; }
 
     this.paymentFlowHandlers = new PaymentFlowHandlers({
@@ -95,13 +94,8 @@ export default class DonationFormController extends LitElement {
       recaptchaManager: this.recaptchaManager
     });
 
-    // const recaptchaContainer = document.getElementById('recaptcha');
-    // const donationForm = document.querySelector('donation-form');
-
     this.donationForm.braintreeManager = this.braintreeManager;
     this.donationForm.paymentFlowHandlers = this.paymentFlowHandlers;
-
-    console.debug('setup recaptcha', window.grecaptcha.render);
 
     this.recaptchaManager.setup(this.recaptcha, 1, 'light', 'image');
     this.braintreeManager.startup();
@@ -161,18 +155,15 @@ export default class DonationFormController extends LitElement {
         </div>
       </modal-manager>
 
-      <div id="recaptcha"></div>
-
       <donation-form
         .braintreeManager=${this.braintreeManager}>
 
         <!--
           Why are these slots here?
 
-          Due to the way Braintree & PayPal works, they cannot exist
+          Due to the way Braintree, PayPal, and Recaptcha work, they cannot exist
           in the shadowDOM so must exist in the clearDOM and get passed
-          in through a <slot>. Their IDs are tied to the hostedFieldConfig
-          configuration above.
+          in through a <slot>.
 
           Braintree / PayPal are working on a solution to this. See:
           - https://github.com/braintree/braintree-web-drop-in/issues/614#issuecomment-616796104
@@ -197,6 +188,10 @@ export default class DonationFormController extends LitElement {
 
         <div slot="paypal-button">
           <div id="paypal-button"></div>
+        </div>
+
+        <div slot="recaptcha">
+          <div id="recaptcha"></div>
         </div>
       </donation-form>
 
@@ -280,7 +275,7 @@ export default class DonationFormController extends LitElement {
    * @param {string} name Name of event
    * @param {object} params Additional tracking parameters
    */
-  logEvent(name: string, params: any): void {
+  logEvent(): void {
     // this.analyticsHandler.sendEvent(
     //   DonationFormController.analyticsCategory, name, window.location.pathname, params,
     // );

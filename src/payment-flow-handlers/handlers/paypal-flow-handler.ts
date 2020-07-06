@@ -102,7 +102,9 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
     const response: DonationResponse = await this.braintreeManager.submitDataToEndpoint(request);
 
     if (!response.success) {
-      this.donationFlowModalManager.showErrorModal();
+      this.donationFlowModalManager.showErrorModal({
+        message: "Error setting up donation"
+      });
       // alert('ERROR DURING payPalPaymentAuthorized');
       console.error('Error during payPalPaymentAuthorized', response);
       return;
@@ -129,7 +131,9 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
           });
         } else {
           // we're in the upsell flow, but no upsell data source container.. this should not happen
-          this.donationFlowModalManager.showErrorModal();
+          this.donationFlowModalManager.showErrorModal({
+            message: "Error setting up monthly donation"
+          });
         }
         break;
     }

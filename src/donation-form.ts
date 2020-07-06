@@ -82,6 +82,7 @@ export class DonationForm extends LitElement {
       <div class="contact-form-section" class="${this.contactFormVisible ? '' : 'hidden'}">
         ${this.contactFormSection}
       </div>
+      <slot name="recaptcha"></slot>
     `;
   }
 

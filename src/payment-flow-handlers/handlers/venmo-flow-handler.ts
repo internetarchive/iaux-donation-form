@@ -55,7 +55,9 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
         this.paymentInitiated(restoredInfo.contactInfo, restoredInfo.donationInfo);
       } else {
         console.error('no restoration info');
-        this.donationFlowModalManager.showErrorModal();
+        this.donationFlowModalManager.showErrorModal({
+          message: "Error restoring donation session"
+        });
       }
     }
   }
@@ -75,7 +77,9 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
       const result = await handler?.startPayment();
       if (!result) {
         this.restorationStateHandler.clearState();
-        this.donationFlowModalManager.showErrorModal();
+        this.donationFlowModalManager.showErrorModal({
+          message: "Error setting up the donation"
+        });
         return;
       }
       console.debug('paymentInitiated', result);
@@ -83,7 +87,9 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
     } catch(tokenizeError) {
       this.restorationStateHandler.clearState();
       this.handleTokenizationError(tokenizeError);
-      this.donationFlowModalManager.showErrorModal()
+      this.donationFlowModalManager.showErrorModal({
+        message: "Error loading donation information"
+      })
     }
   }
 
@@ -135,7 +141,9 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
           break;
       }
     } else {
-      this.donationFlowModalManager.showErrorModal();
+      this.donationFlowModalManager.showErrorModal({
+        message: "Error setting up donation"
+      });
     }
   }
 
@@ -186,7 +194,9 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
         upsellSuccessResponse: response.value as SuccessResponse
       });
     } else {
-      this.donationFlowModalManager.showErrorModal();
+      this.donationFlowModalManager.showErrorModal({
+        message: "Error setting up monthly donation"
+      });
     }
   }
 
