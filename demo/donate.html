@@ -29,15 +29,27 @@
 
 </head>
 <body>
-  <script type="module">
-    import '../dist/demo/donation-form-controller.js';
-  </script>
+  <div id="demo"></div>
 
-  <donation-form-controller
-    braintreeAuthToken='sandbox_x634jsj7_7zybks4ybp63pbmd'
-    recaptchaSiteKey='6LeTUvYUAAAAAPTvW98MaXyS8c6vxk4-9n8DI1ve'
-    venmoProfileId='1953896702662410263'
-    googlePayMerchantId=''>
-  </donation-form-controller>
+  <script type="module">
+    import { render, html } from 'lit-html';
+    import '../dist/index.js';
+    import { BraintreeEndpointManager } from '../dist/demo/braintree-endpoint-manager.js';
+
+    const braintreeEndpointManager = new BraintreeEndpointManager();
+
+    render(
+      html`
+        <ia-donation-form-controller
+          braintreeAuthToken='sandbox_x634jsj7_7zybks4ybp63pbmd'
+          recaptchaSiteKey='6LeTUvYUAAAAAPTvW98MaXyS8c6vxk4-9n8DI1ve'
+          venmoProfileId='1953896702662410263'
+          googlePayMerchantId=''
+          .endpointManager=${braintreeEndpointManager}>
+        </ia-donation-form-controller>
+      `,
+      document.querySelector('#demo')
+    );
+  </script>
 </body>
 </html>

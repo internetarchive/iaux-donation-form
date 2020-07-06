@@ -1,11 +1,9 @@
-import { LitElement, html, property, PropertyValues, query, TemplateResult } from 'lit-element';
-
-// import AnalyticsHandler from '../../analyticsHandler/analyticsHandler.js';
+import { LitElement, html, property, PropertyValues, query, TemplateResult, customElement } from 'lit-element';
 
 import { LazyLoaderService, LazyLoaderServiceInterface } from '@internetarchive/lazy-loader-service';
 import { ModalManager } from '@internetarchive/modal-manager';
 
-import { BraintreeEndpointManager } from './braintree-endpoint-manager.js';
+import { AnalyticsHandlerInterface } from './@types/analytics-handler';
 
 import { DonationForm, PaymentClients, BraintreeManager, PaymentFlowHandlers, RecaptchaManager,
   PaymentClientsInterface,
@@ -17,16 +15,20 @@ import { DonationForm, PaymentClients, BraintreeManager, PaymentFlowHandlers, Re
 } from '../index';
 
 /**
- * The RadioPlayerController is the bridge between petabox and the radio player UI widget
+ * The IADonationFormController is an IA-specific bridge between petabox
+ * and the `<donation-form>` element.
  *
- * It is responsible for fetching metadata and transcript and passing them into
- * the radio player UI.
+ * It handles all of the interactions between the various pieces that the
+ * donation form.
  *
  * @export
  * @class RadioPlayerController
  * @extends {LitElement}
  */
-export default class DonationFormController extends LitElement {
+@customElement('ia-donation-form-controller')
+export class IADonationFormController extends LitElement {
+
+  @property({ type: String }) environment: HostingEnvironment = HostingEnvironment.Development;
 
   @property({ type: String }) braintreeAuthToken?: string;
 
@@ -36,39 +38,34 @@ export default class DonationFormController extends LitElement {
 
   @property({ type: String }) googlePayMerchantId?: string;
 
-  @property({ type: Object }) braintreeManager?: BraintreeManagerInterface;
+  @property({ type: String }) analyticsCategory = 'DonationForm'
 
-  @property({ type: Object }) recaptchaManager?: RecaptchaManagerInterface;
+  @property({ type: Object }) endpointManager?: BraintreeEndpointManagerInterface;
 
-  @property({ type: Object }) paymentFlowHandlers?: PaymentFlowHandlersInterface;
+  @property({ type: Object }) analyticsHandler?: AnalyticsHandlerInterface;
 
-  @query('modal-manager') modalManager!: ModalManager;
+  @property({ type: Object }) private braintreeManager?: BraintreeManagerInterface;
 
-  @query('donation-form') donationForm!: DonationForm;
+  @property({ type: Object }) private recaptchaManager?: RecaptchaManagerInterface;
 
-  @query('#recaptcha') recaptcha!: HTMLElement;
+  @property({ type: Object }) private paymentFlowHandlers?: PaymentFlowHandlersInterface;
+
+  @query('modal-manager') private modalManager!: ModalManager;
+
+  @query('donation-form') private donationForm!: DonationForm;
+
+  @query('#recaptcha') private recaptcha!: HTMLElement;
 
   private lazyLoaderService: LazyLoaderServiceInterface = new LazyLoaderService();
 
-  private endpointManager: BraintreeEndpointManagerInterface = new BraintreeEndpointManager();
-
-  private paymentClients: PaymentClientsInterface  = new PaymentClients(
-    this.lazyLoaderService, HostingEnvironment.Development);
+  private paymentClients: PaymentClientsInterface = new PaymentClients(this.lazyLoaderService, this.environment);
 
   /** @inheritdoc */
   updated(changedProperties: PropertyValues): void {
-    if (changedProperties.has('braintreeAuthToken') && this.braintreeAuthToken) {
-      console.debug('this.hostedFieldConfig', this.hostedFieldConfig);
-      this.braintreeManager = new BraintreeManager({
-        paymentClients: this.paymentClients,
-        endpointManager: this.endpointManager,
-        authorizationToken: this.braintreeAuthToken,
-        venmoProfileId: this.venmoProfileId,
-        googlePayMerchantId: this.googlePayMerchantId,
-        hostedFieldStyle: this.hostedFieldStyle,
-        hostedFieldConfig: this.hostedFieldConfig,
-        hostingEnvironment: HostingEnvironment.Development
-      });
+    console.debug('updated', changedProperties);
+    if (changedProperties.has('braintreeAuthToken') || changedProperties.has('endpointManager') &&
+        this.braintreeManager === undefined) {
+      this.setupBraintreeManager();
     }
 
     if (changedProperties.has('recaptchaSiteKey') && this.recaptchaSiteKey) {
@@ -85,7 +82,22 @@ export default class DonationFormController extends LitElement {
     }
   }
 
-  setupPaymentFlowHandlers(): void {
+  private setupBraintreeManager(): void {
+    if (this.braintreeAuthToken && this.endpointManager) {
+      this.braintreeManager = new BraintreeManager({
+        paymentClients: this.paymentClients,
+        endpointManager: this.endpointManager,
+        authorizationToken: this.braintreeAuthToken,
+        venmoProfileId: this.venmoProfileId,
+        googlePayMerchantId: this.googlePayMerchantId,
+        hostedFieldStyle: this.hostedFieldStyle,
+        hostedFieldConfig: this.hostedFieldConfig,
+        hostingEnvironment: HostingEnvironment.Development
+      });
+    }
+  }
+
+  private setupPaymentFlowHandlers(): void {
     if (!this.braintreeManager || !this.recaptchaManager) { return; }
 
     this.paymentFlowHandlers = new PaymentFlowHandlers({
@@ -102,11 +114,7 @@ export default class DonationFormController extends LitElement {
     this.paymentFlowHandlers.startup();
   }
 
-  static get analyticsCategory(): string {
-    return 'DonationForm';
-  }
-
-  get hostedFieldStyle(): object {
+  private get hostedFieldStyle(): object {
     return {
       input: {
         'font-size': '14px',
@@ -125,7 +133,7 @@ export default class DonationFormController extends LitElement {
     };
   }
 
-  get hostedFieldConfig(): braintree.HostedFieldFieldOptions {
+  private get hostedFieldConfig(): braintree.HostedFieldFieldOptions {
     return {
       number: {
         selector: '#braintree-creditcard',
@@ -240,12 +248,11 @@ export default class DonationFormController extends LitElement {
         .braintree-input {
           height: 25px;
         }
-
       </style>
     `;
   }
 
-  modalModeChanged(e: CustomEvent): void {
+  private modalModeChanged(e: CustomEvent): void {
     console.debug('modalModeChanged', e);
     const mode = e.detail.mode;
     switch (mode) {
@@ -275,11 +282,9 @@ export default class DonationFormController extends LitElement {
    * @param {string} name Name of event
    * @param {object} params Additional tracking parameters
    */
-  logEvent(): void {
-    // this.analyticsHandler.sendEvent(
-    //   DonationFormController.analyticsCategory, name, window.location.pathname, params,
-    // );
+  private logEvent(name: string, params: object): void {
+    this.analyticsHandler?.sendEvent(
+      this.analyticsCategory, name, window.location.pathname, params,
+    );
   }
 }
-
-customElements.define('donation-form-controller', DonationFormController);
