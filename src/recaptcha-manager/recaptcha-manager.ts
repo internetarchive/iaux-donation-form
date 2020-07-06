@@ -3,30 +3,18 @@ export interface RecaptchaManagerInterface {
   setup(
     container: HTMLElement,
     tabIndex: number,
-    theme: ReCaptchaTheme,
-    type: ReCaptchaType
+    theme: ReCaptchaV2.Theme,
+    type: ReCaptchaV2.Type
   ): void;
 }
 
-export enum ReCaptchaTheme {
-  Dark = 'dark',
-  Light = 'light'
-}
-
-export enum ReCaptchaType {
-  Image = 'image',
-  Audio = 'audio'
-}
-
-export class RecaptchaManager {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private grecaptchaLibrary: any;
+export class RecaptchaManager implements RecaptchaManagerInterface {
+  private grecaptchaLibrary: ReCaptchaV2.ReCaptcha;
 
   private siteKey: string;
 
   constructor(options: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    grecaptchaLibrary: any;
+    grecaptchaLibrary: ReCaptchaV2.ReCaptcha;
     siteKey: string;
   }) {
     this.grecaptchaLibrary = options.grecaptchaLibrary;
@@ -92,19 +80,19 @@ export class RecaptchaManager {
     this.grecaptchaLibrary.reset();
   }
 
-  setup(options: {
-    container: HTMLElement;
-    tabIndex: number;
-    theme: ReCaptchaTheme;
-    type: ReCaptchaType;
-  }): void {
-    this.grecaptchaLibrary.render(options.container, {
+  setup(
+    container: HTMLElement,
+    tabIndex: number,
+    theme: ReCaptchaV2.Theme,
+    type: ReCaptchaV2.Type,
+  ): void {
+    this.grecaptchaLibrary.render(container, {
       callback: this.responseHandler.bind(this),
       'expired-callback': this.expiredHandler.bind(this),
       sitekey: this.siteKey,
-      tabindex: options.tabIndex,
-      theme: options.theme,
-      type: options.type,
+      tabindex: tabIndex,
+      theme: theme,
+      type: type,
       size: 'invisible'
     });
   }

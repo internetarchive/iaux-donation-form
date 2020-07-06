@@ -1,7 +1,7 @@
 import { BraintreeManagerInterface } from "../../braintree-manager/braintree-interfaces";
 import { DonorContactInfo } from "../../models/common/donor-contact-info";
 import { DonationPaymentInfo } from "../../models/donation-info/donation-payment-info";
-import { DonationRequest } from "../../models/request_models/donation-request";
+import { DonationRequest } from "../../models/request-models/donation-request";
 import { PaymentProvider } from "../../models/common/payment-provider-name";
 import { VenmoRestorationStateHandlerInterface, VenmoRestorationStateHandler } from "./venmo-restoration-state-handler";
 import { SuccessResponse } from "../../models/response-models/success-models/success-response";

@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "tags": [
+    {
+      "name": "donation-form",
+      "description": "The Internet Archive donation form",
+      "properties": [
+        {
+          "name": "title",
+          "type": "String",
+          "description": "The title of your component",
+          "default": "Hey there"
+        },
+        {
+          "name": "counter",
+          "type": "Number",
+          "description": "An action counter",
+          "default": 0
+        }
+      ],
+      "events": [],
+      "slots": [],
+      "cssProperties": [
+        {
+          "name": "--placeholder-image-text-color",
+          "description": "Main Text Color",
+          "type": "Color"
+        }
+      ]
+    }
+  ]
+}

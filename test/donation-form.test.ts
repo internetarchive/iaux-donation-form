@@ -1,15 +1,16 @@
 import {
-  html, fixture, expect, oneEvent, elementUpdated
+  html, fixture, expect
 } from '@open-wc/testing';
 
-import '../lib/donation-form';
+import { DonationForm } from '../src/donation-form';
+
 
 describe('Donation Form', () => {
   describe('Configuration', () => {
     it('has no configuration', async () => {
       const el = await fixture(html`
         <donation-form></donation-form>
-      `);
+      `) as DonationForm;
 
       expect(el.braintreeManager).to.equal(undefined);
     });

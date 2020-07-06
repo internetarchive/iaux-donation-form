@@ -7,22 +7,30 @@ import {
   TemplateResult,
   property,
   query,
-  PropertyValues,
+  PropertyValues
 } from 'lit-element';
 
+// we have to import the registered component independently from the definition below
+// because inside each of these files, we're registering the custom element inside
+// these files and by simply importing the class name, you lose that behavior
+// See https://github.com/microsoft/TypeScript/issues/9191 for more discussion
 import './form-elements/form-section';
-import './form-elements/header/donation-form-header';
 import './form-elements/contact-form';
 import './form-elements/payment-selector';
-import { BraintreeManagerInterface } from './braintree-manager/braintree-interfaces';
-import { DonationRequest } from './models/request_models/donation-request';
-import { ContactForm } from './form-elements/contact-form';
-import { DonationPaymentInfo } from './models/donation-info/donation-payment-info';
+import './form-elements/header/donation-form-header';
+
 import { DonationFormHeader } from './form-elements/header/donation-form-header';
+import { ContactForm } from './form-elements/contact-form';
+import { PaymentSelector } from './form-elements/payment-selector';
+
+import { BraintreeManagerInterface } from './braintree-manager/braintree-interfaces';
+
+import { DonationRequest } from './models/request-models/donation-request';
+import { DonationPaymentInfo } from './models/donation-info/donation-payment-info';
 import { DonationType } from './models/donation-info/donation-type';
+
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
 import { PaymentProvider } from './models/common/payment-provider-name';
-import { PaymentSelector } from './form-elements/payment-selector';
 
 @customElement('donation-form')
 export class DonationForm extends LitElement {

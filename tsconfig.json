@@ -1,23 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es6",                // define the target version of js
+    "target": "es6",
     "module": "esnext",
-    "lib": ["es2016", "dom"],       // define the minimum set of libraries needed to build
-    "experimentalDecorators": true, // needed for using decorators
-    "moduleResolution": "node",     // needed to correctly resolve node_modules like `lit-element`
-    "sourceMap": true,
-    "outDir": "./lib",
-    "declaration": true,
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "lib": ["es2017", "dom"],
     "strict": true,
-    "allowSyntheticDefaultImports": true
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "inlineSources": true,
+    "declaration": true,
+    "rootDir": "./"
   },
-  "include": [
-    "src/**/*.ts",
-    "dev_tools/**/*.ts",
-    "demo/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules/!(@open-wc)",
-    "node_modules/!(@types)"
-  ]
+  "include": ["**/*.ts"]
 }

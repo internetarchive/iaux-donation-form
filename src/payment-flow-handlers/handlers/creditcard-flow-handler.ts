@@ -2,7 +2,7 @@ import { BraintreeManagerInterface } from "../../braintree-manager/braintree-int
 import { RecaptchaManagerInterface } from "../../recaptcha-manager/recaptcha-manager";
 
 import { DonorContactInfo } from '../../models/common/donor-contact-info';
-import { DonationRequest } from '../../models/request_models/donation-request';
+import { DonationRequest } from '../../models/request-models/donation-request';
 import { DonationType } from '../../models/donation-info/donation-type';
 import { DonationResponse } from '../../models/response-models/donation-response';
 import { SuccessResponse } from '../../models/response-models/success-models/success-response';

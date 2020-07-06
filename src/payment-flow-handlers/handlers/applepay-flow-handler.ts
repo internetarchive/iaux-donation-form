@@ -3,7 +3,7 @@ import { ApplePaySessionDataSourceDelegate, ApplePaySessionDataSourceInterface }
 import { DonationResponse } from "../../models/response-models/donation-response";
 import { DonationPaymentInfo } from "../../models/donation-info/donation-payment-info";
 import { SuccessResponse } from "../../models/response-models/success-models/success-response";
-import { DonationRequest } from "../../models/request_models/donation-request";
+import { DonationRequest } from "../../models/request-models/donation-request";
 import { PaymentProvider } from "../../models/common/payment-provider-name";
 import { DonationType } from "../../models/donation-info/donation-type";
 import { DonationFlowModalManagerInterface } from "../donation-flow-modal-manager";

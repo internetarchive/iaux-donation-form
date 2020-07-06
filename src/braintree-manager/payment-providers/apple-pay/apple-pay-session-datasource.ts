@@ -2,7 +2,7 @@ import { DonationPaymentInfo } from "../../../models/donation-info/donation-paym
 import { BraintreeManagerInterface } from "../../braintree-interfaces";
 import { BillingInfo } from "../../../models/common/billing-info";
 import { CustomerInfo } from "../../../models/common/customer-info";
-import { DonationRequest, DonationRequestCustomFields } from "../../../models/request_models/donation-request";
+import { DonationRequest, DonationRequestCustomFields } from "../../../models/request-models/donation-request";
 import { DonationType } from "../../../models/donation-info/donation-type";
 import { DonationResponse } from "../../../models/response-models/donation-response";
 import { PaymentProvider } from "../../../models/common/payment-provider-name";
@@ -56,7 +56,7 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
       }
       this.session.completeMerchantValidation(validationData);
     });
-  };
+  }
 
   async oncancel(): Promise<void> {
     this.delegate?.paymentCancelled();
@@ -129,6 +129,6 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
       this.delegate?.paymentFailed(err);
       this.session.completePayment(ApplePaySession.STATUS_FAILURE);
     }
-  };
+  }
 
 }

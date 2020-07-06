@@ -6,7 +6,7 @@
 
 # build
 /_site/
-/lib
+/dist
 
 *.log
 node_modules

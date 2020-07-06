@@ -120,22 +120,12 @@ npm install
 
 ## Start Development Server
 ```bash
-npm start  // start development server and typescript compiler
+npm run start  // start development server and typescript compiler
 ```
 
 ## Testing
 ```bash
-npm test
-```
-
-## Testing via browserstack
-```bash
-npm test:bs
-```
-
-## Demoing using storybook
-```bash
-npm storybook
+npm run test
 ```
 
 ## Linting

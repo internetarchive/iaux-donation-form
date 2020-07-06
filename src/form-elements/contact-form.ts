@@ -7,14 +7,10 @@ import {
   TemplateResult,
   query
 } from 'lit-element';
-import { unsafeSVG } from 'lit-html/directives/unsafe-svg';
-import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 
 import { BillingInfo } from '../models/common/billing-info';
 import { CustomerInfo } from '../models/common/customer-info';
 import { DonorContactInfo } from '../models/common/donor-contact-info';
-
-import emailImg from '../assets/img/contact-form-icons/email';
 
 @customElement('contact-form')
 export class ContactForm extends LitElement {

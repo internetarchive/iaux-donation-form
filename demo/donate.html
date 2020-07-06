@@ -29,24 +29,23 @@
     }
   </style>
 
-  <script>
-    // *****************
-    // DON'T COMMIT KEYS
-    // *****************
-    window.config = {
-      BRAINTREE_KEY: '',
-      RECAPTCHA_KEY: ''
-    };
-  </script>
 </head>
 <body>
   <script type="module">
-    import './donation-form-controller';
+    import '../dist/demo/donation-form-controller.js';
   </script>
 
+  <!--
+    // *****************
+    // DON'T COMMIT KEYS
+    // *****************
+  -->
+
   <donation-form-controller
-    braintreeAuthToken=''
-    recaptchaSiteKey=''>
+    braintreeAuthToken='sandbox_x634jsj7_7zybks4ybp63pbmd'
+    recaptchaSiteKey='6LeTUvYUAAAAAPTvW98MaXyS8c6vxk4-9n8DI1ve'
+    venmoProfileId='1953896702662410263'
+    googlePayMerchantId=''>
   </donation-form-controller>
 </body>
 </html>

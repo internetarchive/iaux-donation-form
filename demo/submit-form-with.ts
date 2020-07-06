@@ -1,19 +1,30 @@
-export function submitFormWith({ method = 'POST', fields, action }) {
-  const form = document.createElement('form');
-  form.method = method;
-  form.action = action;
+export function submitFormWith(options: {
+  method?: string;
+  fields: { [key: string]: string | undefined };
+  action: string;
+}): void {
+  const form = document.createElement('form') as HTMLFormElement;
+  form.method = options.method ?? 'POST';
+  form.action = options.action;
   form.style.display = 'none';
   form.target = '_top';
 
   document.body.appendChild(form);
 
-  console.debug(method, fields, action);
+  // console.debug(method, fields, action);
 
-  Object.keys(fields).forEach((name) => {
+  const fields = options.fields ?? {};
+
+  Object.keys(fields).forEach((name: string) => {
     const input = document.createElement('input');
     input.type = 'text';
     input.name = name;
-    input.value = fields[name];
+
+    const value = fields[name];
+
+    if (value) {
+      input.value = value;
+    }
 
     form.appendChild(input)
   });

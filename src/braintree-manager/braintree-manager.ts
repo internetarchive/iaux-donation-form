@@ -1,5 +1,5 @@
 import { DonationResponse } from '../models/response-models/donation-response';
-import { DonationRequest } from '../models/request_models/donation-request';
+import { DonationRequest } from '../models/request-models/donation-request';
 import { PaymentProvidersInterface, PaymentProviders } from './payment-providers';
 import { PaymentClientsInterface } from './payment-clients';
 import { BraintreeManagerInterface, BraintreeEndpointManagerInterface, HostingEnvironment } from './braintree-interfaces';

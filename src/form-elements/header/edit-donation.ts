@@ -12,7 +12,6 @@ import {
 import currency from 'currency.js';
 
 import '../form-section';
-import '../static-custom-button';
 import { DonationType } from '../../models/donation-info/donation-type';
 import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
 import { CurrencyValidator } from './currency-validator';
