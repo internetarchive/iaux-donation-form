@@ -22,7 +22,11 @@ export class FormSection extends LitElement {
           <div class="number">${this.number}</div>
         </div>
         <div class="col right">
-          ${this.headline ? html`<div class="title">${this.headline}</div>` : ''}
+          ${this.headline
+            ? html`
+                <div class="title">${this.headline}</div>
+              `
+            : ''}
           <div class="content">
             <slot></slot>
           </div>

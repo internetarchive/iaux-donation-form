@@ -1,4 +1,4 @@
-import { BraintreeManagerInterface } from "../braintree-interfaces";
+import { BraintreeManagerInterface } from '../braintree-interfaces';
 
 export interface GooglePayHandlerInterface {
   isBrowserSupported(): Promise<boolean>;
@@ -30,19 +30,23 @@ export class GooglePayHandler implements GooglePayHandlerInterface {
   private googlePaymentsClient: google.payments.api.PaymentsClient;
 
   async isBrowserSupported(): Promise<boolean> {
-    return this.googlePaymentsClient.isReadyToPay({
-      // see https://developers.google.com/pay/api/web/reference/object#IsReadyToPayRequest for all options
-      apiVersion: 2,
-      apiVersionMinor: 0,
-      allowedPaymentMethods: [{
-        "type": "CARD",
-        "parameters": {
-          "allowedAuthMethods": ["PAN_ONLY"],
-          "allowedCardNetworks": ["AMEX", "DISCOVER", "INTERAC", "JCB", "MASTERCARD", "VISA"]
-        }
-      }],
-      existingPaymentMethodRequired: false
-    }).then((isReadyToPay) => isReadyToPay.result);
+    return this.googlePaymentsClient
+      .isReadyToPay({
+        // see https://developers.google.com/pay/api/web/reference/object#IsReadyToPayRequest for all options
+        apiVersion: 2,
+        apiVersionMinor: 0,
+        allowedPaymentMethods: [
+          {
+            type: 'CARD',
+            parameters: {
+              allowedAuthMethods: ['PAN_ONLY'],
+              allowedCardNetworks: ['AMEX', 'DISCOVER', 'INTERAC', 'JCB', 'MASTERCARD', 'VISA'],
+            },
+          },
+        ],
+        existingPaymentMethodRequired: false,
+      })
+      .then(isReadyToPay => isReadyToPay.result);
   }
 
   async getPaymentsClient(): Promise<google.payments.api.PaymentsClient> {
@@ -57,19 +61,23 @@ export class GooglePayHandler implements GooglePayHandlerInterface {
     const braintreeInstance = await this.braintreeManager.getInstance();
 
     return new Promise((resolve, reject) => {
-      this.googlePayBraintreeClient.create({
-        client: braintreeInstance,
-        googlePayVersion: 2,
-        googleMerchantId: this.googlePayMerchantId
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      }, (error: any, instance: braintree.GooglePayment) => {
-        if (error) {
-          return reject(error);
-        }
+      this.googlePayBraintreeClient.create(
+        {
+          client: braintreeInstance,
+          googlePayVersion: 2,
+          googleMerchantId: this.googlePayMerchantId,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (error: any, instance: braintree.GooglePayment) => {
+          if (error) {
+            return reject(error);
+          }
 
-        this.googlePayInstance = instance;
-        resolve(instance);
-      });
+          this.googlePayInstance = instance;
+          resolve(instance);
+        },
+      );
     });
   }
 }

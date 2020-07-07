@@ -1,4 +1,4 @@
-import { BraintreeManagerInterface } from "../braintree-interfaces";
+import { BraintreeManagerInterface } from '../braintree-interfaces';
 
 export interface CreditCardHandlerInterface {
   setupHostedFields(): Promise<braintree.HostedFields | undefined>;
@@ -12,7 +12,7 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
     braintreeManager: BraintreeManagerInterface,
     hostedFieldsClient: braintree.HostedFields,
     hostedFieldStyle: object,
-    hostedFieldConfig: braintree.HostedFieldFieldOptions
+    hostedFieldConfig: braintree.HostedFieldFieldOptions,
   ) {
     this.braintreeManager = braintreeManager;
     this.hostedFieldsClient = hostedFieldsClient;
@@ -53,18 +53,24 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
 
     return new Promise((resolve, reject) => {
       console.log('credit card hostedFieldsClient.create');
-      this.hostedFieldsClient.create({
-        client: braintreeClient,
-        styles: this.hostedFieldStyle,
-        fields: this.hostedFieldConfig
-      }, (hostedFieldsErr: braintree.BraintreeError | undefined, hostedFieldsInstance: braintree.HostedFields) => {
-        if (hostedFieldsErr) {
-          return reject(hostedFieldsErr);
-        }
+      this.hostedFieldsClient.create(
+        {
+          client: braintreeClient,
+          styles: this.hostedFieldStyle,
+          fields: this.hostedFieldConfig,
+        },
+        (
+          hostedFieldsErr: braintree.BraintreeError | undefined,
+          hostedFieldsInstance: braintree.HostedFields,
+        ) => {
+          if (hostedFieldsErr) {
+            return reject(hostedFieldsErr);
+          }
 
-        this.hostedFieldsInstance = hostedFieldsInstance;
-        resolve(hostedFieldsInstance);
-      });
+          this.hostedFieldsInstance = hostedFieldsInstance;
+          resolve(hostedFieldsInstance);
+        },
+      );
     });
   }
 

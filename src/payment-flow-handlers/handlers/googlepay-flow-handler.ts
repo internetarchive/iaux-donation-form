@@ -36,15 +36,15 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
       transactionInfo: {
         currencyCode: 'USD',
         totalPriceStatus: 'FINAL',
-        totalPrice: `${donationInfo.total}`
-      }
+        totalPrice: `${donationInfo.total}`,
+      },
     });
 
     const cardPaymentMethod = paymentDataRequest.allowedPaymentMethods[0];
     cardPaymentMethod.parameters.billingAddressRequired = true;
     cardPaymentMethod.parameters.billingAddressParameters = {
       format: 'FULL',
-      phoneNumberRequired: false
+      phoneNumberRequired: false,
     };
 
     console.debug('paymentDataRequest', cardPaymentMethod, paymentDataRequest);
@@ -53,7 +53,7 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
     try {
       const paymentData = await client.loadPaymentData(paymentDataRequest);
       const result: braintree.GooglePaymentTokenizePayload = await instance.parseResponse(
-        paymentData
+        paymentData,
       );
 
       const billingInfo = paymentData.paymentMethodData.info?.billingAddress;
@@ -79,7 +79,7 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
         locality: billingInfo?.locality,
         region: billingInfo?.administrativeArea,
         postalCode: billingInfo?.postalCode,
-        countryCodeAlpha2: billingInfo?.countryCode
+        countryCodeAlpha2: billingInfo?.countryCode,
       });
 
       const donationRequest = new DonationRequest({
@@ -96,8 +96,8 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
         billing,
         customFields: {
           // eslint-disable-next-line @typescript-eslint/camelcase
-          fee_amount_covered: donationInfo.feeAmountCovered
-        }
+          fee_amount_covered: donationInfo.feeAmountCovered,
+        },
       });
 
       const response = await this.braintreeManager.submitDataToEndpoint(donationRequest);
@@ -106,7 +106,7 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
         this.handleSuccessfulResponse(donationInfo, response.value as SuccessResponse);
       } else {
         this.donationFlowModalManager.showErrorModal({
-          message: "Error setting up donation"
+          message: 'Error setting up donation',
         });
       }
 
@@ -118,7 +118,7 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
 
   private handleSuccessfulResponse(
     donationInfo: DonationPaymentInfo,
-    response: SuccessResponse
+    response: SuccessResponse,
   ): void {
     console.debug('handleSuccessfulResponse', this);
     switch (donationInfo.donationType) {
@@ -135,7 +135,7 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
           userClosedModalCallback: () => {
             console.debug('modal closed');
             this.showThankYouModal({ successResponse: response });
-          }
+          },
         });
         break;
       case DonationType.Monthly:
@@ -155,12 +155,12 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
     upsellSuccessResponse?: SuccessResponse;
   }): void {
     this.donationFlowModalManager.showThankYouModal();
-this.braintreeManager.donationSuccessful(options)
+    this.braintreeManager.donationSuccessful(options);
   }
 
   private async modalYesSelected(
     oneTimeDonationResponse: SuccessResponse,
-    amount: number
+    amount: number,
   ): Promise<void> {
     console.debug('yesSelected, oneTimeDonationResponse', oneTimeDonationResponse, 'e', amount);
 
@@ -175,7 +175,7 @@ this.braintreeManager.donationSuccessful(options)
       customer: oneTimeDonationResponse.customer,
       billing: oneTimeDonationResponse.billing,
       customFields: undefined,
-      upsellOnetimeTransactionId: oneTimeDonationResponse.transaction_id
+      upsellOnetimeTransactionId: oneTimeDonationResponse.transaction_id,
     });
 
     this.donationFlowModalManager.showProcessingModal();
@@ -189,13 +189,12 @@ this.braintreeManager.donationSuccessful(options)
     if (response.success) {
       this.showThankYouModal({
         successResponse: oneTimeDonationResponse,
-        upsellSuccessResponse: response.value as SuccessResponse
+        upsellSuccessResponse: response.value as SuccessResponse,
       });
     } else {
       this.donationFlowModalManager.showErrorModal({
-        message: "Error setting up monthly donation"
+        message: 'Error setting up monthly donation',
       });
     }
   }
-
 }

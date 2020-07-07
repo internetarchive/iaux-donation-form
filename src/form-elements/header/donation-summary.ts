@@ -34,7 +34,10 @@ export class DonationSummary extends LitElement {
       precision = 0;
     }
 
-    const displayAmount = currency(this.donationInfo.amount, { formatWithSymbol: true, precision: precision }).format();
+    const displayAmount = currency(this.donationInfo.amount, {
+      formatWithSymbol: true,
+      precision: precision,
+    }).format();
 
     return `${displayAmount} ${monthlyString} Donation`;
   }

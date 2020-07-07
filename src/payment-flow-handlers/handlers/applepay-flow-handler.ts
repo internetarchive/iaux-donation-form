@@ -1,18 +1,22 @@
-import { BraintreeManagerInterface } from "../../braintree-manager/braintree-interfaces";
-import { ApplePaySessionDataSourceDelegate, ApplePaySessionDataSourceInterface } from "../../braintree-manager/payment-providers/apple-pay/apple-pay-session-datasource";
-import { DonationResponse } from "../../models/response-models/donation-response";
-import { DonationPaymentInfo } from "../../models/donation-info/donation-payment-info";
-import { SuccessResponse } from "../../models/response-models/success-models/success-response";
-import { DonationRequest } from "../../models/request-models/donation-request";
-import { PaymentProvider } from "../../models/common/payment-provider-name";
-import { DonationType } from "../../models/donation-info/donation-type";
-import { DonationFlowModalManagerInterface } from "../donation-flow-modal-manager";
+import { BraintreeManagerInterface } from '../../braintree-manager/braintree-interfaces';
+import {
+  ApplePaySessionDataSourceDelegate,
+  ApplePaySessionDataSourceInterface,
+} from '../../braintree-manager/payment-providers/apple-pay/apple-pay-session-datasource';
+import { DonationResponse } from '../../models/response-models/donation-response';
+import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
+import { SuccessResponse } from '../../models/response-models/success-models/success-response';
+import { DonationRequest } from '../../models/request-models/donation-request';
+import { PaymentProvider } from '../../models/common/payment-provider-name';
+import { DonationType } from '../../models/donation-info/donation-type';
+import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
 
 export interface ApplePayFlowHandlerInterface {
   paymentInitiated(donationInfo: DonationPaymentInfo, e: Event): Promise<void>;
 }
 
-export class ApplePayFlowHandler implements ApplePayFlowHandlerInterface, ApplePaySessionDataSourceDelegate {
+export class ApplePayFlowHandler
+  implements ApplePayFlowHandlerInterface, ApplePaySessionDataSourceDelegate {
   private donationFlowModalManager: DonationFlowModalManagerInterface;
 
   private braintreeManager: BraintreeManagerInterface;
@@ -29,7 +33,7 @@ export class ApplePayFlowHandler implements ApplePayFlowHandlerInterface, AppleP
 
   async paymentInitiated(donationInfo: DonationPaymentInfo, e: Event): Promise<void> {
     this.donationFlowModalManager.showProcessingModal();
-    const handler = await this.braintreeManager?.paymentProviders.getApplePayHandler()
+    const handler = await this.braintreeManager?.paymentProviders.getApplePayHandler();
     this.applePayDataSource = await handler?.createPaymentRequest(e, donationInfo);
 
     console.debug('paymentInitiated, e, applePayDataSource', e, this.applePayDataSource);
@@ -39,7 +43,10 @@ export class ApplePayFlowHandler implements ApplePayFlowHandlerInterface, AppleP
     }
   }
 
-  private async modalYesSelected(oneTimeDonationResponse: SuccessResponse, amount: number): Promise<void> {
+  private async modalYesSelected(
+    oneTimeDonationResponse: SuccessResponse,
+    amount: number,
+  ): Promise<void> {
     console.debug('yesSelected, oneTimeDonationResponse', oneTimeDonationResponse, 'e', amount);
 
     const donationRequest = new DonationRequest({
@@ -53,7 +60,7 @@ export class ApplePayFlowHandler implements ApplePayFlowHandlerInterface, AppleP
       customer: oneTimeDonationResponse.customer,
       billing: oneTimeDonationResponse.billing,
       customFields: undefined,
-      upsellOnetimeTransactionId: oneTimeDonationResponse.transaction_id
+      upsellOnetimeTransactionId: oneTimeDonationResponse.transaction_id,
     });
 
     this.donationFlowModalManager.showProcessingModal();
@@ -65,11 +72,11 @@ export class ApplePayFlowHandler implements ApplePayFlowHandlerInterface, AppleP
     if (response.success) {
       this.showThankYouModal({
         successResponse: oneTimeDonationResponse,
-        upsellSuccessResponse: response.value as SuccessResponse
+        upsellSuccessResponse: response.value as SuccessResponse,
       });
     } else {
       this.donationFlowModalManager.showErrorModal({
-        message: "Error setting up monthly donation"
+        message: 'Error setting up monthly donation',
       });
     }
   }
@@ -79,7 +86,7 @@ export class ApplePayFlowHandler implements ApplePayFlowHandlerInterface, AppleP
     upsellSuccessResponse?: SuccessResponse;
   }): void {
     this.donationFlowModalManager.showThankYouModal();
-this.braintreeManager.donationSuccessful(options)
+    this.braintreeManager.donationSuccessful(options);
   }
 
   // MARK - ApplePaySessionDataSourceDelegate
@@ -91,21 +98,21 @@ this.braintreeManager.donationSuccessful(options)
         this.donationFlowModalManager.showUpsellModal({
           yesSelected: this.modalYesSelected.bind(this, successResponse),
           noSelected: this.showThankYouModal.bind(this, { successResponse }),
-          userClosedModalCallback: this.showThankYouModal.bind(this, { successResponse })
-        })
+          userClosedModalCallback: this.showThankYouModal.bind(this, { successResponse }),
+        });
       } else {
         this.showThankYouModal({ successResponse });
       }
     } else {
       this.donationFlowModalManager.showErrorModal({
-        message: "Error setting up donation"
+        message: 'Error setting up donation',
       });
     }
   }
 
   paymentFailed(): void {
     this.donationFlowModalManager.showErrorModal({
-      message: "Payment failed"
+      message: 'Payment failed',
     });
   }
 

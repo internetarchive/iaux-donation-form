@@ -1,4 +1,4 @@
-import { DonationType } from "./donation-type";
+import { DonationType } from './donation-type';
 
 export class DonationPaymentInfo {
   donationType: DonationType;
@@ -10,7 +10,7 @@ export class DonationPaymentInfo {
   }
 
   get fee(): number {
-    const fee = (this.amount * 0.022) + 0.30;
+    const fee = this.amount * 0.022 + 0.3;
     return isNaN(fee) ? 0 : fee;
   }
 
@@ -23,17 +23,13 @@ export class DonationPaymentInfo {
     return new DonationPaymentInfo({
       donationType: DonationType.OneTime,
       amount: 5,
-      coverFees: false
+      coverFees: false,
     });
   }
 
-  constructor(params: {
-    donationType: DonationType;
-    amount: number;
-    coverFees: boolean;
-  }) {
+  constructor(params: { donationType: DonationType; amount: number; coverFees: boolean }) {
     this.donationType = params.donationType;
     this.amount = params.amount;
-    this.coverFees = params.coverFees
+    this.coverFees = params.coverFees;
   }
 }

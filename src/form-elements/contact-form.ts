@@ -5,7 +5,7 @@ import {
   customElement,
   CSSResult,
   TemplateResult,
-  query
+  query,
 } from 'lit-element';
 
 import { BillingInfo } from '../models/common/billing-info';
@@ -14,7 +14,6 @@ import { DonorContactInfo } from '../models/common/donor-contact-info';
 
 @customElement('contact-form')
 export class ContactForm extends LitElement {
-
   @query('#email') emailField!: HTMLInputElement;
   @query('#firstName') firstNameField!: HTMLInputElement;
   @query('#lastName') lastNameField!: HTMLInputElement;
@@ -30,7 +29,6 @@ export class ContactForm extends LitElement {
     // console.debug('render', emailImg);
 
     // style="background-image: url('data:image/svg+xml;utf8,${emailImg.getHTML()}')">
-
 
     // console.debug('BACKGROUND', background)
 
@@ -93,7 +91,7 @@ export class ContactForm extends LitElement {
   get donorContactInfo(): DonorContactInfo {
     return new DonorContactInfo({
       billing: this.billingInfo,
-      customer: this.contactInfo
+      customer: this.contactInfo,
     });
   }
 
@@ -104,7 +102,7 @@ export class ContactForm extends LitElement {
       locality: this.localityField.value,
       region: this.regionField.value,
       postalCode: this.postalCodeField.value,
-      countryCodeAlpha2: 'US'
+      countryCodeAlpha2: 'US',
     });
     return billingInfo;
   }
@@ -114,7 +112,7 @@ export class ContactForm extends LitElement {
       email: this.emailField.value,
       firstName: this.firstNameField.value,
       lastName: this.lastNameField.value,
-    })
+    });
   }
 
   /** @inheritdoc */

@@ -35,7 +35,7 @@ export class PaymentProviders implements PaymentProvidersInterface {
       this.braintreeManager,
       client,
       this.hostedFieldStyle,
-      this.hostedFieldConfig
+      this.hostedFieldConfig,
     );
 
     return this.creditCardHandlerCache;
@@ -57,7 +57,7 @@ export class PaymentProviders implements PaymentProvidersInterface {
     this.applePayHandlerCache = new ApplePayHandler(
       this.braintreeManager,
       client,
-      applePaySessionManager
+      applePaySessionManager,
     );
 
     console.debug('getApplePayHandler done', client, this.applePayHandlerCache);
@@ -80,7 +80,7 @@ export class PaymentProviders implements PaymentProvidersInterface {
     this.venmoHandlerCache = new VenmoHandler({
       braintreeManager: this.braintreeManager,
       venmoClient: client,
-      venmoProfileId: this.venmoProfileId
+      venmoProfileId: this.venmoProfileId,
     });
 
     console.debug('getVenmoHandler done', client, this.venmoHandlerCache);
@@ -100,7 +100,7 @@ export class PaymentProviders implements PaymentProvidersInterface {
       this.braintreeManager,
       client,
       paypalLibrary,
-      this.hostingEnvironment
+      this.hostingEnvironment,
     );
 
     console.log(this.paymentClients.getPayPal, paypalLibrary, this.paypalHandlerCache);
@@ -119,12 +119,11 @@ export class PaymentProviders implements PaymentProvidersInterface {
       braintreeManager: this.braintreeManager,
       googlePayMerchantId: this.googlePayMerchantId,
       googlePayBraintreeClient: braintreeClient,
-      googlePaymentsClient: googlePaymentsClient
-    })
+      googlePaymentsClient: googlePaymentsClient,
+    });
 
     console.log(this.googlePayHandlerCache);
     return this.googlePayHandlerCache;
-
   }
 
   private braintreeManager: BraintreeManagerInterface;

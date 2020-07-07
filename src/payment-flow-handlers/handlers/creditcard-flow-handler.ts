@@ -1,5 +1,5 @@
-import { BraintreeManagerInterface } from "../../braintree-manager/braintree-interfaces";
-import { RecaptchaManagerInterface } from "../../recaptcha-manager/recaptcha-manager";
+import { BraintreeManagerInterface } from '../../braintree-manager/braintree-interfaces';
+import { RecaptchaManagerInterface } from '../../recaptcha-manager/recaptcha-manager';
 
 import { DonorContactInfo } from '../../models/common/donor-contact-info';
 import { DonationRequest } from '../../models/request-models/donation-request';
@@ -13,7 +13,7 @@ import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manage
 export interface CreditCardFlowHandlerInterface {
   paymentInitiated(
     donationInfo: DonationPaymentInfo,
-    donorContactInfo: DonorContactInfo
+    donorContactInfo: DonorContactInfo,
   ): Promise<void>;
 }
 
@@ -37,7 +37,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
   // PaymentFlowHandlerInterface conformance
   async paymentInitiated(
     donationInfo: DonationPaymentInfo,
-    donorContactInfo: DonorContactInfo
+    donorContactInfo: DonorContactInfo,
   ): Promise<void> {
     let hostedFieldsResponse: braintree.HostedFieldsTokenizePayload | undefined;
 
@@ -47,18 +47,23 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     const handler = await this.braintreeManager.paymentProviders.getCreditCardHandler();
 
     try {
-      hostedFieldsResponse = await handler?.tokenizeHostedFields()
+      hostedFieldsResponse = await handler?.tokenizeHostedFields();
     } catch {
       this.donationFlowModalManager.showErrorModal({
-        message: "Error collecting credit card info"
+        message: 'Error collecting credit card info',
       });
-      return
+      return;
     }
-    console.debug('paymentInitiated, hostedFieldsResponse', hostedFieldsResponse, 'time from start', performance.now() - start);
+    console.debug(
+      'paymentInitiated, hostedFieldsResponse',
+      hostedFieldsResponse,
+      'time from start',
+      performance.now() - start,
+    );
 
     if (!hostedFieldsResponse) {
       this.donationFlowModalManager.showErrorModal({
-        message: "Error getting credit card response"
+        message: 'Error getting credit card response',
       });
       console.error('no hostedFieldsResponse');
       return;
@@ -70,12 +75,17 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       recaptchaToken = await this.recaptchaManager.execute();
     } catch {
       this.donationFlowModalManager.showErrorModal({
-        message: "Recaptcha failure"
+        message: 'Recaptcha failure',
       });
       console.error('recaptcha failure');
-      return
+      return;
     }
-    console.debug('paymentInitiated recaptchaToken', recaptchaToken, 'time from start', performance.now() - start);
+    console.debug(
+      'paymentInitiated recaptchaToken',
+      recaptchaToken,
+      'time from start',
+      performance.now() - start,
+    );
 
     this.donationFlowModalManager.showProcessingModal();
 
@@ -91,8 +101,8 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       billing: donorContactInfo.billing,
       customFields: {
         // eslint-disable-next-line @typescript-eslint/camelcase
-        fee_amount_covered: donationInfo.feeAmountCovered
-      }
+        fee_amount_covered: donationInfo.feeAmountCovered,
+      },
     });
 
     let response: DonationResponse;
@@ -105,15 +115,14 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
         this.handleSuccessfulResponse(donationInfo, response.value as SuccessResponse);
       } else {
         this.donationFlowModalManager.showErrorModal({
-          message: "Error setting up donation"
+          message: 'Error setting up donation',
         });
       }
-
     } catch {
       this.donationFlowModalManager.showErrorModal({
-        message: "Error getting a response from the server"
+        message: 'Error getting a response from the server',
       });
-      console.error('error getting a response')
+      console.error('error getting a response');
       return;
     }
   }
@@ -123,10 +132,13 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     upsellSuccessResponse?: SuccessResponse;
   }): void {
     this.donationFlowModalManager.showThankYouModal();
-this.braintreeManager.donationSuccessful(options)
+    this.braintreeManager.donationSuccessful(options);
   }
 
-  private handleSuccessfulResponse(donationInfo: DonationPaymentInfo, response: SuccessResponse): void {
+  private handleSuccessfulResponse(
+    donationInfo: DonationPaymentInfo,
+    response: SuccessResponse,
+  ): void {
     console.debug('handleSuccessfulResponse', this);
     switch (donationInfo.donationType) {
       case DonationType.OneTime:
@@ -142,20 +154,23 @@ this.braintreeManager.donationSuccessful(options)
           userClosedModalCallback: () => {
             console.debug('modal closed');
             this.showThankYouModal({ successResponse: response });
-          }
+          },
         });
-      break;
+        break;
       case DonationType.Monthly:
         this.showThankYouModal({ successResponse: response });
-      break;
+        break;
       // This case will never be reached, it is only here for completeness.
       // The upsell case gets handled in `modalYesSelected()` below
       case DonationType.Upsell:
-      break;
+        break;
     }
   }
 
-  private async modalYesSelected(oneTimeDonationResponse: SuccessResponse, amount: number): Promise<void> {
+  private async modalYesSelected(
+    oneTimeDonationResponse: SuccessResponse,
+    amount: number,
+  ): Promise<void> {
     console.debug('yesSelected, oneTimeDonationResponse', oneTimeDonationResponse, amount, this);
 
     const donationRequest = new DonationRequest({
@@ -169,7 +184,7 @@ this.braintreeManager.donationSuccessful(options)
       customer: oneTimeDonationResponse.customer,
       billing: oneTimeDonationResponse.billing,
       customFields: undefined,
-      upsellOnetimeTransactionId: oneTimeDonationResponse.transaction_id
+      upsellOnetimeTransactionId: oneTimeDonationResponse.transaction_id,
     });
 
     this.donationFlowModalManager.showProcessingModal();
@@ -183,11 +198,11 @@ this.braintreeManager.donationSuccessful(options)
     if (response.success) {
       this.showThankYouModal({
         successResponse: oneTimeDonationResponse,
-        upsellSuccessResponse: response.value as SuccessResponse
+        upsellSuccessResponse: response.value as SuccessResponse,
       });
     } else {
       this.donationFlowModalManager.showErrorModal({
-        message: "Error setting up monthly donation"
+        message: 'Error setting up monthly donation',
       });
     }
   }

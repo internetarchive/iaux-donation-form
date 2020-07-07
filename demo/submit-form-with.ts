@@ -26,7 +26,7 @@ export function submitFormWith(options: {
       input.value = value;
     }
 
-    form.appendChild(input)
+    form.appendChild(input);
   });
 
   console.debug('form', form);

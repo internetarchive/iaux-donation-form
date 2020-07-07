@@ -47,8 +47,8 @@ export class PaymentClients implements PaymentClientsInterface {
       src: 'https://www.paypalobjects.com/api/checkout.js',
       attributes: [
         { key: 'data-version-4', value: '' },
-        { key: 'log-level', value: 'warn' }
-      ]
+        { key: 'log-level', value: 'warn' },
+      ],
     });
     console.debug('getPaypalLibrary window.paypal finished loading', window.paypal);
     return window.paypal;
@@ -59,7 +59,7 @@ export class PaymentClients implements PaymentClientsInterface {
     await this.lazyLoader.loadScript({ src: 'https://pay.google.com/gp/p/js/pay.js' });
     console.debug('getGooglePaymentsClient loaded', google.payments.api.PaymentsClient);
     const paymentsClient = new google.payments.api.PaymentsClient({
-      environment: 'TEST' // Or 'PRODUCTION'
+      environment: 'TEST', // Or 'PRODUCTION'
     });
 
     return paymentsClient;
@@ -190,10 +190,7 @@ export class PaymentClients implements PaymentClientsInterface {
 
   private environment: HostingEnvironment = HostingEnvironment.Development;
 
-  constructor(
-    lazyLoader: LazyLoaderServiceInterface,
-    environment: HostingEnvironment
-  ) {
+  constructor(lazyLoader: LazyLoaderServiceInterface, environment: HostingEnvironment) {
     this.lazyLoader = lazyLoader;
     this.environment = environment;
   }

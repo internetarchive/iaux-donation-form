@@ -1,8 +1,11 @@
-import { PayPalButtonDataSourceInterface, PayPalButtonDataSourceDelegate } from "../../braintree-manager/payment-providers/paypal/paypal-button-datasource";
-import { DonationResponse } from "../../models/response-models/donation-response";
-import { BraintreeManagerInterface } from "../../braintree-manager/braintree-interfaces";
-import { DonationType } from "../../models/donation-info/donation-type";
-import { DonationPaymentInfo } from "../../models/donation-info/donation-payment-info";
+import {
+  PayPalButtonDataSourceInterface,
+  PayPalButtonDataSourceDelegate,
+} from '../../braintree-manager/payment-providers/paypal/paypal-button-datasource';
+import { DonationResponse } from '../../models/response-models/donation-response';
+import { BraintreeManagerInterface } from '../../braintree-manager/braintree-interfaces';
+import { DonationType } from '../../models/donation-info/donation-type';
+import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
 
 import { UpsellModalCTAMode } from '../../modals/upsell-modal-content';
 import { DonationRequest } from '../../models/request-models/donation-request';
@@ -11,7 +14,6 @@ import { CustomerInfo } from '../../models/common/customer-info';
 import { BillingInfo } from '../../models/common/billing-info';
 import { PaymentProvider } from '../../models/common/payment-provider-name';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
-
 
 export interface PayPalFlowHandlerInterface {
   updateDonationInfo(donationInfo: DonationPaymentInfo): void;
@@ -48,7 +50,8 @@ class UpsellDataSourceContainer {
  * @implements {PayPalFlowHandlerInterface}
  * @implements {PayPalButtonDataSourceDelegate}
  */
-export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButtonDataSourceDelegate {
+export class PayPalFlowHandler
+  implements PayPalFlowHandlerInterface, PayPalButtonDataSourceDelegate {
   private upsellButtonDataSourceContainer?: UpsellDataSourceContainer;
 
   private buttonDataSource?: PayPalButtonDataSourceInterface;
@@ -78,13 +81,29 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
     this.donationFlowModalManager = options.donationFlowModalManager;
   }
 
-  async payPalPaymentStarted(dataSource: PayPalButtonDataSourceInterface, options: object): Promise<void> {
-    console.debug('PaymentSector:payPalPaymentStarted options:', dataSource, dataSource.donationInfo, options);
+  async payPalPaymentStarted(
+    dataSource: PayPalButtonDataSourceInterface,
+    options: object,
+  ): Promise<void> {
+    console.debug(
+      'PaymentSector:payPalPaymentStarted options:',
+      dataSource,
+      dataSource.donationInfo,
+      options,
+    );
     // this.donationFlowModalManager.showProcessingModal();
   }
 
-  async payPalPaymentAuthorized(dataSource: PayPalButtonDataSourceInterface, payload: paypal.TokenizePayload): Promise<void> {
-    console.debug('PaymentSector:payPalPaymentAuthorized payload,response', dataSource, dataSource.donationInfo, payload);
+  async payPalPaymentAuthorized(
+    dataSource: PayPalButtonDataSourceInterface,
+    payload: paypal.TokenizePayload,
+  ): Promise<void> {
+    console.debug(
+      'PaymentSector:payPalPaymentAuthorized payload,response',
+      dataSource,
+      dataSource.donationInfo,
+      payload,
+    );
 
     this.donationFlowModalManager.showProcessingModal();
 
@@ -92,7 +111,7 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
 
     const request = this.buildDonationRequest({
       donationInfo: dataSource.donationInfo,
-      payload
+      payload,
     });
 
     if (this.upsellButtonDataSourceContainer) {
@@ -103,7 +122,7 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
 
     if (!response.success) {
       this.donationFlowModalManager.showErrorModal({
-        message: "Error setting up donation"
+        message: 'Error setting up donation',
       });
       // alert('ERROR DURING payPalPaymentAuthorized');
       console.error('Error during payPalPaymentAuthorized', response);
@@ -127,24 +146,40 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
         if (this.upsellButtonDataSourceContainer) {
           this.showThankYouModal({
             successResponse: this.upsellButtonDataSourceContainer.oneTimeSuccessResponse,
-            upsellSuccessResponse: successResponse
+            upsellSuccessResponse: successResponse,
           });
         } else {
           // we're in the upsell flow, but no upsell data source container.. this should not happen
           this.donationFlowModalManager.showErrorModal({
-            message: "Error setting up monthly donation"
+            message: 'Error setting up monthly donation',
           });
         }
         break;
     }
   }
 
-  async payPalPaymentCancelled(dataSource: PayPalButtonDataSourceInterface, data: object): Promise<void> {
-    console.debug('PaymentSector:payPalPaymentCancelled data:', dataSource, dataSource.donationInfo, data);
+  async payPalPaymentCancelled(
+    dataSource: PayPalButtonDataSourceInterface,
+    data: object,
+  ): Promise<void> {
+    console.debug(
+      'PaymentSector:payPalPaymentCancelled data:',
+      dataSource,
+      dataSource.donationInfo,
+      data,
+    );
   }
 
-  async payPalPaymentError(dataSource: PayPalButtonDataSourceInterface, error: string): Promise<void> {
-    console.debug('PaymentSector:payPalPaymentError error:', dataSource, dataSource.donationInfo, error);
+  async payPalPaymentError(
+    dataSource: PayPalButtonDataSourceInterface,
+    error: string,
+  ): Promise<void> {
+    console.debug(
+      'PaymentSector:payPalPaymentError error:',
+      dataSource,
+      dataSource.donationInfo,
+      error,
+    );
   }
 
   async renderPayPalButton(donationInfo: DonationPaymentInfo): Promise<void> {
@@ -157,9 +192,9 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
         label: 'paypal' as paypal.ButtonLabelOption,
         shape: 'rect' as paypal.ButtonShapeOption,
         size: 'medium' as paypal.ButtonSizeOption,
-        tagline: false
+        tagline: false,
       },
-      donationInfo: donationInfo
+      donationInfo: donationInfo,
     });
 
     if (this.buttonDataSource) {
@@ -177,7 +212,7 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
 
   private async showUpsellModal(
     oneTimePayload: paypal.TokenizePayload,
-    oneTimeSuccessResponse: SuccessResponse
+    oneTimeSuccessResponse: SuccessResponse,
   ): Promise<void> {
     console.debug('showUpsellModal', oneTimePayload, oneTimeSuccessResponse);
 
@@ -191,20 +226,20 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
       userClosedModalCallback: () => {
         console.debug('userClosedModalCallback');
         this.showThankYouModal({ successResponse: oneTimeSuccessResponse });
-      }
+      },
     });
 
     const upsellDonationInfo = new DonationPaymentInfo({
       amount: 5, // TODO: <-- this should be dynamic based on the one-time amount
       donationType: DonationType.Upsell,
-      coverFees: false
+      coverFees: false,
     });
 
     if (!this.upsellButtonDataSourceContainer) {
       this.renderUpsellPayPalButton({
         donationInfo: upsellDonationInfo,
         oneTimePayload,
-        oneTimeSuccessResponse
+        oneTimeSuccessResponse,
       });
     }
   }
@@ -230,9 +265,9 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
         label: 'paypal' as paypal.ButtonLabelOption,
         shape: 'rect' as paypal.ButtonShapeOption,
         size: 'small' as paypal.ButtonSizeOption,
-        tagline: false
+        tagline: false,
       },
-      donationInfo: options.donationInfo
+      donationInfo: options.donationInfo,
     });
 
     if (upsellButtonDataSource) {
@@ -240,12 +275,12 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
       this.upsellButtonDataSourceContainer = new UpsellDataSourceContainer({
         upsellButtonDataSource: upsellButtonDataSource,
         oneTimePayload: options.oneTimePayload,
-        oneTimeSuccessResponse: options.oneTimeSuccessResponse
+        oneTimeSuccessResponse: options.oneTimeSuccessResponse,
       });
     } else {
       // this.showErrorModal();
       // alert('ERROR RENDERING UPSELL PAYPAL BUTTON');
-      console.error('error rendering paypal upsell button')
+      console.error('error rendering paypal upsell button');
     }
   }
 
@@ -258,7 +293,7 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
     const customerInfo = new CustomerInfo({
       email: details?.email,
       firstName: details?.firstName,
-      lastName: details?.lastName
+      lastName: details?.lastName,
     });
 
     const shippingAddress = details.shippingAddress;
@@ -269,8 +304,8 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
       locality: shippingAddress?.city,
       region: shippingAddress?.state,
       postalCode: shippingAddress?.postalCode,
-      countryCodeAlpha2: shippingAddress?.countryCode
-    })
+      countryCodeAlpha2: shippingAddress?.countryCode,
+    });
 
     const request = new DonationRequest({
       paymentProvider: PaymentProvider.PayPal,
@@ -281,13 +316,12 @@ export class PayPalFlowHandler implements PayPalFlowHandlerInterface, PayPalButt
       billing: billingInfo,
       customFields: {
         // eslint-disable-next-line @typescript-eslint/camelcase
-        fee_amount_covered: params.donationInfo.feeAmountCovered
-      }
+        fee_amount_covered: params.donationInfo.feeAmountCovered,
+      },
     });
 
     console.debug('buildDonationRequest, request', request);
 
-    return request
+    return request;
   }
-
 }

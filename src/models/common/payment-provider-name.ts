@@ -3,5 +3,5 @@ export enum PaymentProvider {
   PayPal = 'PayPal',
   GooglePay = 'Google Pay',
   Venmo = 'Venmo',
-  ApplePay = 'Apple Pay'
+  ApplePay = 'Apple Pay',
 }

@@ -9,10 +9,7 @@ export class ErrorResponse {
    * @param {message: string, errors: BraintreeError[]} params
    * @memberof ErrorResponse
    */
-  constructor(params: {
-    message: string;
-    errors?: CodedError[];
-  }) {
+  constructor(params: { message: string; errors?: CodedError[] }) {
     this.message = params.message;
 
     const { errors = [] } = params;

@@ -24,7 +24,7 @@ export class UpsellModalContent extends LitElement {
     return html`
       <div class="monthly-amount">
         <h3>Enter your monthly amount</h3>
-        $ <input type="text" value=${this.amount} @input=${this.amountChanged}>
+        $ <input type="text" value=${this.amount} @input=${this.amountChanged} />
       </div>
 
       ${this.yesButton}
@@ -54,12 +54,12 @@ export class UpsellModalContent extends LitElement {
     const amount = (e.target as HTMLFormElement).value;
     console.debug('amountChanged', e, amount);
     this.amount = parseFloat(amount);
-    const event = new CustomEvent('amountChanged', { detail: { amount: this.amount }});
+    const event = new CustomEvent('amountChanged', { detail: { amount: this.amount } });
     this.dispatchEvent(event);
   }
 
   private yesSelected(): void {
-    const event = new CustomEvent('yesSelected', { detail: { amount: this.amount }});
+    const event = new CustomEvent('yesSelected', { detail: { amount: this.amount } });
     this.dispatchEvent(event);
   }
 

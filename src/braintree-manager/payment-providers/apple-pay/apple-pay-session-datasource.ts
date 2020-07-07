@@ -1,11 +1,14 @@
-import { DonationPaymentInfo } from "../../../models/donation-info/donation-payment-info";
-import { BraintreeManagerInterface } from "../../braintree-interfaces";
-import { BillingInfo } from "../../../models/common/billing-info";
-import { CustomerInfo } from "../../../models/common/customer-info";
-import { DonationRequest, DonationRequestCustomFields } from "../../../models/request-models/donation-request";
-import { DonationType } from "../../../models/donation-info/donation-type";
-import { DonationResponse } from "../../../models/response-models/donation-response";
-import { PaymentProvider } from "../../../models/common/payment-provider-name";
+import { DonationPaymentInfo } from '../../../models/donation-info/donation-payment-info';
+import { BraintreeManagerInterface } from '../../braintree-interfaces';
+import { BillingInfo } from '../../../models/common/billing-info';
+import { CustomerInfo } from '../../../models/common/customer-info';
+import {
+  DonationRequest,
+  DonationRequestCustomFields,
+} from '../../../models/request-models/donation-request';
+import { DonationType } from '../../../models/donation-info/donation-type';
+import { DonationResponse } from '../../../models/response-models/donation-response';
+import { PaymentProvider } from '../../../models/common/payment-provider-name';
 
 export interface ApplePaySessionDataSourceInterface {
   delegate?: ApplePaySessionDataSourceDelegate;
@@ -44,18 +47,21 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
   }
 
   async onvalidatemerchant(event: ApplePayJS.ApplePayValidateMerchantEvent): Promise<void> {
-    this.applePayInstance.performValidation({
-      validationURL: event.validationURL,
-      displayName: 'Internet Archive'
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }, (validationErr: any, validationData: any) => {
-      if (validationErr) {
-        this.delegate?.paymentFailed(validationErr);
-        this.session.abort();
-        return;
-      }
-      this.session.completeMerchantValidation(validationData);
-    });
+    this.applePayInstance.performValidation(
+      {
+        validationURL: event.validationURL,
+        displayName: 'Internet Archive',
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (validationErr: any, validationData: any) => {
+        if (validationErr) {
+          this.delegate?.paymentFailed(validationErr);
+          this.session.abort();
+          return;
+        }
+        this.session.completeMerchantValidation(validationData);
+      },
+    );
   }
 
   async oncancel(): Promise<void> {
@@ -67,7 +73,7 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
 
     try {
       payload = await this.applePayInstance.tokenize({
-        token: event.payment.token
+        token: event.payment.token,
       });
     } catch (err) {
       this.delegate?.paymentFailed(err);
@@ -93,13 +99,13 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
       locality: billingContact?.locality,
       region: billingContact?.administrativeArea,
       postalCode: billingContact?.postalCode,
-      countryCodeAlpha2: billingContact?.countryCode
+      countryCodeAlpha2: billingContact?.countryCode,
     });
 
     const customerInfo = new CustomerInfo({
       email: billingContact?.emailAddress,
       firstName: billingContact?.givenName,
-      lastName: billingContact?.familyName
+      lastName: billingContact?.familyName,
     });
 
     const customFields = new DonationRequestCustomFields();
@@ -113,7 +119,7 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
       donationType: DonationType.OneTime,
       customer: customerInfo,
       billing: billingInfo,
-      customFields: customFields
+      customFields: customFields,
     });
 
     try {
@@ -130,5 +136,4 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
       this.session.completePayment(ApplePaySession.STATUS_FAILURE);
     }
   }
-
 }

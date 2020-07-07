@@ -42,17 +42,14 @@ export class EditDonation extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <form-section
-        number=1
-        headline="Choose a frequency">
-
+      <form-section number="1" headline="Choose a frequency">
         <ul class="frequency-selector">
           <li>
             ${this.getRadioButton({
               group: SelectionGroup.DonationType,
               value: DonationType.OneTime,
               displayText: 'One time',
-              checked: this.donationInfo.donationType === DonationType.OneTime
+              checked: this.donationInfo.donationType === DonationType.OneTime,
             })}
           </li>
 
@@ -61,17 +58,13 @@ export class EditDonation extends LitElement {
               group: SelectionGroup.DonationType,
               value: DonationType.Monthly,
               displayText: 'Monthly',
-              checked: this.donationInfo.donationType === DonationType.Monthly
+              checked: this.donationInfo.donationType === DonationType.Monthly,
             })}
           </li>
         </ul>
-
       </form-section>
 
-      <form-section
-        number=2
-        headline="Choose an amount (USD)">
-
+      <form-section number="2" headline="Choose an amount (USD)">
         <ul class="amount-selector">
           ${this.presetAmountsTemplate}
           <li class="custom-amount">${this.customAmountTemplate}</li>
@@ -82,12 +75,11 @@ export class EditDonation extends LitElement {
         </div>
 
         <div class="cover-fees-container">
-          <input
-            type="checkbox"
-            id="cover-fees"
-            @input=${this.coverFeesChecked} />
+          <input type="checkbox" id="cover-fees" @input=${this.coverFeesChecked} />
           <label for="cover-fees">
-            I'll generously add ${currency(this.donationInfo.fee, { formatWithSymbol: true }).format()} to cover the transaction fees so you can keep 100% of my donation.
+            I'll generously add
+            ${currency(this.donationInfo.fee, { formatWithSymbol: true }).format()} to cover the
+            transaction fees so you can keep 100% of my donation.
           </label>
         </div>
       </form-section>
@@ -104,7 +96,14 @@ export class EditDonation extends LitElement {
     const radioId = `${options.group}-${options.value}-option`;
     return html`
       <div class="selection-button">
-        <input type="radio" name=${options.group} value=${options.value} id=${radioId} .checked=${options.checked} @change=${this.radioSelected}>
+        <input
+          type="radio"
+          name=${options.group}
+          value=${options.value}
+          id=${radioId}
+          .checked=${options.checked}
+          @change=${this.radioSelected}
+        />
         <label for=${radioId}>${options.displayText}</label>
       </div>
     `;
@@ -112,16 +111,18 @@ export class EditDonation extends LitElement {
 
   private get presetAmountsTemplate(): TemplateResult {
     return html`
-      ${this.amountOptions.map(amount => html`
-        <li>
-          ${this.getRadioButton({
-            group: SelectionGroup.Amount,
-            value: `${amount}`,
-            displayText: `$${amount}`,
-            checked: amount === this.donationInfo.amount
-          })}
-        </li>
-      `)}
+      ${this.amountOptions.map(
+        amount => html`
+          <li>
+            ${this.getRadioButton({
+              group: SelectionGroup.Amount,
+              value: `${amount}`,
+              displayText: `$${amount}`,
+              checked: amount === this.donationInfo.amount,
+            })}
+          </li>
+        `,
+      )}
     `;
   }
 
@@ -131,20 +132,24 @@ export class EditDonation extends LitElement {
 
     return html`
       <div class="selection-button">
-        <input type="radio"
-               name=${SelectionGroup.Amount}
-               value="custom"
-               id="custom-amount-button"
-               .checked=${selected}
-               @change=${this.customRadioSelected}>
+        <input
+          type="radio"
+          name=${SelectionGroup.Amount}
+          value="custom"
+          id="custom-amount-button"
+          .checked=${selected}
+          @change=${this.customRadioSelected}
+        />
 
         <label for="custom-amount-button">
-          Custom: $<input type="text"
-                          id="custom-amount-input"
-                          value=${value}
-                          @input=${this.customAmountChanged}
-                          @keydown=${this.currencyValidator.keydown}
-                          @focus=${this.customAmountFocused} />
+          Custom: $<input
+            type="text"
+            id="custom-amount-input"
+            value=${value}
+            @input=${this.customAmountChanged}
+            @keydown=${this.currencyValidator.keydown}
+            @focus=${this.customAmountFocused}
+          />
         </label>
       </div>
     `;
@@ -167,7 +172,7 @@ export class EditDonation extends LitElement {
     this.donationInfo = new DonationPaymentInfo({
       amount: this.donationInfo.amount,
       donationType: this.donationInfo.donationType,
-      coverFees: coverFees
+      coverFees: coverFees,
     });
     console.debug('coverFeesChecked', this.donationInfo);
     this.dispatchDonationInfoChangedEvent();
@@ -184,14 +189,19 @@ export class EditDonation extends LitElement {
     console.debug('amountChanged', amount);
 
     if (amount > 10000) {
-      this.error = html`To make a donation of $10,000 or more, please contact our philanthropy department at <a href="mailto:donations@archive.org">donations@archive.org</a>`;
+      this.error = html`
+        To make a donation of $10,000 or more, please contact our philanthropy department at
+        <a href="mailto:donations@archive.org">donations@archive.org</a>
+      `;
       this.dispatchEditDonationError(DonationInfoError.DonationTooHigh);
       return;
     }
 
     if (amount < 1) {
       if (this.customAmountInput.value.length > 0) {
-        this.error = html`Please select an amount (minimum $1)`;
+        this.error = html`
+          Please select an amount (minimum $1)
+        `;
       }
       this.dispatchEditDonationError(DonationInfoError.DonationTooLow);
       return;
@@ -247,10 +257,12 @@ export class EditDonation extends LitElement {
     const newDonationInfo = new DonationPaymentInfo({
       donationType: this.donationInfo.donationType,
       amount: this.donationInfo.amount,
-      coverFees: this.donationInfo.coverFees
+      coverFees: this.donationInfo.coverFees,
     });
 
-    const event = new CustomEvent('donationInfoChanged', { detail: { donationInfo: newDonationInfo } });
+    const event = new CustomEvent('donationInfoChanged', {
+      detail: { donationInfo: newDonationInfo },
+    });
     this.dispatchEvent(event);
   }
 
@@ -290,20 +302,20 @@ export class EditDonation extends LitElement {
         font-weight: bold;
       }
 
-      label[for="custom-amount-button"] {
+      label[for='custom-amount-button'] {
         padding-top: 3px;
         padding-bottom: 2px;
       }
 
-      input[type="radio"] {
+      input[type='radio'] {
         display: none;
       }
 
-      input[type="radio"] + label {
+      input[type='radio'] + label {
         background-color: ${buttonColorCss};
       }
 
-      input[type="radio"]:checked + label {
+      input[type='radio']:checked + label {
         background-color: ${buttonSelectedColorCss};
       }
 

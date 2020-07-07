@@ -1,7 +1,7 @@
-import { PaymentProvidersInterface } from "./payment-providers";
-import { DonationRequest } from "../models/request-models/donation-request";
-import { DonationResponse } from "../models/response-models/donation-response";
-import { SuccessResponse } from "../models/response-models/success-models/success-response";
+import { PaymentProvidersInterface } from './payment-providers';
+import { DonationRequest } from '../models/request-models/donation-request';
+import { DonationResponse } from '../models/response-models/donation-response';
+import { SuccessResponse } from '../models/response-models/success-models/success-response';
 
 export interface BraintreeManagerInterface {
   paymentProviders: PaymentProvidersInterface;

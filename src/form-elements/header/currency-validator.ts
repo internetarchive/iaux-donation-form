@@ -14,13 +14,13 @@ export class CurrencyValidator implements FieldValidator {
     }
 
     switch (char) {
-      case "Delete":
-      case "Backspace":
-      case "ArrowLeft":
-      case "ArrowRight":
-      case "ArrowUp":
-      case "ArrowDown":
-      return;
+      case 'Delete':
+      case 'Backspace':
+      case 'ArrowLeft':
+      case 'ArrowRight':
+      case 'ArrowUp':
+      case 'ArrowDown':
+        return;
     }
 
     const input = e.target as HTMLInputElement;

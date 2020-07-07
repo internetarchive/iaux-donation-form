@@ -1,15 +1,34 @@
-import { LitElement, html, property, PropertyValues, query, TemplateResult, customElement } from 'lit-element';
+import {
+  LitElement,
+  html,
+  property,
+  PropertyValues,
+  query,
+  TemplateResult,
+  customElement,
+} from 'lit-element';
 
-import { LazyLoaderService, LazyLoaderServiceInterface } from '@internetarchive/lazy-loader-service';
+import {
+  LazyLoaderService,
+  LazyLoaderServiceInterface,
+} from '@internetarchive/lazy-loader-service';
 import { ModalManager } from '@internetarchive/modal-manager';
 
-import { AnalyticsHandlerInterface } from './@types/analytics-handler';
+// import { AnalyticsHandlerInterface } from './@types/analytics-handler';
 
 import { DonationForm } from './donation-form';
 import { PaymentClients, PaymentClientsInterface } from './braintree-manager/payment-clients';
 import { BraintreeManager } from './braintree-manager/braintree-manager';
-import { BraintreeEndpointManagerInterface, BraintreeManagerInterface, HostingEnvironment } from './braintree-manager/braintree-interfaces';
-import { PaymentFlowHandlers, PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
+import {
+  BraintreeEndpointManagerInterface,
+  BraintreeManagerInterface,
+  HostingEnvironment,
+} from './braintree-manager/braintree-interfaces';
+import {
+  PaymentFlowHandlers,
+  PaymentFlowHandlersInterface,
+} from './payment-flow-handlers/payment-flow-handlers';
+
 import { RecaptchaManager, RecaptchaManagerInterface } from './recaptcha-manager/recaptcha-manager';
 
 /**
@@ -25,7 +44,6 @@ import { RecaptchaManager, RecaptchaManagerInterface } from './recaptcha-manager
  */
 @customElement('ia-donation-form-controller')
 export class IADonationFormController extends LitElement {
-
   @property({ type: String }) environment: HostingEnvironment = HostingEnvironment.Development;
 
   @property({ type: String }) braintreeAuthToken?: string;
@@ -36,11 +54,12 @@ export class IADonationFormController extends LitElement {
 
   @property({ type: String }) googlePayMerchantId?: string;
 
-  @property({ type: String }) analyticsCategory = 'DonationForm'
+  @property({ type: String }) analyticsCategory = 'DonationForm';
 
   @property({ type: Object }) endpointManager?: BraintreeEndpointManagerInterface;
 
-  @property({ type: Object }) analyticsHandler?: AnalyticsHandlerInterface;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @property({ type: Object }) analyticsHandler?: any;
 
   @property({ type: Object }) private braintreeManager?: BraintreeManagerInterface;
 
@@ -56,20 +75,25 @@ export class IADonationFormController extends LitElement {
 
   private lazyLoaderService: LazyLoaderServiceInterface = new LazyLoaderService();
 
-  private paymentClients: PaymentClientsInterface = new PaymentClients(this.lazyLoaderService, this.environment);
+  private paymentClients: PaymentClientsInterface = new PaymentClients(
+    this.lazyLoaderService,
+    this.environment,
+  );
 
   /** @inheritdoc */
   updated(changedProperties: PropertyValues): void {
     console.debug('updated', changedProperties);
-    if (changedProperties.has('braintreeAuthToken') || changedProperties.has('endpointManager') &&
-        this.braintreeManager === undefined) {
+    if (
+      changedProperties.has('braintreeAuthToken') ||
+      (changedProperties.has('endpointManager') && this.braintreeManager === undefined)
+    ) {
       this.setupBraintreeManager();
     }
 
     if (changedProperties.has('recaptchaSiteKey') && this.recaptchaSiteKey) {
       this.recaptchaManager = new RecaptchaManager({
         grecaptchaLibrary: window.grecaptcha,
-        siteKey: this.recaptchaSiteKey
+        siteKey: this.recaptchaSiteKey,
       });
     }
 
@@ -90,18 +114,20 @@ export class IADonationFormController extends LitElement {
         googlePayMerchantId: this.googlePayMerchantId,
         hostedFieldStyle: this.hostedFieldStyle,
         hostedFieldConfig: this.hostedFieldConfig,
-        hostingEnvironment: HostingEnvironment.Development
+        hostingEnvironment: HostingEnvironment.Development,
       });
     }
   }
 
   private setupPaymentFlowHandlers(): void {
-    if (!this.braintreeManager || !this.recaptchaManager) { return; }
+    if (!this.braintreeManager || !this.recaptchaManager) {
+      return;
+    }
 
     this.paymentFlowHandlers = new PaymentFlowHandlers({
       braintreeManager: this.braintreeManager,
       modalManager: this.modalManager,
-      recaptchaManager: this.recaptchaManager
+      recaptchaManager: this.recaptchaManager,
     });
 
     this.donationForm.braintreeManager = this.braintreeManager;
@@ -123,11 +149,10 @@ export class IADonationFormController extends LitElement {
       ':focus': {
         color: '#333',
       },
-      '.valid': {
-      },
+      '.valid': {},
       '.invalid': {
         color: '#b00b00',
-      }
+      },
     };
   }
 
@@ -135,17 +160,17 @@ export class IADonationFormController extends LitElement {
     return {
       number: {
         selector: '#braintree-creditcard',
-        placeholder: 'Card number'
+        placeholder: 'Card number',
       },
       cvv: {
         selector: '#braintree-cvv',
-        placeholder: 'CVC'
+        placeholder: 'CVC',
       },
       expirationDate: {
         selector: '#braintree-expiration',
-        placeholder: 'MM / YY'
-      }
-    }
+        placeholder: 'MM / YY',
+      },
+    };
   }
 
   /** @inheritdoc */
@@ -161,9 +186,7 @@ export class IADonationFormController extends LitElement {
         </div>
       </modal-manager>
 
-      <donation-form
-        .braintreeManager=${this.braintreeManager}>
-
+      <donation-form .braintreeManager=${this.braintreeManager}>
         <!--
           Why are these slots here?
 
@@ -282,7 +305,10 @@ export class IADonationFormController extends LitElement {
    */
   private logEvent(name: string, params: object): void {
     this.analyticsHandler?.sendEvent(
-      this.analyticsCategory, name, window.location.pathname, params,
+      this.analyticsCategory,
+      name,
+      window.location.pathname,
+      params,
     );
   }
 }

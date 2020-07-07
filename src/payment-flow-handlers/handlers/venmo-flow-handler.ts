@@ -1,19 +1,19 @@
-import { BraintreeManagerInterface } from "../../braintree-manager/braintree-interfaces";
-import { DonorContactInfo } from "../../models/common/donor-contact-info";
-import { DonationPaymentInfo } from "../../models/donation-info/donation-payment-info";
-import { DonationRequest } from "../../models/request-models/donation-request";
-import { PaymentProvider } from "../../models/common/payment-provider-name";
-import { VenmoRestorationStateHandlerInterface, VenmoRestorationStateHandler } from "./venmo-restoration-state-handler";
-import { SuccessResponse } from "../../models/response-models/success-models/success-response";
-import { DonationType } from "../../models/donation-info/donation-type";
-import { DonationFlowModalManagerInterface } from "../donation-flow-modal-manager";
+import { BraintreeManagerInterface } from '../../braintree-manager/braintree-interfaces';
+import { DonorContactInfo } from '../../models/common/donor-contact-info';
+import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
+import { DonationRequest } from '../../models/request-models/donation-request';
+import { PaymentProvider } from '../../models/common/payment-provider-name';
+import {
+  VenmoRestorationStateHandlerInterface,
+  VenmoRestorationStateHandler,
+} from './venmo-restoration-state-handler';
+import { SuccessResponse } from '../../models/response-models/success-models/success-response';
+import { DonationType } from '../../models/donation-info/donation-type';
+import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
 
 export interface VenmoFlowHandlerInterface {
   startup(): Promise<void>;
-  paymentInitiated(
-    contactInfo: DonorContactInfo,
-    donationInfo: DonationPaymentInfo
-  ): Promise<void>;
+  paymentInitiated(contactInfo: DonorContactInfo, donationInfo: DonationPaymentInfo): Promise<void>;
 }
 
 export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
@@ -30,7 +30,8 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
   }) {
     this.braintreeManager = options.braintreeManager;
     this.donationFlowModalManager = options.donationFlowModalManager;
-    this.restorationStateHandler = options.restorationStateHandler ?? new VenmoRestorationStateHandler();
+    this.restorationStateHandler =
+      options.restorationStateHandler ?? new VenmoRestorationStateHandler();
   }
 
   /**
@@ -56,7 +57,7 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
       } else {
         console.error('no restoration info');
         this.donationFlowModalManager.showErrorModal({
-          message: "Error restoring donation session"
+          message: 'Error restoring donation session',
         });
       }
     }
@@ -65,9 +66,8 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
   // VenmoFlowHandlerInterface conformance
   async paymentInitiated(
     contactInfo: DonorContactInfo,
-    donationInfo: DonationPaymentInfo
+    donationInfo: DonationPaymentInfo,
   ): Promise<void> {
-
     // if we get redirected back from venmo in a different tab, we need to restore the data
     // that was persisted when the payment was initiated so persist it here
     this.restorationStateHandler.persistState(contactInfo, donationInfo);
@@ -78,25 +78,25 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
       if (!result) {
         this.restorationStateHandler.clearState();
         this.donationFlowModalManager.showErrorModal({
-          message: "Error setting up the donation"
+          message: 'Error setting up the donation',
         });
         return;
       }
       console.debug('paymentInitiated', result);
       this.handleTokenizationResult(result, contactInfo, donationInfo);
-    } catch(tokenizeError) {
+    } catch (tokenizeError) {
       this.restorationStateHandler.clearState();
       this.handleTokenizationError(tokenizeError);
       this.donationFlowModalManager.showErrorModal({
-        message: "Error loading donation information"
-      })
+        message: 'Error loading donation information',
+      });
     }
   }
 
   private async handleTokenizationResult(
     payload: braintree.VenmoTokenizePayload,
     contactInfo: DonorContactInfo,
-    donationInfo: DonationPaymentInfo
+    donationInfo: DonationPaymentInfo,
   ): Promise<void> {
     console.debug('handleTokenizationResult', payload, contactInfo, donationInfo);
 
@@ -111,8 +111,8 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
       billing: contactInfo.billing,
       customFields: {
         // eslint-disable-next-line @typescript-eslint/camelcase
-        fee_amount_covered: donationInfo.feeAmountCovered
-      }
+        fee_amount_covered: donationInfo.feeAmountCovered,
+      },
     });
 
     this.donationFlowModalManager.showProcessingModal();
@@ -133,8 +133,8 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
             userClosedModalCallback: () => {
               console.debug('modal closed');
               this.showThankYouModal({ successResponse });
-            }
-            });
+            },
+          });
           break;
         case DonationType.Monthly:
           this.showThankYouModal({ successResponse });
@@ -142,7 +142,7 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
       }
     } else {
       this.donationFlowModalManager.showErrorModal({
-        message: "Error setting up donation"
+        message: 'Error setting up donation',
       });
     }
   }
@@ -163,8 +163,16 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
     // alert(`Tokenization Error: ${tokenizeError.code}`);
   }
 
-  private async modalYesSelected(oneTimeDonationResponse: SuccessResponse, amount: number): Promise<void> {
-    console.debug('yesSelected, oneTimeDonationResponse', oneTimeDonationResponse, 'amount', amount);
+  private async modalYesSelected(
+    oneTimeDonationResponse: SuccessResponse,
+    amount: number,
+  ): Promise<void> {
+    console.debug(
+      'yesSelected, oneTimeDonationResponse',
+      oneTimeDonationResponse,
+      'amount',
+      amount,
+    );
 
     const donationRequest = new DonationRequest({
       paymentMethodNonce: oneTimeDonationResponse.paymentMethodNonce,
@@ -177,7 +185,7 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
       customer: oneTimeDonationResponse.customer,
       billing: oneTimeDonationResponse.billing,
       customFields: undefined,
-      upsellOnetimeTransactionId: oneTimeDonationResponse.transaction_id
+      upsellOnetimeTransactionId: oneTimeDonationResponse.transaction_id,
     });
 
     this.donationFlowModalManager.showProcessingModal();
@@ -191,11 +199,11 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
     if (response.success) {
       this.showThankYouModal({
         successResponse: oneTimeDonationResponse,
-        upsellSuccessResponse: response.value as SuccessResponse
+        upsellSuccessResponse: response.value as SuccessResponse,
       });
     } else {
       this.donationFlowModalManager.showErrorModal({
-        message: "Error setting up monthly donation"
+        message: 'Error setting up monthly donation',
       });
     }
   }
@@ -205,6 +213,6 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
     upsellSuccessResponse?: SuccessResponse;
   }): void {
     this.donationFlowModalManager.showThankYouModal();
-    this.braintreeManager.donationSuccessful(options)
+    this.braintreeManager.donationSuccessful(options);
   }
 }

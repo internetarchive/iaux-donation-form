@@ -1,5 +1,5 @@
-import { DonationPaymentInfo } from "../../../models/donation-info/donation-payment-info";
-import { DonationType } from "../../../models/donation-info/donation-type";
+import { DonationPaymentInfo } from '../../../models/donation-info/donation-payment-info';
+import { DonationType } from '../../../models/donation-info/donation-type';
 
 import currency from 'currency.js';
 
@@ -7,14 +7,20 @@ export interface PayPalButtonDataSourceInterface {
   delegate?: PayPalButtonDataSourceDelegate;
   donationInfo: DonationPaymentInfo;
   payment(): Promise<string>;
-  onAuthorize(data: paypal.AuthorizationData, actions: object): Promise<paypal.TokenizePayload | undefined>;
+  onAuthorize(
+    data: paypal.AuthorizationData,
+    actions: object,
+  ): Promise<paypal.TokenizePayload | undefined>;
   onCancel(data: paypal.CancellationData): void;
   onError(error: string): void;
 }
 
 export interface PayPalButtonDataSourceDelegate {
   payPalPaymentStarted(dataSource: PayPalButtonDataSourceInterface, options: object): Promise<void>;
-  payPalPaymentAuthorized(dataSource: PayPalButtonDataSourceInterface, payload: paypal.TokenizePayload): Promise<void>;
+  payPalPaymentAuthorized(
+    dataSource: PayPalButtonDataSourceInterface,
+    payload: paypal.TokenizePayload,
+  ): Promise<void>;
   payPalPaymentCancelled(dataSource: PayPalButtonDataSourceInterface, data: object): Promise<void>;
   payPalPaymentError(dataSource: PayPalButtonDataSourceInterface, error: string): Promise<void>;
 }
@@ -41,7 +47,7 @@ export class PayPalButtonDataSource implements PayPalButtonDataSourceInterface {
     const flow = donationType === DonationType.OneTime ? 'checkout' : 'vault';
 
     const options: braintree.PayPalCheckoutCreatePaymentOptions = {
-      flow: flow as paypal.FlowType
+      flow: flow as paypal.FlowType,
     };
     options.enableShippingAddress = true;
 
@@ -49,7 +55,10 @@ export class PayPalButtonDataSource implements PayPalButtonDataSourceInterface {
       options.amount = this.donationInfo.total;
       options.currency = 'USD';
     } else {
-      options.billingAgreementDescription = `Subscribe to donate ${currency(this.donationInfo.total, { formatWithSymbol: true }).format()} monthly`
+      options.billingAgreementDescription = `Subscribe to donate ${currency(
+        this.donationInfo.total,
+        { formatWithSymbol: true },
+      ).format()} monthly`;
     }
 
     this.delegate?.payPalPaymentStarted(this, options);

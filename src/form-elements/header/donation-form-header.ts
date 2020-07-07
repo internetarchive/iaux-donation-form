@@ -51,22 +51,25 @@ export class DonationFormHeader extends LitElement {
         .donationInfo=${this.donationInfo}
         @donationInfoChanged=${this.donationInfoChanged}
         @showSummaryClicked=${this.showSummaryClicked}
-        @editDonationError=${this.editDonationError}>
-      </edit-donation>`;
+        @editDonationError=${this.editDonationError}
+      >
+      </edit-donation>
+    `;
   }
 
   private get donationSummaryTemplate(): TemplateResult {
     return html`
-      <donation-summary
-        .donationInfo=${this.donationInfo}
-        @editClicked=${this.summaryEditClicked}>
-      </donation-summary>`;
+      <donation-summary .donationInfo=${this.donationInfo} @editClicked=${this.summaryEditClicked}>
+      </donation-summary>
+    `;
   }
 
   private donationInfoChanged(e: CustomEvent): void {
     console.log('DonationFormHeader frequencyChanged', e.detail.donationInfo);
     this.donationInfo = e.detail.donationInfo as DonationPaymentInfo;
-    const event = new CustomEvent('donationInfoChanged', { detail: { donationInfo: this.donationInfo }});
+    const event = new CustomEvent('donationInfoChanged', {
+      detail: { donationInfo: this.donationInfo },
+    });
     this.dispatchEvent(event);
   }
 
@@ -85,7 +88,6 @@ export class DonationFormHeader extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    return css`
-    `;
+    return css``;
   }
 }

@@ -7,7 +7,7 @@ import {
   TemplateResult,
   property,
   query,
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 
 // we have to import the registered component independently from the definition below
@@ -63,10 +63,11 @@ export class DonationForm extends LitElement {
     return html`
       <donation-form-header
         @donationInfoChanged=${this.donationInfoChanged}
-        @editDonationError=${this.editDonationError}>
+        @editDonationError=${this.editDonationError}
+      >
       </donation-form-header>
 
-      <form-section number=3 headline="Choose a payment method">
+      <form-section number="3" headline="Choose a payment method">
         <payment-selector
           .paymentProviders=${this.braintreeManager?.paymentProviders}
           @firstUpdated=${this.paymentSelectorFirstUpdated}
@@ -74,7 +75,8 @@ export class DonationForm extends LitElement {
           @venmoSelected=${this.venmoSelected}
           @applePaySelected=${this.applePaySelected}
           @googlePaySelected=${this.googlePaySelected}
-          @paypalBlockerSelected=${this.paypalBlockerSelected}>
+          @paypalBlockerSelected=${this.paypalBlockerSelected}
+        >
           <slot name="paypal-button" slot="paypal-button"></slot>
         </payment-selector>
       </form-section>
@@ -88,24 +90,24 @@ export class DonationForm extends LitElement {
 
   get contactFormSection(): TemplateResult {
     return html`
-      <form-section number=4 headline="Tell us about yourself">
+      <form-section number="4" headline="Tell us about yourself">
         <contact-form></contact-form>
         <div class="credit-card-fields" class="${this.creditCardVisible ? '' : 'hidden'}">
           <slot name="braintree-hosted-fields"></slot>
         </div>
       </form-section>
 
-      <form-section number=5>
+      <form-section number="5">
         <button
           id="donate-button"
           @click=${this.donateClicked}
-          ?disabled=${this.donationInfoValid === false}>
+          ?disabled=${this.donationInfoValid === false}
+        >
           Donate
         </button>
       </form-section>
     `;
   }
-
 
   private editDonationError(e: CustomEvent): void {
     this.donationInfoValid = false;
@@ -178,7 +180,10 @@ export class DonationForm extends LitElement {
 
     switch (this.selectedPaymentProvider) {
       case PaymentProvider.CreditCard:
-        this.paymentFlowHandlers?.creditCardHandler?.paymentInitiated(this.donationInfo, contactInfo);
+        this.paymentFlowHandlers?.creditCardHandler?.paymentInitiated(
+          this.donationInfo,
+          contactInfo,
+        );
         break;
       case PaymentProvider.Venmo:
         this.paymentFlowHandlers?.venmoHandler?.paymentInitiated(contactInfo, this.donationInfo);
@@ -215,7 +220,7 @@ export class DonationForm extends LitElement {
     const donationInfo = new DonationPaymentInfo({
       donationType: frequency,
       amount: amount,
-      coverFees: coverFeesParam === 'true'
+      coverFees: coverFeesParam === 'true',
     });
 
     console.debug('queryParam donationInfo', donationInfo);
@@ -272,12 +277,17 @@ export class DonationForm extends LitElement {
 
   private donationInfoChanged(e: CustomEvent): void {
     const donationInfo: DonationPaymentInfo = e.detail.donationInfo;
-    console.debug('donationInfoChanged', this.donationInfo, donationInfo, this.donationInfo === donationInfo);
+    console.debug(
+      'donationInfoChanged',
+      this.donationInfo,
+      donationInfo,
+      this.donationInfo === donationInfo,
+    );
 
     this.donationInfo = new DonationPaymentInfo({
       amount: donationInfo.amount,
       donationType: donationInfo.donationType,
-      coverFees: donationInfo.coverFees
+      coverFees: donationInfo.coverFees,
     });
 
     this.donationInfoValid = true;
@@ -296,7 +306,7 @@ export class DonationForm extends LitElement {
       }
 
       #donate-button {
-        background-color: #55A283;
+        background-color: #55a283;
         width: 100%;
         appearance: none;
         -webkit-appearance: none;

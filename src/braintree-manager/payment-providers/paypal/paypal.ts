@@ -1,6 +1,9 @@
 import { BraintreeManagerInterface, HostingEnvironment } from '../../braintree-interfaces';
 import { DonationPaymentInfo } from '../../../models/donation-info/donation-payment-info';
-import { PayPalButtonDataSourceInterface, PayPalButtonDataSource } from './paypal-button-datasource';
+import {
+  PayPalButtonDataSourceInterface,
+  PayPalButtonDataSource,
+} from './paypal-button-datasource';
 
 export interface PayPalHandlerInterface {
   renderPayPalButton(params: {
@@ -17,7 +20,7 @@ export class PayPalHandler implements PayPalHandlerInterface {
     paypalClient: braintree.PayPalCheckout,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     paypalLibrary: any,
-    hostingEnvironment: HostingEnvironment
+    hostingEnvironment: HostingEnvironment,
   ) {
     this.braintreeManager = braintreeManager;
     this.paypalClient = paypalClient;
@@ -43,17 +46,21 @@ export class PayPalHandler implements PayPalHandlerInterface {
 
     const braintreeClient = await this.braintreeManager.getInstance();
     return new Promise((resolve, reject) => {
-      this.paypalClient.create({
-        client: braintreeClient
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      }, (error: any, instance: braintree.PayPalCheckout) => {
-        if (error) {
-          return reject(error);
-        }
+      this.paypalClient.create(
+        {
+          client: braintreeClient,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (error: any, instance: braintree.PayPalCheckout) => {
+          if (error) {
+            return reject(error);
+          }
 
-        this.paypalInstance = instance;
-        resolve(instance);
-      });
+          this.paypalInstance = instance;
+          resolve(instance);
+        },
+      );
     });
   }
 
@@ -62,24 +69,31 @@ export class PayPalHandler implements PayPalHandlerInterface {
     style: paypal.ButtonStyle;
     donationInfo: DonationPaymentInfo;
   }): Promise<PayPalButtonDataSourceInterface | undefined> {
-    const env: paypal.Environment = (this.hostingEnvironment === HostingEnvironment.Development ? 'sandbox' : 'production') as paypal.Environment;
+    const env: paypal.Environment = (this.hostingEnvironment === HostingEnvironment.Development
+      ? 'sandbox'
+      : 'production') as paypal.Environment;
 
     const paypalInstance = await this.getPayPalInstance();
-    if (!paypalInstance) { return; }
+    if (!paypalInstance) {
+      return;
+    }
 
     const dataSource = new PayPalButtonDataSource({
       donationInfo: params.donationInfo,
-      paypalInstance: paypalInstance
+      paypalInstance: paypalInstance,
     });
 
-    await this.paypalLibrary.Button.render({
-      env,
-      style: params.style,
-      payment: dataSource.payment.bind(dataSource),
-      onAuthorize: dataSource.onAuthorize.bind(dataSource),
-      onCancel: dataSource.onCancel.bind(dataSource),
-      onError: dataSource.onError.bind(dataSource)
-    }, params.selector);
+    await this.paypalLibrary.Button.render(
+      {
+        env,
+        style: params.style,
+        payment: dataSource.payment.bind(dataSource),
+        onAuthorize: dataSource.onAuthorize.bind(dataSource),
+        onCancel: dataSource.onCancel.bind(dataSource),
+        onError: dataSource.onError.bind(dataSource),
+      },
+      params.selector,
+    );
 
     return dataSource;
   }

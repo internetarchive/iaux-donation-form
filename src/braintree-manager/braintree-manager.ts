@@ -2,7 +2,11 @@ import { DonationResponse } from '../models/response-models/donation-response';
 import { DonationRequest } from '../models/request-models/donation-request';
 import { PaymentProvidersInterface, PaymentProviders } from './payment-providers';
 import { PaymentClientsInterface } from './payment-clients';
-import { BraintreeManagerInterface, BraintreeEndpointManagerInterface, HostingEnvironment } from './braintree-interfaces';
+import {
+  BraintreeManagerInterface,
+  BraintreeEndpointManagerInterface,
+  HostingEnvironment,
+} from './braintree-interfaces';
 import { SuccessResponse } from '../models/response-models/success-models/success-response';
 
 export class BraintreeManager implements BraintreeManagerInterface {
@@ -42,16 +46,20 @@ export class BraintreeManager implements BraintreeManagerInterface {
 
     return new Promise((resolve, reject) => {
       this.paymentClients.getBraintreeClient().then((client?: braintree.Client) => {
-        client?.create({
-          authorization: this.authorizationToken
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        }, (clientErr: any | undefined, clientInstance: braintree.Client | undefined) => {
-          if (clientErr) {
-            return reject(clientErr);
-          }
-          this.braintreeInstance = clientInstance;
-          resolve(clientInstance);
-        });
+        client?.create(
+          {
+            authorization: this.authorizationToken,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (clientErr: any | undefined, clientInstance: braintree.Client | undefined) => {
+            if (clientErr) {
+              return reject(clientErr);
+            }
+            this.braintreeInstance = clientInstance;
+            resolve(clientInstance);
+          },
+        );
       });
     });
   }
@@ -71,22 +79,27 @@ export class BraintreeManager implements BraintreeManagerInterface {
 
   private async collectDeviceData(): Promise<void> {
     const instance = await this.getInstance();
-    if (!instance) { return; }
+    if (!instance) {
+      return;
+    }
 
     console.debug('collectDeviceData, starting dataCollector');
     this.paymentClients.getDataCollector().then((collector?: braintree.DataCollector) => {
-      collector?.create({
-        client: instance,
-        kount: false,
-        paypal: true
-      }, (error?: braintree.BraintreeError, instance?: braintree.DataCollector) => {
-        if (error) {
-          console.error(error);
-          return;
-        }
-        console.debug('dataCollector started', instance?.deviceData);
-        this._deviceData = instance?.deviceData;
-      });
+      collector?.create(
+        {
+          client: instance,
+          kount: false,
+          paypal: true,
+        },
+        (error?: braintree.BraintreeError, instance?: braintree.DataCollector) => {
+          if (error) {
+            console.error(error);
+            return;
+          }
+          console.debug('dataCollector started', instance?.deviceData);
+          this._deviceData = instance?.deviceData;
+        },
+      );
     });
   }
 
@@ -101,14 +114,14 @@ export class BraintreeManager implements BraintreeManagerInterface {
   private hostingEnvironment: HostingEnvironment = HostingEnvironment.Development;
 
   constructor(options: {
+    authorizationToken: string;
     paymentClients: PaymentClientsInterface;
     endpointManager: BraintreeEndpointManagerInterface;
-    authorizationToken: string;
-    venmoProfileId?: string;
-    googlePayMerchantId?: string;
     hostedFieldStyle: object;
     hostedFieldConfig: braintree.HostedFieldFieldOptions;
     hostingEnvironment: HostingEnvironment;
+    venmoProfileId?: string;
+    googlePayMerchantId?: string;
   }) {
     this.authorizationToken = options.authorizationToken;
     this.endpointManager = options.endpointManager;
@@ -122,7 +135,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
       googlePayMerchantId: options.googlePayMerchantId,
       hostingEnvironment: options.hostingEnvironment,
       hostedFieldStyle: options.hostedFieldStyle,
-      hostedFieldConfig: options.hostedFieldConfig
+      hostedFieldConfig: options.hostedFieldConfig,
     });
   }
 }

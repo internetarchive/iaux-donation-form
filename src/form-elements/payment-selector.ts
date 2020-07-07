@@ -18,7 +18,7 @@ import { PaymentProvidersInterface } from '../braintree-manager/payment-provider
 enum PaymentButtonMode {
   Loading = 'loading',
   Available = 'available',
-  Unavailable = 'unavailable'
+  Unavailable = 'unavailable',
 }
 
 @customElement('payment-selector')
@@ -38,23 +38,23 @@ export class PaymentSelector extends LitElement {
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
-      <div class="payment-container ${this.donationInfoValid ? 'donation-info-valid' : 'donation-info-invalid'}">
-
-        <div
-          class="applepay provider-button ${this.applePayMode}"
-          @click=${this.applePaySelected}>
+      <div
+        class="payment-container ${this.donationInfoValid
+          ? 'donation-info-valid'
+          : 'donation-info-invalid'}"
+      >
+        <div class="applepay provider-button ${this.applePayMode}" @click=${this.applePaySelected}>
           <div class="payment-image">${applePayButtonImage}</div>
         </div>
 
         <div
           class="googlepay provider-button ${this.googlePayMode}"
-          @click=${this.googlePaySelected}>
+          @click=${this.googlePaySelected}
+        >
           <div class="payment-image">${googlePayButtonImage}</div>
         </div>
 
-        <div
-          class="venmo provider-button ${this.venmoMode}"
-          @click=${this.venmoSelected}>
+        <div class="venmo provider-button ${this.venmoMode}" @click=${this.venmoSelected}>
           <div class="payment-image">${venmoButtonImage}</div>
         </div>
 
@@ -67,9 +67,7 @@ export class PaymentSelector extends LitElement {
           </div>
         </div>
 
-        <button
-          @click=${this.creditCardSelected}
-          class="button-style credit-card-button">
+        <button @click=${this.creditCardSelected} class="button-style credit-card-button">
           <div class="cc-background">
             <span class="cc-title">Credit Card</span>
           </div>
@@ -96,66 +94,90 @@ export class PaymentSelector extends LitElement {
   }
 
   private async setButtonVisibility(): Promise<void> {
-    console.debug('setButtonVisibility')
+    console.debug('setButtonVisibility');
 
-    this.paymentProviders?.getVenmoHandler().then(handler => {
-      console.debug('getVenmo inside')
-      if (!handler) {
-        console.debug('venmo handler unavailable');
+    this.paymentProviders
+      ?.getVenmoHandler()
+      .then(handler => {
+        console.debug('getVenmo inside');
+        if (!handler) {
+          console.debug('venmo handler unavailable');
+          this.venmoMode = PaymentButtonMode.Unavailable;
+          return;
+        }
+
+        handler
+          .isBrowserSupported()
+          .then(supported => {
+            console.debug('venmo: isBrowserSupporter', supported);
+            this.venmoMode = supported
+              ? PaymentButtonMode.Available
+              : PaymentButtonMode.Unavailable;
+          })
+          .catch(reason => {
+            console.error('error loading venmo', reason);
+            this.venmoMode = PaymentButtonMode.Unavailable;
+          });
+      })
+      .catch(reason => {
+        console.error('venmo unavailable', reason);
         this.venmoMode = PaymentButtonMode.Unavailable;
-        return;
-      }
-
-      handler.isBrowserSupported().then(supported => {
-        console.debug('venmo: isBrowserSupporter', supported);
-        this.venmoMode = supported ? PaymentButtonMode.Available : PaymentButtonMode.Unavailable;
-      }).catch(reason => {
-        console.error('error loading venmo', reason);
-        this.venmoMode = PaymentButtonMode.Unavailable;
       });
-    }).catch(reason => {
-      console.error('venmo unavailable', reason);
-      this.venmoMode = PaymentButtonMode.Unavailable;
-    });
 
-    this.paymentProviders?.getApplePayHandler().then(handler => {
-      console.debug('getApplePayHandler inside')
-      if (!handler) {
-        console.error('applePayHandler unavailable');
+    this.paymentProviders
+      ?.getApplePayHandler()
+      .then(handler => {
+        console.debug('getApplePayHandler inside');
+        if (!handler) {
+          console.error('applePayHandler unavailable');
+          this.applePayMode = PaymentButtonMode.Unavailable;
+          return;
+        }
+
+        handler
+          .isAvailable()
+          .then(supported => {
+            console.debug('applePay: isAvailable', supported);
+            this.applePayMode = supported
+              ? PaymentButtonMode.Available
+              : PaymentButtonMode.Unavailable;
+          })
+          .catch(reason => {
+            console.error('error loading applepay', reason);
+            this.applePayMode = PaymentButtonMode.Unavailable;
+          });
+      })
+      .catch(reason => {
+        console.error('apple pay unavailable', reason);
         this.applePayMode = PaymentButtonMode.Unavailable;
-        return;
-      }
-
-      handler.isAvailable().then(supported => {
-        console.debug('applePay: isAvailable', supported);
-        this.applePayMode = supported ? PaymentButtonMode.Available : PaymentButtonMode.Unavailable;
-      }).catch(reason => {
-        console.error('error loading applepay', reason);
-        this.applePayMode = PaymentButtonMode.Unavailable;
       });
-    }).catch(reason => {
-      console.error('apple pay unavailable', reason);
-      this.applePayMode = PaymentButtonMode.Unavailable;
-    });
 
-    this.paymentProviders?.getGooglePayHandler().then(handler => {
-      if (!handler) {
-        console.debug('google pay handler unavailable');
-        this.googlePayMode = PaymentButtonMode.Unavailable;
-        return;
-      }
+    this.paymentProviders
+      ?.getGooglePayHandler()
+      .then(handler => {
+        if (!handler) {
+          console.debug('google pay handler unavailable');
+          this.googlePayMode = PaymentButtonMode.Unavailable;
+          return;
+        }
 
-      handler.isBrowserSupported().then(supported => {
-        console.debug('googlePay: isAvailable', supported);
-        this.googlePayMode = supported ? PaymentButtonMode.Available : PaymentButtonMode.Unavailable;
-      }).catch(reason => {
-        console.error('error loading googlepay', reason);
+        handler
+          .isBrowserSupported()
+          .then(supported => {
+            console.debug('googlePay: isAvailable', supported);
+            this.googlePayMode = supported
+              ? PaymentButtonMode.Available
+              : PaymentButtonMode.Unavailable;
+          })
+          .catch(reason => {
+            console.error('error loading googlepay', reason);
+            this.googlePayMode = PaymentButtonMode.Unavailable;
+          });
+      })
+      .catch(reason => {
+        console.error('google pay unavailable', reason);
         this.googlePayMode = PaymentButtonMode.Unavailable;
       });
-    }).catch(reason => {
-      console.error('google pay unavailable', reason);
-      this.googlePayMode = PaymentButtonMode.Unavailable;
-    });
   }
 
   private googlePaySelected(): void {
@@ -163,7 +185,7 @@ export class PaymentSelector extends LitElement {
   }
 
   private applePaySelected(e: Event): void {
-    const event = new CustomEvent('applePaySelected', { detail: { originalEvent: e }})
+    const event = new CustomEvent('applePaySelected', { detail: { originalEvent: e } });
     this.dispatchEvent(event);
   }
 

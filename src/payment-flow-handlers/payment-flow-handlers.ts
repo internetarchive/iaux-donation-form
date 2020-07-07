@@ -1,13 +1,25 @@
-import { ModalManagerInterface } from "@internetarchive/modal-manager";
+import { ModalManagerInterface } from '@internetarchive/modal-manager';
 
-import { CreditCardFlowHandlerInterface, CreditCardFlowHandler } from "./handlers/creditcard-flow-handler";
-import { PayPalFlowHandlerInterface, PayPalFlowHandler } from "./handlers/paypal-flow-handler";
-import { BraintreeManagerInterface } from "../braintree-manager/braintree-interfaces";
-import { RecaptchaManagerInterface } from "../recaptcha-manager/recaptcha-manager";
-import { ApplePayFlowHandlerInterface, ApplePayFlowHandler } from "./handlers/applepay-flow-handler";
-import { VenmoFlowHandlerInterface, VenmoFlowHandler } from "./handlers/venmo-flow-handler";
-import { DonationFlowModalManagerInterface, DonationFlowModalManager } from "./donation-flow-modal-manager";
-import { GooglePayFlowHandlerInterface, GooglePayFlowHandler } from "./handlers/googlepay-flow-handler";
+import {
+  CreditCardFlowHandlerInterface,
+  CreditCardFlowHandler,
+} from './handlers/creditcard-flow-handler';
+import { PayPalFlowHandlerInterface, PayPalFlowHandler } from './handlers/paypal-flow-handler';
+import { BraintreeManagerInterface } from '../braintree-manager/braintree-interfaces';
+import { RecaptchaManagerInterface } from '../recaptcha-manager/recaptcha-manager';
+import {
+  ApplePayFlowHandlerInterface,
+  ApplePayFlowHandler,
+} from './handlers/applepay-flow-handler';
+import { VenmoFlowHandlerInterface, VenmoFlowHandler } from './handlers/venmo-flow-handler';
+import {
+  DonationFlowModalManagerInterface,
+  DonationFlowModalManager,
+} from './donation-flow-modal-manager';
+import {
+  GooglePayFlowHandlerInterface,
+  GooglePayFlowHandler,
+} from './handlers/googlepay-flow-handler';
 
 export interface PaymentFlowHandlersInterface {
   startup(): Promise<void>;
@@ -51,7 +63,7 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
     this.creditCardHandlerCache = new CreditCardFlowHandler({
       braintreeManager: this.braintreeManager,
       donationFlowModalManager: this.donationFlowModalManager,
-      recaptchaManager: this.recaptchaManager
+      recaptchaManager: this.recaptchaManager,
     });
 
     return this.creditCardHandlerCache;
@@ -64,7 +76,7 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
 
     this.paypalHandlerCache = new PayPalFlowHandler({
       braintreeManager: this.braintreeManager,
-      donationFlowModalManager: this.donationFlowModalManager
+      donationFlowModalManager: this.donationFlowModalManager,
     });
 
     return this.paypalHandlerCache;
@@ -77,7 +89,7 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
 
     this.applePayHandlerCache = new ApplePayFlowHandler({
       braintreeManager: this.braintreeManager,
-      donationFlowModalManager: this.donationFlowModalManager
+      donationFlowModalManager: this.donationFlowModalManager,
     });
 
     return this.applePayHandlerCache;
@@ -90,7 +102,7 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
 
     this.venmoHandlerCache = new VenmoFlowHandler({
       braintreeManager: this.braintreeManager,
-      donationFlowModalManager: this.donationFlowModalManager
+      donationFlowModalManager: this.donationFlowModalManager,
     });
 
     return this.venmoHandlerCache;
@@ -103,7 +115,7 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
 
     this.googlePayHandlerCache = new GooglePayFlowHandler({
       braintreeManager: this.braintreeManager,
-      donationFlowModalManager: this.donationFlowModalManager
+      donationFlowModalManager: this.donationFlowModalManager,
     });
 
     return this.googlePayHandlerCache;
@@ -125,8 +137,8 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
     this.recaptchaManager = options.recaptchaManager;
 
     this.donationFlowModalManager = new DonationFlowModalManager({
-      modalManager: this.modalManager
-    })
+      modalManager: this.modalManager,
+    });
   }
 
   private braintreeManager: BraintreeManagerInterface;

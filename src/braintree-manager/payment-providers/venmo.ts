@@ -1,4 +1,4 @@
-import { BraintreeManagerInterface } from "../braintree-interfaces";
+import { BraintreeManagerInterface } from '../braintree-interfaces';
 
 export interface VenmoHandlerInterface {
   isBrowserSupported(): Promise<boolean>;
@@ -39,18 +39,21 @@ export class VenmoHandler implements VenmoHandlerInterface {
     const braintreeInstance = await this.braintreeManager.getInstance();
 
     return new Promise((resolve, reject) => {
-      this.venmoClient.create({
-        client: braintreeInstance,
-        profileId: this.venmoProfileId
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      }, (error: any, instance: braintree.Venmo) => {
-        if (error) {
-          return reject(error);
-        }
+      this.venmoClient.create(
+        {
+          client: braintreeInstance,
+          profileId: this.venmoProfileId,
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (error: any, instance: braintree.Venmo) => {
+          if (error) {
+            return reject(error);
+          }
 
-        this.venmoInstance = instance;
-        resolve(instance);
-      });
+          this.venmoInstance = instance;
+          resolve(instance);
+        },
+      );
     });
   }
 

@@ -1,6 +1,6 @@
-import { ModalConfig, ModalManagerInterface } from "@internetarchive/modal-manager";
-import { html } from "lit-html";
-import { UpsellModalCTAMode } from "../modals/upsell-modal-content";
+import { ModalConfig, ModalManagerInterface } from '@internetarchive/modal-manager';
+import { html } from 'lit-html';
+import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
 
 export interface DonationFlowModalManagerInterface {
   /**
@@ -32,10 +32,7 @@ export interface DonationFlowModalManagerInterface {
    *   }} [options]
    * @memberof DonationFlowModalManagerInterface
    */
-  showErrorModal(options: {
-    message: string;
-    userClosedModalCallback?: () => void;
-  }): void;
+  showErrorModal(options: { message: string; userClosedModalCallback?: () => void }): void;
 
   /**
    * Show the upsell modal
@@ -62,9 +59,7 @@ export interface DonationFlowModalManagerInterface {
 export class DonationFlowModalManager implements DonationFlowModalManagerInterface {
   private modalManager: ModalManagerInterface;
 
-  constructor(options: {
-    modalManager: ModalManagerInterface;
-  }) {
+  constructor(options: { modalManager: ModalManagerInterface }) {
     this.modalManager = options.modalManager;
     this.modalManager.addEventListener('modeChanged', this.modalModeChanged as EventListener);
   }
@@ -83,7 +78,9 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     const modalConfig = new ModalConfig();
     modalConfig.showProcessingIndicator = true;
     modalConfig.allowUserToClose = false;
-    modalConfig.title = html`Processing...`;
+    modalConfig.title = html`
+      Processing...
+    `;
     this.modalManager.showModal({ config: modalConfig });
   }
 
@@ -92,22 +89,23 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     const modalConfig = new ModalConfig();
     modalConfig.showProcessingIndicator = true;
     modalConfig.processingImageMode = 'complete';
-    modalConfig.title = html`Thank You!`;
+    modalConfig.title = html`
+      Thank You!
+    `;
     this.modalManager.showModal({
-      config: modalConfig
+      config: modalConfig,
     });
   }
 
   /** @inheritdoc */
-  showErrorModal(options: {
-    message: string;
-    userClosedModalCallback?: () => void;
-  }): void {
+  showErrorModal(options: { message: string; userClosedModalCallback?: () => void }): void {
     const modalConfig = ModalConfig.errorConfig;
-    modalConfig.message = html`${options?.message}`;
+    modalConfig.message = html`
+      ${options?.message}
+    `;
     this.modalManager.showModal({
       config: modalConfig,
-      userClosedModalCallback: options?.userClosedModalCallback
+      userClosedModalCallback: options?.userClosedModalCallback,
     });
   }
 
@@ -123,16 +121,19 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     const modalContent = html`
       <upsell-modal-content
         .yesButtonMode=${options?.ctaMode ?? UpsellModalCTAMode.YesButton}
-        @yesSelected=${(e: CustomEvent): void => options?.yesSelected ? options.yesSelected(e.detail.amount) : undefined}
+        @yesSelected=${(e: CustomEvent): void =>
+          options?.yesSelected ? options.yesSelected(e.detail.amount) : undefined}
         @noThanksSelected=${options?.noSelected}
-        @amountChanged=${(e: CustomEvent): void => options?.amountChanged ? options.amountChanged(e.detail.amount) : undefined}>
+        @amountChanged=${(e: CustomEvent): void =>
+          options?.amountChanged ? options.amountChanged(e.detail.amount) : undefined}
+      >
         <slot name="paypal-upsell-button"></slot>
       </upsell-modal-content>
     `;
     return this.modalManager.showModal({
       config: modalConfig,
       customModalContent: modalContent,
-      userClosedModalCallback: options?.userClosedModalCallback
+      userClosedModalCallback: options?.userClosedModalCallback,
     });
   }
 }

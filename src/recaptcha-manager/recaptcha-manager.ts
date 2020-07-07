@@ -4,7 +4,7 @@ export interface RecaptchaManagerInterface {
     container: HTMLElement,
     tabIndex: number,
     theme: ReCaptchaV2.Theme,
-    type: ReCaptchaV2.Type
+    type: ReCaptchaV2.Type,
   ): void;
 }
 
@@ -13,10 +13,7 @@ export class RecaptchaManager implements RecaptchaManagerInterface {
 
   private siteKey: string;
 
-  constructor(options: {
-    grecaptchaLibrary: ReCaptchaV2.ReCaptcha;
-    siteKey: string;
-  }) {
+  constructor(options: { grecaptchaLibrary: ReCaptchaV2.ReCaptcha; siteKey: string }) {
     this.grecaptchaLibrary = options.grecaptchaLibrary;
     this.siteKey = options.siteKey;
   }
@@ -56,7 +53,9 @@ export class RecaptchaManager implements RecaptchaManagerInterface {
     console.debug('RecaptchaManager: execute');
 
     if (this.isExecuting) {
-      return new Promise((resolve, reject) => { reject('Execution already in progress.'); });
+      return new Promise((resolve, reject) => {
+        reject('Execution already in progress.');
+      });
     }
     this.isExecuting = true;
     this.grecaptchaLibrary.execute();
@@ -65,13 +64,13 @@ export class RecaptchaManager implements RecaptchaManagerInterface {
         console.debug('RecaptchaManager: executionSuccessBlock', token);
         this.finishExecution();
         resolve(token);
-      }
+      };
 
       this.executionExpiredBlock = (): void => {
         console.debug('RecaptchaManager: executionExpiredBlock');
         this.finishExecution();
         reject();
-      }
+      };
     });
   }
 
@@ -93,7 +92,7 @@ export class RecaptchaManager implements RecaptchaManagerInterface {
       tabindex: tabIndex,
       theme: theme,
       type: type,
-      size: 'invisible'
+      size: 'invisible',
     });
   }
 

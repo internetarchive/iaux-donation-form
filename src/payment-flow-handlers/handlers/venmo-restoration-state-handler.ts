@@ -1,5 +1,5 @@
-import { DonorContactInfo } from "../../models/common/donor-contact-info";
-import { DonationPaymentInfo } from "../../models/donation-info/donation-payment-info";
+import { DonorContactInfo } from '../../models/common/donor-contact-info';
+import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
 
 export interface VenmoRestorationStateHandlerInterface {
   /**
@@ -9,10 +9,7 @@ export interface VenmoRestorationStateHandlerInterface {
    * @param {DonationPaymentInfo} donationInfo
    * @memberof VenmoRestorationStateHandlerInterface
    */
-  persistState(
-    contactInfo: DonorContactInfo,
-    donationInfo: DonationPaymentInfo
-  ): void;
+  persistState(contactInfo: DonorContactInfo, donationInfo: DonationPaymentInfo): void;
 
   /**
    * Get the session restoration state
@@ -41,10 +38,7 @@ export class VenmoRestorationState {
   donationInfo: DonationPaymentInfo;
 
   // TODO: Add restoration state expiration
-  constructor(params: {
-    contactInfo: DonorContactInfo;
-    donationInfo: DonationPaymentInfo;
-  }) {
+  constructor(params: { contactInfo: DonorContactInfo; donationInfo: DonationPaymentInfo }) {
     this.contactInfo = params.contactInfo;
     this.donationInfo = params.donationInfo;
   }
@@ -66,7 +60,7 @@ export class VenmoRestorationState {
  * @implements {VenmoRestorationStateHandlerInterface}
  */
 export class VenmoRestorationStateHandler implements VenmoRestorationStateHandlerInterface {
-  private persistanceKey = 'venmoRestorationStateInfo'
+  private persistanceKey = 'venmoRestorationStateInfo';
 
   /** @inheritdoc */
   clearState(): void {
@@ -75,12 +69,10 @@ export class VenmoRestorationStateHandler implements VenmoRestorationStateHandle
   }
 
   /** @inheritdoc */
-  persistState(
-    contactInfo: DonorContactInfo,
-    donationInfo: DonationPaymentInfo
-  ): void {
+  persistState(contactInfo: DonorContactInfo, donationInfo: DonationPaymentInfo): void {
     const venmoRestoration = new VenmoRestorationState({
-      contactInfo, donationInfo
+      contactInfo,
+      donationInfo,
     });
     const serialized = JSON.stringify(venmoRestoration);
     localStorage.setItem(this.persistanceKey, serialized);

@@ -8,9 +8,11 @@ export class ApplePaySessionManager implements ApplePaySessionManagerInterface {
   static VERSION = 3;
 
   canMakePayments(): boolean {
-    return 'ApplePaySession' in window &&
+    return (
+      'ApplePaySession' in window &&
       ApplePaySession.supportsVersion(ApplePaySessionManager.VERSION) &&
-      ApplePaySession.canMakePayments();
+      ApplePaySession.canMakePayments()
+    );
   }
 
   async canMakePaymentsWithActiveCard(merchantIdentifier: string): Promise<boolean> {
