@@ -10,6 +10,7 @@ import {
 import { SuccessResponse } from '../../models/response-models/success-models/success-response';
 import { DonationType } from '../../models/donation-info/donation-type';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
+import { ErrorResponse } from '../../models/response-models/error-models/error-response';
 
 export interface VenmoFlowHandlerInterface {
   startup(): Promise<void>;
@@ -141,8 +142,9 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
           break;
       }
     } else {
+      const error = response.value as ErrorResponse;
       this.donationFlowModalManager.showErrorModal({
-        message: 'Error setting up donation',
+        message: `Error setting up donation: ${error.message}, ${error.errors}`,
       });
     }
   }
@@ -202,8 +204,9 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
         upsellSuccessResponse: response.value as SuccessResponse,
       });
     } else {
+      const error = response.value as ErrorResponse;
       this.donationFlowModalManager.showErrorModal({
-        message: 'Error setting up monthly donation',
+        message: `Error setting up monthly donation: ${error.message}, ${error.errors}`,
       });
     }
   }

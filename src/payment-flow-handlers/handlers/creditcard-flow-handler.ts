@@ -9,6 +9,7 @@ import { SuccessResponse } from '../../models/response-models/success-models/suc
 import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
 import { PaymentProvider } from '../../models/common/payment-provider-name';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
+import { ErrorResponse } from '../../models/response-models/error-models/error-response';
 
 export interface CreditCardFlowHandlerInterface {
   paymentInitiated(
@@ -48,9 +49,9 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
 
     try {
       hostedFieldsResponse = await handler?.tokenizeHostedFields();
-    } catch {
+    } catch (error) {
       this.donationFlowModalManager.showErrorModal({
-        message: 'Error collecting credit card info',
+        message: `Credit card info missing: ${error}`,
       });
       return;
     }
@@ -73,11 +74,11 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
 
     try {
       recaptchaToken = await this.recaptchaManager.execute();
-    } catch {
+    } catch (error) {
       this.donationFlowModalManager.showErrorModal({
-        message: 'Recaptcha failure',
+        message: `Recaptcha failure: ${error}`,
       });
-      console.error('recaptcha failure');
+      console.error('recaptcha failure', error);
       return;
     }
     console.debug(
@@ -114,15 +115,16 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       if (response.success) {
         this.handleSuccessfulResponse(donationInfo, response.value as SuccessResponse);
       } else {
+        const error = response.value as ErrorResponse;
         this.donationFlowModalManager.showErrorModal({
-          message: 'Error setting up donation',
+          message: `Error setting up donation: ${error.message}, ${error.errors}`,
         });
       }
-    } catch {
+    } catch (error) {
       this.donationFlowModalManager.showErrorModal({
-        message: 'Error getting a response from the server',
+        message: `Error getting a response from the server: ${error}`,
       });
-      console.error('error getting a response');
+      console.error('error getting a response', error);
       return;
     }
   }
@@ -201,8 +203,9 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
         upsellSuccessResponse: response.value as SuccessResponse,
       });
     } else {
+      const error = response.value as ErrorResponse;
       this.donationFlowModalManager.showErrorModal({
-        message: 'Error setting up monthly donation',
+        message: `Error setting up monthly donation: ${error.message}, ${error.errors}`,
       });
     }
   }

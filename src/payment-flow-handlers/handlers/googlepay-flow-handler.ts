@@ -7,6 +7,7 @@ import { DonationType } from '../../models/donation-info/donation-type';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
 import { CustomerInfo } from '../../models/common/customer-info';
 import { BillingInfo } from '../../models/common/billing-info';
+import { ErrorResponse } from '../../models/response-models/error-models/error-response';
 
 export interface GooglePayFlowHandlerInterface {
   paymentInitiated(donationInfo: DonationPaymentInfo): Promise<void>;
@@ -105,8 +106,9 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
       if (response.success) {
         this.handleSuccessfulResponse(donationInfo, response.value as SuccessResponse);
       } else {
+        const error = response.value as ErrorResponse;
         this.donationFlowModalManager.showErrorModal({
-          message: 'Error setting up donation',
+          message: `Error setting up donation: ${error.message}, ${error.errors}`,
         });
       }
 
@@ -192,8 +194,9 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
         upsellSuccessResponse: response.value as SuccessResponse,
       });
     } else {
+      const error = response.value as ErrorResponse;
       this.donationFlowModalManager.showErrorModal({
-        message: 'Error setting up monthly donation',
+        message: `Error setting up monthly donation: ${error.message}, ${error.errors}`,
       });
     }
   }

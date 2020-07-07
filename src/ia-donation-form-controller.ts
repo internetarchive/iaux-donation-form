@@ -273,15 +273,23 @@ export class IADonationFormController extends LitElement {
     `;
   }
 
+  private bodyStyleOverflow?: string;
+  private bodyStyleTransition?: string;
+
   private modalModeChanged(e: CustomEvent): void {
     console.debug('modalModeChanged', e);
     const mode = e.detail.mode;
     switch (mode) {
       case 'modal':
+        this.bodyStyleOverflow = document.body.style.overflow;
+        this.bodyStyleTransition = document.body.style.transition;
+
+        document.body.style.transition = 'none';
         document.body.style.overflow = 'hidden';
         break;
       case 'closed':
-        document.body.style.overflow = 'auto';
+        document.body.style.overflow = this.bodyStyleOverflow ?? 'auto';
+        document.body.style.transition = this.bodyStyleTransition ?? 'none';
         break;
       default:
         break;

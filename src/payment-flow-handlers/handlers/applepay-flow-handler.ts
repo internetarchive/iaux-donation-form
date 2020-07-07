@@ -10,6 +10,7 @@ import { DonationRequest } from '../../models/request-models/donation-request';
 import { PaymentProvider } from '../../models/common/payment-provider-name';
 import { DonationType } from '../../models/donation-info/donation-type';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
+import { ErrorResponse } from '../../models/response-models/error-models/error-response';
 
 export interface ApplePayFlowHandlerInterface {
   paymentInitiated(donationInfo: DonationPaymentInfo, e: Event): Promise<void>;
@@ -75,8 +76,9 @@ export class ApplePayFlowHandler
         upsellSuccessResponse: response.value as SuccessResponse,
       });
     } else {
+      const error = response.value as ErrorResponse;
       this.donationFlowModalManager.showErrorModal({
-        message: 'Error setting up monthly donation',
+        message: `Error setting up monthly donation: ${error}`,
       });
     }
   }
@@ -104,8 +106,9 @@ export class ApplePayFlowHandler
         this.showThankYouModal({ successResponse });
       }
     } else {
+      const errorResponse = response.value as ErrorResponse;
       this.donationFlowModalManager.showErrorModal({
-        message: 'Error setting up donation',
+        message: `Error setting up donation: ${errorResponse.message}, ${errorResponse.errors}`,
       });
     }
   }
