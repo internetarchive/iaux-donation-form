@@ -5,14 +5,12 @@ import { ModalManager } from '@internetarchive/modal-manager';
 
 import { AnalyticsHandlerInterface } from './@types/analytics-handler';
 
-import { DonationForm, PaymentClients, BraintreeManager, PaymentFlowHandlers, RecaptchaManager,
-  PaymentClientsInterface,
-  BraintreeManagerInterface,
-  BraintreeEndpointManagerInterface,
-  HostingEnvironment,
-  RecaptchaManagerInterface,
-  PaymentFlowHandlersInterface
-} from '../index';
+import { DonationForm } from './donation-form';
+import { PaymentClients, PaymentClientsInterface } from './braintree-manager/payment-clients';
+import { BraintreeManager } from './braintree-manager/braintree-manager';
+import { BraintreeEndpointManagerInterface, BraintreeManagerInterface, HostingEnvironment } from './braintree-manager/braintree-interfaces';
+import { PaymentFlowHandlers, PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
+import { RecaptchaManager, RecaptchaManagerInterface } from './recaptcha-manager/recaptcha-manager';
 
 /**
  * The IADonationFormController is an IA-specific bridge between petabox

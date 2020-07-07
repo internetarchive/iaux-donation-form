@@ -1,11 +1,11 @@
 {
   "name": "@internetarchive/donation-form",
-  "version": "0.0.0-alpha.11",
+  "version": "0.0.0-alpha.14",
   "description": "The Internet Archive Donation Form",
   "license": "AGPL-3.0-only",
-  "main": "index.js",
-  "module": "index.js",
-  "types": "index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist/**/*",
     "src/**/*",
@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "prepare": "npm run build",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "rm -Rf dist && tsc -p tsconfig.build.json",
     "start": "concurrently --kill-others --names tsc,es-dev-server \"npm run tsc:watch\" \"es-dev-server --app-index demo/index.html --node-resolve --open --watch --preserve-symlinks --hostname 192.168.1.160 --http2\"",
     "tsc:watch": "tsc --watch",
     "lint:eslint": "eslint --ext .ts,.html . --ignore-path .gitignore",
