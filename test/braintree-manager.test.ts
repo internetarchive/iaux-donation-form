@@ -10,6 +10,11 @@ import {
 import { DonationRequest } from '../src/models/request-models/donation-request';
 import { DonationResponse } from '../src/models/response-models/donation-response';
 import { SuccessResponse } from '../src/models/response-models/success-models/success-response';
+import { HostedFieldConfiguration } from '../src/braintree-manager/payment-providers/credit-card/hosted-field-configuration';
+import {
+  HostedFieldContainerInterface,
+  HostedFieldContainer,
+} from '../src/braintree-manager/payment-providers/credit-card/hosted-field-container';
 
 class MockPaymentClients implements PaymentClientsInterface {
   getBraintreeClient(): Promise<braintree.Client> {
@@ -59,7 +64,23 @@ describe('Braintree Manager', () => {
     const paymentClients = new MockPaymentClients();
     const endpointManager = new MockEndpointManager();
 
-    const fieldConfig: braintree.HostedFieldFieldOptions = {
+    const hostedFieldStyle: object = {
+      input: {
+        'font-size': '14px',
+        'font-family': '"Helvetica Neue", Helvetica, Arial, sans-serif',
+        'font-weight': '700',
+        color: '#333',
+      },
+      ':focus': {
+        color: '#333',
+      },
+      '.valid': {},
+      '.invalid': {
+        color: '#b00b00',
+      },
+    };
+
+    const hostedFieldFieldOptions: braintree.HostedFieldFieldOptions = {
       number: {
         selector: '#braintree-creditcard',
         placeholder: 'Card number',
@@ -74,12 +95,27 @@ describe('Braintree Manager', () => {
       },
     };
 
+    const numberField = document.createElement('input');
+    const cvvField = document.createElement('input');
+    const expField = document.createElement('input');
+
+    const hostedFieldContainer: HostedFieldContainerInterface = new HostedFieldContainer({
+      number: numberField,
+      cvv: cvvField,
+      expirationDate: expField,
+    });
+
+    const config: HostedFieldConfiguration = new HostedFieldConfiguration({
+      hostedFieldStyle,
+      hostedFieldFieldOptions,
+      hostedFieldContainer,
+    });
+
     const braintreeManager = new BraintreeManager({
       authorizationToken: 'foo',
       paymentClients,
       endpointManager,
-      hostedFieldStyle: {},
-      hostedFieldConfig: fieldConfig,
+      hostedFieldConfig: config,
       hostingEnvironment: HostingEnvironment.Development,
     });
 

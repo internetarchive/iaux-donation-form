@@ -1,29 +1,30 @@
-import { BraintreeManagerInterface } from '../braintree-interfaces';
+import { BraintreeManagerInterface } from '../../braintree-interfaces';
+import { HostedFieldConfiguration } from './hosted-field-configuration';
+import { HostedFieldName } from './hosted-field-container';
 
 export interface CreditCardHandlerInterface {
   setupHostedFields(): Promise<braintree.HostedFields | undefined>;
   teardownHostedFields(): Promise<void>;
   getInstance(): Promise<braintree.HostedFields | undefined>;
   tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined>;
+  markFieldErrors(fields: HostedFieldName[]): void;
+  removeFieldErrors(fields: HostedFieldName[]): void;
 }
 
 export class CreditCardHandler implements CreditCardHandlerInterface {
-  constructor(
-    braintreeManager: BraintreeManagerInterface,
-    hostedFieldsClient: braintree.HostedFields,
-    hostedFieldStyle: object,
-    hostedFieldConfig: braintree.HostedFieldFieldOptions,
-  ) {
-    this.braintreeManager = braintreeManager;
-    this.hostedFieldsClient = hostedFieldsClient;
-    this.hostedFieldStyle = hostedFieldStyle;
-    this.hostedFieldConfig = hostedFieldConfig;
+  constructor(options: {
+    braintreeManager: BraintreeManagerInterface;
+    hostedFieldClient: braintree.HostedFields;
+    hostedFieldConfig: HostedFieldConfiguration;
+  }) {
+    this.braintreeManager = options.braintreeManager;
+    this.hostedFieldClient = options.hostedFieldClient;
+    this.hostedFieldConfig = options.hostedFieldConfig;
   }
 
   private braintreeManager: BraintreeManagerInterface;
-  private hostedFieldsClient: braintree.HostedFields;
-  private hostedFieldStyle: object;
-  private hostedFieldConfig: braintree.HostedFieldFieldOptions;
+  private hostedFieldClient: braintree.HostedFields;
+  private hostedFieldConfig: HostedFieldConfiguration;
 
   private hostedFieldsInstance?: braintree.HostedFields;
 
@@ -53,11 +54,11 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
 
     return new Promise((resolve, reject) => {
       console.log('credit card hostedFieldsClient.create');
-      this.hostedFieldsClient.create(
+      this.hostedFieldClient.create(
         {
           client: braintreeClient,
-          styles: this.hostedFieldStyle,
-          fields: this.hostedFieldConfig,
+          styles: this.hostedFieldConfig.hostedFieldStyle,
+          fields: this.hostedFieldConfig.hostedFieldFieldOptions,
         },
         (
           hostedFieldsErr: braintree.BraintreeError | undefined,
@@ -77,5 +78,13 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
   async tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined> {
     const hostedFields = await this.getInstance();
     return hostedFields?.tokenize();
+  }
+
+  markFieldErrors(fields: HostedFieldName[]): void {
+    this.hostedFieldConfig.hostedFieldContainer.markFieldErrors(fields);
+  }
+
+  removeFieldErrors(fields: HostedFieldName[]): void {
+    this.hostedFieldConfig.hostedFieldContainer.removeFieldErrors(fields);
   }
 }

@@ -10,6 +10,7 @@ import { DonationPaymentInfo } from '../../models/donation-info/donation-payment
 import { PaymentProvider } from '../../models/common/payment-provider-name';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
 import { ErrorResponse } from '../../models/response-models/error-models/error-response';
+import { HostedFieldName } from '../../braintree-manager/payment-providers/credit-card/hosted-field-container';
 
 export interface CreditCardFlowHandlerInterface {
   paymentInitiated(
@@ -50,11 +51,15 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     try {
       hostedFieldsResponse = await handler?.tokenizeHostedFields();
     } catch (error) {
-      this.donationFlowModalManager.showErrorModal({
-        message: `Credit card info missing: ${error}`,
-      });
+      console.debug(error);
+      // this.braintreeManager.paymentProviders.getCreditCardHandler
+      handler.markFieldErrors([HostedFieldName.Number]);
+      // this.donationFlowModalManager.showErrorModal({
+      //   message: `Credit card info missing: ${error}`,
+      // });
       return;
     }
+
     console.debug(
       'paymentInitiated, hostedFieldsResponse',
       hostedFieldsResponse,

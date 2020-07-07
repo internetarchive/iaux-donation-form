@@ -166,6 +166,8 @@ export class DonationForm extends LitElement {
   }
 
   private donateClicked(): void {
+    console.debug('donateClicked');
+
     if (!this.contactForm) {
       console.error('no contact form');
       alert('Please enter contact info.');
@@ -173,6 +175,12 @@ export class DonationForm extends LitElement {
     }
     if (!this.donationInfoValid) {
       this.showInvalidDonationInfoAlert();
+      return;
+    }
+
+    const valid = this.contactForm.validate();
+
+    if (!valid) {
       return;
     }
 

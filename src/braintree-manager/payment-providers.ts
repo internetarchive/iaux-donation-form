@@ -1,4 +1,7 @@
-import { CreditCardHandlerInterface, CreditCardHandler } from './payment-providers/credit-card';
+import {
+  CreditCardHandlerInterface,
+  CreditCardHandler,
+} from './payment-providers/credit-card/credit-card';
 import { ApplePayHandlerInterface, ApplePayHandler } from './payment-providers/apple-pay/apple-pay';
 import { VenmoHandlerInterface, VenmoHandler } from './payment-providers/venmo';
 import { PayPalHandlerInterface, PayPalHandler } from './payment-providers/paypal/paypal';
@@ -6,6 +9,7 @@ import { ApplePaySessionManager } from './payment-providers/apple-pay/apple-pay-
 import { PaymentClientsInterface } from './payment-clients';
 import { GooglePayHandlerInterface, GooglePayHandler } from './payment-providers/google-pay';
 import { BraintreeManagerInterface, HostingEnvironment } from './braintree-interfaces';
+import { HostedFieldConfiguration } from './payment-providers/credit-card/hosted-field-configuration';
 
 export interface PaymentProvidersInterface {
   getCreditCardHandler(): Promise<CreditCardHandlerInterface>;
@@ -31,12 +35,13 @@ export class PaymentProviders implements PaymentProvidersInterface {
 
     const client = await this.paymentClients.getHostedFields();
 
-    this.creditCardHandlerCache = new CreditCardHandler(
-      this.braintreeManager,
-      client,
-      this.hostedFieldStyle,
-      this.hostedFieldConfig,
-    );
+    // const config = new H
+
+    this.creditCardHandlerCache = new CreditCardHandler({
+      braintreeManager: this.braintreeManager,
+      hostedFieldClient: client,
+      hostedFieldConfig: this.hostedFieldConfig,
+    });
 
     return this.creditCardHandlerCache;
   }
@@ -142,9 +147,7 @@ export class PaymentProviders implements PaymentProvidersInterface {
 
   private googlePayHandlerCache?: GooglePayHandlerInterface;
 
-  private hostedFieldStyle: object;
-
-  private hostedFieldConfig: braintree.HostedFieldFieldOptions;
+  private hostedFieldConfig: HostedFieldConfiguration;
 
   private hostingEnvironment: HostingEnvironment = HostingEnvironment.Development;
 
@@ -156,15 +159,13 @@ export class PaymentProviders implements PaymentProvidersInterface {
     venmoProfileId?: string;
     googlePayMerchantId?: string;
     hostingEnvironment: HostingEnvironment;
-    hostedFieldStyle: object;
-    hostedFieldConfig: braintree.HostedFieldFieldOptions;
+    hostedFieldConfig: HostedFieldConfiguration;
   }) {
     this.braintreeManager = options.braintreeManager;
     this.venmoProfileId = options.venmoProfileId;
     this.googlePayMerchantId = options.googlePayMerchantId;
     this.paymentClients = options.paymentClients;
     this.hostingEnvironment = options.hostingEnvironment;
-    this.hostedFieldStyle = options.hostedFieldStyle;
     this.hostedFieldConfig = options.hostedFieldConfig;
   }
 }

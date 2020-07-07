@@ -23,68 +23,113 @@ export class ContactForm extends LitElement {
   @query('#region') regionField!: HTMLInputElement;
   @query('#postalCode') postalCodeField!: HTMLInputElement;
   @query('#countryCodeAlpha2') countryCodeAlpha2Field!: HTMLInputElement;
+  @query('form') form!: HTMLFormElement;
+
+  get requriedFields(): HTMLInputElement[] {
+    return [
+      this.emailField,
+      this.firstNameField,
+      this.lastNameField,
+      this.streetAddressField,
+      this.localityField,
+      this.regionField,
+      this.postalCodeField,
+      this.countryCodeAlpha2Field,
+    ];
+  }
+
+  validate(): boolean {
+    const valid = this.form.reportValidity();
+    return valid;
+  }
+
+  submitForm(e: Event): void {
+    console.debug('submitForm');
+    e.preventDefault();
+  }
 
   /** @inheritdoc */
   render(): TemplateResult {
-    // console.debug('render', emailImg);
+    return html`
+      <form @submit=${this.submitForm}>
+        <fieldset>
+          <div class="row has-icon email-icon">
+            ${this.generateInput({
+              id: 'email',
+              placeholder: 'Email',
+              required: true,
+              fieldType: 'email',
+            })}
+          </div>
+        </fieldset>
 
-    // style="background-image: url('data:image/svg+xml;utf8,${emailImg.getHTML()}')">
+        <fieldset>
+          <div class="row has-icon person">
+            ${this.generateInput({ id: 'firstName', placeholder: 'First name', required: true })}
+          </div>
 
-    // console.debug('BACKGROUND', background)
+          <div class="row">
+            ${this.generateInput({ id: 'lastName', placeholder: 'Last name', required: true })}
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <div class="row">
+            ${this.generateInput({
+              id: 'streetAddress',
+              placeholder: 'Address Line 1',
+              required: true,
+            })}
+          </div>
+          <div class="row">
+            ${this.generateInput({
+              id: 'extendedAddress',
+              placeholder: 'Address Line 2',
+              required: false,
+            })}
+          </div>
+          <div class="row">
+            ${this.generateInput({ id: 'locality', placeholder: 'City', required: false })}
+          </div>
+          <div class="row">
+            ${this.generateInput({ id: 'region', placeholder: 'State / Province', required: true })}
+            ${this.generateInput({ id: 'postalCode', placeholder: 'Zip / Postal', required: true })}
+          </div>
+          <div class="row">
+            ${this.generateInput({
+              id: 'countryCodeAlpha2',
+              placeholder: 'Country',
+              required: true,
+            })}
+          </div>
+        </fieldset>
+      </form>
+    `;
+  }
+
+  private inputChanged(): void {
+    console.debug('inputChanged');
+  }
+
+  private generateInput(options: {
+    id: string;
+    placeholder: string;
+    required?: boolean;
+    fieldType?: 'text' | 'email';
+  }): TemplateResult {
+    const required = options.required ?? true;
+    const fieldType = options.fieldType ?? 'text';
 
     return html`
-      <fieldset>
-        <div class="row has-icon email-icon">
-          <div class="input-wrapper email">
-            <input type="text" id="email" placeholder="Email" />
-          </div>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <div class="row has-icon person">
-          <div class="input-wrapper firstName">
-            <input type="text" id="firstName" placeholder="First name" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="input-wrapper">
-            <input type="text" id="lastName" placeholder="Last name" />
-          </div>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <div class="row">
-          <div class="input-wrapper streetAddress">
-            <input type="text" id="streetAddress" placeholder="Address Line 1" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-wrapper extendedAddress">
-            <input type="text" id="extendedAddress" placeholder="Address Line 2" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-wrapper locality">
-            <input type="text" id="locality" placeholder="City" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-wrapper region">
-            <input type="text" id="region" placeholder="State / Province" />
-          </div>
-          <div class="input-wrapper postalCode">
-            <input type="text" id="postalCode" placeholder="Zip / Postal" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-wrapper countryCodeAlpha2">
-            <input type="text" id="countryCodeAlpha2" placeholder="Country" />
-          </div>
-        </div>
-      </fieldset>
+      <div class="input-wrapper ${options.id}">
+        <input
+          type=${fieldType}
+          id=${options.id}
+          placeholder=${options.placeholder}
+          @input=${this.inputChanged}
+          ?required=${required}
+        />
+      </div>
     `;
   }
 
@@ -126,12 +171,23 @@ export class ContactForm extends LitElement {
         margin: 0 0 0.5em 0;
       }
 
+      /* These 1px and 0 margins in the next few selectors are to account for the
+      double outlines caused by the fields being right next to each other */
       .row {
         display: flex;
+        margin-top: 1px;
       }
 
       fieldset .row:first-child {
-        border-top: ${borderCss};
+        margin-top: 0;
+      }
+
+      .row .input-wrapper {
+        margin-left: 1px;
+      }
+
+      .row .input-wrapper:first-child {
+        margin-left: 0;
       }
 
       .email-icon {
@@ -151,8 +207,7 @@ export class ContactForm extends LitElement {
 
       .input-wrapper {
         width: 100%;
-        border: ${borderCss};
-        border-top: 0;
+        outline: ${borderCss};
         padding: 2px 5px;
         padding-left: 2rem;
       }
@@ -166,18 +221,6 @@ export class ContactForm extends LitElement {
         border-left: 0;
         width: 40%;
       }
-
-      /* #region {
-        width: 60%;
-      }
-
-      #postalCode {
-        width: 40%;
-      }
-
-      #postalCode {
-        padding-left: 10px;
-      } */
     `;
   }
 }

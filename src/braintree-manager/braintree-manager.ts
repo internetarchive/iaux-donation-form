@@ -8,6 +8,7 @@ import {
   HostingEnvironment,
 } from './braintree-interfaces';
 import { SuccessResponse } from '../models/response-models/success-models/success-response';
+import { HostedFieldConfiguration } from './payment-providers/credit-card/hosted-field-configuration';
 
 export class BraintreeManager implements BraintreeManagerInterface {
   get deviceData(): string | undefined {
@@ -117,8 +118,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
     authorizationToken: string;
     paymentClients: PaymentClientsInterface;
     endpointManager: BraintreeEndpointManagerInterface;
-    hostedFieldStyle: object;
-    hostedFieldConfig: braintree.HostedFieldFieldOptions;
+    hostedFieldConfig: HostedFieldConfiguration;
     hostingEnvironment: HostingEnvironment;
     venmoProfileId?: string;
     googlePayMerchantId?: string;
@@ -134,7 +134,6 @@ export class BraintreeManager implements BraintreeManagerInterface {
       venmoProfileId: options.venmoProfileId,
       googlePayMerchantId: options.googlePayMerchantId,
       hostingEnvironment: options.hostingEnvironment,
-      hostedFieldStyle: options.hostedFieldStyle,
       hostedFieldConfig: options.hostedFieldConfig,
     });
   }

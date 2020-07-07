@@ -30,6 +30,11 @@ import {
 } from './payment-flow-handlers/payment-flow-handlers';
 
 import { RecaptchaManager, RecaptchaManagerInterface } from './recaptcha-manager/recaptcha-manager';
+import { HostedFieldConfiguration } from './braintree-manager/payment-providers/credit-card/hosted-field-configuration';
+import {
+  HostedFieldContainerInterface,
+  HostedFieldContainer,
+} from './braintree-manager/payment-providers/credit-card/hosted-field-container';
 
 /**
  * The IADonationFormController is an IA-specific bridge between petabox
@@ -73,6 +78,12 @@ export class IADonationFormController extends LitElement {
 
   @query('#recaptcha') private recaptcha!: HTMLElement;
 
+  @query('#braintree-creditcard') private braintreeNumberInput!: HTMLInputElement;
+
+  @query('#braintree-cvv') private braintreeCVVInput!: HTMLInputElement;
+
+  @query('#braintree-expiration') private braintreeExpirationDateInput!: HTMLInputElement;
+
   private lazyLoaderService: LazyLoaderServiceInterface = new LazyLoaderService();
 
   private paymentClients: PaymentClientsInterface = new PaymentClients(
@@ -112,7 +123,6 @@ export class IADonationFormController extends LitElement {
         authorizationToken: this.braintreeAuthToken,
         venmoProfileId: this.venmoProfileId,
         googlePayMerchantId: this.googlePayMerchantId,
-        hostedFieldStyle: this.hostedFieldStyle,
         hostedFieldConfig: this.hostedFieldConfig,
         hostingEnvironment: HostingEnvironment.Development,
       });
@@ -138,8 +148,8 @@ export class IADonationFormController extends LitElement {
     this.paymentFlowHandlers.startup();
   }
 
-  private get hostedFieldStyle(): object {
-    return {
+  private get hostedFieldConfig(): HostedFieldConfiguration {
+    const hostedFieldStyle: object = {
       input: {
         'font-size': '14px',
         'font-family': '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -154,10 +164,8 @@ export class IADonationFormController extends LitElement {
         color: '#b00b00',
       },
     };
-  }
 
-  private get hostedFieldConfig(): braintree.HostedFieldFieldOptions {
-    return {
+    const hostedFieldFieldOptions: braintree.HostedFieldFieldOptions = {
       number: {
         selector: '#braintree-creditcard',
         placeholder: 'Card number',
@@ -171,6 +179,20 @@ export class IADonationFormController extends LitElement {
         placeholder: 'MM / YY',
       },
     };
+
+    const hostedFieldContainer: HostedFieldContainerInterface = new HostedFieldContainer({
+      number: this.braintreeNumberInput,
+      cvv: this.braintreeCVVInput,
+      expirationDate: this.braintreeExpirationDateInput,
+    });
+
+    const config: HostedFieldConfiguration = new HostedFieldConfiguration({
+      hostedFieldStyle,
+      hostedFieldFieldOptions,
+      hostedFieldContainer,
+    });
+
+    return config;
   }
 
   /** @inheritdoc */
@@ -240,6 +262,10 @@ export class IADonationFormController extends LitElement {
           display: block;
         }
 
+        donation-form:focus {
+          outline: none;
+        }
+
         #paypal-button {
           opacity: 0.001;
           width: 50px;
@@ -254,17 +280,22 @@ export class IADonationFormController extends LitElement {
         .braintree-input-wrapper {
           width: 100%;
           border: 1px solid #d9d9d9;
-          border-top: 0;
           padding-left: 2rem;
+          /* margin-top: 1px; */
         }
 
-        .braintree-input-wrapper.creditcard {
+        .braintree-input-wrapper.error {
+          border-color: red;
+          /* border: 1px solid red; */
+        }
+
+        /* .braintree-input-wrapper.creditcard {
           border-top: 1px solid #d9d9d9;
-        }
+        } */
 
-        .braintree-input-wrapper.cvv {
-          border-left: 0;
-        }
+        /* .braintree-input-wrapper.cvv {
+          margin-left: 1px;
+        } */
 
         .braintree-input {
           height: 25px;
