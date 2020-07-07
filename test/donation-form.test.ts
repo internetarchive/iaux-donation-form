@@ -1,5 +1,6 @@
 import { html, fixture, expect } from '@open-wc/testing';
 
+import '../src/donation-form';
 import { DonationForm } from '../src/donation-form';
 
 describe('Donation Form', () => {
