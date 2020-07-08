@@ -248,7 +248,7 @@ export class ContactForm extends LitElement {
 
       .input-wrapper.countryCodeAlpha2 select {
         width: 100%;
-        height: 30px;
+        height: 27px;
         box-sizing: border-box;
         font-weight: bold;
         font-size: 0.9em;
