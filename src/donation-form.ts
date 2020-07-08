@@ -50,6 +50,10 @@ export class DonationForm extends LitElement {
 
   @property({ type: Boolean }) private donationInfoValid = true;
 
+  @property({ type: Boolean }) private contactInfoValid = false;
+
+  @property({ type: Boolean }) private hostedFieldsValid = false;
+
   @property({ type: String }) private selectedPaymentProvider?: PaymentProvider;
 
   @query('contact-form') contactForm?: ContactForm;
@@ -93,7 +97,7 @@ export class DonationForm extends LitElement {
   get contactFormSection(): TemplateResult {
     return html`
       <form-section number="4" headline="Tell us about yourself">
-        <contact-form></contact-form>
+        <contact-form @form-validity-changed=${this.contactFormValidityChanged}></contact-form>
         <div class="credit-card-fields" class="${this.creditCardVisible ? '' : 'hidden'}">
           <slot name="braintree-hosted-fields"></slot>
         </div>
@@ -103,7 +107,7 @@ export class DonationForm extends LitElement {
         <button
           id="donate-button"
           @click=${this.donateClicked}
-          ?disabled=${this.donationInfoValid === false}
+          ?disabled=${this.donateButtonDisabled}
         >
           Donate
         </button>
@@ -113,6 +117,19 @@ export class DonationForm extends LitElement {
         </div>
       </form-section>
     `;
+  }
+
+  private get donateButtonDisabled(): boolean {
+    return (
+      this.donationInfoValid === false ||
+      this.contactInfoValid === false ||
+      (this.selectedPaymentProvider === PaymentProvider.CreditCard &&
+        this.hostedFieldsValid === false)
+    );
+  }
+
+  private contactFormValidityChanged(e: CustomEvent): void {
+    this.contactInfoValid = e.detail.isValid;
   }
 
   private editDonationError(e: CustomEvent): void {
@@ -252,13 +269,7 @@ export class DonationForm extends LitElement {
     console.debug('updated: changedProperties', changedProperties);
 
     if (changedProperties.has('paymentFlowHandlers')) {
-      console.debug('updated: paymentFlowHandlers', this.paymentFlowHandlers);
-      if (this.paypalButtonNeedsRender) {
-        this.renderPayPalButton();
-      }
-      this.paymentFlowHandlers?.paypalHandler?.updateDonationInfo(this.donationInfo);
-      console.debug('calling startup');
-      this.paymentFlowHandlers?.creditCardHandler?.startup();
+      this.setupFlowHandlers();
     }
 
     if (changedProperties.has('donationInfo')) {
@@ -271,6 +282,18 @@ export class DonationForm extends LitElement {
     if (changedProperties.has('donationInfoValid')) {
       this.paymentSelector.donationInfoValid = this.donationInfoValid;
     }
+  }
+
+  private setupFlowHandlers(): void {
+    console.debug('updated: paymentFlowHandlers', this.paymentFlowHandlers);
+    if (this.paypalButtonNeedsRender) {
+      this.renderPayPalButton();
+    }
+    this.paymentFlowHandlers?.paypalHandler?.updateDonationInfo(this.donationInfo);
+    this.paymentFlowHandlers?.creditCardHandler?.startup();
+    this.paymentFlowHandlers?.creditCardHandler?.on('validityChanged', (isValid: boolean) => {
+      this.hostedFieldsValid = isValid;
+    });
   }
 
   private donationInfoChanged(e: CustomEvent): void {
@@ -316,7 +339,6 @@ export class DonationForm extends LitElement {
       }
 
       #donate-button {
-        background-color: #55a283;
         width: 100%;
         appearance: none;
         -webkit-appearance: none;
@@ -327,9 +349,14 @@ export class DonationForm extends LitElement {
         cursor: pointer;
         border: none;
         border-radius: 5px;
-        background: #31a481;
+        background-color: rgba(49, 164, 129, 1);
         padding-top: 5px;
         padding-bottom: 5px;
+      }
+
+      #donate-button:disabled {
+        background-color: rgba(49, 164, 129, 0.5);
+        cursor: not-allowed;
       }
     `;
   }

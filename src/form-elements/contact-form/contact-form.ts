@@ -110,8 +110,16 @@ export class ContactForm extends LitElement {
     `;
   }
 
+  private formValid = false;
+
   private inputChanged(): void {
     console.debug('inputChanged');
+    const isValid = this.form.checkValidity();
+    // only dispatch if there is a change
+    if (isValid === this.formValid) { return; }
+    this.formValid = isValid;
+    const event = new CustomEvent('form-validity-changed', { detail: { isValid } });
+    this.dispatchEvent(event);
   }
 
   private generateInput(options: {
