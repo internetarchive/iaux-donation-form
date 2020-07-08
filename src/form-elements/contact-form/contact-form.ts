@@ -9,13 +9,15 @@ import {
   query,
 } from 'lit-element';
 
-import { BillingInfo } from '../models/common/billing-info';
-import { CustomerInfo } from '../models/common/customer-info';
-import { DonorContactInfo } from '../models/common/donor-contact-info';
+import { BillingInfo } from '../../models/common/billing-info';
+import { CustomerInfo } from '../../models/common/customer-info';
+import { DonorContactInfo } from '../../models/common/donor-contact-info';
 
-import emailImg from '../assets/img/contact-form-icons/email';
-import localePinImg from '../assets/img/contact-form-icons/locale-pin';
-import personImg from '../assets/img/contact-form-icons/person';
+import emailImg from '../../assets/img/contact-form-icons/email';
+import localePinImg from '../../assets/img/contact-form-icons/locale-pin';
+import personImg from '../../assets/img/contact-form-icons/person';
+
+import countries from './countries';
 
 @customElement('contact-form')
 export class ContactForm extends LitElement {
@@ -48,15 +50,10 @@ export class ContactForm extends LitElement {
     return valid;
   }
 
-  submitForm(e: Event): void {
-    console.debug('submitForm');
-    e.preventDefault();
-  }
-
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
-      <form @submit=${this.submitForm}>
+      <form>
         <fieldset>
           <div class="row has-icon">
             ${this.generateInput({
@@ -94,18 +91,19 @@ export class ContactForm extends LitElement {
             })}
           </div>
           <div class="row">
-            ${this.generateInput({ id: 'locality', placeholder: 'City', required: false })}
+            ${this.generateInput({ id: 'locality', placeholder: 'City', required: true })}
           </div>
           <div class="row">
             ${this.generateInput({ id: 'region', placeholder: 'State / Province', required: true })}
             ${this.generateInput({ id: 'postalCode', placeholder: 'Zip / Postal', required: true })}
           </div>
           <div class="row">
-            ${this.generateInput({
+            ${this.countrySelector}
+            <!-- ${this.generateInput({
               id: 'countryCodeAlpha2',
               placeholder: 'Country',
               required: true,
-            })}
+            })} -->
           </div>
         </fieldset>
       </form>
@@ -134,6 +132,21 @@ export class ContactForm extends LitElement {
           @input=${this.inputChanged}
           ?required=${required}
         />
+      </div>
+    `;
+  }
+
+  private get countrySelector(): TemplateResult {
+    const selectedCountry = 'US';
+
+    return html`
+      <div class="input-wrapper countryCodeAlpha2">
+        <select>
+          ${Object.keys(countries).map((key) => {
+            const name = countries[key];
+            return html`<option value=${key} ?selected=${key === selectedCountry}>${name}</option>`;
+          })}
+        </select>
       </div>
     `;
   }
@@ -225,6 +238,22 @@ export class ContactForm extends LitElement {
 
       .input-wrapper.streetAddress {
         background-image: url('${unsafeCSS(localePinImg)}')
+      }
+
+      .input-wrapper.countryCodeAlpha2 {
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-right: 0;
+      }
+
+      .input-wrapper.countryCodeAlpha2 select {
+        width: 100%;
+        height: 30px;
+        box-sizing: border-box;
+        font-weight: bold;
+        font-size: 0.9em;
+        border: none;
+        background: #fff;
       }
 
       .input-wrapper.region {

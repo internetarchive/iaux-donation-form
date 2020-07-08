@@ -15,12 +15,12 @@ import {
 // these files and by simply importing the class name, you lose that behavior
 // See https://github.com/microsoft/TypeScript/issues/9191 for more discussion
 import './form-elements/form-section';
-import './form-elements/contact-form';
+import './form-elements/contact-form/contact-form';
 import './form-elements/payment-selector';
 import './form-elements/header/donation-form-header';
 
 import { DonationFormHeader } from './form-elements/header/donation-form-header';
-import { ContactForm } from './form-elements/contact-form';
+import { ContactForm } from './form-elements/contact-form/contact-form';
 import { PaymentSelector } from './form-elements/payment-selector';
 
 import { BraintreeManagerInterface } from './braintree-manager/braintree-interfaces';
