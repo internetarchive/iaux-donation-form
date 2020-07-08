@@ -5,12 +5,17 @@ import {
   customElement,
   CSSResult,
   TemplateResult,
+  unsafeCSS,
   query,
 } from 'lit-element';
 
 import { BillingInfo } from '../models/common/billing-info';
 import { CustomerInfo } from '../models/common/customer-info';
 import { DonorContactInfo } from '../models/common/donor-contact-info';
+
+import emailImg from '../assets/img/contact-form-icons/email';
+import localePinImg from '../assets/img/contact-form-icons/locale-pin';
+import personImg from '../assets/img/contact-form-icons/person';
 
 @customElement('contact-form')
 export class ContactForm extends LitElement {
@@ -53,7 +58,7 @@ export class ContactForm extends LitElement {
     return html`
       <form @submit=${this.submitForm}>
         <fieldset>
-          <div class="row has-icon email-icon">
+          <div class="row has-icon">
             ${this.generateInput({
               id: 'email',
               placeholder: 'Email',
@@ -64,7 +69,7 @@ export class ContactForm extends LitElement {
         </fieldset>
 
         <fieldset>
-          <div class="row has-icon person">
+          <div class="row has-icon">
             ${this.generateInput({ id: 'firstName', placeholder: 'First name', required: true })}
           </div>
 
@@ -190,11 +195,6 @@ export class ContactForm extends LitElement {
         margin-left: 0;
       }
 
-      .email-icon {
-        background-position: 0.75rem 50%;
-        background-repeat: no-repeat;
-      }
-
       input {
         width: 100%;
         border: 0;
@@ -210,6 +210,21 @@ export class ContactForm extends LitElement {
         outline: ${borderCss};
         padding: 2px 5px;
         padding-left: 2rem;
+        background-position: 0.75rem 50%;
+        background-repeat: no-repeat;
+        background-size: auto 12px;
+      }
+
+      .input-wrapper.email {
+        background-image: url('${unsafeCSS(emailImg)}')
+      }
+
+      .input-wrapper.firstName {
+        background-image: url('${unsafeCSS(personImg)}')
+      }
+
+      .input-wrapper.streetAddress {
+        background-image: url('${unsafeCSS(localePinImg)}')
       }
 
       .input-wrapper.region {

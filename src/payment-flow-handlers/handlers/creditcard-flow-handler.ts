@@ -27,8 +27,6 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
 
   private recaptchaManager: RecaptchaManagerInterface;
 
-  private startupComplete = false;
-
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;
     donationFlowModalManager: DonationFlowModalManagerInterface;

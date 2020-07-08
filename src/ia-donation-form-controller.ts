@@ -6,6 +6,7 @@ import {
   query,
   TemplateResult,
   customElement,
+  unsafeCSS
 } from 'lit-element';
 
 import {
@@ -13,8 +14,6 @@ import {
   LazyLoaderServiceInterface,
 } from '@internetarchive/lazy-loader-service';
 import { ModalManager } from '@internetarchive/modal-manager';
-
-// import { AnalyticsHandlerInterface } from './@types/analytics-handler';
 
 import { DonationForm } from './donation-form';
 import { PaymentClients, PaymentClientsInterface } from './braintree-manager/payment-clients';
@@ -35,6 +34,10 @@ import {
   HostedFieldContainerInterface,
   HostedFieldContainer,
 } from './braintree-manager/payment-providers/credit-card/hosted-field-container';
+
+import creditCardImg from './assets/img/contact-form-icons/ccard';
+import calendarImg from './assets/img/contact-form-icons/calendar';
+import lockImg from './assets/img/contact-form-icons/lock';
 
 /**
  * The IADonationFormController is an IA-specific bridge between petabox
@@ -281,24 +284,29 @@ export class IADonationFormController extends LitElement {
           width: 100%;
           border: 1px solid #d9d9d9;
           padding-left: 2rem;
-          /* margin-top: 1px; */
+          background-position: 0.75rem 50%;
+          background-repeat: no-repeat;
+          background-size: auto 12px;
         }
 
         .braintree-input-wrapper.error {
           border-color: red;
-          /* border: 1px solid red; */
         }
-
-        /* .braintree-input-wrapper.creditcard {
-          border-top: 1px solid #d9d9d9;
-        } */
-
-        /* .braintree-input-wrapper.cvv {
-          margin-left: 1px;
-        } */
 
         .braintree-input {
           height: 25px;
+        }
+
+        .braintree-input-wrapper.creditcard {
+          background-image: url('${unsafeCSS(creditCardImg)}')
+        }
+
+        .braintree-input-wrapper.expiration {
+          background-image: url('${unsafeCSS(calendarImg)}')
+        }
+
+        .braintree-input-wrapper.cvv {
+          background-image: url('${unsafeCSS(lockImg)}')
         }
       </style>
     `;

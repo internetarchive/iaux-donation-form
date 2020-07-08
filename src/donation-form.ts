@@ -32,6 +32,8 @@ import { DonationType } from './models/donation-info/donation-type';
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
 import { PaymentProvider } from './models/common/payment-provider-name';
 
+import lockImg from './assets/img/lock';
+
 @customElement('donation-form')
 export class DonationForm extends LitElement {
   @property({ type: Object }) braintreeManager: BraintreeManagerInterface | undefined;
@@ -105,6 +107,10 @@ export class DonationForm extends LitElement {
         >
           Donate
         </button>
+
+        <div class="secure-process-note">
+          ${lockImg} Your payment will be securely processed
+        </div>
       </form-section>
     `;
   }
@@ -234,12 +240,6 @@ export class DonationForm extends LitElement {
     console.debug('queryParam donationInfo', donationInfo);
 
     this.donationInfo = donationInfo;
-
-    // if (amountParam || frequencyParam) {
-    //   this.donationFormHeader.mode = DonationFormHeaderMode.Summary;
-    // } else {
-    //   this.donationFormHeader.mode = DonationFormHeaderMode.Edit;
-    // }
   }
 
   private async renderPayPalButton(): Promise<void> {
@@ -301,6 +301,18 @@ export class DonationForm extends LitElement {
 
       .hidden {
         display: none;
+      }
+
+      .secure-process-note {
+        margin-top: 0.5em;
+        font-size: 0.75em;
+        text-align: center;
+      }
+
+      .secure-process-note svg {
+        width: 12px;
+        height: 15px;
+        vertical-align: bottom;
       }
 
       #donate-button {
