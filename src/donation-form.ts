@@ -257,7 +257,8 @@ export class DonationForm extends LitElement {
         this.renderPayPalButton();
       }
       this.paymentFlowHandlers?.paypalHandler?.updateDonationInfo(this.donationInfo);
-      this.setupHostedFields();
+      console.debug('calling startup');
+      this.paymentFlowHandlers?.creditCardHandler?.startup();
     }
 
     if (changedProperties.has('donationInfo')) {
@@ -270,17 +271,6 @@ export class DonationForm extends LitElement {
     if (changedProperties.has('donationInfoValid')) {
       this.paymentSelector.donationInfoValid = this.donationInfoValid;
     }
-  }
-
-  private async setupHostedFields(): Promise<void> {
-    console.debug('setupHostedFields');
-    const start = performance.now();
-    const handler = await this.braintreeManager?.paymentProviders.getCreditCardHandler();
-    await handler?.teardownHostedFields();
-    const teardown = performance.now();
-    console.debug('setupHostedFields, teardown took (ms)', teardown - start);
-    await handler?.setupHostedFields();
-    console.debug('setupHostedFields, setup took (ms)', performance.now() - teardown);
   }
 
   private donationInfoChanged(e: CustomEvent): void {

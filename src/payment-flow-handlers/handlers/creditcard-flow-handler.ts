@@ -13,6 +13,7 @@ import { ErrorResponse } from '../../models/response-models/error-models/error-r
 import { HostedFieldName } from '../../braintree-manager/payment-providers/credit-card/hosted-field-container';
 
 export interface CreditCardFlowHandlerInterface {
+  startup(): Promise<void>;
   paymentInitiated(
     donationInfo: DonationPaymentInfo,
     donorContactInfo: DonorContactInfo,
@@ -26,6 +27,8 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
 
   private recaptchaManager: RecaptchaManagerInterface;
 
+  private startupComplete = false;
+
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;
     donationFlowModalManager: DonationFlowModalManagerInterface;
@@ -34,6 +37,32 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     this.braintreeManager = options.braintreeManager;
     this.donationFlowModalManager = options.donationFlowModalManager;
     this.recaptchaManager = options.recaptchaManager;
+  }
+
+  async startup(): Promise<void> {
+    const handler = await this.braintreeManager?.paymentProviders.getCreditCardHandler();
+    const instance = await handler?.getInstance();
+
+    // NOTE: The `focus` and `blur` callback logic must work in conjunction with
+    // the `HostedFieldContainer` class. We use the `HostedFieldContainer` for
+    // managing the hosted field error state in other parts of the form, but
+    // since we can only get event callbacks from the hosted fields like this,
+    // this has to operate independently and modify the CSS styles by itself
+    instance?.on('focus', (event: braintree.HostedFieldsStateObject): void => {
+      const { emittedBy, fields } = event;
+      const fieldInFocus = fields[emittedBy];
+      const { container } = fieldInFocus;
+      container.parentElement?.classList.remove('error');
+    });
+
+    instance?.on('blur', (event: braintree.HostedFieldsStateObject): void => {
+      const { emittedBy, fields } = event;
+      const fieldInFocus = fields[emittedBy];
+      const { container, isEmpty } = fieldInFocus;
+      if (isEmpty) {
+        container.parentElement?.classList.add('error');
+      }
+    });
   }
 
   // PaymentFlowHandlerInterface conformance
@@ -52,11 +81,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       hostedFieldsResponse = await handler?.tokenizeHostedFields();
     } catch (error) {
       console.debug(error);
-      // this.braintreeManager.paymentProviders.getCreditCardHandler
-      handler.markFieldErrors([HostedFieldName.Number]);
-      // this.donationFlowModalManager.showErrorModal({
-      //   message: `Credit card info missing: ${error}`,
-      // });
+      this.handleHostedFieldTokenizationError(error);
       return;
     }
 
@@ -131,6 +156,59 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       });
       console.error('error getting a response', error);
       return;
+    }
+  }
+
+  private async handleHostedFieldTokenizationError(
+    error: braintree.BraintreeError
+  ): Promise<void> {
+
+    console.error('handleHostedFieldTokenizationError start', error);
+
+    const handler = await this.braintreeManager.paymentProviders.getCreditCardHandler();
+
+    console.error('handleHostedFieldTokenizationError handler', handler, error);
+
+    switch (error.code) {
+    case 'HOSTED_FIELDS_FIELDS_EMPTY':
+      // occurs when none of the fields are filled in
+      handler.markFieldErrors([
+        HostedFieldName.Number,
+        HostedFieldName.CVV,
+        HostedFieldName.ExpirationDate
+      ]);
+      break;
+    case 'HOSTED_FIELDS_FIELDS_INVALID':
+      // occurs when certain fields do not pass client side validation
+      Object.keys(error.details.invalidFields).forEach((key) => {
+        handler.markFieldErrors([key as HostedFieldName]);
+      });
+      break;
+    case 'HOSTED_FIELDS_TOKENIZATION_FAIL_ON_DUPLICATE':
+      // occurs when:
+      //   * the client token used for client authorization was generated
+      //     with a customer ID and the fail on duplicate payment method
+      //     option is set to true
+      //   * the card being tokenized has previously been vaulted (with any customer)
+      break;
+    case 'HOSTED_FIELDS_TOKENIZATION_CVV_VERIFICATION_FAILED':
+      // occurs when:
+      //   * the client token used for client authorization was generated
+      //     with a customer ID and the verify card option is set to true
+      //     and you have credit card verification turned on in the Braintree
+      //     control panel
+      //   * the cvv does not pass verfication
+      handler.markFieldErrors([HostedFieldName.CVV]);
+      break;
+    case 'HOSTED_FIELDS_FAILED_TOKENIZATION':
+      // occurs for any other tokenization error on the server
+      break;
+    case 'HOSTED_FIELDS_TOKENIZATION_NETWORK_ERROR':
+      // occurs when the Braintree gateway cannot be contacted
+      break;
+    default:
+      // something else happened
+      break;
     }
   }
 

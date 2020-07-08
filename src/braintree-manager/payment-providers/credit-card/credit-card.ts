@@ -3,8 +3,6 @@ import { HostedFieldConfiguration } from './hosted-field-configuration';
 import { HostedFieldName } from './hosted-field-container';
 
 export interface CreditCardHandlerInterface {
-  setupHostedFields(): Promise<braintree.HostedFields | undefined>;
-  teardownHostedFields(): Promise<void>;
   getInstance(): Promise<braintree.HostedFields | undefined>;
   tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined>;
   markFieldErrors(fields: HostedFieldName[]): void;
@@ -27,20 +25,6 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
   private hostedFieldConfig: HostedFieldConfiguration;
 
   private hostedFieldsInstance?: braintree.HostedFields;
-
-  /**
-   * This is a convenience wrapper for consumers that don't care about the hosted
-   * fields themselves, just to set them up.
-   */
-  async setupHostedFields(): Promise<braintree.HostedFields | undefined> {
-    return await this.getInstance();
-  }
-
-  async teardownHostedFields(): Promise<void> {
-    console.log('teardownHostedFields', this.hostedFieldsInstance);
-    await this.hostedFieldsInstance?.teardown();
-    this.hostedFieldsInstance = undefined;
-  }
 
   async getInstance(): Promise<braintree.HostedFields | undefined> {
     if (this.hostedFieldsInstance) {
@@ -76,6 +60,7 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
   }
 
   async tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined> {
+    console.debug('tokenizeHostedFields')
     const hostedFields = await this.getInstance();
     return hostedFields?.tokenize();
   }
