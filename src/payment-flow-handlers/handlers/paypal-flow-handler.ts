@@ -264,7 +264,7 @@ export class PayPalFlowHandler
         color: 'gold' as paypal.ButtonColorOption, // I'm not sure why I can't access the enum directly here.. I get a UMD error
         label: 'paypal' as paypal.ButtonLabelOption,
         shape: 'rect' as paypal.ButtonShapeOption,
-        size: 'small' as paypal.ButtonSizeOption,
+        size: 'medium' as paypal.ButtonSizeOption,
         tagline: false,
       },
       donationInfo: options.donationInfo,

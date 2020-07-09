@@ -38,13 +38,14 @@ import {
 import creditCardImg from './assets/img/contact-form-icons/ccard';
 import calendarImg from './assets/img/contact-form-icons/calendar';
 import lockImg from './assets/img/contact-form-icons/lock';
+import { AnalyticsHandlerInterface } from './@types/analytics-handler';
 
 /**
  * The IADonationFormController is an IA-specific bridge between petabox
  * and the `<donation-form>` element.
  *
- * It handles all of the interactions between the various pieces that the
- * donation form.
+ * It orchestrates several of the interactions between the various pieces of the
+ * donation form like modals, braintree, paypal, and recaptcha
  *
  * @export
  * @class RadioPlayerController
@@ -66,8 +67,7 @@ export class IADonationFormController extends LitElement {
 
   @property({ type: Object }) endpointManager?: BraintreeEndpointManagerInterface;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @property({ type: Object }) analyticsHandler?: any;
+  @property({ type: Object }) analyticsHandler?: AnalyticsHandlerInterface;
 
   @property({ type: Object }) private braintreeManager?: BraintreeManagerInterface;
 
@@ -201,114 +201,57 @@ export class IADonationFormController extends LitElement {
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
-      <modal-manager @modeChanged=${this.modalModeChanged}>
-        <!--
-          The PayPal buttons cannot exist in the shadowDOM so they have to be slotted
-          from the top.
-        -->
-        <div slot="paypal-upsell-button">
-          <div id="paypal-upsell-button"></div>
-        </div>
-      </modal-manager>
+      <div class="donation-form-controller-container">
+        <modal-manager @modeChanged=${this.modalModeChanged}>
+          <!--
+            The PayPal buttons cannot exist in the shadowDOM so they have to be slotted
+            from the top.
+          -->
+          <div slot="paypal-upsell-button">
+            <div id="paypal-upsell-button"></div>
+          </div>
+        </modal-manager>
 
-      <donation-form .braintreeManager=${this.braintreeManager}>
-        <!--
-          Why are these slots here?
+        <donation-form .braintreeManager=${this.braintreeManager}>
+          <!--
+            Why are these slots here?
 
-          Due to the way Braintree, PayPal, and Recaptcha work, they cannot exist
-          in the shadowDOM so must exist in the clearDOM and get passed
-          in through a <slot>.
+            Due to the way Braintree, PayPal, and Recaptcha work, they cannot exist
+            in the shadowDOM so must exist in the clearDOM and get passed
+            in through a <slot>.
 
-          Braintree / PayPal are working on a solution to this. See:
-          - https://github.com/braintree/braintree-web-drop-in/issues/614#issuecomment-616796104
-          - https://github.com/braintree/braintree-web-drop-in/issues/296#issuecomment-616749307
-          - https://github.com/paypal/paypal-checkout-components/issues/353#issuecomment-595956216
-        -->
-        <div slot="braintree-hosted-fields">
-          <div class="braintree-row">
-            <div class="braintree-input-wrapper creditcard">
-              <div class="braintree-input" id="braintree-creditcard"></div>
+            Braintree / PayPal are working on a solution to this. See:
+            - https://github.com/braintree/braintree-web-drop-in/issues/614#issuecomment-616796104
+            - https://github.com/braintree/braintree-web-drop-in/issues/296#issuecomment-616749307
+            - https://github.com/paypal/paypal-checkout-components/issues/353#issuecomment-595956216
+          -->
+          <div slot="braintree-hosted-fields">
+            <div class="braintree-row">
+              <div class="braintree-input-wrapper creditcard">
+                <div class="braintree-input" id="braintree-creditcard"></div>
+              </div>
+            </div>
+            <div class="braintree-row">
+              <div class="braintree-input-wrapper expiration">
+                <div class="braintree-input" id="braintree-expiration"></div>
+              </div>
+              <div class="braintree-input-wrapper cvv">
+                <div class="braintree-input" id="braintree-cvv"></div>
+              </div>
             </div>
           </div>
-          <div class="braintree-row">
-            <div class="braintree-input-wrapper expiration">
-              <div class="braintree-input" id="braintree-expiration"></div>
-            </div>
-            <div class="braintree-input-wrapper cvv">
-              <div class="braintree-input" id="braintree-cvv"></div>
-            </div>
+
+          <div slot="paypal-button">
+            <div id="paypal-button"></div>
           </div>
-        </div>
 
-        <div slot="paypal-button">
-          <div id="paypal-button"></div>
-        </div>
+          <div slot="recaptcha">
+            <div id="recaptcha"></div>
+          </div>
+        </donation-form>
+      </div>
 
-        <div slot="recaptcha">
-          <div id="recaptcha"></div>
-        </div>
-      </donation-form>
-
-      <style>
-        modal-manager {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          z-index: 250; /* the PayPal button starts off at 200, then drops down to 100 so this is just staying above it */
-        }
-
-        modal-manager[mode='closed'] {
-          display: none;
-        }
-
-        modal-manager[mode='modal'] {
-          display: block;
-        }
-
-        donation-form:focus {
-          outline: none;
-        }
-
-        #paypal-button {
-          opacity: 0.001;
-          width: 50px;
-          height: 32px;
-          overflow: hidden;
-        }
-
-        .braintree-row {
-          display: flex;
-        }
-
-        .braintree-input-wrapper {
-          width: 100%;
-          border: 1px solid #d9d9d9;
-          padding-left: 2rem;
-          background-position: 0.75rem 50%;
-          background-repeat: no-repeat;
-          background-size: auto 12px;
-        }
-
-        .braintree-input-wrapper.error {
-          border-color: red;
-        }
-
-        .braintree-input {
-          height: 25px;
-        }
-
-        .braintree-input-wrapper.creditcard {
-          background-image: url('${unsafeCSS(creditCardImg)}')
-        }
-
-        .braintree-input-wrapper.expiration {
-          background-image: url('${unsafeCSS(calendarImg)}')
-        }
-
-        .braintree-input-wrapper.cvv {
-          background-image: url('${unsafeCSS(lockImg)}')
-        }
-      </style>
+      ${this.getStyles}
     `;
   }
 
@@ -357,5 +300,83 @@ export class IADonationFormController extends LitElement {
       window.location.pathname,
       params,
     );
+  }
+
+  /**
+   * This is not the normal LitElement styles block.
+   *
+   * This element uses the clear DOM instead of the shadow DOM, it can't use
+   * the shadowRoot's isolated styling. This is a bit of a workaround to keep all of
+   * the styling local by writing out our own <style> tag and just be careful about
+   * the selectors since they will leak outside of this component.
+   *
+   * @readonly
+   * @private
+   * @type {TemplateResult}
+   * @memberof IADonationFormController
+   */
+  private get getStyles(): TemplateResult {
+    return html`
+      <style>
+        .donation-form-controller-container modal-manager {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          z-index: 250; /* the PayPal button starts off at 200, then drops down to 100 so this is just staying above it */
+        }
+
+        .donation-form-controller-container modal-manager[mode='closed'] {
+          display: none;
+        }
+
+        .donation-form-controller-container modal-manager[mode='modal'] {
+          display: block;
+        }
+
+        .donation-form-controller-container donation-form:focus {
+          outline: none;
+        }
+
+        .donation-form-controller-container #paypal-button {
+          opacity: 0.001;
+          width: 50px;
+          height: 32px;
+          overflow: hidden;
+        }
+
+        .donation-form-controller-container .braintree-row {
+          display: flex;
+        }
+
+        .donation-form-controller-container .braintree-input-wrapper {
+          width: 100%;
+          border: 1px solid #d9d9d9;
+          padding-left: 2rem;
+          background-position: 0.75rem 50%;
+          background-repeat: no-repeat;
+          background-size: auto 12px;
+        }
+
+        .donation-form-controller-container .braintree-input-wrapper.error {
+          border-color: red;
+        }
+
+        .donation-form-controller-container .braintree-input {
+          height: 25px;
+        }
+
+        .donation-form-controller-container .braintree-input-wrapper.creditcard {
+          background-image: url('${unsafeCSS(creditCardImg)}')
+        }
+
+        .donation-form-controller-container .braintree-input-wrapper.expiration {
+          background-image: url('${unsafeCSS(calendarImg)}')
+        }
+
+        .donation-form-controller-container .braintree-input-wrapper.cvv {
+          background-image: url('${unsafeCSS(lockImg)}')
+        }
+      </style>
+    `;
   }
 }

@@ -1,5 +1,5 @@
-import { ModalConfig, ModalManagerInterface } from '@internetarchive/modal-manager';
 import { html } from 'lit-html';
+import { ModalConfig, ModalManagerInterface } from '@internetarchive/modal-manager';
 import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
 
 export interface DonationFlowModalManagerInterface {
@@ -118,6 +118,19 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     ctaMode?: UpsellModalCTAMode;
   }): Promise<void> {
     const modalConfig = new ModalConfig();
+    modalConfig.title = html`
+      Donation received
+    `;
+    modalConfig.headline = html`
+      Thanks for donating. Would you consider becoming a monthly donor starting next month?
+    `;
+    modalConfig.message = html`
+      Monthly support helps ensure that anyone curious enough to seek knowledge will be able to find
+      it here. For free. Together we are building the public libraries of the future.
+    `;
+    modalConfig.processingImageMode = 'complete';
+    modalConfig.showProcessingIndicator = true;
+
     const modalContent = html`
       <upsell-modal-content
         .yesButtonMode=${options?.ctaMode ?? UpsellModalCTAMode.YesButton}

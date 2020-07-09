@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@internetarchive/lazy-loader-service": "0.0.0-alpha.2",
-    "@internetarchive/modal-manager": "0.0.0-alpha.7",
+    "@internetarchive/modal-manager": "0.0.0-alpha.8",
     "currency.js": "^1.2.2",
     "lit-element": "^2.2.1",
     "lit-html": "^1.0.0",
