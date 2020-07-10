@@ -26,6 +26,8 @@ export class VenmoHandler implements VenmoHandlerInterface {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private venmoInstance?: any;
 
+  private venmoInstancePromise?: Promise<braintree.Venmo>;
+
   async isBrowserSupported(): Promise<boolean> {
     const instance = await this.getInstance();
     return instance?.isBrowserSupported() ?? false;
@@ -36,25 +38,26 @@ export class VenmoHandler implements VenmoHandlerInterface {
       return this.venmoInstance;
     }
 
-    const braintreeInstance = await this.braintreeManager.getInstance();
+    // we only want one instance of this to be created so this chains the promise
+    // calls if multiple callers request the instance
+    if (this.venmoInstancePromise) {
+      this.venmoInstancePromise = this.venmoInstancePromise.then(handler => { return handler });
+      return this.venmoInstancePromise;
+    }
 
-    return new Promise((resolve, reject) => {
-      this.venmoClient.create(
-        {
+    this.venmoInstancePromise = this.braintreeManager.getInstance()
+      .then(braintreeInstance => {
+        return this.venmoClient.create({
           client: braintreeInstance,
           profileId: this.venmoProfileId,
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (error: any, instance: braintree.Venmo) => {
-          if (error) {
-            return reject(error);
-          }
+        });
+      })
+      .then(instance => {
+        this.venmoInstance = instance;
+        return instance;
+      });
 
-          this.venmoInstance = instance;
-          resolve(instance);
-        },
-      );
-    });
+    return this.venmoInstancePromise
   }
 
   async startPayment(): Promise<braintree.VenmoTokenizePayload> {

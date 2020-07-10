@@ -34,59 +34,52 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
 
   private applePayClient: braintree.ApplePay;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private applePayInstancePromise?: Promise<any>;
+
   async isAvailable(): Promise<boolean> {
-    console.debug('isAvailable start');
     try {
       const instance = await this.getInstance();
-      console.debug('isAvailable instance', instance);
       return !!instance;
     } catch (err) {
-      console.error('ERROR', err);
       return false;
     }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getInstance(): Promise<any | undefined> {
-    console.debug('getInstance start');
     if (this.applePayInstance) {
-      console.debug('getInstance', this.applePayInstance);
       return this.applePayInstance;
     }
 
     if (!this.applePaySessionManager.canMakePayments()) {
-      console.debug('ApplePay: Can not make payments');
       return undefined;
     }
 
-    const braintreeClient = await this.braintreeManager.getInstance();
-    if (!braintreeClient) {
-      return undefined;
+    // we only want one instance of this to be created so this chains the promise
+    // calls if multiple callers request the instance
+    if (this.applePayInstancePromise) {
+      this.applePayInstancePromise = this.applePayInstancePromise.then(handler => { return handler });
+      return this.applePayInstancePromise;
     }
 
-    console.debug('CREATE');
-    return (
-      this.applePayClient
-        .create({
-          client: braintreeClient,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .then(async (instance: any) => {
-          console.debug('ApplePaySession');
+    this.applePayInstancePromise = this.braintreeManager.getInstance().then(async braintreeClient => {
+      const instance = await this.applePayClient.create({
+        client: braintreeClient,
+      });
 
-          const canMakePayments = await ApplePaySession.canMakePaymentsWithActiveCard(
-            instance.merchantIdentifier,
-          );
-          console.debug('canMakePayments', canMakePayments);
-          if (canMakePayments) {
-            this.applePayInstance = instance;
-            return this.applePayInstance;
-          } else {
-            return undefined;
-          }
-        })
-    );
+      const canMakePayments = await ApplePaySession.canMakePaymentsWithActiveCard(
+        instance.merchantIdentifier);
+
+      if (canMakePayments) {
+        this.applePayInstance = instance;
+        return this.applePayInstance;
+      } else {
+        return undefined;
+      }
+    });
+
+    return this.applePayInstancePromise;
   }
 
   // In order to trigger the Apple Pay flow, you HAVE to pass in the event
@@ -102,8 +95,6 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
     if (donationInfo.donationType === DonationType.OneTime) {
       label = 'Internet Archive';
     }
-
-    console.debug('createPaymentRequest', donationInfo);
 
     const paymentRequest = applePayInstance.createPaymentRequest({
       total: {
@@ -122,13 +113,10 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
       braintreeManager: this.braintreeManager,
     });
 
-    console.log('createPaymentRequest', session, paymentRequest);
-
     session.onvalidatemerchant = sessionDataSource.onvalidatemerchant.bind(sessionDataSource);
     session.onpaymentauthorized = sessionDataSource.onpaymentauthorized.bind(sessionDataSource);
     session.oncancel = sessionDataSource.oncancel.bind(sessionDataSource);
 
-    console.log('session, sessionDataSource', session, sessionDataSource);
     session.begin();
 
     return sessionDataSource;

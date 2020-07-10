@@ -31,80 +31,36 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
   private hostedFieldsSetupPromise?: Promise<braintree.HostedFields | undefined>;
 
   async getInstance(): Promise<braintree.HostedFields | undefined> {
-    console.debug('credit card getInstance', this.identifier);
     if (this.hostedFieldsInstance) {
-      console.log('hostedFieldsInstance exists, returning it', this.hostedFieldsInstance);
       return this.hostedFieldsInstance;
     }
 
-    const originalPromise = this.hostedFieldsSetupPromise;
-    if (originalPromise) {
-      console.debug('getInstance originalPromise exists, chainging', this.identifier);
-      this.hostedFieldsSetupPromise = new Promise(resolve => {
-        console.debug('getInstance inside chained callback', this.identifier);
-        originalPromise.then(handler => {
-          console.debug('getInstance original promise resolved, resolving second callback', this.identifier, handler);
-          resolve(handler);
-        });
-      });
+    // we only want one instance of this to be created so this chains the promise
+    // calls if multiple callers request the instance
+    // const originalPromise = this.clientInstancePromise;
+    if (this.hostedFieldsSetupPromise) {
+      this.hostedFieldsSetupPromise = this.hostedFieldsSetupPromise.then(handler => { return handler });
       return this.hostedFieldsSetupPromise;
     }
 
-
-    // if (this.hostedFieldsSetupPromise) {
-    //   const originalCallback = this.hostedFieldsSetupPromise;
-    //   console.log('hostedFieldsSetupPromise exists, returning it', this.hostedFieldsSetupPromise);
-    //   this.hostedFieldsSetupPromise = new Promise(resolve => {
-    //     console.debug('DOWN DEEP RESOLVE');
-    //     originalCallback?.then(resolve)
-    //   })
-    //   return this.hostedFieldsSetupPromise;
-    // }
-
-    console.log('hostedFieldsInstance does not exist, creating', this.identifier, this.hostedFieldsSetupPromise);
-
-    // const originalCallback = this.hostedFieldsSetupPromise;
-    this.hostedFieldsSetupPromise = new Promise((resolve, reject) => {
-      console.debug('inside promise', this.identifier)
-      this.braintreeManager.getInstance().then(braintreeClient => {
-        console.debug('INSIDE getInstance', this.identifier)
-        if (this.hostedFieldsSetupPromise) {
-          const originalCallback = this.hostedFieldsSetupPromise;
-          console.log('hostedFieldsSetupPromise exists, returning it', this.hostedFieldsSetupPromise);
-          this.hostedFieldsSetupPromise = new Promise(resolve => {
-            console.debug('DOWN DEEP RESOLVE');
-            originalCallback?.then(resolve)
-          })
-          return this.hostedFieldsSetupPromise;
-        }
-
-        this.hostedFieldClient.create(
+    this.hostedFieldsSetupPromise = this.braintreeManager.getInstance()
+      .then(braintreeClient => {
+        return this.hostedFieldClient.create(
           {
             client: braintreeClient,
             styles: this.hostedFieldConfig.hostedFieldStyle,
             fields: this.hostedFieldConfig.hostedFieldFieldOptions,
-          },
-          (
-            hostedFieldsErr: braintree.BraintreeError | undefined,
-            hostedFieldsInstance: braintree.HostedFields,
-          ) => {
-            if (hostedFieldsErr) {
-              return reject(hostedFieldsErr);
-            }
-
-            this.hostedFieldsInstance = hostedFieldsInstance;
-            console.log('HOSTED FIELD PROMISE RESOLVED: credit card hostedFieldsClient.create');
-            resolve(hostedFieldsInstance);
-          },
-        );
+          })
+      })
+      .then(instance => {
+        this.hostedFieldsInstance = instance;
+        return instance;
       });
-    });
 
-    return this.hostedFieldsSetupPromise
+    return this.hostedFieldsSetupPromise;
   }
 
   async tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined> {
-    console.debug('tokenizeHostedFields')
     const hostedFields = await this.getInstance();
     return hostedFields?.tokenize();
   }

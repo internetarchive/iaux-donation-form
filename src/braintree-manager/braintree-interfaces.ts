@@ -8,7 +8,7 @@ export interface BraintreeManagerInterface {
   deviceData: string | undefined;
 
   startup(): void;
-  getInstance(): Promise<braintree.Client | undefined>;
+  getInstance(): Promise<braintree.Client>;
   submitDataToEndpoint(request: DonationRequest): Promise<DonationResponse>;
   donationSuccessful(options: {
     successResponse: SuccessResponse;

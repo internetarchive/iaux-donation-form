@@ -40,29 +40,31 @@ export class BraintreeManager implements BraintreeManagerInterface {
     this.collectDeviceData();
   }
 
-  async getInstance(): Promise<braintree.Client | undefined> {
+  private clientInstancePromise?: Promise<braintree.Client>;
+
+  async getInstance(): Promise<braintree.Client> {
     if (this.braintreeInstance) {
       return this.braintreeInstance;
     }
 
-    return new Promise((resolve, reject) => {
-      this.paymentClients.getBraintreeClient().then((client?: braintree.Client) => {
-        client?.create(
-          {
-            authorization: this.authorizationToken,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (clientErr: any | undefined, clientInstance: braintree.Client | undefined) => {
-            if (clientErr) {
-              return reject(clientErr);
-            }
-            this.braintreeInstance = clientInstance;
-            resolve(clientInstance);
-          },
-        );
+    // we only want one instance of this to be created so this chains the promise
+    // calls if multiple callers request the instance
+    // const originalPromise = this.clientInstancePromise;
+    if (this.clientInstancePromise) {
+      this.clientInstancePromise = this.clientInstancePromise.then(handler => { return handler });
+      return this.clientInstancePromise;
+    }
+
+    this.clientInstancePromise = this.paymentClients.getBraintreeClient()
+      .then((client: braintree.Client) => {
+        return client?.create({ authorization: this.authorizationToken })
+      })
+      .then((clientInstance: braintree.Client) => {
+        this.braintreeInstance = clientInstance;
+        return clientInstance;
       });
-    });
+
+    return this.clientInstancePromise;
   }
 
   async submitDataToEndpoint(request: DonationRequest): Promise<DonationResponse> {
@@ -78,30 +80,25 @@ export class BraintreeManager implements BraintreeManagerInterface {
     this.endpointManager.donationSuccessful(options);
   }
 
+  private deviceDataCollectionStarted = false;
+
   private async collectDeviceData(): Promise<void> {
+    if (this.deviceDataCollectionStarted) { return; }
+    this.deviceDataCollectionStarted = true;
+
     const instance = await this.getInstance();
     if (!instance) {
       return;
     }
 
     console.debug('collectDeviceData, starting dataCollector');
-    this.paymentClients.getDataCollector().then((collector?: braintree.DataCollector) => {
-      collector?.create(
-        {
-          client: instance,
-          kount: false,
-          paypal: true,
-        },
-        (error?: braintree.BraintreeError, instance?: braintree.DataCollector) => {
-          if (error) {
-            console.error(error);
-            return;
-          }
-          console.debug('dataCollector started', instance?.deviceData);
-          this._deviceData = instance?.deviceData;
-        },
-      );
-    });
+    this.paymentClients.getDataCollector()
+      .then((collector?: braintree.DataCollector) => {
+        return collector?.create({ client: instance, kount: false, paypal: true });
+      })
+      .then(instance => {
+        this._deviceData = instance?.deviceData;
+      });
   }
 
   private authorizationToken: string;
@@ -135,31 +132,6 @@ export class BraintreeManager implements BraintreeManagerInterface {
       googlePayMerchantId: options.googlePayMerchantId,
       hostingEnvironment: options.hostingEnvironment,
       hostedFieldConfig: options.hostedFieldConfig,
-    });
-
-    this.accessBunch();
-  }
-
-  private async accessBunch(): Promise<void> {
-    console.debug('start getCCInstance A');
-    this.paymentProviders.getCreditCardHandler().then(handler => {
-      console.debug('end getCCInstance A', handler.identifier);
-      handler.getInstance()
-    });
-    console.debug('start getCCInstance B');
-    this.paymentProviders.getCreditCardHandler().then(handler => {
-      console.debug('end getCCInstance B', handler.identifier);
-      handler.getInstance()
-    });
-    console.debug('start getCCInstance C');
-    this.paymentProviders.getCreditCardHandler().then(handler => {
-      console.debug('end getCCInstance C', handler.identifier);
-      handler.getInstance()
-    });
-    console.debug('start getCCInstance D');
-    this.paymentProviders.getCreditCardHandler().then(handler => {
-      console.debug('end getCCInstance D', handler.identifier);
-      handler.getInstance()
     });
   }
 }

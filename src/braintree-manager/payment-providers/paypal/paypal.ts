@@ -15,17 +15,17 @@ export interface PayPalHandlerInterface {
 }
 
 export class PayPalHandler implements PayPalHandlerInterface {
-  constructor(
-    braintreeManager: BraintreeManagerInterface,
-    paypalClient: braintree.PayPalCheckout,
+  constructor(options: {
+    braintreeManager: BraintreeManagerInterface;
+    paypalClient: braintree.PayPalCheckout;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    paypalLibrary: any,
-    hostingEnvironment: HostingEnvironment,
-  ) {
-    this.braintreeManager = braintreeManager;
-    this.paypalClient = paypalClient;
-    this.paypalLibrary = paypalLibrary;
-    this.hostingEnvironment = hostingEnvironment;
+    paypalLibrary: any;
+    hostingEnvironment: HostingEnvironment;
+  }) {
+    this.braintreeManager = options.braintreeManager;
+    this.paypalClient = options.paypalClient;
+    this.paypalLibrary = options.paypalLibrary;
+    this.hostingEnvironment = options.hostingEnvironment;
   }
 
   private braintreeManager: BraintreeManagerInterface;
@@ -39,29 +39,32 @@ export class PayPalHandler implements PayPalHandlerInterface {
 
   private paypalInstance: braintree.PayPalCheckout | undefined;
 
+  private paypalInstancePromise?: Promise<braintree.PayPalCheckout | undefined>;
+
   async getPayPalInstance(): Promise<braintree.PayPalCheckout | undefined> {
     if (this.paypalInstance) {
       return this.paypalInstance;
     }
 
-    const braintreeClient = await this.braintreeManager.getInstance();
-    return new Promise((resolve, reject) => {
-      this.paypalClient.create(
-        {
-          client: braintreeClient,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (error: any, instance: braintree.PayPalCheckout) => {
-          if (error) {
-            return reject(error);
-          }
+    // we only want one instance of this to be created so this chains the promise
+    // calls if multiple callers request the instance
+    if (this.paypalInstancePromise) {
+      this.paypalInstancePromise = this.paypalInstancePromise.then(handler => { return handler });
+      return this.paypalInstancePromise;
+    }
 
-          this.paypalInstance = instance;
-          resolve(instance);
-        },
-      );
-    });
+    this.paypalInstancePromise = this.braintreeManager.getInstance()
+      .then(braintreeClient => {
+        return this.paypalClient.create({
+          client: braintreeClient,
+        })
+      })
+      .then(instance => {
+        this.paypalInstance = instance;
+        return instance;
+      });
+
+    return this.paypalInstancePromise;
   }
 
   async renderPayPalButton(params: {

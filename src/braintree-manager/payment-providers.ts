@@ -28,74 +28,60 @@ export interface PaymentProvidersInterface {
  * @implements {PaymentProvidersInterface}
  */
 export class PaymentProviders implements PaymentProvidersInterface {
-  private handlerPromise?: Promise<CreditCardHandlerInterface>;
+  private creditCardHandlerPromise?: Promise<CreditCardHandlerInterface>;
 
   async getCreditCardHandler(): Promise<CreditCardHandlerInterface> {
-    console.debug('getCreditCardHandler START', this.identifier);
-
     if (this.creditCardHandlerCache) {
-      console.debug('getCreditCardHandler creditCardHandlerCache exists returning', this.identifier);
       return this.creditCardHandlerCache;
     }
 
-    const originalPromise = this.handlerPromise;
-    if (originalPromise) {
-      console.debug('getCreditCardHandler originalPromise exists, chainging', this.identifier);
-      this.handlerPromise = new Promise(resolve => {
-        console.debug('getCreditCardHandler inside chained callback', this.identifier);
-        originalPromise.then(handler => {
-          console.debug('getCreditCardHandler original promise resolved, resolving second callback', this.identifier, handler);
-          resolve(handler);
+    if (this.creditCardHandlerPromise) {
+      this.creditCardHandlerPromise = this.creditCardHandlerPromise.then(handler => { return handler });
+      return this.creditCardHandlerPromise;
+    }
+
+    this.creditCardHandlerPromise = this.paymentClients.getHostedFields()
+      .then(client => {
+        this.creditCardHandlerCache = new CreditCardHandler({
+          braintreeManager: this.braintreeManager,
+          hostedFieldClient: client,
+          hostedFieldConfig: this.hostedFieldConfig,
         });
-      });
-      return this.handlerPromise;
-    }
-
-    console.debug('getCreditCardHandler NO originalPromise, setting up handler', this.identifier);
-    this.handlerPromise = this.paymentClients.getHostedFields().then(client => {
-      console.debug('getCreditCardHandler NO originalPromise, inside getHostedField', this.identifier);
-      this.creditCardHandlerCache = new CreditCardHandler({
-        braintreeManager: this.braintreeManager,
-        hostedFieldClient: client,
-        hostedFieldConfig: this.hostedFieldConfig,
+        return this.creditCardHandlerCache;
       });
 
-      console.debug('getCreditCardHandler NO originalPromise, returning CACHE', this.identifier, this.creditCardHandlerCache);
-      return this.creditCardHandlerCache;
-    })
-
-    // const config = new H
-
-    console.debug('getCreditCardHandler NO originalPromise, RETURNING ORIGINAL PROMISE', this.identifier);
-    return this.handlerPromise;
+    return this.creditCardHandlerPromise;
   }
 
-  async getApplePayHandler(): Promise<ApplePayHandlerInterface> {
-    console.debug('getApplePayHandler start');
+  private applePayHandlerPromise?: Promise<ApplePayHandlerInterface>;
 
+  async getApplePayHandler(): Promise<ApplePayHandlerInterface> {
     if (this.applePayHandlerCache) {
-      console.debug('getApplePayHandler, handler cached');
       return this.applePayHandlerCache;
     }
 
-    const client = await this.paymentClients.getApplePay();
-
-    console.debug('getApplePayHandler, client', client);
+    if (this.applePayHandlerPromise) {
+      this.applePayHandlerPromise = this.applePayHandlerPromise.then(handler => { return handler });
+      return this.applePayHandlerPromise;
+    }
 
     const applePaySessionManager = new ApplePaySessionManager();
-    this.applePayHandlerCache = new ApplePayHandler(
-      this.braintreeManager,
-      client,
-      applePaySessionManager,
-    );
+    this.applePayHandlerPromise = this.paymentClients.getApplePay()
+      .then(client => {
+        this.applePayHandlerCache = new ApplePayHandler(
+          this.braintreeManager,
+          client,
+          applePaySessionManager,
+        );
+        return this.applePayHandlerCache;
+      });
 
-    console.debug('getApplePayHandler done', client, this.applePayHandlerCache);
-
-    return this.applePayHandlerCache;
+    return this.applePayHandlerPromise;
   }
 
+  private venmoHandlerPromise?: Promise<VenmoHandlerInterface | undefined>;
+
   async getVenmoHandler(): Promise<VenmoHandlerInterface | undefined> {
-    console.debug('getVenmoHandler start');
     if (!this.venmoProfileId) {
       return undefined;
     }
@@ -104,55 +90,81 @@ export class PaymentProviders implements PaymentProvidersInterface {
       return this.venmoHandlerCache;
     }
 
-    const client = await this.paymentClients.getVenmo();
+    if (this.venmoHandlerPromise) {
+      this.venmoHandlerPromise = this.venmoHandlerPromise.then(handler => { return handler });
+      return this.venmoHandlerPromise;
+    }
 
-    this.venmoHandlerCache = new VenmoHandler({
-      braintreeManager: this.braintreeManager,
-      venmoClient: client,
-      venmoProfileId: this.venmoProfileId,
-    });
+    this.venmoHandlerPromise = this.paymentClients.getVenmo()
+      .then(client => {
+        if (!this.venmoProfileId) { return undefined; }
+        this.venmoHandlerCache = new VenmoHandler({
+          braintreeManager: this.braintreeManager,
+          venmoClient: client,
+          venmoProfileId: this.venmoProfileId,
+        });
+        return this.venmoHandlerCache;
+      });
 
-    console.debug('getVenmoHandler done', client, this.venmoHandlerCache);
-
-    return this.venmoHandlerCache;
+    return this.venmoHandlerPromise;
   }
+
+  private paypalHandlerPromise?: Promise<PayPalHandlerInterface>;
 
   async getPaypalHandler(): Promise<PayPalHandlerInterface> {
     if (this.paypalHandlerCache) {
       return this.paypalHandlerCache;
     }
 
-    const paypalLibrary = await this.paymentClients.getPaypalLibrary();
-    const client = await this.paymentClients.getPayPal();
+    if (this.paypalHandlerPromise) {
+      this.paypalHandlerPromise = this.paypalHandlerPromise.then(handler => { return handler });
+      return this.paypalHandlerPromise;
+    }
 
-    this.paypalHandlerCache = new PayPalHandler(
-      this.braintreeManager,
-      client,
-      paypalLibrary,
-      this.hostingEnvironment,
-    );
+    const paypalLibrary = this.paymentClients.getPaypalLibrary();
+    const client = this.paymentClients.getPayPal();
 
-    console.log(this.paymentClients.getPayPal, paypalLibrary, this.paypalHandlerCache);
-    return this.paypalHandlerCache;
+    this.paypalHandlerPromise = Promise.all([client, paypalLibrary])
+      .then(values => {
+        this.paypalHandlerCache = new PayPalHandler({
+          braintreeManager: this.braintreeManager,
+          paypalClient: values[0],
+          paypalLibrary: values[1],
+          hostingEnvironment: this.hostingEnvironment,
+        });
+        return this.paypalHandlerCache;
+      })
+
+    return this.paypalHandlerPromise;
   }
+
+  private googlePayHandlerPromise?: Promise<GooglePayHandlerInterface>;
 
   async getGooglePayHandler(): Promise<GooglePayHandlerInterface> {
     if (this.googlePayHandlerCache) {
       return this.googlePayHandlerCache;
     }
 
-    const googlePaymentsClient = await this.paymentClients.getGooglePaymentsClient();
-    const braintreeClient = await this.paymentClients.getGooglePayBraintreeClient();
+    if (this.googlePayHandlerPromise) {
+      this.googlePayHandlerPromise = this.googlePayHandlerPromise.then(handler => { return handler });
+      return this.googlePayHandlerPromise;
+    }
 
-    this.googlePayHandlerCache = new GooglePayHandler({
-      braintreeManager: this.braintreeManager,
-      googlePayMerchantId: this.googlePayMerchantId,
-      googlePayBraintreeClient: braintreeClient,
-      googlePaymentsClient: googlePaymentsClient,
-    });
+    const googlePaymentsClient = this.paymentClients.getGooglePaymentsClient();
+    const braintreeClient = this.paymentClients.getGooglePayBraintreeClient();
 
-    console.log(this.googlePayHandlerCache);
-    return this.googlePayHandlerCache;
+    this.googlePayHandlerPromise = Promise.all([braintreeClient, googlePaymentsClient])
+      .then(values => {
+        this.googlePayHandlerCache = new GooglePayHandler({
+          braintreeManager: this.braintreeManager,
+          googlePayMerchantId: this.googlePayMerchantId,
+          googlePayBraintreeClient: values[0],
+          googlePaymentsClient: values[1],
+        });
+        return this.googlePayHandlerCache
+      })
+
+    return this.googlePayHandlerPromise;
   }
 
   private braintreeManager: BraintreeManagerInterface;
