@@ -136,5 +136,30 @@ export class BraintreeManager implements BraintreeManagerInterface {
       hostingEnvironment: options.hostingEnvironment,
       hostedFieldConfig: options.hostedFieldConfig,
     });
+
+    this.accessBunch();
+  }
+
+  private async accessBunch(): Promise<void> {
+    console.debug('start getCCInstance A');
+    this.paymentProviders.getCreditCardHandler().then(handler => {
+      console.debug('end getCCInstance A', handler.identifier);
+      handler.getInstance()
+    });
+    console.debug('start getCCInstance B');
+    this.paymentProviders.getCreditCardHandler().then(handler => {
+      console.debug('end getCCInstance B', handler.identifier);
+      handler.getInstance()
+    });
+    console.debug('start getCCInstance C');
+    this.paymentProviders.getCreditCardHandler().then(handler => {
+      console.debug('end getCCInstance C', handler.identifier);
+      handler.getInstance()
+    });
+    console.debug('start getCCInstance D');
+    this.paymentProviders.getCreditCardHandler().then(handler => {
+      console.debug('end getCCInstance D', handler.identifier);
+      handler.getInstance()
+    });
   }
 }

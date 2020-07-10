@@ -188,6 +188,13 @@ export class DonationForm extends LitElement {
     this.showInvalidDonationInfoAlert();
   }
 
+  private identifier: number;
+
+  constructor() {
+    super();
+    this.identifier = Math.random() * 1000;
+  }
+
   private donateClicked(): void {
     console.debug('donateClicked');
 
@@ -285,7 +292,7 @@ export class DonationForm extends LitElement {
   }
 
   private setupFlowHandlers(): void {
-    console.debug('updated: paymentFlowHandlers', this.paymentFlowHandlers);
+    console.debug('updated: paymentFlowHandlers', this.paymentFlowHandlers, this.identifier);
     if (this.paypalButtonNeedsRender) {
       this.renderPayPalButton();
     }

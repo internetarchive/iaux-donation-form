@@ -28,22 +28,46 @@ export interface PaymentProvidersInterface {
  * @implements {PaymentProvidersInterface}
  */
 export class PaymentProviders implements PaymentProvidersInterface {
+  private handlerPromise?: Promise<CreditCardHandlerInterface>;
+
   async getCreditCardHandler(): Promise<CreditCardHandlerInterface> {
+    console.debug('getCreditCardHandler START', this.identifier);
+
     if (this.creditCardHandlerCache) {
+      console.debug('getCreditCardHandler creditCardHandlerCache exists returning', this.identifier);
       return this.creditCardHandlerCache;
     }
 
-    const client = await this.paymentClients.getHostedFields();
+    const originalPromise = this.handlerPromise;
+    if (originalPromise) {
+      console.debug('getCreditCardHandler originalPromise exists, chainging', this.identifier);
+      this.handlerPromise = new Promise(resolve => {
+        console.debug('getCreditCardHandler inside chained callback', this.identifier);
+        originalPromise.then(handler => {
+          console.debug('getCreditCardHandler original promise resolved, resolving second callback', this.identifier, handler);
+          resolve(handler);
+        });
+      });
+      return this.handlerPromise;
+    }
+
+    console.debug('getCreditCardHandler NO originalPromise, setting up handler', this.identifier);
+    this.handlerPromise = this.paymentClients.getHostedFields().then(client => {
+      console.debug('getCreditCardHandler NO originalPromise, inside getHostedField', this.identifier);
+      this.creditCardHandlerCache = new CreditCardHandler({
+        braintreeManager: this.braintreeManager,
+        hostedFieldClient: client,
+        hostedFieldConfig: this.hostedFieldConfig,
+      });
+
+      console.debug('getCreditCardHandler NO originalPromise, returning CACHE', this.identifier, this.creditCardHandlerCache);
+      return this.creditCardHandlerCache;
+    })
 
     // const config = new H
 
-    this.creditCardHandlerCache = new CreditCardHandler({
-      braintreeManager: this.braintreeManager,
-      hostedFieldClient: client,
-      hostedFieldConfig: this.hostedFieldConfig,
-    });
-
-    return this.creditCardHandlerCache;
+    console.debug('getCreditCardHandler NO originalPromise, RETURNING ORIGINAL PROMISE', this.identifier);
+    return this.handlerPromise;
   }
 
   async getApplePayHandler(): Promise<ApplePayHandlerInterface> {
@@ -153,6 +177,8 @@ export class PaymentProviders implements PaymentProvidersInterface {
 
   private paymentClients: PaymentClientsInterface;
 
+  private identifier: number;
+
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;
     paymentClients: PaymentClientsInterface;
@@ -167,5 +193,6 @@ export class PaymentProviders implements PaymentProvidersInterface {
     this.paymentClients = options.paymentClients;
     this.hostingEnvironment = options.hostingEnvironment;
     this.hostedFieldConfig = options.hostedFieldConfig;
+    this.identifier = Math.random() * 1000;
   }
 }
