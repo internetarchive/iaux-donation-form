@@ -96,7 +96,7 @@ export class DonationForm extends LitElement {
 
   get contactFormSection(): TemplateResult {
     return html`
-      <form-section number="4" headline="Tell us about yourself">
+      <form-section number="4" headline="Enter your payment information">
         <contact-form @form-validity-changed=${this.contactFormValidityChanged}></contact-form>
         <div class="credit-card-fields" class="${this.creditCardVisible ? '' : 'hidden'}">
           <slot name="braintree-hosted-fields"></slot>
@@ -261,8 +261,6 @@ export class DonationForm extends LitElement {
       coverFees: coverFeesParam === 'true',
     });
 
-    console.debug('queryParam donationInfo', donationInfo);
-
     this.donationInfo = donationInfo;
   }
 
@@ -273,8 +271,6 @@ export class DonationForm extends LitElement {
   }
 
   updated(changedProperties: PropertyValues): void {
-    console.debug('updated: changedProperties', changedProperties);
-
     if (changedProperties.has('paymentFlowHandlers')) {
       this.setupFlowHandlers();
     }
@@ -292,7 +288,6 @@ export class DonationForm extends LitElement {
   }
 
   private setupFlowHandlers(): void {
-    console.debug('updated: paymentFlowHandlers', this.paymentFlowHandlers, this.identifier);
     if (this.paypalButtonNeedsRender) {
       this.renderPayPalButton();
     }
@@ -305,19 +300,11 @@ export class DonationForm extends LitElement {
 
   private donationInfoChanged(e: CustomEvent): void {
     const donationInfo: DonationPaymentInfo = e.detail.donationInfo;
-    console.debug(
-      'donationInfoChanged',
-      this.donationInfo,
-      donationInfo,
-      this.donationInfo === donationInfo,
-    );
-
     this.donationInfo = new DonationPaymentInfo({
       amount: donationInfo.amount,
       donationType: donationInfo.donationType,
       coverFees: donationInfo.coverFees,
     });
-
     this.donationInfoValid = true;
   }
 
@@ -349,7 +336,7 @@ export class DonationForm extends LitElement {
         width: 100%;
         appearance: none;
         -webkit-appearance: none;
-        font-size: 1.4rem;
+        font-size: 1.4em;
         font-weight: bold;
         text-align: center;
         color: #fff;

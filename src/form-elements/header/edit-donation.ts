@@ -142,7 +142,7 @@ export class EditDonation extends LitElement {
         />
 
         <label for="custom-amount-button">
-          Custom: $<input
+          <span class="custom-amount-text">Custom: $</span><input
             type="text"
             id="custom-amount-input"
             value=${value}
@@ -268,8 +268,12 @@ export class EditDonation extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const buttonSelectedColorCss = css`var(--buttonSelectedColor, #f9bf3b)`;
-    const buttonColorCss = css`var(--buttonColor, #fff)`;
+    const buttonMarginCss = css`var(--paymentButtonMargin, 3px)`;
+    const buttonFontSizeCss = css`var(--paymentButtonFontSize, 16px)`;
+    const buttonSelectedColorCss = css`var(--paymentButtonSelectedColor, #f9bf3b)`;
+    const buttonColorCss = css`var(--paymentButtonColor, #fff)`;
+    const coverFeesFontSizeCss = css`var(--coverFeesFontSize, 14px)`;
+    const coverFeesFontWeightCss = css`var(--coverFeesFontWeight, bold)`;
 
     return css`
       .errors {
@@ -284,27 +288,40 @@ export class EditDonation extends LitElement {
       }
 
       li {
-        margin: 3px;
+        margin: ${buttonMarginCss};
         padding: 0;
         display: inline-block;
       }
 
+      .selection-button {
+        height: 32px;
+      }
+
       .selection-button label {
-        display: block;
-        padding: 7px 10px;
-        border: 1px solid black;
-        border-radius: 5px;
-        background-color: #ccc;
+        padding: 0 10px;
+        display: flex;
         color: #202020;
         cursor: pointer;
         text-align: center;
-        font-size: 0.75em;
+        font-size: ${buttonFontSizeCss};
         font-weight: bold;
+        border: 1px solid black;
+        border-radius: 5px;
+        background-color: #ccc;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
       }
 
       label[for='custom-amount-button'] {
-        padding-top: 3px;
-        padding-bottom: 2px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .custom-amount-text {
+        white-space: nowrap;
       }
 
       input[type='radio'] {
@@ -331,8 +348,8 @@ export class EditDonation extends LitElement {
       }
 
       .cover-fees-container label {
-        font-size: 0.75em;
-        font-weight: bold;
+        font-size: ${coverFeesFontSizeCss};
+        font-weight: ${coverFeesFontWeightCss};
         flex: 1;
       }
 
@@ -347,7 +364,7 @@ export class EditDonation extends LitElement {
       }
 
       #custom-amount-input {
-        width: 5em;
+        width: 4em;
         font-size: 16px;
       }
     `;

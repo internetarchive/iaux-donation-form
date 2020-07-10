@@ -77,19 +77,16 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     instance?.on('blur', (event: braintree.HostedFieldsStateObject): void => {
       const { emittedBy, fields } = event;
       const fieldInFocus = fields[emittedBy];
-      const { container, isEmpty } = fieldInFocus;
-      if (isEmpty) {
+      const { container, isEmpty, isValid } = fieldInFocus;
+      if (isEmpty || !isValid) {
         container.parentElement?.classList.add('error');
       }
     });
 
     instance?.on('validityChange', (event: braintree.HostedFieldsStateObject): void => {
-      console.debug('validityChange', event);
       const { fields } = event;
       const isValid = fields.cvv.isValid && fields.expirationDate.isValid && fields.number.isValid;
-      // const validityEvent = new CustomEvent('validityChange', { detail: { isValid } });
       this.emitter.emit('validityChanged', isValid);
-      // this.dispatchEvent(validityEvent);
     });
   }
 
@@ -167,8 +164,6 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     let response: DonationResponse;
     try {
       response = await this.braintreeManager.submitDataToEndpoint(donationRequest);
-
-      console.debug('RESPONSE', response);
 
       if (response.success) {
         this.handleSuccessfulResponse(donationInfo, response.value as SuccessResponse);

@@ -37,7 +37,13 @@ export class FormSection extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const numberSize = css`var(--formSectionNumberRadius, 10px)`;
+    const numberRadius = css`var(--formSectionNumberRadius, 12px)`;
+    const numberFontSize = css`var(--formSectionNumberFontSize, 18px)`;
+    const numberFontWeight = css`var(--formSectionNumberFontWeight, bold)`;
+    const titleFontSize = css`var(--formSectionTitleFontSize, 18px)`;
+    const titleFontWeight = css`var(--formSectionTitleFontWeight, bold)`;
+
+    const lineHeightCss = css`calc(${numberRadius} * 2)`;
 
     return css`
       .container {
@@ -53,18 +59,21 @@ export class FormSection extends LitElement {
       .number {
         background-color: black;
         color: white;
-        width: calc(${numberSize} * 2);
-        height: calc(${numberSize} * 2);
-        border-radius: ${numberSize};
+        width: calc(${numberRadius} * 2);
+        height: calc(${numberRadius} * 2);
+        border-radius: ${numberRadius};
         display: flex;
         justify-content: center;
         align-items: center;
-        font-weight: bold;
+        font-weight: ${numberFontWeight};
+        font-size: ${numberFontSize};
       }
 
       .title {
-        line-height: calc(${numberSize} * 2);
+        line-height: ${lineHeightCss};
         margin-bottom: 0.5em;
+        font-size: ${titleFontSize};
+        font-weight: ${titleFontWeight};
       }
     `;
   }

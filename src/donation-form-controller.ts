@@ -298,13 +298,13 @@ export class DonationFormController extends LitElement {
 
         .donation-form-controller-container .braintree-input-wrapper {
           width: 100%;
-          border: 1px solid #d9d9d9;
+          outline: 1px solid #d9d9d9;
           display: flex;
           height: 35px;
         }
 
         .donation-form-controller-container .braintree-input-wrapper.error {
-          border-color: red;
+          outline-color: red;
         }
 
         .donation-form-controller-container .braintree-input {
@@ -315,10 +315,11 @@ export class DonationFormController extends LitElement {
           width: 2em;
           display: flex;
           justify-content: center;
+          align-items: center;
         }
 
         .donation-form-controller-container .braintree-input-wrapper .icon-container svg {
-          width: 16px
+          height: 16px
         }
       </style>
     `;

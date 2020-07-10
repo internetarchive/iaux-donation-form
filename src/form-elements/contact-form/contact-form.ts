@@ -195,6 +195,12 @@ export class ContactForm extends LitElement {
   static get styles(): CSSResult {
     const borderCss = css`var(--contactFormBorderCss, 1px solid #d9d9d9)`;
     const fieldHeight = css`var(--fieldHeight, 35px)`;
+    const iconSpacerWidth = css`var(--contactFieldIconSpacerWidth, 2em)`;
+    const fieldFontFamily = css`var(--contactFieldFontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
+    const fieldFontSize = css`var(--contactFieldFontSize, 16px)`;
+
+
+    const fieldWidth = css`calc(100% - ${iconSpacerWidth})`;
 
     return css`
       fieldset {
@@ -223,14 +229,15 @@ export class ContactForm extends LitElement {
       }
 
       input {
-        width: 100%;
+        width: ${fieldWidth};
         border: 0;
         outline: 0;
         background: transparent;
         font-weight: bold;
         color: #333;
-        font-size: 16px;
+        font-size: ${fieldFontSize};
         padding: 0;
+        font-family: ${fieldFontFamily}
       }
 
       .input-wrapper {
@@ -241,13 +248,15 @@ export class ContactForm extends LitElement {
       }
 
       .input-wrapper .icon-container {
-        width: 2em;
+        width: ${iconSpacerWidth};
         display: flex;
         justify-content: center;
+        align-items: center;
+        flex-shrink: 0;
       }
 
       .input-wrapper .icon-container svg {
-        width: 16px
+        height: 16px
       }
 
       .input-wrapper.countryCodeAlpha2 {
@@ -257,12 +266,13 @@ export class ContactForm extends LitElement {
       }
 
       .input-wrapper.countryCodeAlpha2 select {
-        width: 100%;
+        width: ${fieldWidth};
         height: ${fieldHeight};
         box-sizing: border-box;
         font-weight: bold;
-        font-size: 0.9em;
-        border: none;
+        font-size: ${fieldFontSize};
+        font-family: ${fieldFontFamily};
+        border: 0;
         background: #fff;
       }
 
