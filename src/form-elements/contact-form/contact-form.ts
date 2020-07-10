@@ -61,13 +61,14 @@ export class ContactForm extends LitElement {
               placeholder: 'Email',
               required: true,
               fieldType: 'email',
+              icon: emailImg
             })}
           </div>
         </fieldset>
 
         <fieldset>
           <div class="row has-icon">
-            ${this.generateInput({ id: 'firstName', placeholder: 'First name', required: true })}
+            ${this.generateInput({ id: 'firstName', placeholder: 'First name', required: true, icon: personImg })}
           </div>
 
           <div class="row">
@@ -81,6 +82,7 @@ export class ContactForm extends LitElement {
               id: 'streetAddress',
               placeholder: 'Address Line 1',
               required: true,
+              icon: localePinImg
             })}
           </div>
           <div class="row">
@@ -127,12 +129,14 @@ export class ContactForm extends LitElement {
     placeholder: string;
     required?: boolean;
     fieldType?: 'text' | 'email';
+    icon?: TemplateResult;
   }): TemplateResult {
     const required = options.required ?? true;
     const fieldType = options.fieldType ?? 'text';
 
     return html`
       <div class="input-wrapper ${options.id}">
+        <div class="icon-container">${options.icon}</div>
         <input
           type=${fieldType}
           id=${options.id}
@@ -149,6 +153,7 @@ export class ContactForm extends LitElement {
 
     return html`
       <div class="input-wrapper countryCodeAlpha2">
+        <div class="icon-container"></div>
         <select>
           ${Object.keys(countries).map((key) => {
             const name = countries[key];
@@ -189,6 +194,7 @@ export class ContactForm extends LitElement {
   /** @inheritdoc */
   static get styles(): CSSResult {
     const borderCss = css`var(--contactFormBorderCss, 1px solid #d9d9d9)`;
+    const fieldHeight = css`var(--fieldHeight, 35px)`;
 
     return css`
       fieldset {
@@ -222,30 +228,26 @@ export class ContactForm extends LitElement {
         outline: 0;
         background: transparent;
         font-weight: bold;
-        font-size: 0.9em;
         color: #333;
+        font-size: 16px;
+        padding: 0;
       }
 
       .input-wrapper {
         width: 100%;
         outline: ${borderCss};
-        padding: 2px 5px;
-        padding-left: 2rem;
-        background-position: 0.75rem 50%;
-        background-repeat: no-repeat;
-        background-size: auto 12px;
+        height: ${fieldHeight};
+        display: flex;
       }
 
-      .input-wrapper.email {
-        background-image: url('${unsafeCSS(emailImg)}')
+      .input-wrapper .icon-container {
+        width: 2em;
+        display: flex;
+        justify-content: center;
       }
 
-      .input-wrapper.firstName {
-        background-image: url('${unsafeCSS(personImg)}')
-      }
-
-      .input-wrapper.streetAddress {
-        background-image: url('${unsafeCSS(localePinImg)}')
+      .input-wrapper .icon-container svg {
+        width: 16px
       }
 
       .input-wrapper.countryCodeAlpha2 {
@@ -256,7 +258,7 @@ export class ContactForm extends LitElement {
 
       .input-wrapper.countryCodeAlpha2 select {
         width: 100%;
-        height: 27px;
+        height: ${fieldHeight};
         box-sizing: border-box;
         font-weight: bold;
         font-size: 0.9em;

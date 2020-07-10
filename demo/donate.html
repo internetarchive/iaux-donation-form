@@ -25,6 +25,21 @@
     donation-form-controller {
       display: block;
     }
+
+    modal-manager {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 250; /* the PayPal button starts off at 200, then drops down to 100 so this is just staying above it */
+    }
+
+    modal-manager[mode='closed'] {
+      display: none;
+    }
+
+    modal-manager[mode='modal'] {
+      display: block;
+    }
   </style>
 
 </head>
@@ -38,18 +53,55 @@
 
     const braintreeEndpointManager = new BraintreeEndpointManager();
 
+    function modalModeChanged(e) {
+      const mode = e.detail.mode;
+      switch (mode) {
+        case 'modal':
+          this.bodyStyleOverflow = document.body.style.overflow;
+          this.bodyStyleTransition = document.body.style.transition;
+
+          document.body.style.transition = 'none';
+          document.body.style.overflow = 'hidden';
+          break;
+        case 'closed':
+          document.body.style.overflow = 'auto';
+          document.body.style.transition = 'none';
+          break;
+        default:
+          break;
+      }
+    }
+
     render(
       html`
-        <ia-donation-form-controller
+        <modal-manager @modeChanged=${modalModeChanged}>
+          <!--
+            The PayPal buttons cannot exist in the shadowDOM so they have to be slotted
+            from the top.
+          -->
+          <div slot="paypal-upsell-button">
+            <div id="paypal-upsell-button"></div>
+          </div>
+        </modal-manager>
+
+        <donation-form-controller
           braintreeAuthToken='sandbox_x634jsj7_7zybks4ybp63pbmd'
           recaptchaSiteKey='6LeTUvYUAAAAAPTvW98MaXyS8c6vxk4-9n8DI1ve'
           venmoProfileId='1953896702662410263'
           googlePayMerchantId=''
           .endpointManager=${braintreeEndpointManager}>
-        </ia-donation-form-controller>
+        </donation-form-controller>
+
+        <div id="recaptcha"></div>
       `,
       document.querySelector('#demo')
     );
+
+    const recaptchaElement = document.querySelector('#recaptcha');
+    const modalManager = document.querySelector('modal-manager');
+    const formController = document.querySelector('donation-form-controller');
+    formController.modalManager = modalManager;
+    formController.recaptchaElement = recaptchaElement;
   </script>
 </body>
 </html>

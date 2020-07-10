@@ -4,7 +4,7 @@ export {
   HostingEnvironment,
 } from './src/braintree-manager/braintree-interfaces';
 
-export { IADonationFormController } from './src/ia-donation-form-controller';
+export { DonationFormController } from './src/donation-form-controller';
 export { DonationForm } from './src/donation-form';
 export {
   RecaptchaManager,

@@ -6,14 +6,13 @@ import {
   query,
   TemplateResult,
   customElement,
-  unsafeCSS
 } from 'lit-element';
 
 import {
   LazyLoaderService,
   LazyLoaderServiceInterface,
 } from '@internetarchive/lazy-loader-service';
-import { ModalManager } from '@internetarchive/modal-manager';
+import { ModalManagerInterface } from '@internetarchive/modal-manager';
 
 import { DonationForm } from './donation-form';
 import { PaymentClients, PaymentClientsInterface } from './braintree-manager/payment-clients';
@@ -37,22 +36,19 @@ import {
 
 import creditCardImg from './assets/img/contact-form-icons/ccard';
 import calendarImg from './assets/img/contact-form-icons/calendar';
-import lockImg from './assets/img/contact-form-icons/lock';
+import lockImg from './assets/img/lock';
 import { AnalyticsHandlerInterface } from './@types/analytics-handler';
 
 /**
- * The IADonationFormController is an IA-specific bridge between petabox
- * and the `<donation-form>` element.
- *
- * It orchestrates several of the interactions between the various pieces of the
- * donation form like modals, braintree, paypal, and recaptcha
+ * The DonationFormController orchestrates several of the interactions between
+ * the various pieces of the donation form like modals, braintree, paypal, and recaptcha
  *
  * @export
  * @class RadioPlayerController
  * @extends {LitElement}
  */
-@customElement('ia-donation-form-controller')
-export class IADonationFormController extends LitElement {
+@customElement('donation-form-controller')
+export class DonationFormController extends LitElement {
   @property({ type: String }) environment: HostingEnvironment = HostingEnvironment.Development;
 
   @property({ type: String }) braintreeAuthToken?: string;
@@ -69,17 +65,17 @@ export class IADonationFormController extends LitElement {
 
   @property({ type: Object }) analyticsHandler?: AnalyticsHandlerInterface;
 
+  @property({ type: Object }) modalManager?: ModalManagerInterface;
+
+  @property({ type: Object }) recaptchaElement?: HTMLElement;
+
   @property({ type: Object }) private braintreeManager?: BraintreeManagerInterface;
 
   @property({ type: Object }) private recaptchaManager?: RecaptchaManagerInterface;
 
   @property({ type: Object }) private paymentFlowHandlers?: PaymentFlowHandlersInterface;
 
-  @query('modal-manager') private modalManager!: ModalManager;
-
   @query('donation-form') private donationForm!: DonationForm;
-
-  @query('#recaptcha') private recaptcha!: HTMLElement;
 
   @query('#braintree-creditcard') private braintreeNumberInput!: HTMLInputElement;
 
@@ -111,10 +107,8 @@ export class IADonationFormController extends LitElement {
       });
     }
 
-    if (changedProperties.has('braintreeManager') || changedProperties.has('recaptchaManager')) {
-      if (this.braintreeManager && this.recaptchaManager) {
-        this.setupPaymentFlowHandlers();
-      }
+    if (changedProperties.has('braintreeManager') || changedProperties.has('recaptchaManager') || changedProperties.has('modalManager') || changedProperties.has('recaptchaElement')) {
+      this.setupPaymentFlowHandlers();
     }
   }
 
@@ -133,7 +127,7 @@ export class IADonationFormController extends LitElement {
   }
 
   private setupPaymentFlowHandlers(): void {
-    if (!this.braintreeManager || !this.recaptchaManager) {
+    if (!this.braintreeManager || !this.recaptchaManager || !this.modalManager || !this.recaptchaElement) {
       return;
     }
 
@@ -146,7 +140,7 @@ export class IADonationFormController extends LitElement {
     this.donationForm.braintreeManager = this.braintreeManager;
     this.donationForm.paymentFlowHandlers = this.paymentFlowHandlers;
 
-    this.recaptchaManager.setup(this.recaptcha, 1, 'light', 'image');
+    this.recaptchaManager.setup(this.recaptchaElement, 1, 'light', 'image');
     this.braintreeManager.startup();
     this.paymentFlowHandlers.startup();
   }
@@ -154,7 +148,7 @@ export class IADonationFormController extends LitElement {
   private get hostedFieldConfig(): HostedFieldConfiguration {
     const hostedFieldStyle: object = {
       input: {
-        'font-size': '14px',
+        'font-size': '16px',
         'font-family': '"Helvetica Neue", Helvetica, Arial, sans-serif',
         'font-weight': '700',
         color: '#333',
@@ -202,16 +196,6 @@ export class IADonationFormController extends LitElement {
   render(): TemplateResult {
     return html`
       <div class="donation-form-controller-container">
-        <modal-manager @modeChanged=${this.modalModeChanged}>
-          <!--
-            The PayPal buttons cannot exist in the shadowDOM so they have to be slotted
-            from the top.
-          -->
-          <div slot="paypal-upsell-button">
-            <div id="paypal-upsell-button"></div>
-          </div>
-        </modal-manager>
-
         <donation-form .braintreeManager=${this.braintreeManager}>
           <!--
             Why are these slots here?
@@ -228,14 +212,17 @@ export class IADonationFormController extends LitElement {
           <div slot="braintree-hosted-fields">
             <div class="braintree-row">
               <div class="braintree-input-wrapper creditcard">
+                <div class="icon-container">${creditCardImg}</div>
                 <div class="braintree-input" id="braintree-creditcard"></div>
               </div>
             </div>
             <div class="braintree-row">
               <div class="braintree-input-wrapper expiration">
+                <div class="icon-container">${calendarImg}</div>
                 <div class="braintree-input" id="braintree-expiration"></div>
               </div>
               <div class="braintree-input-wrapper cvv">
+                <div class="icon-container">${lockImg}</div>
                 <div class="braintree-input" id="braintree-cvv"></div>
               </div>
             </div>
@@ -245,37 +232,13 @@ export class IADonationFormController extends LitElement {
             <div id="paypal-button"></div>
           </div>
 
-          <div slot="recaptcha">
-            <div id="recaptcha"></div>
-          </div>
+          <slot name="recaptcha" slot="recaptcha">
+          </slot>
         </donation-form>
       </div>
 
       ${this.getStyles}
     `;
-  }
-
-  private bodyStyleOverflow?: string;
-  private bodyStyleTransition?: string;
-
-  private modalModeChanged(e: CustomEvent): void {
-    console.debug('modalModeChanged', e);
-    const mode = e.detail.mode;
-    switch (mode) {
-      case 'modal':
-        this.bodyStyleOverflow = document.body.style.overflow;
-        this.bodyStyleTransition = document.body.style.transition;
-
-        document.body.style.transition = 'none';
-        document.body.style.overflow = 'hidden';
-        break;
-      case 'closed':
-        document.body.style.overflow = this.bodyStyleOverflow ?? 'auto';
-        document.body.style.transition = this.bodyStyleTransition ?? 'none';
-        break;
-      default:
-        break;
-    }
   }
 
   /** @inheritdoc */
@@ -318,21 +281,6 @@ export class IADonationFormController extends LitElement {
   private get getStyles(): TemplateResult {
     return html`
       <style>
-        .donation-form-controller-container modal-manager {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          z-index: 250; /* the PayPal button starts off at 200, then drops down to 100 so this is just staying above it */
-        }
-
-        .donation-form-controller-container modal-manager[mode='closed'] {
-          display: none;
-        }
-
-        .donation-form-controller-container modal-manager[mode='modal'] {
-          display: block;
-        }
-
         .donation-form-controller-container donation-form:focus {
           outline: none;
         }
@@ -351,10 +299,8 @@ export class IADonationFormController extends LitElement {
         .donation-form-controller-container .braintree-input-wrapper {
           width: 100%;
           border: 1px solid #d9d9d9;
-          padding-left: 2rem;
-          background-position: 0.75rem 50%;
-          background-repeat: no-repeat;
-          background-size: auto 12px;
+          display: flex;
+          height: 35px;
         }
 
         .donation-form-controller-container .braintree-input-wrapper.error {
@@ -362,19 +308,17 @@ export class IADonationFormController extends LitElement {
         }
 
         .donation-form-controller-container .braintree-input {
-          height: 25px;
+          width: 100%;
         }
 
-        .donation-form-controller-container .braintree-input-wrapper.creditcard {
-          background-image: url('${unsafeCSS(creditCardImg)}')
+        .donation-form-controller-container .braintree-input-wrapper .icon-container {
+          width: 2em;
+          display: flex;
+          justify-content: center;
         }
 
-        .donation-form-controller-container .braintree-input-wrapper.expiration {
-          background-image: url('${unsafeCSS(calendarImg)}')
-        }
-
-        .donation-form-controller-container .braintree-input-wrapper.cvv {
-          background-image: url('${unsafeCSS(lockImg)}')
+        .donation-form-controller-container .braintree-input-wrapper .icon-container svg {
+          width: 16px
         }
       </style>
     `;

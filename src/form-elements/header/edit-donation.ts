@@ -348,6 +348,7 @@ export class EditDonation extends LitElement {
 
       #custom-amount-input {
         width: 5em;
+        font-size: 16px;
       }
     `;
   }

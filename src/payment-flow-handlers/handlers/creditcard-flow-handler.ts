@@ -51,7 +51,14 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     return this.emitter.on(event, callback);
   }
 
+  private started = false;
+
   async startup(): Promise<void> {
+    console.debug('startup');
+
+    if (this.started) { return; }
+    this.started = true;
+
     const handler = await this.braintreeManager?.paymentProviders.getCreditCardHandler();
     const instance = await handler?.getInstance();
 
