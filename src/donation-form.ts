@@ -1,3 +1,5 @@
+import * as smoothscroll from 'smoothscroll-polyfill';
+
 import {
   LitElement,
   html,
@@ -139,7 +141,6 @@ export class DonationForm extends LitElement {
   }
 
   private paymentSelectorFirstUpdated(): void {
-    console.debug('paymentSelectorFirstUpdated', this.donationInfo);
     if (this.paypalButtonNeedsRender && this.paymentFlowHandlers?.paypalHandler) {
       this.renderPayPalButton();
     }
@@ -171,10 +172,15 @@ export class DonationForm extends LitElement {
     }
   }
 
-  private creditCardSelected(): void {
+  private async creditCardSelected(): Promise<void> {
     this.selectedPaymentProvider = PaymentProvider.CreditCard;
     this.contactFormVisible = true;
     this.creditCardVisible = true;
+
+    await this.updateComplete;
+    if (this.contactForm) {
+      this.contactForm.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   private venmoSelected(): void {
@@ -226,6 +232,7 @@ export class DonationForm extends LitElement {
 
   /** @inheritdoc */
   firstUpdated(): void {
+    smoothscroll.polyfill();
     this.readQueryParams();
   }
 

@@ -208,6 +208,7 @@ export class ContactForm extends LitElement {
     const iconSpacerWidth = css`var(--contactFieldIconSpacerWidth, 40px)`;
     const fieldFontFamily = css`var(--fontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
     const fieldFontSize = css`var(--contactFieldFontSize, 16px)`;
+    const fieldFontColor = css`var(--inputFieldFontColor, #333)`;
 
     const fieldWidth = css`calc(100% - ${iconSpacerWidth})`;
 
@@ -244,10 +245,14 @@ export class ContactForm extends LitElement {
         outline: 0;
         background: transparent;
         font-weight: bold;
-        color: #333;
+        color: ${fieldFontColor};
         font-size: ${fieldFontSize};
         padding: 0;
         font-family: ${fieldFontFamily};
+      }
+
+      #postalCode {
+        width: 100%;
       }
 
       .input-wrapper {

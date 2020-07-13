@@ -37,9 +37,11 @@ export class FormSection extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
+    const numberBackgroundColor = css`var(--formSectionNumberBackgroundColor, #333)`;
     const numberRadius = css`var(--formSectionNumberRadius, 12px)`;
     const numberFontSize = css`var(--formSectionNumberFontSize, 18px)`;
     const numberFontWeight = css`var(--formSectionNumberFontWeight, bold)`;
+    const numberFontColor = css`var(--formSectionNumberFontColor, #fff)`;
     const titleFontSize = css`var(--formSectionTitleFontSize, 18px)`;
     const titleFontWeight = css`var(--formSectionTitleFontWeight, bold)`;
 
@@ -57,8 +59,8 @@ export class FormSection extends LitElement {
       }
 
       .number {
-        background-color: black;
-        color: white;
+        background-color: ${numberBackgroundColor};
+        color: ${numberFontColor};
         width: calc(${numberRadius} * 2);
         height: calc(${numberRadius} * 2);
         border-radius: ${numberRadius};

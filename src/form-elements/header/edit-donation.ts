@@ -83,7 +83,6 @@ export class EditDonation extends LitElement {
           </label>
         </div>
       </form-section>
-      <!-- <button @click=${this.dispatchShowSummaryClickedEvent}>Switch to Summary</button> -->
     `;
   }
 
@@ -175,7 +174,6 @@ export class EditDonation extends LitElement {
       donationType: this.donationInfo.donationType,
       coverFees: coverFees,
     });
-    console.debug('coverFeesChecked', this.donationInfo);
     this.dispatchDonationInfoChangedEvent();
   }
 
@@ -187,8 +185,6 @@ export class EditDonation extends LitElement {
   }
 
   private amountChanged(amount: number): void {
-    console.debug('amountChanged', amount);
-
     if (amount > 10000) {
       this.error = html`
         To make a donation of $10,000 or more, please contact our philanthropy department at
@@ -241,20 +237,16 @@ export class EditDonation extends LitElement {
 
   private donationTypeChanged(donationType: DonationType): void {
     this.donationInfo.donationType = donationType;
-    console.debug('EditDonation donationTypeChanged', donationType);
     this.dispatchDonationInfoChangedEvent();
   }
 
   private presetAmountChanged(amount: number): void {
     this.error = undefined;
     this.donationInfo.amount = amount;
-    console.debug('EditDonation amountChanged', amount);
     this.dispatchDonationInfoChangedEvent();
   }
 
   private dispatchDonationInfoChangedEvent(): void {
-    console.debug('dispatchDonationInfoChangedEvent', this.donationInfo);
-
     const newDonationInfo = new DonationPaymentInfo({
       donationType: this.donationInfo.donationType,
       amount: this.donationInfo.amount,
@@ -269,12 +261,15 @@ export class EditDonation extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
+    const buttonBorderColorCss = css`var(--paymentButtonBorderColor, #333)`;
     const buttonGridGapCss = css`var(--paymentButtonGridGap, 10px)`;
     const buttonFontSizeCss = css`var(--paymentButtonFontSize, 16px)`;
     const buttonSelectedColorCss = css`var(--paymentButtonSelectedColor, #f9bf3b)`;
     const buttonColorCss = css`var(--paymentButtonColor, #fff)`;
     const coverFeesFontSizeCss = css`var(--coverFeesFontSize, 12px)`;
     const coverFeesFontWeightCss = css`var(--coverFeesFontWeight, bold)`;
+    const customAmountWidth = css`var(--customAmountWidth, 40px)`;
+    const fieldFontColor = css`var(--inputFieldFontColor, #333)`;
 
     return css`
       .errors {
@@ -300,14 +295,13 @@ export class EditDonation extends LitElement {
       }
 
       .selection-button label {
-        padding: 0 5px;
+        padding: 0 3px;
         display: flex;
-        color: #202020;
         cursor: pointer;
         text-align: center;
         font-size: ${buttonFontSizeCss};
         font-weight: bold;
-        border: 1px solid black;
+        border: 1px solid ${buttonBorderColorCss};
         border-radius: 5px;
         background-color: #ccc;
         height: 100%;
@@ -369,8 +363,9 @@ export class EditDonation extends LitElement {
       }
 
       #custom-amount-input {
-        width: 4em;
+        width: ${customAmountWidth};
         font-size: 16px;
+        color: ${fieldFontColor}
       }
     `;
   }
