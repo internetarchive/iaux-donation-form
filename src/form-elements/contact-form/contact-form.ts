@@ -202,9 +202,11 @@ export class ContactForm extends LitElement {
   /** @inheritdoc */
   static get styles(): CSSResult {
     const borderCss = css`var(--contactFormBorderCss, 1px solid #d9d9d9)`;
-    const fieldHeight = css`var(--fieldHeight, 35px)`;
-    const iconSpacerWidth = css`var(--contactFieldIconSpacerWidth, 2em)`;
-    const fieldFontFamily = css`var(--contactFieldFontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
+    const fieldHeight = css`var(--fieldHeight, 30px)`;
+    const fieldSetSpacing = css`var(--fieldSetSpacing, 10px)`;
+    const iconSpacerLeftMargin = css`var(--contactFieldIconLeftMargin, 10px)`;
+    const iconSpacerWidth = css`var(--contactFieldIconSpacerWidth, 40px)`;
+    const fieldFontFamily = css`var(--fontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
     const fieldFontSize = css`var(--contactFieldFontSize, 16px)`;
 
     const fieldWidth = css`calc(100% - ${iconSpacerWidth})`;
@@ -213,7 +215,8 @@ export class ContactForm extends LitElement {
       fieldset {
         border: 0;
         padding: 0;
-        margin: 0 0 0.5em 0;
+        margin: 0;
+        margin-bottom: ${fieldSetSpacing};
       }
 
       /* These 1px and 0 margins in the next few selectors are to account for the
@@ -256,8 +259,8 @@ export class ContactForm extends LitElement {
 
       .input-wrapper .icon-container {
         width: ${iconSpacerWidth};
+        margin-left: ${iconSpacerLeftMargin};
         display: flex;
-        justify-content: center;
         align-items: center;
         flex-shrink: 0;
       }
@@ -281,6 +284,9 @@ export class ContactForm extends LitElement {
         font-family: ${fieldFontFamily};
         border: 0;
         background: #fff;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
       }
 
       .input-wrapper.region {
@@ -291,6 +297,11 @@ export class ContactForm extends LitElement {
         padding-left: 0.5em;
         border-left: 0;
         width: 40%;
+      }
+
+      .input-wrapper.postalCode .icon-container {
+        width: 0;
+        margin: 0;
       }
     `;
   }

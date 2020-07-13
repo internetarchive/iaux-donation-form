@@ -96,7 +96,7 @@ export class DonationForm extends LitElement {
 
   get contactFormSection(): TemplateResult {
     return html`
-      <form-section number="4" headline="Enter your payment information">
+      <form-section number="4" headline="Enter payment information">
         <contact-form @form-validity-changed=${this.contactFormValidityChanged}></contact-form>
         <div class="credit-card-fields" class="${this.creditCardVisible ? '' : 'hidden'}">
           <slot name="braintree-hosted-fields"></slot>
@@ -190,10 +190,7 @@ export class DonationForm extends LitElement {
   }
 
   private donateClicked(): void {
-    console.debug('donateClicked');
-
     if (!this.contactForm) {
-      console.error('no contact form');
       alert('Please enter contact info.');
       return;
     }
@@ -304,6 +301,11 @@ export class DonationForm extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
+    const donateButtonFontSize = css`var(--donateButtonFontSize, 26px)`;
+    const donateButtonHeight = css`var(--donateButtonHeight, 40px)`;
+    const donateButtonColor = css`var(--donateButtonColor, rgba(49, 164, 129, 1))`;
+    const donateButtonDisabledColor = css`var(--donateButtonDisabledColor, rgba(49, 164, 129, 0.5))`;
+
     return css`
       h1 {
         margin: 0;
@@ -330,20 +332,21 @@ export class DonationForm extends LitElement {
         width: 100%;
         appearance: none;
         -webkit-appearance: none;
-        font-size: 1.4em;
+        font-size: ${donateButtonFontSize};
         font-weight: bold;
         text-align: center;
         color: #fff;
         cursor: pointer;
         border: none;
         border-radius: 5px;
-        background-color: rgba(49, 164, 129, 1);
+        background-color: ${donateButtonColor};
         padding-top: 5px;
         padding-bottom: 5px;
+        height: ${donateButtonHeight};
       }
 
       #donate-button:disabled {
-        background-color: rgba(49, 164, 129, 0.5);
+        background-color: ${donateButtonDisabledColor};
         cursor: not-allowed;
       }
     `;

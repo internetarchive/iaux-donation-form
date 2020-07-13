@@ -6,6 +6,7 @@ import {
   query,
   TemplateResult,
   customElement,
+  css
 } from 'lit-element';
 
 import {
@@ -288,6 +289,8 @@ export class DonationFormController extends LitElement {
    * @memberof IADonationFormController
    */
   private get getStyles(): TemplateResult {
+    const fieldHeight = css`var(--fieldHeight, 30px)`;
+
     return html`
       <style>
         .donation-form-controller-container donation-form:focus {
@@ -297,7 +300,7 @@ export class DonationFormController extends LitElement {
         .donation-form-controller-container #paypal-button {
           opacity: 0.001;
           width: 50px;
-          height: 32px;
+          height: 30px;
           overflow: hidden;
         }
 
@@ -309,7 +312,7 @@ export class DonationFormController extends LitElement {
           width: 100%;
           outline: 1px solid #d9d9d9;
           display: flex;
-          height: 35px;
+          height: ${fieldHeight};
         }
 
         .donation-form-controller-container .braintree-input-wrapper.error {
@@ -321,10 +324,11 @@ export class DonationFormController extends LitElement {
         }
 
         .donation-form-controller-container .braintree-input-wrapper .icon-container {
-          width: 2em;
+          width: 40px;
+          margin-left: 10px;
           display: flex;
-          justify-content: center;
           align-items: center;
+          flex-shrink: 0;
         }
 
         .donation-form-controller-container .braintree-input-wrapper .icon-container svg {

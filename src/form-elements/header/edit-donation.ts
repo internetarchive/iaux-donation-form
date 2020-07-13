@@ -269,11 +269,11 @@ export class EditDonation extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const buttonMarginCss = css`var(--paymentButtonMargin, 3px)`;
+    const buttonGridGapCss = css`var(--paymentButtonGridGap, 10px)`;
     const buttonFontSizeCss = css`var(--paymentButtonFontSize, 16px)`;
     const buttonSelectedColorCss = css`var(--paymentButtonSelectedColor, #f9bf3b)`;
     const buttonColorCss = css`var(--paymentButtonColor, #fff)`;
-    const coverFeesFontSizeCss = css`var(--coverFeesFontSize, 14px)`;
+    const coverFeesFontSizeCss = css`var(--coverFeesFontSize, 12px)`;
     const coverFeesFontWeightCss = css`var(--coverFeesFontWeight, bold)`;
 
     return css`
@@ -285,21 +285,22 @@ export class EditDonation extends LitElement {
         list-style: none;
         margin: 0;
         padding: 0;
-        display: inline-block;
+        display: grid;
+        grid-gap: ${buttonGridGapCss};
       }
 
       li {
-        margin: ${buttonMarginCss};
+        margin: 0;
         padding: 0;
         display: inline-block;
       }
 
       .selection-button {
-        height: 32px;
+        height: 30px;
       }
 
       .selection-button label {
-        padding: 0 10px;
+        padding: 0 5px;
         display: flex;
         color: #202020;
         cursor: pointer;
@@ -355,8 +356,11 @@ export class EditDonation extends LitElement {
       }
 
       .amount-selector {
-        display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      }
+
+      .frequency-selector {
+        grid-template-columns: 1fr 1fr;
       }
 
       .custom-amount {

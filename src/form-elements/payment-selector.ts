@@ -94,14 +94,10 @@ export class PaymentSelector extends LitElement {
   }
 
   private async setButtonVisibility(): Promise<void> {
-    console.debug('setButtonVisibility');
-
     this.paymentProviders?.venmoHandler
       .get()
       .then(handler => {
-        console.debug('getVenmo inside');
         if (!handler) {
-          console.debug('venmo handler unavailable');
           this.venmoMode = PaymentButtonMode.Unavailable;
           return;
         }
@@ -109,7 +105,6 @@ export class PaymentSelector extends LitElement {
         handler
           .isBrowserSupported()
           .then(supported => {
-            console.debug('venmo: isBrowserSupporter', supported);
             this.venmoMode = supported
               ? PaymentButtonMode.Available
               : PaymentButtonMode.Unavailable;
@@ -210,8 +205,8 @@ export class PaymentSelector extends LitElement {
       .payment-container {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
-        column-gap: 1em;
-        row-gap: 1em;
+        grid-gap: 10px;
+        max-width: 320px;
       }
 
       .provider-button {
