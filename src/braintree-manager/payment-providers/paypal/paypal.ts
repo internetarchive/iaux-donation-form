@@ -4,17 +4,21 @@ import {
   PayPalButtonDataSourceInterface,
   PayPalButtonDataSource,
 } from './paypal-button-datasource';
+import { PromisedSingleton } from '../../../util/promised-singleton';
 
 export interface PayPalHandlerInterface {
+  instance: PromisedSingleton<braintree.PayPalCheckout | undefined>;
+
   renderPayPalButton(params: {
     selector: string;
     style: paypal.ButtonStyle;
     donationInfo: DonationPaymentInfo;
   }): Promise<PayPalButtonDataSourceInterface | undefined>;
-  getPayPalInstance(): Promise<braintree.PayPalCheckout | undefined>;
 }
 
 export class PayPalHandler implements PayPalHandlerInterface {
+  instance: PromisedSingleton<braintree.PayPalCheckout | undefined>;
+
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;
     paypalClient: braintree.PayPalCheckout;
@@ -26,6 +30,14 @@ export class PayPalHandler implements PayPalHandlerInterface {
     this.paypalClient = options.paypalClient;
     this.paypalLibrary = options.paypalLibrary;
     this.hostingEnvironment = options.hostingEnvironment;
+
+    this.instance = new PromisedSingleton<braintree.PayPalCheckout | undefined>(
+      this.braintreeManager.instance.get().then(braintreeClient => {
+        return this.paypalClient.create({
+          client: braintreeClient,
+        });
+      }),
+    );
   }
 
   private braintreeManager: BraintreeManagerInterface;
@@ -37,39 +49,6 @@ export class PayPalHandler implements PayPalHandlerInterface {
 
   private hostingEnvironment: HostingEnvironment;
 
-  private paypalInstance: braintree.PayPalCheckout | undefined;
-
-  private paypalInstancePromise?: Promise<braintree.PayPalCheckout | undefined>;
-
-  async getPayPalInstance(): Promise<braintree.PayPalCheckout | undefined> {
-    if (this.paypalInstance) {
-      return this.paypalInstance;
-    }
-
-    // we only want one instance of this to be created so this chains the promise
-    // calls if multiple callers request the instance
-    if (this.paypalInstancePromise) {
-      this.paypalInstancePromise = this.paypalInstancePromise.then(handler => {
-        return handler;
-      });
-      return this.paypalInstancePromise;
-    }
-
-    this.paypalInstancePromise = this.braintreeManager
-      .getInstance()
-      .then(braintreeClient => {
-        return this.paypalClient.create({
-          client: braintreeClient,
-        });
-      })
-      .then(instance => {
-        this.paypalInstance = instance;
-        return instance;
-      });
-
-    return this.paypalInstancePromise;
-  }
-
   async renderPayPalButton(params: {
     selector: string;
     style: paypal.ButtonStyle;
@@ -79,7 +58,7 @@ export class PayPalHandler implements PayPalHandlerInterface {
       ? 'sandbox'
       : 'production') as paypal.Environment;
 
-    const paypalInstance = await this.getPayPalInstance();
+    const paypalInstance = await this.instance.get();
     if (!paypalInstance) {
       return;
     }

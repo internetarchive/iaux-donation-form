@@ -9,6 +9,7 @@ import {
 } from './braintree-interfaces';
 import { SuccessResponse } from '../models/response-models/success-models/success-response';
 import { HostedFieldConfiguration } from './payment-providers/credit-card/hosted-field-configuration';
+import { PromisedSingleton } from '../util/promised-singleton';
 
 export class BraintreeManager implements BraintreeManagerInterface {
   get deviceData(): string | undefined {
@@ -40,35 +41,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
     this.collectDeviceData();
   }
 
-  private clientInstancePromise?: Promise<braintree.Client>;
-
-  async getInstance(): Promise<braintree.Client> {
-    if (this.braintreeInstance) {
-      return this.braintreeInstance;
-    }
-
-    // we only want one instance of this to be created so this chains the promise
-    // calls if multiple callers request the instance
-    // const originalPromise = this.clientInstancePromise;
-    if (this.clientInstancePromise) {
-      this.clientInstancePromise = this.clientInstancePromise.then(handler => {
-        return handler;
-      });
-      return this.clientInstancePromise;
-    }
-
-    this.clientInstancePromise = this.paymentClients
-      .getBraintreeClient()
-      .then((client: braintree.Client) => {
-        return client?.create({ authorization: this.authorizationToken });
-      })
-      .then((clientInstance: braintree.Client) => {
-        this.braintreeInstance = clientInstance;
-        return clientInstance;
-      });
-
-    return this.clientInstancePromise;
-  }
+  instance: PromisedSingleton<braintree.Client>;
 
   async submitDataToEndpoint(request: DonationRequest): Promise<DonationResponse> {
     const jsonResponse = await this.endpointManager.submitData(request);
@@ -91,14 +64,14 @@ export class BraintreeManager implements BraintreeManagerInterface {
     }
     this.deviceDataCollectionStarted = true;
 
-    const instance = await this.getInstance();
+    const instance = await this.instance.get();
     if (!instance) {
       return;
     }
 
     console.debug('collectDeviceData, starting dataCollector');
-    this.paymentClients
-      .getDataCollector()
+    this.paymentClients.dataCollector
+      .get()
       .then((collector?: braintree.DataCollector) => {
         return collector?.create({ client: instance, kount: false, paypal: true });
       })
@@ -139,5 +112,11 @@ export class BraintreeManager implements BraintreeManagerInterface {
       hostingEnvironment: options.hostingEnvironment,
       hostedFieldConfig: options.hostedFieldConfig,
     });
+
+    this.instance = new PromisedSingleton<braintree.Client>(
+      this.paymentClients.braintreeClient.get().then((client: braintree.Client) => {
+        return client?.create({ authorization: this.authorizationToken });
+      }),
+    );
   }
 }

@@ -15,35 +15,76 @@ import {
   HostedFieldContainerInterface,
   HostedFieldContainer,
 } from '../src/braintree-manager/payment-providers/credit-card/hosted-field-container';
+import { PromisedSingleton } from '../src/util/promised-singleton';
+import {
+  Client,
+  DataCollector,
+  HostedFields,
+  Venmo,
+  PayPalCheckout,
+  ApplePay,
+  GooglePayment,
+} from 'braintree-web';
 
 class MockPaymentClients implements PaymentClientsInterface {
-  getBraintreeClient(): Promise<braintree.Client> {
-    throw new Error('Method not implemented.');
-  }
-  getDataCollector(): Promise<braintree.DataCollector> {
-    throw new Error('Method not implemented.');
-  }
-  getHostedFields(): Promise<braintree.HostedFields> {
-    throw new Error('Method not implemented.');
-  }
-  getVenmo(): Promise<braintree.Venmo> {
-    throw new Error('Method not implemented.');
-  }
-  getPayPal(): Promise<braintree.PayPalCheckout> {
-    throw new Error('Method not implemented.');
-  }
-  getApplePay(): Promise<braintree.ApplePay> {
-    throw new Error('Method not implemented.');
-  }
-  getGooglePayBraintreeClient(): Promise<braintree.GooglePayment> {
-    throw new Error('Method not implemented.');
-  }
-  getGooglePaymentsClient(): Promise<google.payments.api.PaymentsClient> {
-    throw new Error('Method not implemented.');
-  }
+  braintreeClient: PromisedSingleton<Client>;
+  dataCollector: PromisedSingleton<DataCollector>;
+  hostedFields: PromisedSingleton<HostedFields>;
+  venmo: PromisedSingleton<Venmo>;
+  payPal: PromisedSingleton<PayPalCheckout>;
+  applePay: PromisedSingleton<ApplePay>;
+  googlePayBraintreeClient: PromisedSingleton<GooglePayment>;
+  googlePaymentsClient: PromisedSingleton<google.payments.api.PaymentsClient>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getPaypalLibrary(): Promise<any> {
-    throw new Error('Method not implemented.');
+  paypalLibrary: PromisedSingleton<any>;
+
+  constructor() {
+    this.braintreeClient = new PromisedSingleton<Client>(
+      new Promise((resolve, reject) => {
+        reject('Not implemented');
+      }),
+    );
+    this.dataCollector = new PromisedSingleton<DataCollector>(
+      new Promise((resolve, reject) => {
+        reject('Not implemented');
+      }),
+    );
+    this.hostedFields = new PromisedSingleton<HostedFields>(
+      new Promise((resolve, reject) => {
+        reject('Not implemented');
+      }),
+    );
+    this.venmo = new PromisedSingleton<Venmo>(
+      new Promise((resolve, reject) => {
+        reject('Not implemented');
+      }),
+    );
+    this.payPal = new PromisedSingleton<PayPalCheckout>(
+      new Promise((resolve, reject) => {
+        reject('Not implemented');
+      }),
+    );
+    this.applePay = new PromisedSingleton<ApplePay>(
+      new Promise((resolve, reject) => {
+        reject('Not implemented');
+      }),
+    );
+    this.googlePayBraintreeClient = new PromisedSingleton<GooglePayment>(
+      new Promise((resolve, reject) => {
+        reject('Not implemented');
+      }),
+    );
+    this.googlePaymentsClient = new PromisedSingleton<google.payments.api.PaymentsClient>(
+      new Promise((resolve, reject) => {
+        reject('Not implemented');
+      }),
+    );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.paypalLibrary = new PromisedSingleton<any>(
+      new Promise((resolve, reject) => {
+        reject('Not implemented');
+      }),
+    );
   }
 }
 

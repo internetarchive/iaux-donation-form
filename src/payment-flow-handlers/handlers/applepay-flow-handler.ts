@@ -34,7 +34,7 @@ export class ApplePayFlowHandler
 
   async paymentInitiated(donationInfo: DonationPaymentInfo, e: Event): Promise<void> {
     this.donationFlowModalManager.showProcessingModal();
-    const handler = await this.braintreeManager?.paymentProviders.getApplePayHandler();
+    const handler = await this.braintreeManager?.paymentProviders.applePayHandler.get();
     this.applePayDataSource = await handler?.createPaymentRequest(e, donationInfo);
 
     console.debug('paymentInitiated, e, applePayDataSource', e, this.applePayDataSource);

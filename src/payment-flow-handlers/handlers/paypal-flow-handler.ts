@@ -183,7 +183,7 @@ export class PayPalFlowHandler
   }
 
   async renderPayPalButton(donationInfo: DonationPaymentInfo): Promise<void> {
-    const handler = await this.braintreeManager?.paymentProviders.getPaypalHandler();
+    const handler = await this.braintreeManager?.paymentProviders.paypalHandler.get();
 
     this.buttonDataSource = await handler?.renderPayPalButton({
       selector: '#paypal-button',
@@ -256,7 +256,7 @@ export class PayPalFlowHandler
     oneTimePayload: paypal.TokenizePayload;
     oneTimeSuccessResponse: SuccessResponse;
   }): Promise<void> {
-    const handler = await this.braintreeManager?.paymentProviders.getPaypalHandler();
+    const handler = await this.braintreeManager?.paymentProviders.paypalHandler.get();
 
     const upsellButtonDataSource = await handler?.renderPayPalButton({
       selector: '#paypal-upsell-button',

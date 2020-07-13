@@ -189,13 +189,6 @@ export class DonationForm extends LitElement {
     this.showInvalidDonationInfoAlert();
   }
 
-  private identifier: number;
-
-  constructor() {
-    super();
-    this.identifier = Math.random() * 1000;
-  }
-
   private donateClicked(): void {
     console.debug('donateClicked');
 

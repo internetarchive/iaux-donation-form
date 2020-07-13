@@ -45,8 +45,8 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
    */
   async startup(): Promise<void> {
     console.debug('Venmo startup');
-    const handler = await this.braintreeManager.paymentProviders.getVenmoHandler();
-    const instance = await handler?.getInstance();
+    const handler = await this.braintreeManager.paymentProviders.venmoHandler.get();
+    const instance = await handler?.instance.get();
     if (instance?.hasTokenizationResult()) {
       console.debug('Venmo startup, has tokenization results');
 
@@ -74,7 +74,7 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
     this.restorationStateHandler.persistState(contactInfo, donationInfo);
 
     try {
-      const handler = await this.braintreeManager.paymentProviders.getVenmoHandler();
+      const handler = await this.braintreeManager.paymentProviders.venmoHandler.get();
       const result = await handler?.startPayment();
       if (!result) {
         this.restorationStateHandler.clearState();

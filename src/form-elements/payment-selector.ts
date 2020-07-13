@@ -96,8 +96,8 @@ export class PaymentSelector extends LitElement {
   private async setButtonVisibility(): Promise<void> {
     console.debug('setButtonVisibility');
 
-    this.paymentProviders
-      ?.getVenmoHandler()
+    this.paymentProviders?.venmoHandler
+      .get()
       .then(handler => {
         console.debug('getVenmo inside');
         if (!handler) {
@@ -124,8 +124,8 @@ export class PaymentSelector extends LitElement {
         this.venmoMode = PaymentButtonMode.Unavailable;
       });
 
-    this.paymentProviders
-      ?.getApplePayHandler()
+    this.paymentProviders?.applePayHandler
+      .get()
       .then(handler => {
         console.debug('getApplePayHandler inside');
         if (!handler) {
@@ -152,8 +152,8 @@ export class PaymentSelector extends LitElement {
         this.applePayMode = PaymentButtonMode.Unavailable;
       });
 
-    this.paymentProviders
-      ?.getGooglePayHandler()
+    this.paymentProviders?.googlePayHandler
+      .get()
       .then(handler => {
         if (!handler) {
           console.debug('google pay handler unavailable');

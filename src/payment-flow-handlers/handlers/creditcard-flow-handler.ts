@@ -61,8 +61,8 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     }
     this.started = true;
 
-    const handler = await this.braintreeManager?.paymentProviders.getCreditCardHandler();
-    const instance = await handler?.getInstance();
+    const handler = await this.braintreeManager?.paymentProviders.creditCardHandler.get();
+    const instance = await handler?.instance.get();
 
     // NOTE: The `focus` and `blur` callback logic must work in conjunction with
     // the `HostedFieldContainer` class. We use the `HostedFieldContainer` for
@@ -102,7 +102,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     const start = performance.now();
     console.debug('paymentInitiated donorContactInfo', donorContactInfo);
 
-    const handler = await this.braintreeManager.paymentProviders.getCreditCardHandler();
+    const handler = await this.braintreeManager.paymentProviders.creditCardHandler.get();
 
     try {
       hostedFieldsResponse = await handler?.tokenizeHostedFields();
@@ -187,7 +187,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
   private async handleHostedFieldTokenizationError(error: braintree.BraintreeError): Promise<void> {
     console.error('handleHostedFieldTokenizationError start', error);
 
-    const handler = await this.braintreeManager.paymentProviders.getCreditCardHandler();
+    const handler = await this.braintreeManager.paymentProviders.creditCardHandler.get();
 
     console.error('handleHostedFieldTokenizationError handler', handler, error);
 

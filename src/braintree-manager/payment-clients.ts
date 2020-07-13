@@ -1,18 +1,19 @@
 import { LazyLoaderServiceInterface } from '@internetarchive/lazy-loader-service';
 import { HostingEnvironment } from './braintree-interfaces';
+import { PromisedSingleton } from '../util/promised-singleton';
 
 export interface PaymentClientsInterface {
-  getBraintreeClient(): Promise<braintree.Client>;
-  getDataCollector(): Promise<braintree.DataCollector>;
-  getHostedFields(): Promise<braintree.HostedFields>;
-  getVenmo(): Promise<braintree.Venmo>;
-  getPayPal(): Promise<braintree.PayPalCheckout>;
-  getApplePay(): Promise<braintree.ApplePay>;
-  getGooglePayBraintreeClient(): Promise<braintree.GooglePayment>;
+  braintreeClient: PromisedSingleton<braintree.Client>;
+  dataCollector: PromisedSingleton<braintree.DataCollector>;
+  hostedFields: PromisedSingleton<braintree.HostedFields>;
+  venmo: PromisedSingleton<braintree.Venmo>;
+  payPal: PromisedSingleton<braintree.PayPalCheckout>;
+  applePay: PromisedSingleton<braintree.ApplePay>;
+  googlePayBraintreeClient: PromisedSingleton<braintree.GooglePayment>;
 
-  getGooglePaymentsClient(): Promise<google.payments.api.PaymentsClient>;
+  googlePaymentsClient: PromisedSingleton<google.payments.api.PaymentsClient>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getPaypalLibrary(): Promise<any>;
+  paypalLibrary: PromisedSingleton<any>;
 }
 
 /**
@@ -27,140 +28,86 @@ export interface PaymentClientsInterface {
  * @implements {PaymentClientsInterface}
  */
 export class PaymentClients implements PaymentClientsInterface {
-  /**
-   * The PayPal library loaded from the script tag.
-   *
-   * This is needed to configure the PayPal button. The Braintree library does not handle this.
-   *
-   * @type {object} PayPal library
-   * @memberof PaymentClients
-   */
+  braintreeClient: PromisedSingleton<braintree.Client>;
+  dataCollector: PromisedSingleton<braintree.DataCollector>;
+  hostedFields: PromisedSingleton<braintree.HostedFields>;
+  venmo: PromisedSingleton<braintree.Venmo>;
+  payPal: PromisedSingleton<braintree.PayPalCheckout>;
+  applePay: PromisedSingleton<braintree.ApplePay>;
+  googlePayBraintreeClient: PromisedSingleton<braintree.GooglePayment>;
+
+  googlePaymentsClient: PromisedSingleton<google.payments.api.PaymentsClient>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async getPaypalLibrary(): Promise<any> {
-    if (window.paypal) {
-      return window.paypal;
-    }
-    await this.lazyLoader.loadScript({
-      src: 'https://www.paypalobjects.com/api/checkout.js',
-      attributes: [
-        { key: 'data-version-4', value: '' },
-        { key: 'log-level', value: 'warn' },
-      ],
-    });
-    return window.paypal;
-  }
+  paypalLibrary: PromisedSingleton<any>;
 
-  async getGooglePaymentsClient(): Promise<google.payments.api.PaymentsClient> {
-    await this.lazyLoader.loadScript({ src: 'https://pay.google.com/gp/p/js/pay.js' });
-    const paymentsClient = new google.payments.api.PaymentsClient({
-      environment: 'TEST', // Or 'PRODUCTION'
-    });
-    return paymentsClient;
-  }
+  constructor(lazyLoader: LazyLoaderServiceInterface, environment: HostingEnvironment) {
+    this.lazyLoader = lazyLoader;
+    this.environment = environment;
 
-  /**
-   * The Braintree client from Braintree.
-   *
-   * @readonly
-   * @type {(braintree.Client | undefined)}
-   * @memberof BraintreeManager
-   */
-  async getBraintreeClient(): Promise<braintree.Client> {
-    if (window.braintree?.client) {
-      return window.braintree.client;
-    }
-    await this.loadBraintreeScript('client');
-    return window.braintree.client;
-  }
+    this.braintreeClient = new PromisedSingleton<braintree.Client>(
+      this.loadBraintreeScript('client').then(() => {
+        return window.braintree.client;
+      }),
+    );
 
-  /**
-   * The Braintree Data Collector
-   *
-   * @readonly
-   * @type {(braintree.Client | undefined)}
-   * @memberof BraintreeManager
-   */
-  async getDataCollector(): Promise<braintree.DataCollector> {
-    if (window.braintree?.dataCollector) {
-      return window.braintree.dataCollector;
-    }
-    await this.loadBraintreeScript('data-collector');
-    return window.braintree.dataCollector;
-  }
+    this.dataCollector = new PromisedSingleton<braintree.DataCollector>(
+      this.loadBraintreeScript('data-collector').then(() => {
+        return window.braintree.dataCollector;
+      }),
+    );
 
-  /**
-   * The HostedFields client from Braintree.
-   *
-   * @readonly
-   * @type {(braintree.HostedFields | undefined)}
-   * @memberof BraintreeManager
-   */
-  async getHostedFields(): Promise<braintree.HostedFields> {
-    if (window.braintree?.hostedFields) {
-      return window.braintree.hostedFields;
-    }
-    await this.loadBraintreeScript('hosted-fields');
-    return window.braintree.hostedFields;
-  }
+    this.hostedFields = new PromisedSingleton<braintree.HostedFields>(
+      this.loadBraintreeScript('hosted-fields').then(() => {
+        return window.braintree.hostedFields;
+      }),
+    );
 
-  /**
-   * The Venmo client from Braintree.
-   *
-   * @readonly
-   * @type {(braintree.Venmo | undefined)}
-   * @memberof BraintreeManager
-   */
-  async getVenmo(): Promise<braintree.Venmo> {
-    if (window.braintree?.venmo) {
-      return window.braintree.venmo;
-    }
-    await this.loadBraintreeScript('venmo');
-    return window.braintree.venmo;
-  }
+    this.venmo = new PromisedSingleton<braintree.Venmo>(
+      this.loadBraintreeScript('venmo').then(() => {
+        return window.braintree.venmo;
+      }),
+    );
 
-  /**
-   * The PayPalCheckout client from Braintree.
-   *
-   * @readonly
-   * @type {(braintree.PayPalCheckout | undefined)}
-   * @memberof BraintreeManager
-   */
-  async getPayPal(): Promise<braintree.PayPalCheckout> {
-    if (window.braintree?.paypalCheckout) {
-      return window.braintree.paypalCheckout;
-    }
-    await this.loadBraintreeScript('paypal-checkout');
-    return window.braintree.paypalCheckout;
-  }
+    this.payPal = new PromisedSingleton<braintree.PayPalCheckout>(
+      this.loadBraintreeScript('paypal-checkout').then(() => {
+        return window.braintree.paypalCheckout;
+      }),
+    );
 
-  /**
-   * The Apple Pay client from Braintree.
-   *
-   * @readonly
-   * @type {(braintree.ApplePay | undefined)}
-   * @memberof BraintreeManager
-   */
-  async getApplePay(): Promise<braintree.ApplePay> {
-    if (window.braintree?.applePay) {
-      return window.braintree.applePay;
-    }
-    await this.loadBraintreeScript('apple-pay');
-    return window.braintree.applePay;
-  }
+    this.applePay = new PromisedSingleton<braintree.ApplePay>(
+      this.loadBraintreeScript('apple-pay').then(() => {
+        return window.braintree.applePay;
+      }),
+    );
 
-  /**
-   * The Google Pay client from Braintree.
-   *
-   * @readonly
-   * @type {(braintree.GooglePay)}
-   * @memberof BraintreeManager
-   */
-  async getGooglePayBraintreeClient(): Promise<braintree.GooglePayment> {
-    if (window.braintree?.googlePayment) {
-      return window.braintree.googlePayment;
-    }
-    await this.loadBraintreeScript('google-payment');
-    return window.braintree.googlePayment;
+    this.googlePayBraintreeClient = new PromisedSingleton<braintree.GooglePayment>(
+      this.loadBraintreeScript('google-payment').then(() => {
+        return window.braintree.googlePayment;
+      }),
+    );
+
+    this.googlePaymentsClient = new PromisedSingleton<google.payments.api.PaymentsClient>(
+      this.lazyLoader.loadScript({ src: 'https://pay.google.com/gp/p/js/pay.js' }).then(() => {
+        return new google.payments.api.PaymentsClient({
+          environment: 'TEST', // Or 'PRODUCTION'
+        });
+      }),
+    );
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.paypalLibrary = new PromisedSingleton<any>(
+      this.lazyLoader
+        .loadScript({
+          src: 'https://www.paypalobjects.com/api/checkout.js',
+          attributes: [
+            { key: 'data-version-4', value: '' },
+            { key: 'log-level', value: 'warn' },
+          ],
+        })
+        .then(() => {
+          return window.paypal;
+        }),
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -174,11 +121,6 @@ export class PaymentClients implements PaymentClientsInterface {
   private braintreeVersion = '3.62.2';
 
   private environment: HostingEnvironment = HostingEnvironment.Development;
-
-  constructor(lazyLoader: LazyLoaderServiceInterface, environment: HostingEnvironment) {
-    this.lazyLoader = lazyLoader;
-    this.environment = environment;
-  }
 
   private lazyLoader: LazyLoaderServiceInterface;
 }

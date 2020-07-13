@@ -29,8 +29,8 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
   // GooglePayFlowHandlerInterface conformance
   async paymentInitiated(donationInfo: DonationPaymentInfo): Promise<void> {
     this.donationFlowModalManager.showProcessingModal();
-    const handler = await this.braintreeManager?.paymentProviders.getGooglePayHandler();
-    const instance = await handler.getInstance();
+    const handler = await this.braintreeManager?.paymentProviders.googlePayHandler.get();
+    const instance = await handler.instance.get();
 
     const paymentDataRequest = await instance.createPaymentDataRequest({
       emailRequired: true,
@@ -49,10 +49,9 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
     };
 
     console.debug('paymentDataRequest', cardPaymentMethod, paymentDataRequest);
-    const client = await handler.getPaymentsClient();
 
     try {
-      const paymentData = await client.loadPaymentData(paymentDataRequest);
+      const paymentData = await handler.paymentsClient.loadPaymentData(paymentDataRequest);
       const result: braintree.GooglePaymentTokenizePayload = await instance.parseResponse(
         paymentData,
       );

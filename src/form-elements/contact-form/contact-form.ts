@@ -5,7 +5,6 @@ import {
   customElement,
   CSSResult,
   TemplateResult,
-  unsafeCSS,
   query,
 } from 'lit-element';
 
