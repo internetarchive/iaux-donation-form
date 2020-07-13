@@ -36,19 +36,20 @@ export class PaymentProviders implements PaymentProvidersInterface {
     }
 
     if (this.creditCardHandlerPromise) {
-      this.creditCardHandlerPromise = this.creditCardHandlerPromise.then(handler => { return handler });
+      this.creditCardHandlerPromise = this.creditCardHandlerPromise.then(handler => {
+        return handler;
+      });
       return this.creditCardHandlerPromise;
     }
 
-    this.creditCardHandlerPromise = this.paymentClients.getHostedFields()
-      .then(client => {
-        this.creditCardHandlerCache = new CreditCardHandler({
-          braintreeManager: this.braintreeManager,
-          hostedFieldClient: client,
-          hostedFieldConfig: this.hostedFieldConfig,
-        });
-        return this.creditCardHandlerCache;
+    this.creditCardHandlerPromise = this.paymentClients.getHostedFields().then(client => {
+      this.creditCardHandlerCache = new CreditCardHandler({
+        braintreeManager: this.braintreeManager,
+        hostedFieldClient: client,
+        hostedFieldConfig: this.hostedFieldConfig,
       });
+      return this.creditCardHandlerCache;
+    });
 
     return this.creditCardHandlerPromise;
   }
@@ -61,20 +62,21 @@ export class PaymentProviders implements PaymentProvidersInterface {
     }
 
     if (this.applePayHandlerPromise) {
-      this.applePayHandlerPromise = this.applePayHandlerPromise.then(handler => { return handler });
+      this.applePayHandlerPromise = this.applePayHandlerPromise.then(handler => {
+        return handler;
+      });
       return this.applePayHandlerPromise;
     }
 
     const applePaySessionManager = new ApplePaySessionManager();
-    this.applePayHandlerPromise = this.paymentClients.getApplePay()
-      .then(client => {
-        this.applePayHandlerCache = new ApplePayHandler(
-          this.braintreeManager,
-          client,
-          applePaySessionManager,
-        );
-        return this.applePayHandlerCache;
-      });
+    this.applePayHandlerPromise = this.paymentClients.getApplePay().then(client => {
+      this.applePayHandlerCache = new ApplePayHandler(
+        this.braintreeManager,
+        client,
+        applePaySessionManager,
+      );
+      return this.applePayHandlerCache;
+    });
 
     return this.applePayHandlerPromise;
   }
@@ -91,20 +93,23 @@ export class PaymentProviders implements PaymentProvidersInterface {
     }
 
     if (this.venmoHandlerPromise) {
-      this.venmoHandlerPromise = this.venmoHandlerPromise.then(handler => { return handler });
+      this.venmoHandlerPromise = this.venmoHandlerPromise.then(handler => {
+        return handler;
+      });
       return this.venmoHandlerPromise;
     }
 
-    this.venmoHandlerPromise = this.paymentClients.getVenmo()
-      .then(client => {
-        if (!this.venmoProfileId) { return undefined; }
-        this.venmoHandlerCache = new VenmoHandler({
-          braintreeManager: this.braintreeManager,
-          venmoClient: client,
-          venmoProfileId: this.venmoProfileId,
-        });
-        return this.venmoHandlerCache;
+    this.venmoHandlerPromise = this.paymentClients.getVenmo().then(client => {
+      if (!this.venmoProfileId) {
+        return undefined;
+      }
+      this.venmoHandlerCache = new VenmoHandler({
+        braintreeManager: this.braintreeManager,
+        venmoClient: client,
+        venmoProfileId: this.venmoProfileId,
       });
+      return this.venmoHandlerCache;
+    });
 
     return this.venmoHandlerPromise;
   }
@@ -117,23 +122,24 @@ export class PaymentProviders implements PaymentProvidersInterface {
     }
 
     if (this.paypalHandlerPromise) {
-      this.paypalHandlerPromise = this.paypalHandlerPromise.then(handler => { return handler });
+      this.paypalHandlerPromise = this.paypalHandlerPromise.then(handler => {
+        return handler;
+      });
       return this.paypalHandlerPromise;
     }
 
     const paypalLibrary = this.paymentClients.getPaypalLibrary();
     const client = this.paymentClients.getPayPal();
 
-    this.paypalHandlerPromise = Promise.all([client, paypalLibrary])
-      .then(values => {
-        this.paypalHandlerCache = new PayPalHandler({
-          braintreeManager: this.braintreeManager,
-          paypalClient: values[0],
-          paypalLibrary: values[1],
-          hostingEnvironment: this.hostingEnvironment,
-        });
-        return this.paypalHandlerCache;
-      })
+    this.paypalHandlerPromise = Promise.all([client, paypalLibrary]).then(values => {
+      this.paypalHandlerCache = new PayPalHandler({
+        braintreeManager: this.braintreeManager,
+        paypalClient: values[0],
+        paypalLibrary: values[1],
+        hostingEnvironment: this.hostingEnvironment,
+      });
+      return this.paypalHandlerCache;
+    });
 
     return this.paypalHandlerPromise;
   }
@@ -146,23 +152,26 @@ export class PaymentProviders implements PaymentProvidersInterface {
     }
 
     if (this.googlePayHandlerPromise) {
-      this.googlePayHandlerPromise = this.googlePayHandlerPromise.then(handler => { return handler });
+      this.googlePayHandlerPromise = this.googlePayHandlerPromise.then(handler => {
+        return handler;
+      });
       return this.googlePayHandlerPromise;
     }
 
     const googlePaymentsClient = this.paymentClients.getGooglePaymentsClient();
     const braintreeClient = this.paymentClients.getGooglePayBraintreeClient();
 
-    this.googlePayHandlerPromise = Promise.all([braintreeClient, googlePaymentsClient])
-      .then(values => {
+    this.googlePayHandlerPromise = Promise.all([braintreeClient, googlePaymentsClient]).then(
+      values => {
         this.googlePayHandlerCache = new GooglePayHandler({
           braintreeManager: this.braintreeManager,
           googlePayMerchantId: this.googlePayMerchantId,
           googlePayBraintreeClient: values[0],
           googlePaymentsClient: values[1],
         });
-        return this.googlePayHandlerCache
-      })
+        return this.googlePayHandlerCache;
+      },
+    );
 
     return this.googlePayHandlerPromise;
   }

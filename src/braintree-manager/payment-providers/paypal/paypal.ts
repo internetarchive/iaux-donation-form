@@ -49,15 +49,18 @@ export class PayPalHandler implements PayPalHandlerInterface {
     // we only want one instance of this to be created so this chains the promise
     // calls if multiple callers request the instance
     if (this.paypalInstancePromise) {
-      this.paypalInstancePromise = this.paypalInstancePromise.then(handler => { return handler });
+      this.paypalInstancePromise = this.paypalInstancePromise.then(handler => {
+        return handler;
+      });
       return this.paypalInstancePromise;
     }
 
-    this.paypalInstancePromise = this.braintreeManager.getInstance()
+    this.paypalInstancePromise = this.braintreeManager
+      .getInstance()
       .then(braintreeClient => {
         return this.paypalClient.create({
           client: braintreeClient,
-        })
+        });
       })
       .then(instance => {
         this.paypalInstance = instance;

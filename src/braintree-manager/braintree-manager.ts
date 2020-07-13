@@ -51,13 +51,16 @@ export class BraintreeManager implements BraintreeManagerInterface {
     // calls if multiple callers request the instance
     // const originalPromise = this.clientInstancePromise;
     if (this.clientInstancePromise) {
-      this.clientInstancePromise = this.clientInstancePromise.then(handler => { return handler });
+      this.clientInstancePromise = this.clientInstancePromise.then(handler => {
+        return handler;
+      });
       return this.clientInstancePromise;
     }
 
-    this.clientInstancePromise = this.paymentClients.getBraintreeClient()
+    this.clientInstancePromise = this.paymentClients
+      .getBraintreeClient()
       .then((client: braintree.Client) => {
-        return client?.create({ authorization: this.authorizationToken })
+        return client?.create({ authorization: this.authorizationToken });
       })
       .then((clientInstance: braintree.Client) => {
         this.braintreeInstance = clientInstance;
@@ -83,7 +86,9 @@ export class BraintreeManager implements BraintreeManagerInterface {
   private deviceDataCollectionStarted = false;
 
   private async collectDeviceData(): Promise<void> {
-    if (this.deviceDataCollectionStarted) { return; }
+    if (this.deviceDataCollectionStarted) {
+      return;
+    }
     this.deviceDataCollectionStarted = true;
 
     const instance = await this.getInstance();
@@ -92,7 +97,8 @@ export class BraintreeManager implements BraintreeManagerInterface {
     }
 
     console.debug('collectDeviceData, starting dataCollector');
-    this.paymentClients.getDataCollector()
+    this.paymentClients
+      .getDataCollector()
       .then((collector?: braintree.DataCollector) => {
         return collector?.create({ client: instance, kount: false, paypal: true });
       })

@@ -61,14 +61,19 @@ export class ContactForm extends LitElement {
               placeholder: 'Email',
               required: true,
               fieldType: 'email',
-              icon: emailImg
+              icon: emailImg,
             })}
           </div>
         </fieldset>
 
         <fieldset>
           <div class="row has-icon">
-            ${this.generateInput({ id: 'firstName', placeholder: 'First name', required: true, icon: personImg })}
+            ${this.generateInput({
+              id: 'firstName',
+              placeholder: 'First name',
+              required: true,
+              icon: personImg,
+            })}
           </div>
 
           <div class="row">
@@ -82,7 +87,7 @@ export class ContactForm extends LitElement {
               id: 'streetAddress',
               placeholder: 'Address Line 1',
               required: true,
-              icon: localePinImg
+              icon: localePinImg,
             })}
           </div>
           <div class="row">
@@ -118,7 +123,9 @@ export class ContactForm extends LitElement {
     console.debug('inputChanged');
     const isValid = this.form.checkValidity();
     // only dispatch if there is a change
-    if (isValid === this.formValid) { return; }
+    if (isValid === this.formValid) {
+      return;
+    }
     this.formValid = isValid;
     const event = new CustomEvent('form-validity-changed', { detail: { isValid } });
     this.dispatchEvent(event);
@@ -155,9 +162,11 @@ export class ContactForm extends LitElement {
       <div class="input-wrapper countryCodeAlpha2">
         <div class="icon-container"></div>
         <select>
-          ${Object.keys(countries).map((key) => {
+          ${Object.keys(countries).map(key => {
             const name = countries[key];
-            return html`<option value=${key} ?selected=${key === selectedCountry}>${name}</option>`;
+            return html`
+              <option value=${key} ?selected=${key === selectedCountry}>${name}</option>
+            `;
           })}
         </select>
       </div>
@@ -199,7 +208,6 @@ export class ContactForm extends LitElement {
     const fieldFontFamily = css`var(--contactFieldFontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
     const fieldFontSize = css`var(--contactFieldFontSize, 16px)`;
 
-
     const fieldWidth = css`calc(100% - ${iconSpacerWidth})`;
 
     return css`
@@ -237,7 +245,7 @@ export class ContactForm extends LitElement {
         color: #333;
         font-size: ${fieldFontSize};
         padding: 0;
-        font-family: ${fieldFontFamily}
+        font-family: ${fieldFontFamily};
       }
 
       .input-wrapper {
@@ -256,7 +264,7 @@ export class ContactForm extends LitElement {
       }
 
       .input-wrapper .icon-container svg {
-        height: 16px
+        height: 16px;
       }
 
       .input-wrapper.countryCodeAlpha2 {

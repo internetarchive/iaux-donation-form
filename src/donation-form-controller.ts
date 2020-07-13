@@ -107,7 +107,12 @@ export class DonationFormController extends LitElement {
       });
     }
 
-    if (changedProperties.has('braintreeManager') || changedProperties.has('recaptchaManager') || changedProperties.has('modalManager') || changedProperties.has('recaptchaElement')) {
+    if (
+      changedProperties.has('braintreeManager') ||
+      changedProperties.has('recaptchaManager') ||
+      changedProperties.has('modalManager') ||
+      changedProperties.has('recaptchaElement')
+    ) {
       this.setupPaymentFlowHandlers();
     }
   }
@@ -127,7 +132,12 @@ export class DonationFormController extends LitElement {
   }
 
   private setupPaymentFlowHandlers(): void {
-    if (!this.braintreeManager || !this.recaptchaManager || !this.modalManager || !this.recaptchaElement) {
+    if (
+      !this.braintreeManager ||
+      !this.recaptchaManager ||
+      !this.modalManager ||
+      !this.recaptchaElement
+    ) {
       return;
     }
 
@@ -232,8 +242,7 @@ export class DonationFormController extends LitElement {
             <div id="paypal-button"></div>
           </div>
 
-          <slot name="recaptcha" slot="recaptcha">
-          </slot>
+          <slot name="recaptcha" slot="recaptcha"> </slot>
         </donation-form>
       </div>
 
@@ -319,7 +328,7 @@ export class DonationFormController extends LitElement {
         }
 
         .donation-form-controller-container .braintree-input-wrapper .icon-container svg {
-          height: 16px
+          height: 16px;
         }
       </style>
     `;

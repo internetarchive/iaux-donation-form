@@ -63,23 +63,25 @@ export class GooglePayHandler implements GooglePayHandlerInterface {
     // we only want one instance of this to be created so this chains the promise
     // calls if multiple callers request the instance
     if (this.googlePayInstancePromise) {
-      this.googlePayInstancePromise = this.googlePayInstancePromise.then(handler => { return handler });
+      this.googlePayInstancePromise = this.googlePayInstancePromise.then(handler => {
+        return handler;
+      });
       return this.googlePayInstancePromise;
     }
 
-    this.googlePayInstancePromise = this.braintreeManager.getInstance()
+    this.googlePayInstancePromise = this.braintreeManager
+      .getInstance()
       .then(braintreeInstance => {
-        return this.googlePayBraintreeClient.create(
-          {
-            client: braintreeInstance,
-            googlePayVersion: 2,
-            googleMerchantId: this.googlePayMerchantId
-          })
-        })
-        .then(instance => {
-          this.googlePayInstance = instance;
-          return instance;
+        return this.googlePayBraintreeClient.create({
+          client: braintreeInstance,
+          googlePayVersion: 2,
+          googleMerchantId: this.googlePayMerchantId,
         });
+      })
+      .then(instance => {
+        this.googlePayInstance = instance;
+        return instance;
+      });
 
     return this.googlePayInstancePromise;
   }

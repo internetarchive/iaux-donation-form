@@ -104,6 +104,7 @@ export class DonationForm extends LitElement {
       </form-section>
 
       <form-section number="5">
+        <slot name="recaptcha"></slot>
         <button
           id="donate-button"
           @click=${this.donateClicked}

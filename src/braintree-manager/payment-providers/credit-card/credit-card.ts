@@ -39,18 +39,20 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
     // calls if multiple callers request the instance
     // const originalPromise = this.clientInstancePromise;
     if (this.hostedFieldsSetupPromise) {
-      this.hostedFieldsSetupPromise = this.hostedFieldsSetupPromise.then(handler => { return handler });
+      this.hostedFieldsSetupPromise = this.hostedFieldsSetupPromise.then(handler => {
+        return handler;
+      });
       return this.hostedFieldsSetupPromise;
     }
 
-    this.hostedFieldsSetupPromise = this.braintreeManager.getInstance()
+    this.hostedFieldsSetupPromise = this.braintreeManager
+      .getInstance()
       .then(braintreeClient => {
-        return this.hostedFieldClient.create(
-          {
-            client: braintreeClient,
-            styles: this.hostedFieldConfig.hostedFieldStyle,
-            fields: this.hostedFieldConfig.hostedFieldFieldOptions,
-          })
+        return this.hostedFieldClient.create({
+          client: braintreeClient,
+          styles: this.hostedFieldConfig.hostedFieldStyle,
+          fields: this.hostedFieldConfig.hostedFieldFieldOptions,
+        });
       })
       .then(instance => {
         this.hostedFieldsInstance = instance;

@@ -171,10 +171,6 @@ export class PaymentClients implements PaymentClientsInterface {
     return this.lazyLoader.loadScript({ src: url });
   }
 
-  private promisedSleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
   private braintreeVersion = '3.62.2';
 
   private environment: HostingEnvironment = HostingEnvironment.Development;

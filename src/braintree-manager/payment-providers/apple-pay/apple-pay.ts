@@ -59,25 +59,30 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
     // we only want one instance of this to be created so this chains the promise
     // calls if multiple callers request the instance
     if (this.applePayInstancePromise) {
-      this.applePayInstancePromise = this.applePayInstancePromise.then(handler => { return handler });
+      this.applePayInstancePromise = this.applePayInstancePromise.then(handler => {
+        return handler;
+      });
       return this.applePayInstancePromise;
     }
 
-    this.applePayInstancePromise = this.braintreeManager.getInstance().then(async braintreeClient => {
-      const instance = await this.applePayClient.create({
-        client: braintreeClient,
+    this.applePayInstancePromise = this.braintreeManager
+      .getInstance()
+      .then(async braintreeClient => {
+        const instance = await this.applePayClient.create({
+          client: braintreeClient,
+        });
+
+        const canMakePayments = await ApplePaySession.canMakePaymentsWithActiveCard(
+          instance.merchantIdentifier,
+        );
+
+        if (canMakePayments) {
+          this.applePayInstance = instance;
+          return this.applePayInstance;
+        } else {
+          return undefined;
+        }
       });
-
-      const canMakePayments = await ApplePaySession.canMakePaymentsWithActiveCard(
-        instance.merchantIdentifier);
-
-      if (canMakePayments) {
-        this.applePayInstance = instance;
-        return this.applePayInstance;
-      } else {
-        return undefined;
-      }
-    });
 
     return this.applePayInstancePromise;
   }

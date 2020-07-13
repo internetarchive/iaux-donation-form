@@ -41,11 +41,14 @@ export class VenmoHandler implements VenmoHandlerInterface {
     // we only want one instance of this to be created so this chains the promise
     // calls if multiple callers request the instance
     if (this.venmoInstancePromise) {
-      this.venmoInstancePromise = this.venmoInstancePromise.then(handler => { return handler });
+      this.venmoInstancePromise = this.venmoInstancePromise.then(handler => {
+        return handler;
+      });
       return this.venmoInstancePromise;
     }
 
-    this.venmoInstancePromise = this.braintreeManager.getInstance()
+    this.venmoInstancePromise = this.braintreeManager
+      .getInstance()
       .then(braintreeInstance => {
         return this.venmoClient.create({
           client: braintreeInstance,
@@ -57,7 +60,7 @@ export class VenmoHandler implements VenmoHandlerInterface {
         return instance;
       });
 
-    return this.venmoInstancePromise
+    return this.venmoInstancePromise;
   }
 
   async startPayment(): Promise<braintree.VenmoTokenizePayload> {

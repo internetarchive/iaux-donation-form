@@ -142,7 +142,8 @@ export class EditDonation extends LitElement {
         />
 
         <label for="custom-amount-button">
-          <span class="custom-amount-text">Custom: $</span><input
+          <span class="custom-amount-text">Custom: $</span
+          ><input
             type="text"
             id="custom-amount-input"
             value=${value}
