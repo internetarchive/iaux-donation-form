@@ -35,9 +35,9 @@ import {
   HostedFieldContainer,
 } from './braintree-manager/payment-providers/credit-card/hosted-field-container';
 
-import creditCardImg from './assets/img/contact-form-icons/ccard';
-import calendarImg from './assets/img/contact-form-icons/calendar';
-import lockImg from './assets/img/lock';
+import creditCardImg from './assets/img/icons/ccard';
+import calendarImg from './assets/img/icons/calendar';
+import lockImg from './assets/img/icons/lock';
 import { AnalyticsHandlerInterface } from './@types/analytics-handler';
 
 /**
@@ -290,6 +290,8 @@ export class DonationFormController extends LitElement {
    */
   private get getStyles(): TemplateResult {
     const fieldHeight = css`var(--fieldHeight, 30px)`;
+    const iconSpacerWidth = css`var(--fieldIconSpacerWidth, 30px)`;
+    const iconSize = css`var(--fieldIconSize, 14px)`;
 
     return html`
       <style>
@@ -324,15 +326,15 @@ export class DonationFormController extends LitElement {
         }
 
         .donation-form-controller-container .braintree-input-wrapper .icon-container {
-          width: 40px;
-          margin-left: 10px;
+          width: ${iconSpacerWidth};
           display: flex;
           align-items: center;
+          justify-content: center;
           flex-shrink: 0;
         }
 
         .donation-form-controller-container .braintree-input-wrapper .icon-container svg {
-          height: 16px;
+          height: ${iconSize};
         }
       </style>
     `;

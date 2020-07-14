@@ -12,9 +12,9 @@ import { BillingInfo } from '../../models/common/billing-info';
 import { CustomerInfo } from '../../models/common/customer-info';
 import { DonorContactInfo } from '../../models/common/donor-contact-info';
 
-import emailImg from '../../assets/img/contact-form-icons/email';
-import localePinImg from '../../assets/img/contact-form-icons/locale-pin';
-import personImg from '../../assets/img/contact-form-icons/person';
+import emailImg from '../../assets/img/icons/email';
+import localePinImg from '../../assets/img/icons/locale-pin';
+import personImg from '../../assets/img/icons/person';
 
 import countries from './countries';
 
@@ -92,7 +92,7 @@ export class ContactForm extends LitElement {
           <div class="row">
             ${this.generateInput({
               id: 'extendedAddress',
-              placeholder: 'Address Line 2',
+              placeholder: 'Address Line 2 (optional)',
               required: false,
             })}
           </div>
@@ -105,11 +105,6 @@ export class ContactForm extends LitElement {
           </div>
           <div class="row">
             ${this.countrySelector}
-            <!-- ${this.generateInput({
-              id: 'countryCodeAlpha2',
-              placeholder: 'Country',
-              required: true,
-            })} -->
           </div>
         </fieldset>
       </form>
@@ -204,11 +199,11 @@ export class ContactForm extends LitElement {
     const borderCss = css`var(--contactFormBorderCss, 1px solid #d9d9d9)`;
     const fieldHeight = css`var(--fieldHeight, 30px)`;
     const fieldSetSpacing = css`var(--fieldSetSpacing, 10px)`;
-    const iconSpacerLeftMargin = css`var(--contactFieldIconLeftMargin, 10px)`;
-    const iconSpacerWidth = css`var(--contactFieldIconSpacerWidth, 40px)`;
+    const iconSpacerWidth = css`var(--fieldIconSpacerWidth, 30px)`;
     const fieldFontFamily = css`var(--fontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
     const fieldFontSize = css`var(--contactFieldFontSize, 16px)`;
     const fieldFontColor = css`var(--inputFieldFontColor, #333)`;
+    const iconSize = css`var(--fieldIconSize, 14px)`;
 
     const fieldWidth = css`calc(100% - ${iconSpacerWidth})`;
 
@@ -264,14 +259,14 @@ export class ContactForm extends LitElement {
 
       .input-wrapper .icon-container {
         width: ${iconSpacerWidth};
-        margin-left: ${iconSpacerLeftMargin};
         display: flex;
         align-items: center;
+        justify-content: center;
         flex-shrink: 0;
       }
 
       .input-wrapper .icon-container svg {
-        height: 16px;
+        height: ${iconSize};
       }
 
       .input-wrapper.countryCodeAlpha2 {

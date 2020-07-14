@@ -34,7 +34,7 @@ import { DonationType } from './models/donation-info/donation-type';
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
 import { PaymentProvider } from './models/common/payment-provider-name';
 
-import lockImg from './assets/img/lock';
+import lockImg from './assets/img/icons/lock';
 import { FormSection } from './form-elements/form-section';
 
 @customElement('donation-form')
