@@ -37,6 +37,7 @@ export class FormSection extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
+    const numberMargin = css`var(--formSectionNumberMargin, 10px)`;
     const numberBackgroundColor = css`var(--formSectionNumberBackgroundColor, #333)`;
     const numberRadius = css`var(--formSectionNumberRadius, 12px)`;
     const numberFontSize = css`var(--formSectionNumberFontSize, 18px)`;
@@ -54,7 +55,7 @@ export class FormSection extends LitElement {
       }
 
       .right {
-        margin-left: 0.5em;
+        margin-left: ${numberMargin};
         flex: 1;
       }
 
