@@ -35,6 +35,7 @@ import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-fl
 import { PaymentProvider } from './models/common/payment-provider-name';
 
 import lockImg from './assets/img/lock';
+import { FormSection } from './form-elements/form-section';
 
 @customElement('donation-form')
 export class DonationForm extends LitElement {
@@ -59,6 +60,8 @@ export class DonationForm extends LitElement {
   @property({ type: String }) private selectedPaymentProvider?: PaymentProvider;
 
   @query('contact-form') contactForm?: ContactForm;
+
+  @query('form-section[number="4"]') contactFormSection?: FormSection;
 
   @query('donation-form-header') donationFormHeader!: DonationFormHeader;
 
@@ -90,13 +93,13 @@ export class DonationForm extends LitElement {
       </form-section>
 
       <div class="contact-form-section" class="${this.contactFormVisible ? '' : 'hidden'}">
-        ${this.contactFormSection}
+        ${this.contactFormSectionTemplate}
       </div>
       <slot name="recaptcha"></slot>
     `;
   }
 
-  get contactFormSection(): TemplateResult {
+  get contactFormSectionTemplate(): TemplateResult {
     return html`
       <form-section number="4" headline="Enter payment information">
         <contact-form @form-validity-changed=${this.contactFormValidityChanged}></contact-form>
@@ -178,8 +181,8 @@ export class DonationForm extends LitElement {
     this.creditCardVisible = true;
 
     await this.updateComplete;
-    if (this.contactForm) {
-      this.contactForm.scrollIntoView({ behavior: 'smooth' });
+    if (this.contactFormSection) {
+      this.contactFormSection.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
