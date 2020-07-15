@@ -179,23 +179,27 @@ export class DonationForm extends LitElement {
     this.selectedPaymentProvider = PaymentProvider.CreditCard;
     this.contactFormVisible = true;
     this.creditCardVisible = true;
-
-    await this.updateComplete;
-    if (this.contactFormSection) {
-      this.contactFormSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    this.scrollToContactForm();
   }
 
-  private venmoSelected(): void {
+  private async venmoSelected(): Promise<void> {
     this.selectedPaymentProvider = PaymentProvider.Venmo;
     this.contactFormVisible = true;
     this.creditCardVisible = false;
+    this.scrollToContactForm();
   }
 
   private paypalBlockerSelected(): void {
     this.contactFormVisible = false;
     this.creditCardVisible = false;
     this.showInvalidDonationInfoAlert();
+  }
+
+  private async scrollToContactForm(): Promise<void> {
+    await this.updateComplete;
+    if (this.contactFormSection) {
+      this.contactFormSection.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   private donateClicked(): void {
