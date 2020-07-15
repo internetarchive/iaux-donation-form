@@ -37,8 +37,6 @@ export class ApplePayFlowHandler
     const handler = await this.braintreeManager?.paymentProviders.applePayHandler.get();
     this.applePayDataSource = await handler?.createPaymentRequest(e, donationInfo);
 
-    console.debug('paymentInitiated, e, applePayDataSource', e, this.applePayDataSource);
-
     if (this.applePayDataSource) {
       this.applePayDataSource.delegate = this;
     }
@@ -48,8 +46,6 @@ export class ApplePayFlowHandler
     oneTimeDonationResponse: SuccessResponse,
     amount: number,
   ): Promise<void> {
-    console.debug('yesSelected, oneTimeDonationResponse', oneTimeDonationResponse, 'e', amount);
-
     const donationRequest = new DonationRequest({
       paymentMethodNonce: oneTimeDonationResponse.paymentMethodNonce,
       paymentProvider: PaymentProvider.CreditCard,
@@ -65,8 +61,6 @@ export class ApplePayFlowHandler
     });
 
     this.donationFlowModalManager.showProcessingModal();
-
-    console.debug('yesSelected, donationRequest', donationRequest);
 
     const response = await this.braintreeManager.submitDataToEndpoint(donationRequest);
 
@@ -93,7 +87,6 @@ export class ApplePayFlowHandler
 
   // MARK - ApplePaySessionDataSourceDelegate
   paymentComplete(response: DonationResponse): void {
-    console.debug('paymentComplete', response);
     if (response.success) {
       const successResponse = response.value as SuccessResponse;
       if (this.applePayDataSource?.donationInfo.donationType == DonationType.OneTime) {
