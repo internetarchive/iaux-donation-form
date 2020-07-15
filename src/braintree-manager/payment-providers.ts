@@ -1,3 +1,5 @@
+import { PromisedSingleton } from '@internetarchive/promised-singleton';
+
 import {
   CreditCardHandlerInterface,
   CreditCardHandler,
@@ -10,7 +12,6 @@ import { PaymentClientsInterface } from './payment-clients';
 import { GooglePayHandlerInterface, GooglePayHandler } from './payment-providers/google-pay';
 import { BraintreeManagerInterface, HostingEnvironment } from './braintree-interfaces';
 import { HostedFieldConfiguration } from './payment-providers/credit-card/hosted-field-configuration';
-import { PromisedSingleton } from '../util/promised-singleton';
 
 export interface PaymentProvidersInterface {
   creditCardHandler: PromisedSingleton<CreditCardHandlerInterface>;
@@ -66,25 +67,25 @@ export class PaymentProviders implements PaymentProvidersInterface {
     this.hostingEnvironment = options.hostingEnvironment;
     this.hostedFieldConfig = options.hostedFieldConfig;
 
-    this.creditCardHandler = new PromisedSingleton<CreditCardHandlerInterface>(
-      this.paymentClients.hostedFields.get().then(client => {
+    this.creditCardHandler = new PromisedSingleton<CreditCardHandlerInterface>({
+      generator: this.paymentClients.hostedFields.get().then(client => {
         return new CreditCardHandler({
           braintreeManager: this.braintreeManager,
           hostedFieldClient: client,
           hostedFieldConfig: this.hostedFieldConfig,
         });
       }),
-    );
+    });
 
-    this.applePayHandler = new PromisedSingleton<ApplePayHandlerInterface>(
-      this.paymentClients.applePay.get().then(client => {
+    this.applePayHandler = new PromisedSingleton<ApplePayHandlerInterface>({
+      generator: this.paymentClients.applePay.get().then(client => {
         const applePaySessionManager = new ApplePaySessionManager();
         return new ApplePayHandler(this.braintreeManager, client, applePaySessionManager);
       }),
-    );
+    });
 
-    this.venmoHandler = new PromisedSingleton<VenmoHandlerInterface | undefined>(
-      this.paymentClients.venmo.get().then(client => {
+    this.venmoHandler = new PromisedSingleton<VenmoHandlerInterface | undefined>({
+      generator: this.paymentClients.venmo.get().then(client => {
         if (!this.venmoProfileId) {
           return undefined;
         }
@@ -94,10 +95,10 @@ export class PaymentProviders implements PaymentProvidersInterface {
           venmoProfileId: this.venmoProfileId,
         });
       }),
-    );
+    });
 
-    this.paypalHandler = new PromisedSingleton<PayPalHandlerInterface>(
-      new Promise(async resolve => {
+    this.paypalHandler = new PromisedSingleton<PayPalHandlerInterface>({
+      generator: new Promise(async resolve => {
         const paypalLibrary = this.paymentClients.paypalLibrary.get();
         const client = this.paymentClients.payPal.get();
 
@@ -110,10 +111,10 @@ export class PaymentProviders implements PaymentProvidersInterface {
         });
         resolve(handler);
       }),
-    );
+    });
 
-    this.googlePayHandler = new PromisedSingleton<GooglePayHandlerInterface>(
-      new Promise(async resolve => {
+    this.googlePayHandler = new PromisedSingleton<GooglePayHandlerInterface>({
+      generator: new Promise(async resolve => {
         const googlePaymentsClient = this.paymentClients.googlePaymentsClient.get();
         const braintreeClient = this.paymentClients.googlePayBraintreeClient.get();
 
@@ -127,6 +128,6 @@ export class PaymentProviders implements PaymentProvidersInterface {
           resolve(handler);
         });
       }),
-    );
+    });
   }
 }

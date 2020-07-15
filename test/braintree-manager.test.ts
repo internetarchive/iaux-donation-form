@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { expect } from '@open-wc/testing';
 
+import { PromisedSingleton } from '@internetarchive/promised-singleton';
+
 import { BraintreeManager } from '../src/braintree-manager/braintree-manager';
 import { PaymentClientsInterface } from '../src/braintree-manager/payment-clients';
 import {
@@ -15,7 +17,6 @@ import {
   HostedFieldContainerInterface,
   HostedFieldContainer,
 } from '../src/braintree-manager/payment-providers/credit-card/hosted-field-container';
-import { PromisedSingleton } from '../src/util/promised-singleton';
 import {
   Client,
   DataCollector,
@@ -39,52 +40,52 @@ class MockPaymentClients implements PaymentClientsInterface {
   paypalLibrary: PromisedSingleton<any>;
 
   constructor() {
-    this.braintreeClient = new PromisedSingleton<Client>(
-      new Promise((resolve, reject) => {
+    this.braintreeClient = new PromisedSingleton<Client>({
+      generator: new Promise((resolve, reject) => {
         reject('Not implemented');
       }),
-    );
-    this.dataCollector = new PromisedSingleton<DataCollector>(
-      new Promise((resolve, reject) => {
+    });
+    this.dataCollector = new PromisedSingleton<DataCollector>({
+      generator: new Promise((resolve, reject) => {
         reject('Not implemented');
       }),
-    );
-    this.hostedFields = new PromisedSingleton<HostedFields>(
-      new Promise((resolve, reject) => {
+    });
+    this.hostedFields = new PromisedSingleton<HostedFields>({
+      generator: new Promise((resolve, reject) => {
         reject('Not implemented');
       }),
-    );
-    this.venmo = new PromisedSingleton<Venmo>(
-      new Promise((resolve, reject) => {
+    });
+    this.venmo = new PromisedSingleton<Venmo>({
+      generator: new Promise((resolve, reject) => {
         reject('Not implemented');
       }),
-    );
-    this.payPal = new PromisedSingleton<PayPalCheckout>(
-      new Promise((resolve, reject) => {
+    });
+    this.payPal = new PromisedSingleton<PayPalCheckout>({
+      generator: new Promise((resolve, reject) => {
         reject('Not implemented');
       }),
-    );
-    this.applePay = new PromisedSingleton<ApplePay>(
-      new Promise((resolve, reject) => {
+    });
+    this.applePay = new PromisedSingleton<ApplePay>({
+      generator: new Promise((resolve, reject) => {
         reject('Not implemented');
       }),
-    );
-    this.googlePayBraintreeClient = new PromisedSingleton<GooglePayment>(
-      new Promise((resolve, reject) => {
+    });
+    this.googlePayBraintreeClient = new PromisedSingleton<GooglePayment>({
+      generator: new Promise((resolve, reject) => {
         reject('Not implemented');
       }),
-    );
-    this.googlePaymentsClient = new PromisedSingleton<google.payments.api.PaymentsClient>(
-      new Promise((resolve, reject) => {
+    });
+    this.googlePaymentsClient = new PromisedSingleton<google.payments.api.PaymentsClient>({
+      generator: new Promise((resolve, reject) => {
         reject('Not implemented');
       }),
-    );
+    });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.paypalLibrary = new PromisedSingleton<any>(
-      new Promise((resolve, reject) => {
+    this.paypalLibrary = new PromisedSingleton<any>({
+      generator: new Promise((resolve, reject) => {
         reject('Not implemented');
       }),
-    );
+    });
   }
 }
 

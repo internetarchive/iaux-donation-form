@@ -1,5 +1,6 @@
+import { PromisedSingleton } from '@internetarchive/promised-singleton';
+
 import { BraintreeManagerInterface } from '../braintree-interfaces';
-import { PromisedSingleton } from '../../util/promised-singleton';
 
 export interface VenmoHandlerInterface {
   instance: PromisedSingleton<braintree.Venmo>;
@@ -20,14 +21,14 @@ export class VenmoHandler implements VenmoHandlerInterface {
     this.venmoClient = options.venmoClient;
     this.venmoProfileId = options.venmoProfileId;
 
-    this.instance = new PromisedSingleton<braintree.Venmo>(
-      this.braintreeManager.instance.get().then(braintreeInstance => {
+    this.instance = new PromisedSingleton<braintree.Venmo>({
+      generator: this.braintreeManager.instance.get().then(braintreeInstance => {
         return this.venmoClient.create({
           client: braintreeInstance,
           profileId: this.venmoProfileId,
         });
       }),
-    );
+    });
   }
 
   private braintreeManager: BraintreeManagerInterface;

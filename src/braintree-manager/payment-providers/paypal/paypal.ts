@@ -1,10 +1,10 @@
+import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { BraintreeManagerInterface, HostingEnvironment } from '../../braintree-interfaces';
 import { DonationPaymentInfo } from '../../../models/donation-info/donation-payment-info';
 import {
   PayPalButtonDataSourceInterface,
   PayPalButtonDataSource,
 } from './paypal-button-datasource';
-import { PromisedSingleton } from '../../../util/promised-singleton';
 
 export interface PayPalHandlerInterface {
   instance: PromisedSingleton<braintree.PayPalCheckout | undefined>;
@@ -31,13 +31,13 @@ export class PayPalHandler implements PayPalHandlerInterface {
     this.paypalLibrary = options.paypalLibrary;
     this.hostingEnvironment = options.hostingEnvironment;
 
-    this.instance = new PromisedSingleton<braintree.PayPalCheckout | undefined>(
-      this.braintreeManager.instance.get().then(braintreeClient => {
+    this.instance = new PromisedSingleton<braintree.PayPalCheckout | undefined>({
+      generator: this.braintreeManager.instance.get().then(braintreeClient => {
         return this.paypalClient.create({
           client: braintreeClient,
         });
       }),
-    );
+    });
   }
 
   private braintreeManager: BraintreeManagerInterface;

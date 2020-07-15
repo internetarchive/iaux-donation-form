@@ -1,9 +1,9 @@
+import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { BraintreeManagerInterface } from '../../braintree-interfaces';
 import { ApplePaySessionManagerInterface } from './apple-pay-session-manager';
 import { DonationType } from '../../../models/donation-info/donation-type';
 import { ApplePaySessionDataSource } from './apple-pay-session-datasource';
 import { DonationPaymentInfo } from '../../../models/donation-info/donation-payment-info';
-import { PromisedSingleton } from '../../../util/promised-singleton';
 
 export interface ApplePayHandlerInterface {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,8 +29,8 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
     this.applePaySessionManager = applePaySessionManager;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.instance = new PromisedSingleton<any | undefined>(
-      new Promise(resolve => {
+    this.instance = new PromisedSingleton<any | undefined>({
+      generator: new Promise(resolve => {
         if (!this.applePaySessionManager.canMakePayments()) {
           return resolve(undefined);
         }
@@ -51,7 +51,7 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
           }
         });
       }),
-    );
+    });
   }
 
   private braintreeManager: BraintreeManagerInterface;

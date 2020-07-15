@@ -1,7 +1,7 @@
+import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { BraintreeManagerInterface } from '../../braintree-interfaces';
 import { HostedFieldConfiguration } from './hosted-field-configuration';
 import { HostedFieldName } from './hosted-field-container';
-import { PromisedSingleton } from '../../../util/promised-singleton';
 
 export interface CreditCardHandlerInterface {
   instance: PromisedSingleton<braintree.HostedFields | undefined>;
@@ -22,15 +22,15 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
     this.hostedFieldClient = options.hostedFieldClient;
     this.hostedFieldConfig = options.hostedFieldConfig;
 
-    this.instance = new PromisedSingleton<braintree.HostedFields | undefined>(
-      this.braintreeManager.instance.get().then(braintreeClient => {
+    this.instance = new PromisedSingleton<braintree.HostedFields | undefined>({
+      generator: this.braintreeManager.instance.get().then(braintreeClient => {
         return this.hostedFieldClient.create({
           client: braintreeClient,
           styles: this.hostedFieldConfig.hostedFieldStyle,
           fields: this.hostedFieldConfig.hostedFieldFieldOptions,
         });
       }),
-    );
+    });
   }
 
   private braintreeManager: BraintreeManagerInterface;

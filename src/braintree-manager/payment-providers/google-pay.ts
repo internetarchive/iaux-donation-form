@@ -1,5 +1,6 @@
+import { PromisedSingleton } from '@internetarchive/promised-singleton';
+
 import { BraintreeManagerInterface } from '../braintree-interfaces';
-import { PromisedSingleton } from '../../util/promised-singleton';
 
 export interface GooglePayHandlerInterface {
   paymentsClient: google.payments.api.PaymentsClient;
@@ -44,15 +45,17 @@ export class GooglePayHandler implements GooglePayHandlerInterface {
     this.googlePayBraintreeClient = options.googlePayBraintreeClient;
     this.paymentsClient = options.googlePaymentsClient;
 
-    this.instance = new PromisedSingleton<braintree.GooglePayment>(
-      this.braintreeManager.instance.get().then((braintreeInstance: braintree.Client) => {
-        return this.googlePayBraintreeClient.create({
-          client: braintreeInstance,
-          googlePayVersion: 2,
-          googleMerchantId: this.googlePayMerchantId,
-        });
-      }),
-    );
+    this.instance = new PromisedSingleton<braintree.GooglePayment>({
+      generator: this.braintreeManager.instance
+        .get()
+        .then((braintreeInstance: braintree.Client) => {
+          return this.googlePayBraintreeClient.create({
+            client: braintreeInstance,
+            googlePayVersion: 2,
+            googleMerchantId: this.googlePayMerchantId,
+          });
+        }),
+    });
   }
 
   private braintreeManager: BraintreeManagerInterface;

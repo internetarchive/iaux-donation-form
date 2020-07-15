@@ -9,7 +9,7 @@ import {
 } from './braintree-interfaces';
 import { SuccessResponse } from '../models/response-models/success-models/success-response';
 import { HostedFieldConfiguration } from './payment-providers/credit-card/hosted-field-configuration';
-import { PromisedSingleton } from '../util/promised-singleton';
+import { PromisedSingleton } from '@internetarchive/promised-singleton';
 
 export class BraintreeManager implements BraintreeManagerInterface {
   get deviceData(): string | undefined {
@@ -69,7 +69,6 @@ export class BraintreeManager implements BraintreeManagerInterface {
       return;
     }
 
-    console.debug('collectDeviceData, starting dataCollector');
     this.paymentClients.dataCollector
       .get()
       .then((collector?: braintree.DataCollector) => {
@@ -113,10 +112,10 @@ export class BraintreeManager implements BraintreeManagerInterface {
       hostedFieldConfig: options.hostedFieldConfig,
     });
 
-    this.instance = new PromisedSingleton<braintree.Client>(
-      this.paymentClients.braintreeClient.get().then((client: braintree.Client) => {
+    this.instance = new PromisedSingleton<braintree.Client>({
+      generator: this.paymentClients.braintreeClient.get().then((client: braintree.Client) => {
         return client?.create({ authorization: this.authorizationToken });
       }),
-    );
+    });
   }
 }

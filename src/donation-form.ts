@@ -239,7 +239,8 @@ export class DonationForm extends LitElement {
 
   /** @inheritdoc */
   firstUpdated(): void {
-    smoothscroll.polyfill();
+    console.debug('smoothscroll', smoothscroll);
+    if (smoothscroll.polyfill) smoothscroll.polyfill();
     this.readQueryParams();
   }
 

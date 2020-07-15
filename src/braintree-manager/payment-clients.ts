@@ -1,6 +1,6 @@
 import { LazyLoaderServiceInterface } from '@internetarchive/lazy-loader-service';
+import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { HostingEnvironment } from './braintree-interfaces';
-import { PromisedSingleton } from '../util/promised-singleton';
 
 export interface PaymentClientsInterface {
   braintreeClient: PromisedSingleton<braintree.Client>;
@@ -44,59 +44,61 @@ export class PaymentClients implements PaymentClientsInterface {
     this.lazyLoader = lazyLoader;
     this.environment = environment;
 
-    this.braintreeClient = new PromisedSingleton<braintree.Client>(
-      this.loadBraintreeScript('client').then(() => {
+    this.braintreeClient = new PromisedSingleton<braintree.Client>({
+      generator: this.loadBraintreeScript('client').then(() => {
         return window.braintree.client;
       }),
-    );
+    });
 
-    this.dataCollector = new PromisedSingleton<braintree.DataCollector>(
-      this.loadBraintreeScript('data-collector').then(() => {
+    this.dataCollector = new PromisedSingleton<braintree.DataCollector>({
+      generator: this.loadBraintreeScript('data-collector').then(() => {
         return window.braintree.dataCollector;
       }),
-    );
+    });
 
-    this.hostedFields = new PromisedSingleton<braintree.HostedFields>(
-      this.loadBraintreeScript('hosted-fields').then(() => {
+    this.hostedFields = new PromisedSingleton<braintree.HostedFields>({
+      generator: this.loadBraintreeScript('hosted-fields').then(() => {
         return window.braintree.hostedFields;
       }),
-    );
+    });
 
-    this.venmo = new PromisedSingleton<braintree.Venmo>(
-      this.loadBraintreeScript('venmo').then(() => {
+    this.venmo = new PromisedSingleton<braintree.Venmo>({
+      generator: this.loadBraintreeScript('venmo').then(() => {
         return window.braintree.venmo;
       }),
-    );
+    });
 
-    this.payPal = new PromisedSingleton<braintree.PayPalCheckout>(
-      this.loadBraintreeScript('paypal-checkout').then(() => {
+    this.payPal = new PromisedSingleton<braintree.PayPalCheckout>({
+      generator: this.loadBraintreeScript('paypal-checkout').then(() => {
         return window.braintree.paypalCheckout;
       }),
-    );
+    });
 
-    this.applePay = new PromisedSingleton<braintree.ApplePay>(
-      this.loadBraintreeScript('apple-pay').then(() => {
+    this.applePay = new PromisedSingleton<braintree.ApplePay>({
+      generator: this.loadBraintreeScript('apple-pay').then(() => {
         return window.braintree.applePay;
       }),
-    );
+    });
 
-    this.googlePayBraintreeClient = new PromisedSingleton<braintree.GooglePayment>(
-      this.loadBraintreeScript('google-payment').then(() => {
+    this.googlePayBraintreeClient = new PromisedSingleton<braintree.GooglePayment>({
+      generator: this.loadBraintreeScript('google-payment').then(() => {
         return window.braintree.googlePayment;
       }),
-    );
+    });
 
-    this.googlePaymentsClient = new PromisedSingleton<google.payments.api.PaymentsClient>(
-      this.lazyLoader.loadScript({ src: 'https://pay.google.com/gp/p/js/pay.js' }).then(() => {
-        return new google.payments.api.PaymentsClient({
-          environment: 'TEST', // Or 'PRODUCTION'
-        });
-      }),
-    );
+    this.googlePaymentsClient = new PromisedSingleton<google.payments.api.PaymentsClient>({
+      generator: this.lazyLoader
+        .loadScript({ src: 'https://pay.google.com/gp/p/js/pay.js' })
+        .then(() => {
+          return new google.payments.api.PaymentsClient({
+            environment: 'TEST', // Or 'PRODUCTION'
+          });
+        }),
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.paypalLibrary = new PromisedSingleton<any>(
-      this.lazyLoader
+    this.paypalLibrary = new PromisedSingleton<any>({
+      generator: this.lazyLoader
         .loadScript({
           src: 'https://www.paypalobjects.com/api/checkout.js',
           attributes: [
@@ -107,7 +109,7 @@ export class PaymentClients implements PaymentClientsInterface {
         .then(() => {
           return window.paypal;
         }),
-    );
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
