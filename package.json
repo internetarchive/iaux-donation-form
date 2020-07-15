@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/donation-form",
-  "version": "0.0.0-alpha.28",
+  "version": "0.0.0-alpha.29",
   "description": "The Internet Archive Donation Form",
   "license": "AGPL-3.0-only",
   "main": "dist/index.js",
@@ -27,7 +27,7 @@
     "test:watch": "concurrently --kill-others --names tsc,karma \"npm run tsc:watch\" \"karma start --auto-watch=true --single-run=false\""
   },
   "dependencies": {
-    "@internetarchive/lazy-loader-service": "0.0.0-alpha.2",
+    "@internetarchive/lazy-loader-service": "0.0.0-alpha.4",
     "@internetarchive/modal-manager": "0.0.0-alpha.8",
     "@types/smoothscroll-polyfill": "^0.3.1",
     "currency.js": "^1.2.2",
