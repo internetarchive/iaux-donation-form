@@ -50,7 +50,7 @@ import { AnalyticsHandlerInterface } from './@types/analytics-handler';
  */
 @customElement('donation-form-controller')
 export class DonationFormController extends LitElement {
-  @property({ type: String }) environment: HostingEnvironment = HostingEnvironment.Development;
+  @property({ type: String }) environment?: HostingEnvironment;
 
   @property({ type: String }) braintreeAuthToken?: string;
 
@@ -76,6 +76,8 @@ export class DonationFormController extends LitElement {
 
   @property({ type: Object }) private paymentFlowHandlers?: PaymentFlowHandlersInterface;
 
+  @property({ type: Object }) private paymentClients?: PaymentClientsInterface;
+
   @query('donation-form') private donationForm!: DonationForm;
 
   @query('#braintree-creditcard') private braintreeNumberInput!: HTMLInputElement;
@@ -86,17 +88,14 @@ export class DonationFormController extends LitElement {
 
   private lazyLoaderService: LazyLoaderServiceInterface = new LazyLoaderService();
 
-  private paymentClients: PaymentClientsInterface = new PaymentClients(
-    this.lazyLoaderService,
-    this.environment,
-  );
-
   /** @inheritdoc */
   updated(changedProperties: PropertyValues): void {
-    console.debug('updated', changedProperties);
     if (
-      changedProperties.has('braintreeAuthToken') ||
-      (changedProperties.has('endpointManager') && this.braintreeManager === undefined)
+      this.braintreeManager === undefined &&
+      (changedProperties.has('paymentClients') ||
+        changedProperties.has('braintreeAuthToken') ||
+        changedProperties.has('endpointManager') ||
+        changedProperties.has('environment'))
     ) {
       this.setupBraintreeManager();
     }
@@ -116,10 +115,19 @@ export class DonationFormController extends LitElement {
     ) {
       this.setupPaymentFlowHandlers();
     }
+
+    if (changedProperties.has('environment') && this.environment) {
+      this.paymentClients = new PaymentClients(this.lazyLoaderService, this.environment);
+    }
   }
 
   private setupBraintreeManager(): void {
-    if (this.braintreeAuthToken && this.endpointManager) {
+    if (
+      this.braintreeAuthToken &&
+      this.endpointManager &&
+      this.paymentClients &&
+      this.environment
+    ) {
       this.braintreeManager = new BraintreeManager({
         paymentClients: this.paymentClients,
         endpointManager: this.endpointManager,
@@ -127,7 +135,7 @@ export class DonationFormController extends LitElement {
         venmoProfileId: this.venmoProfileId,
         googlePayMerchantId: this.googlePayMerchantId,
         hostedFieldConfig: this.hostedFieldConfig,
-        hostingEnvironment: HostingEnvironment.Development,
+        hostingEnvironment: this.environment,
       });
     }
   }
@@ -207,7 +215,7 @@ export class DonationFormController extends LitElement {
   render(): TemplateResult {
     return html`
       <div class="donation-form-controller-container">
-        <donation-form .braintreeManager=${this.braintreeManager}>
+        <donation-form .environment=${this.environment} .braintreeManager=${this.braintreeManager}>
           <!--
             Why are these slots here?
 

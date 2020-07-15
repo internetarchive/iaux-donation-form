@@ -91,7 +91,8 @@ export class PaymentClients implements PaymentClientsInterface {
         .loadScript({ src: 'https://pay.google.com/gp/p/js/pay.js' })
         .then(() => {
           return new google.payments.api.PaymentsClient({
-            environment: 'TEST', // Or 'PRODUCTION'
+            environment:
+              this.environment === HostingEnvironment.Development ? 'TEST' : 'PRODUCTION',
           });
         }),
     });
