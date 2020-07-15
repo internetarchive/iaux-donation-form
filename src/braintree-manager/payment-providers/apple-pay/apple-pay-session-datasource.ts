@@ -6,7 +6,6 @@ import {
   DonationRequest,
   DonationRequestCustomFields,
 } from '../../../models/request-models/donation-request';
-import { DonationType } from '../../../models/donation-info/donation-type';
 import { DonationResponse } from '../../../models/response-models/donation-response';
 import { PaymentProvider } from '../../../models/common/payment-provider-name';
 
@@ -85,8 +84,8 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
     const billingContact = payment.billingContact;
     const addressLines = billingContact?.addressLines;
 
-    let line1 = undefined;
-    let line2 = undefined;
+    let line1: string | undefined = undefined;
+    let line2: string | undefined = undefined;
 
     if (addressLines) {
       line1 = addressLines[0];
@@ -116,7 +115,7 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
       paymentProvider: PaymentProvider.ApplePay,
       paymentMethodNonce: payload.nonce,
       amount: this.donationInfo.total,
-      donationType: DonationType.OneTime,
+      donationType: this.donationInfo.donationType,
       customer: customerInfo,
       billing: billingInfo,
       customFields: customFields,
