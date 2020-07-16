@@ -35,6 +35,8 @@ import {
   HostedFieldContainer,
 } from './braintree-manager/payment-providers/credit-card/hosted-field-container';
 
+import './form-elements/badged-input';
+
 import creditCardImg from './assets/img/icons/ccard';
 import calendarImg from './assets/img/icons/calendar';
 import lockImg from './assets/img/icons/lock';
@@ -230,20 +232,17 @@ export class DonationFormController extends LitElement {
           -->
           <div slot="braintree-hosted-fields">
             <div class="braintree-row">
-              <div class="braintree-input-wrapper creditcard">
-                <div class="icon-container">${creditCardImg}</div>
+              <badged-input .icon=${creditCardImg} class="creditcard">
                 <div class="braintree-input" id="braintree-creditcard"></div>
-              </div>
+              </badged-input>
             </div>
             <div class="braintree-row">
-              <div class="braintree-input-wrapper expiration">
-                <div class="icon-container">${calendarImg}</div>
+              <badged-input .icon=${calendarImg} class="expiration">
                 <div class="braintree-input" id="braintree-expiration"></div>
-              </div>
-              <div class="braintree-input-wrapper cvv">
-                <div class="icon-container">${lockImg}</div>
+              </badged-input>
+              <badged-input .icon=${lockImg} class="cvv">
                 <div class="braintree-input" id="braintree-cvv"></div>
-              </div>
+              </badged-input>
             </div>
           </div>
 
@@ -297,10 +296,6 @@ export class DonationFormController extends LitElement {
    * @memberof IADonationFormController
    */
   private get getStyles(): TemplateResult {
-    const fieldHeight = css`var(--fieldHeight, 30px)`;
-    const iconSpacerWidth = css`var(--fieldIconSpacerWidth, 30px)`;
-    const iconSize = css`var(--fieldIconSize, 14px)`;
-
     return html`
       <style>
         .donation-form-controller-container donation-form:focus {
@@ -318,31 +313,12 @@ export class DonationFormController extends LitElement {
           display: flex;
         }
 
-        .donation-form-controller-container .braintree-input-wrapper {
+        .donation-form-controller-container badged-input {
           width: 100%;
-          outline: 1px solid #d9d9d9;
-          display: flex;
-          height: ${fieldHeight};
-        }
-
-        .donation-form-controller-container .braintree-input-wrapper.error {
-          outline-color: red;
         }
 
         .donation-form-controller-container .braintree-input {
           width: 100%;
-        }
-
-        .donation-form-controller-container .braintree-input-wrapper .icon-container {
-          width: ${iconSpacerWidth};
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-
-        .donation-form-controller-container .braintree-input-wrapper .icon-container svg {
-          height: ${iconSize};
         }
       </style>
     `;

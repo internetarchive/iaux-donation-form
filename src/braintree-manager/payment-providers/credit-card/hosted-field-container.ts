@@ -1,3 +1,5 @@
+import { BadgedInput } from '../../../form-elements/badged-input';
+
 export enum HostedFieldName {
   Number = 'number',
   CVV = 'cvv',
@@ -31,14 +33,14 @@ export class HostedFieldContainer implements HostedFieldContainerInterface {
   markFieldErrors(fields: HostedFieldName[]): void {
     fields.forEach(field => {
       const input = this.fieldFor(field);
-      input.parentElement?.classList.add('error');
+      (input.parentElement as BadgedInput).error = true;
     });
   }
 
   removeFieldErrors(fields: HostedFieldName[]): void {
     fields.forEach(field => {
       const input = this.fieldFor(field);
-      input.parentElement?.classList.remove('error');
+      (input.parentElement as BadgedInput).error = false;
     });
   }
 

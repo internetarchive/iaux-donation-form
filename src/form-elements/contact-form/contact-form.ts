@@ -11,6 +11,9 @@ import {
 import { BillingInfo } from '../../models/common/billing-info';
 import { CustomerInfo } from '../../models/common/customer-info';
 import { DonorContactInfo } from '../../models/common/donor-contact-info';
+import { AutoCompleteFieldOptions } from './autocomplete-field-options';
+import { IconSpaceOption } from '../badged-input';
+import '../badged-input';
 
 import emailImg from '../../assets/img/icons/email';
 import localePinImg from '../../assets/img/icons/locale-pin';
@@ -28,21 +31,8 @@ export class ContactForm extends LitElement {
   @query('#locality') localityField!: HTMLInputElement;
   @query('#region') regionField!: HTMLInputElement;
   @query('#postalCode') postalCodeField!: HTMLInputElement;
-  @query('#countryCodeAlpha2') countryCodeAlpha2Field!: HTMLInputElement;
+  @query('#countryCodeAlpha2') countryCodeAlpha2Field!: HTMLSelectElement;
   @query('form') form!: HTMLFormElement;
-
-  get requriedFields(): HTMLInputElement[] {
-    return [
-      this.emailField,
-      this.firstNameField,
-      this.lastNameField,
-      this.streetAddressField,
-      this.localityField,
-      this.regionField,
-      this.postalCodeField,
-      this.countryCodeAlpha2Field,
-    ];
-  }
 
   validate(): boolean {
     const valid = this.form.reportValidity();
@@ -60,6 +50,7 @@ export class ContactForm extends LitElement {
               placeholder: 'Email',
               required: true,
               fieldType: 'email',
+              autocomplete: 'email',
               icon: emailImg,
             })}
           </div>
@@ -71,12 +62,18 @@ export class ContactForm extends LitElement {
               id: 'firstName',
               placeholder: 'First name',
               required: true,
+              autocomplete: 'given-name',
               icon: personImg,
             })}
           </div>
 
           <div class="row">
-            ${this.generateInput({ id: 'lastName', placeholder: 'Last name', required: true })}
+            ${this.generateInput({
+              id: 'lastName',
+              placeholder: 'Last name',
+              autocomplete: 'family-name',
+              required: true,
+            })}
           </div>
         </fieldset>
 
@@ -86,6 +83,7 @@ export class ContactForm extends LitElement {
               id: 'streetAddress',
               placeholder: 'Address Line 1',
               required: true,
+              autocomplete: 'address-line1',
               icon: localePinImg,
             })}
           </div>
@@ -93,15 +91,32 @@ export class ContactForm extends LitElement {
             ${this.generateInput({
               id: 'extendedAddress',
               placeholder: 'Address Line 2 (optional)',
+              autocomplete: 'address-line2',
               required: false,
             })}
           </div>
           <div class="row">
-            ${this.generateInput({ id: 'locality', placeholder: 'City', required: true })}
+            ${this.generateInput({
+              id: 'locality',
+              placeholder: 'City',
+              autocomplete: 'address-level2',
+              required: true,
+            })}
           </div>
           <div class="row">
-            ${this.generateInput({ id: 'region', placeholder: 'State / Province', required: true })}
-            ${this.generateInput({ id: 'postalCode', placeholder: 'Zip / Postal', required: true })}
+            ${this.generateInput({
+              id: 'region',
+              placeholder: 'State / Province',
+              autocomplete: 'address-level1',
+              required: true,
+            })}
+            ${this.generateInput({
+              id: 'postalCode',
+              placeholder: 'Zip / Postal',
+              autocomplete: 'postal-code',
+              required: true,
+              iconSpaceOption: IconSpaceOption.NoIconSpace,
+            })}
           </div>
           <div class="row">
             ${this.countrySelector}
@@ -114,7 +129,6 @@ export class ContactForm extends LitElement {
   private formValid = false;
 
   private inputChanged(): void {
-    console.debug('inputChanged');
     const isValid = this.form.checkValidity();
     // only dispatch if there is a change
     if (isValid === this.formValid) {
@@ -130,22 +144,25 @@ export class ContactForm extends LitElement {
     placeholder: string;
     required?: boolean;
     fieldType?: 'text' | 'email';
+    autocomplete?: AutoCompleteFieldOptions;
     icon?: TemplateResult;
+    iconSpaceOption?: IconSpaceOption;
   }): TemplateResult {
     const required = options.required ?? true;
     const fieldType = options.fieldType ?? 'text';
+    const iconOption = options.iconSpaceOption ?? IconSpaceOption.IconSpace;
 
     return html`
-      <div class="input-wrapper ${options.id}">
-        <div class="icon-container">${options.icon}</div>
+      <badged-input class=${options.id} .icon=${options.icon} .iconSpaceOption=${iconOption}>
         <input
           type=${fieldType}
           id=${options.id}
           placeholder=${options.placeholder}
+          autocomplete=${options.autocomplete ?? 'on'}
           @input=${this.inputChanged}
           ?required=${required}
         />
-      </div>
+      </badged-input>
     `;
   }
 
@@ -153,9 +170,8 @@ export class ContactForm extends LitElement {
     const selectedCountry = 'US';
 
     return html`
-      <div class="input-wrapper countryCodeAlpha2">
-        <div class="icon-container"></div>
-        <select>
+      <badged-input>
+        <select id="countryCodeAlpha2">
           ${Object.keys(countries).map(key => {
             const name = countries[key];
             return html`
@@ -163,7 +179,7 @@ export class ContactForm extends LitElement {
             `;
           })}
         </select>
-      </div>
+      </badged-input>
     `;
   }
 
@@ -181,7 +197,7 @@ export class ContactForm extends LitElement {
       locality: this.localityField.value,
       region: this.regionField.value,
       postalCode: this.postalCodeField.value,
-      countryCodeAlpha2: 'US',
+      countryCodeAlpha2: this.countryCodeAlpha2Field.value,
     });
     return billingInfo;
   }
@@ -196,14 +212,11 @@ export class ContactForm extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const borderCss = css`var(--contactFormBorderCss, 1px solid #d9d9d9)`;
-    const fieldHeight = css`var(--fieldHeight, 30px)`;
     const fieldSetSpacing = css`var(--fieldSetSpacing, 10px)`;
     const iconSpacerWidth = css`var(--fieldIconSpacerWidth, 30px)`;
     const fieldFontFamily = css`var(--fontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
     const fieldFontSize = css`var(--contactFieldFontSize, 16px)`;
     const fieldFontColor = css`var(--inputFieldFontColor, #333)`;
-    const iconSize = css`var(--fieldIconSize, 14px)`;
 
     const fieldWidth = css`calc(100% - ${iconSpacerWidth})`;
 
@@ -226,16 +239,21 @@ export class ContactForm extends LitElement {
         margin-top: 0;
       }
 
-      .row .input-wrapper {
-        margin-left: 1px;
+      badged-input {
+        width: 100%;
       }
 
-      .row .input-wrapper:first-child {
-        margin-left: 0;
+      badged-input.region {
+        width: 60%;
+      }
+
+      badged-input.postalCode {
+        margin-left: 1px;
+        width: 40%;
       }
 
       input {
-        width: ${fieldWidth};
+        width: 100%;
         border: 0;
         outline: 0;
         background: transparent;
@@ -246,38 +264,9 @@ export class ContactForm extends LitElement {
         font-family: ${fieldFontFamily};
       }
 
-      #postalCode {
+      select {
         width: 100%;
-      }
-
-      .input-wrapper {
-        width: 100%;
-        outline: ${borderCss};
-        height: ${fieldHeight};
-        display: flex;
-      }
-
-      .input-wrapper .icon-container {
-        width: ${iconSpacerWidth};
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-
-      .input-wrapper .icon-container svg {
-        height: ${iconSize};
-      }
-
-      .input-wrapper.countryCodeAlpha2 {
-        padding-top: 0;
-        padding-bottom: 0;
-        padding-right: 0;
-      }
-
-      .input-wrapper.countryCodeAlpha2 select {
-        width: ${fieldWidth};
-        height: ${fieldHeight};
+        height: 100%;
         box-sizing: border-box;
         font-weight: bold;
         font-size: ${fieldFontSize};
@@ -287,21 +276,6 @@ export class ContactForm extends LitElement {
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-      }
-
-      .input-wrapper.region {
-        width: 60%;
-      }
-
-      .input-wrapper.postalCode {
-        padding-left: 0.5em;
-        border-left: 0;
-        width: 40%;
-      }
-
-      .input-wrapper.postalCode .icon-container {
-        width: 0;
-        margin: 0;
       }
     `;
   }

@@ -72,6 +72,8 @@ export class UpsellModalContent extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
+    const noThanksFontSize = css`var(--noThanksFontSize, 14px)`;
+
     return css`
       .monthly-amount {
         background-color: #fff;
@@ -117,7 +119,6 @@ export class UpsellModalContent extends LitElement {
         border: 0;
         font-weight: bold;
         line-height: normal;
-        margin-bottom: 0.625em;
         outline: none;
         cursor: pointer;
       }
@@ -129,6 +130,7 @@ export class UpsellModalContent extends LitElement {
         color: red;
         border: 0;
         background: none;
+        font-size: ${noThanksFontSize};
         cursor: pointer;
       }
 
