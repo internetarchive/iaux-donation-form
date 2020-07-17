@@ -7,6 +7,7 @@ import {
   TemplateResult,
   property,
 } from 'lit-element';
+import { CurrencyValidator } from '../form-elements/header/currency-validator';
 
 export enum UpsellModalCTAMode {
   YesButton = 'YesButton',
@@ -19,6 +20,8 @@ export class UpsellModalContent extends LitElement {
 
   @property({ type: Number }) amount = 5;
 
+  private currencyValidator: CurrencyValidator = new CurrencyValidator();
+
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
@@ -26,7 +29,11 @@ export class UpsellModalContent extends LitElement {
         <h1>Enter your monthly amount</h1>
         <div class="amount-input">
           <span class="dollar-symbol">$</span>
-          <input type="text" value=${this.amount} @input=${this.amountChanged} />
+          <input
+            type="text"
+            value=${this.amount}
+            @input=${this.amountChanged}
+            @keydown=${this.currencyValidator.keydown} />
         </div>
       </div>
 
