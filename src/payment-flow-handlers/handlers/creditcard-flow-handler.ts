@@ -251,6 +251,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     switch (donationInfo.donationType) {
       case DonationType.OneTime:
         this.donationFlowModalManager.showUpsellModal({
+          oneTimeAmount: response.amount,
           yesSelected: (amount: number) => {
             console.debug('yesSelected', this);
             this.modalYesSelected(response, amount);

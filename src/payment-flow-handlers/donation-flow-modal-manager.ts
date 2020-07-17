@@ -47,7 +47,8 @@ export interface DonationFlowModalManagerInterface {
    * @returns {Promise<void>}
    * @memberof DonationFlowModalManagerInterface
    */
-  showUpsellModal(options?: {
+  showUpsellModal(options: {
+    oneTimeAmount: number;
     ctaMode?: UpsellModalCTAMode;
     yesSelected?: (amount: number) => void;
     noSelected?: () => void;
@@ -110,7 +111,8 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
   }
 
   /** @inheritdoc */
-  showUpsellModal(options?: {
+  showUpsellModal(options: {
+    oneTimeAmount: number;
     yesSelected?: (amount: number) => void;
     noSelected?: () => void;
     amountChanged?: (amount: number) => void;
@@ -131,8 +133,11 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     modalConfig.processingImageMode = 'complete';
     modalConfig.showProcessingIndicator = true;
 
+    const upsellAmount = this.getDefaultUpsellAmount(options.oneTimeAmount);
+
     const modalContent = html`
       <upsell-modal-content
+        .amount=${upsellAmount}
         .yesButtonMode=${options?.ctaMode ?? UpsellModalCTAMode.YesButton}
         @yesSelected=${(e: CustomEvent): void =>
           options?.yesSelected ? options.yesSelected(e.detail.amount) : undefined}
@@ -148,5 +153,20 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       customModalContent: modalContent,
       userClosedModalCallback: options?.userClosedModalCallback,
     });
+  }
+
+  private getDefaultUpsellAmount(oneTimeAmount: number): number {
+    let amount = 5;
+
+    if (oneTimeAmount <= 10)
+      amount = 5;
+    else if (oneTimeAmount > 10 && oneTimeAmount <= 25)
+      amount = 10;
+    else if (oneTimeAmount > 25 && oneTimeAmount <= 100)
+      amount = 25;
+    else if (oneTimeAmount > 100)
+      amount = 50;
+
+    return amount;
   }
 }

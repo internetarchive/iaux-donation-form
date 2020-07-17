@@ -33,7 +33,7 @@ export class BraintreeEndpointManager implements BraintreeEndpointManagerInterfa
     const upsellChargeId = options.upsellSuccessResponse?.transaction_id;
 
     const payload: { [key: string]: string | undefined } = {
-      amount: options.successResponse.amount,
+      amount: `${options.successResponse.amount}`,
       'charge-id': options.successResponse.transaction_id,
       'donation-type': options.upsellSuccessResponse
         ? 'upsell'
@@ -41,7 +41,7 @@ export class BraintreeEndpointManager implements BraintreeEndpointManagerInterfa
       first_name: options.successResponse.customer.firstName,
       last_name: options.successResponse.customer.lastName,
       email: options.successResponse.customer.email,
-      'upsell-amount': upsellAmount,
+      'upsell-amount': `${upsellAmount}`,
       'upsell-charge-id': upsellChargeId,
     };
 

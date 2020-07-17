@@ -217,6 +217,7 @@ export class PayPalFlowHandler
     console.debug('showUpsellModal', oneTimePayload, oneTimeSuccessResponse);
 
     this.donationFlowModalManager.showUpsellModal({
+      oneTimeAmount: oneTimeSuccessResponse.amount,
       amountChanged: this.upsellAmountChanged.bind(this),
       noSelected: () => {
         console.debug('noSelected');

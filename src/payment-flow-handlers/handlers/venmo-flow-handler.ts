@@ -127,6 +127,7 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
       switch (donationInfo.donationType) {
         case DonationType.OneTime:
           this.donationFlowModalManager.showUpsellModal({
+            oneTimeAmount: successResponse.amount,
             yesSelected: this.modalYesSelected.bind(this, successResponse),
             noSelected: () => {
               this.showThankYouModal({ successResponse });

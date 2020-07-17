@@ -6,7 +6,7 @@ import { DonationType } from '../../donation-info/donation-type';
 
 export class SuccessResponse {
   paymentMethodNonce: string;
-  amount: string;
+  amount: number;
   donationType: DonationType;
   transaction_id: string;
   customer_id: string;
@@ -16,7 +16,7 @@ export class SuccessResponse {
 
   constructor(params: {
     paymentMethodNonce: string;
-    amount: string;
+    amount: number;
     donationType: DonationType;
     transaction_id: string;
     customer_id: string;
