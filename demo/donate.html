@@ -76,7 +76,7 @@
 
     render(
       html`
-        <modal-manager @modeChanged=${modalModeChanged}>
+        <modal-manager-controller>
           <!--
             The PayPal buttons cannot exist in the shadowDOM so they have to be slotted
             from the top.
@@ -84,7 +84,7 @@
           <div slot="paypal-upsell-button">
             <div id="paypal-upsell-button"></div>
           </div>
-        </modal-manager>
+        </modal-manager-controller>
 
         <donation-form-controller
           environment='dev'
@@ -101,7 +101,7 @@
     );
 
     const recaptchaElement = document.querySelector('#recaptcha');
-    const modalManager = document.querySelector('modal-manager');
+    const modalManager = document.querySelector('modal-manager-controller');
     const formController = document.querySelector('donation-form-controller');
     formController.modalManager = modalManager;
     formController.recaptchaElement = recaptchaElement;
