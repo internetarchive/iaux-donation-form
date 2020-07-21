@@ -2,6 +2,12 @@ import { html } from 'lit-html';
 import { ModalConfig, ModalManagerInterface } from '@internetarchive/modal-manager';
 import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
 
+enum ModalHeaderColor {
+  Blue = '#497fbf',
+  Green = '#55A183',
+  Red = '#691916',
+}
+
 export interface DonationFlowModalManagerInterface {
   /**
    * Close the modal
@@ -77,8 +83,10 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
   /** @inheritdoc */
   showProcessingModal(): void {
     const modalConfig = new ModalConfig();
+    modalConfig.headerColor = ModalHeaderColor.Blue;
     modalConfig.showProcessingIndicator = true;
-    modalConfig.allowUserToClose = false;
+    modalConfig.closeOnBackdropClick = false;
+    modalConfig.showCloseButton = false;
     modalConfig.title = html`
       Processing...
     `;
@@ -90,6 +98,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     const modalConfig = new ModalConfig();
     modalConfig.showProcessingIndicator = true;
     modalConfig.processingImageMode = 'complete';
+    modalConfig.headerColor = ModalHeaderColor.Green;
     modalConfig.title = html`
       Thank You!
     `;
@@ -100,7 +109,9 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
 
   /** @inheritdoc */
   showErrorModal(options: { message: string; userClosedModalCallback?: () => void }): void {
-    const modalConfig = ModalConfig.errorConfig;
+    const modalConfig = new ModalConfig();
+    modalConfig.headerColor = '#691916';
+    modalConfig.headline = html`An Error Occurred`
     modalConfig.message = html`
       ${options?.message}
     `;
@@ -120,6 +131,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     ctaMode?: UpsellModalCTAMode;
   }): Promise<void> {
     const modalConfig = new ModalConfig();
+    modalConfig.headerColor = ModalHeaderColor.Green;
     modalConfig.title = html`
       Donation received
     `;
