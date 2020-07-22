@@ -185,7 +185,7 @@ export class EditDonation extends LitElement {
   }
 
   private amountChanged(amount: number): void {
-    if (amount > 10000) {
+    if (amount >= 10000) {
       this.error = html`
         To make a donation of $10,000 or more, please contact our philanthropy department at
         <a href="mailto:donations@archive.org">donations@archive.org</a>
