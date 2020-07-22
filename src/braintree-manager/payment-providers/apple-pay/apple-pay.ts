@@ -40,15 +40,7 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
             client: braintreeClient,
           });
 
-          const canMakePayments = await ApplePaySession.canMakePaymentsWithActiveCard(
-            instance.merchantIdentifier,
-          );
-
-          if (canMakePayments) {
-            return resolve(instance);
-          } else {
-            return resolve(undefined);
-          }
+          resolve(instance);
         });
       }),
     });
