@@ -318,6 +318,7 @@ export class EditDonation extends LitElement {
 
       .custom-amount-text {
         white-space: nowrap;
+        margin-right: 5px;
       }
 
       input[type='radio'] {
