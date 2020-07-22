@@ -3,8 +3,10 @@ import { CustomerInfo } from '../../common/customer-info';
 import { BillingInfo } from '../../common/billing-info';
 import { SubscriptionResponse } from './subscription-response';
 import { DonationType } from '../../donation-info/donation-type';
+import { PaymentProvider } from '../../common/payment-provider-name';
 
 export class SuccessResponse {
+  paymentProvider: PaymentProvider;
   paymentMethodNonce: string;
   amount: number;
   donationType: DonationType;
@@ -15,6 +17,7 @@ export class SuccessResponse {
   subscription?: SubscriptionResponse;
 
   constructor(params: {
+    paymentProvider: PaymentProvider;
     paymentMethodNonce: string;
     amount: number;
     donationType: DonationType;
@@ -24,6 +27,7 @@ export class SuccessResponse {
     billing: BillingInfo;
     subscription?: SubscriptionResponse;
   }) {
+    this.paymentProvider = params.paymentProvider;
     this.paymentMethodNonce = params.paymentMethodNonce;
     this.amount = params.amount;
     this.donationType = params.donationType;

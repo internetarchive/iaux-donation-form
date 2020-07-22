@@ -29,24 +29,29 @@ export class BraintreeEndpointManager implements BraintreeEndpointManagerInterfa
     successResponse: SuccessResponse;
     upsellSuccessResponse?: SuccessResponse;
   }): void {
-    const upsellAmount = options.upsellSuccessResponse?.amount;
-    const upsellChargeId = options.upsellSuccessResponse?.transaction_id;
+    const response = options.successResponse;
+    const upsellResponse = options.upsellSuccessResponse;
+
+    const upsellAmount = upsellResponse?.amount;
+    const upsellChargeId = upsellResponse?.transaction_id;
 
     const payload: { [key: string]: string | undefined } = {
-      amount: `${options.successResponse.amount}`,
-      'charge-id': options.successResponse.transaction_id,
-      'donation-type': options.upsellSuccessResponse
+      amount: `${response.amount}`,
+      'charge-id': response.transaction_id,
+      'donation-type': upsellResponse
         ? 'upsell'
-        : options.successResponse.donationType,
-      first_name: options.successResponse.customer.firstName,
-      last_name: options.successResponse.customer.lastName,
-      email: options.successResponse.customer.email,
+        : response.donationType,
+      first_name: response.customer.firstName,
+      last_name: response.customer.lastName,
+      email: response.customer.email,
       'upsell-amount': `${upsellAmount}`,
       'upsell-charge-id': upsellChargeId,
     };
 
+    const service = encodeURI(response.paymentProvider);
+
     submitFormWith({
-      action: `https://review-1963.archive.org/services/donate.php?service=PayPal`,
+      action: `https://review-1963.archive.org/services/donate.php?service=${service}`,
       fields: payload,
     });
   }
