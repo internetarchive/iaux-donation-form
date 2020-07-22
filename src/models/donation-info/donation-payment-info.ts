@@ -10,13 +10,22 @@ export class DonationPaymentInfo {
   }
 
   get fee(): number {
-    const fee = this.amount * 0.022 + 0.3;
-    return isNaN(fee) ? 0 : fee;
+    return DonationPaymentInfo.calculateFeeAmount(this.amount);
   }
 
   get total(): number {
-    const total = this.amount + this.feeAmountCovered;
+    return DonationPaymentInfo.calculateTotal(this.amount, this.coverFees);
+  }
+
+  static calculateTotal(amount: number, coverFees: boolean): number {
+    const fee = coverFees ? this.calculateFeeAmount(amount) : 0;
+    const total = amount + fee;
     return isNaN(total) ? 0 : total;
+  }
+
+  static calculateFeeAmount(amount: number): number {
+    const fee = amount * 0.022 + 0.3;
+    return isNaN(fee) ? 0 : fee;
   }
 
   static get default(): DonationPaymentInfo {

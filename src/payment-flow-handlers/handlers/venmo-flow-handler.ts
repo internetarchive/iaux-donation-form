@@ -99,14 +99,17 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
     contactInfo: DonorContactInfo,
     donationInfo: DonationPaymentInfo,
   ): Promise<void> {
-    console.debug('handleTokenizationResult', payload, contactInfo, donationInfo);
+    // This is interesting. In Safari, `donationInfo` actually comes through as a DonationPaymentInfo object,
+    // but in Chrome, it comes through as a plain object so you can't call `.total()` on it to get the total
+    // amount and instead have to calculate the total
+    const total = DonationPaymentInfo.calculateTotal(donationInfo.amount, donationInfo.coverFees);
 
     const donationRequest = new DonationRequest({
       paymentMethodNonce: payload.nonce,
       paymentProvider: PaymentProvider.Venmo,
       recaptchaToken: undefined,
       deviceData: this.braintreeManager.deviceData,
-      amount: donationInfo.total,
+      amount: total,
       donationType: donationInfo.donationType,
       customer: contactInfo.customer,
       billing: contactInfo.billing,
