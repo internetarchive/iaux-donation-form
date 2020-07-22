@@ -212,13 +212,16 @@ export class ContactForm extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
+    const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 10px)`;
+    const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 30px)`;
+
     const fieldSetSpacing = css`var(--fieldSetSpacing, 10px)`;
-    const iconSpacerWidth = css`var(--fieldIconSpacerWidth, 30px)`;
     const fieldFontFamily = css`var(--fontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
     const fieldFontSize = css`var(--contactFieldFontSize, 16px)`;
     const fieldFontColor = css`var(--inputFieldFontColor, #333)`;
 
-    const fieldWidth = css`calc(100% - ${iconSpacerWidth})`;
+    const iconFieldWidth = css`calc(100% - ${iconSpacerWidth})`;
+    const noIconFieldWidth = css`calc(100% - ${noIconSpacerWidth})`;
 
     return css`
       fieldset {
@@ -252,8 +255,16 @@ export class ContactForm extends LitElement {
         width: 40%;
       }
 
+      #region {
+        width: ${iconFieldWidth};
+      }
+
+      #postalCode {
+        width: ${noIconFieldWidth};
+      }
+
       input {
-        width: 100%;
+        width: ${iconFieldWidth};
         border: 0;
         outline: 0;
         background: transparent;
@@ -265,7 +276,7 @@ export class ContactForm extends LitElement {
       }
 
       select {
-        width: 100%;
+        width: ${iconFieldWidth};
         height: 100%;
         box-sizing: border-box;
         font-weight: bold;

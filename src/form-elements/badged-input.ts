@@ -44,11 +44,12 @@ export class BadgedInput extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const outlineCss = css`var(--contactFormFieldBorder, 1px solid #d9d9d9)`;
-    const outlineErrorCss = css`var(--contactFormFieldBorderErrorColor, red)`;
-    const iconSize = css`var(--contactFormFieldIconSize, 14px)`;
-    const iconSpacerWidth = css`var(--contactFormFieldIconSpacerWidth, 30px)`;
-    const fieldHeight = css`var(--contactFormFieldHeight, 30px)`;
+    const outlineCss = css`var(--badgedInputBorder, 1px solid #d9d9d9)`;
+    const outlineErrorCss = css`var(--badgedInputBorderErrorColor, red)`;
+    const iconSize = css`var(--badgedInputIconSize, 14px)`;
+    const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 30px)`;
+    const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 10px)`;
+    const fieldHeight = css`var(--badgedInputHeight, 30px)`;
 
     return css`
       .input-wrapper {
@@ -63,7 +64,7 @@ export class BadgedInput extends LitElement {
       }
 
       .input-wrapper.no-icon-space .icon-container {
-        width: 10px;
+        width: ${noIconSpacerWidth};
       }
 
       .icon-container {
