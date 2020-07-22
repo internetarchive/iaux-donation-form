@@ -79,7 +79,8 @@ export class UpsellModalContent extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const noThanksFontSize = css`var(--noThanksFontSize, 14px)`;
+    const noThanksFontSize = css`var(--upsellNoThanksFontSize, 14px)`;
+    const amountInputOffset = css`var(--upsellAmountInputOffset, -10px)`;
 
     return css`
       .monthly-amount {
@@ -98,6 +99,10 @@ export class UpsellModalContent extends LitElement {
         line-height: 1.2em;
         margin: 0;
         padding: 0.5rem 0 0 0;
+      }
+
+      .amount-input {
+        transform: translate(${amountInputOffset}, 0); /* translate slightly to center the input */
       }
 
       .amount-input .dollar-symbol {
