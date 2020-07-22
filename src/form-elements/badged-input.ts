@@ -44,7 +44,7 @@ export class BadgedInput extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const outlineCss = css`var(--badgedInputBorder, 1px solid #d9d9d9)`;
+    const outlineCss = css`var(--inputBorder, 1px solid #d9d9d9)`;
     const outlineErrorCss = css`var(--badgedInputBorderErrorColor, red)`;
     const iconSize = css`var(--badgedInputIconSize, 14px)`;
     const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 30px)`;

@@ -270,6 +270,7 @@ export class EditDonation extends LitElement {
     const coverFeesFontWeightCss = css`var(--coverFeesFontWeight, bold)`;
     const customAmountWidth = css`var(--customAmountWidth, 40px)`;
     const fieldFontColor = css`var(--inputFieldFontColor, #333)`;
+    const customAmountBorderCss = css`var(--inputBorder, 1px solid #d9d9d9)`;
 
     return css`
       .errors {
@@ -366,7 +367,13 @@ export class EditDonation extends LitElement {
       #custom-amount-input {
         width: ${customAmountWidth};
         font-size: 16px;
+        font-weight: bold;
         color: ${fieldFontColor};
+        padding: 1px;
+        border: ${customAmountBorderCss};
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
       }
     `;
   }
