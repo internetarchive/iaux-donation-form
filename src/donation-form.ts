@@ -1,5 +1,3 @@
-import * as smoothscroll from 'smoothscroll-polyfill';
-
 import {
   LitElement,
   html,
@@ -198,7 +196,7 @@ export class DonationForm extends LitElement {
   private async scrollToContactForm(): Promise<void> {
     await this.updateComplete;
     if (this.contactFormSection) {
-      this.contactFormSection.scrollIntoView({ behavior: 'smooth' });
+      this.contactForm?.focus();
     }
   }
 
@@ -239,8 +237,6 @@ export class DonationForm extends LitElement {
 
   /** @inheritdoc */
   firstUpdated(): void {
-    console.debug('smoothscroll', smoothscroll);
-    if (smoothscroll.polyfill) smoothscroll.polyfill();
     this.readQueryParams();
   }
 

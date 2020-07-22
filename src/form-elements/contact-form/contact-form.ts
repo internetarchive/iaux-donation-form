@@ -39,6 +39,10 @@ export class ContactForm extends LitElement {
     return valid;
   }
 
+  focus(): void {
+    this.emailField.focus();
+  }
+
   /** @inheritdoc */
   render(): TemplateResult {
     return html`

@@ -28,14 +28,13 @@
   },
   "dependencies": {
     "@internetarchive/lazy-loader-service": "0.0.0-alpha.4",
-    "@internetarchive/modal-manager": "0.0.0-alpha.14",
+    "@internetarchive/modal-manager": "0.0.0-alpha.16",
     "@internetarchive/promised-singleton": "0.0.0-alpha.1",
     "@types/smoothscroll-polyfill": "^0.3.1",
     "currency.js": "^1.2.2",
     "lit-element": "^2.2.1",
     "lit-html": "^1.0.0",
-    "nanoevents": "^5.1.8",
-    "smoothscroll-polyfill": "^0.4.4"
+    "nanoevents": "^5.1.8"
   },
   "devDependencies": {
     "@open-wc/eslint-config": "^1.0.0",
