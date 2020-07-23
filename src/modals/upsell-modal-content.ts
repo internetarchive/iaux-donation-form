@@ -6,6 +6,7 @@ import {
   CSSResult,
   TemplateResult,
   property,
+  query,
 } from 'lit-element';
 import { CurrencyValidator } from '../form-elements/header/currency-validator';
 
@@ -20,6 +21,10 @@ export class UpsellModalContent extends LitElement {
 
   @property({ type: Number }) amount = 5;
 
+  @property({ type: Object }) error?: TemplateResult;
+
+  @query('#amount-input') amountInput!: HTMLInputElement;
+
   private currencyValidator: CurrencyValidator = new CurrencyValidator();
 
   /** @inheritdoc */
@@ -30,12 +35,14 @@ export class UpsellModalContent extends LitElement {
         <div class="amount-input">
           <span class="dollar-symbol">$</span>
           <input
+            id="amount-input"
             type="text"
             value=${this.amount}
             @input=${this.amountChanged}
             @keydown=${this.currencyValidator.keydown}
           />
         </div>
+        <div class="error">${this.error}</div>
       </div>
 
       ${this.yesButton}
@@ -50,7 +57,7 @@ export class UpsellModalContent extends LitElement {
     switch (this.yesButtonMode) {
       case UpsellModalCTAMode.YesButton:
         return html`
-          <button class="yes-button" @click=${this.yesSelected}>
+          <button class="yes-button" @click=${this.yesSelected} .disabled=${this.error !== undefined}>
             YES, I'll become a monthly donor
           </button>
         `;
@@ -62,9 +69,40 @@ export class UpsellModalContent extends LitElement {
   }
 
   private amountChanged(e: Event): void {
-    const amount = (e.target as HTMLFormElement).value;
-    console.debug('amountChanged', e, amount);
-    this.amount = parseFloat(amount);
+    const target = e.target as HTMLInputElement;
+    const amount = target.value;
+    if (amount.length === 0) { return; }
+    this.handleCustomAmountInput(amount);
+  }
+
+  private handleCustomAmountInput(value: string): void {
+    const amount = parseFloat(value);
+    console.debug('parsed', value, amount)
+    if (isNaN(amount)) {
+      this.error = html`Please enter a valid amount.`;
+    } else {
+      this.processAmount(amount);
+    }
+  }
+
+  private processAmount(amount: number): void {
+    if (amount >= 10000) {
+      this.error = html`
+        To make a donation of $10,000 or more, please contact our philanthropy department at
+        <a href="mailto:donations@archive.org">donations@archive.org</a>
+      `;
+      return;
+    }
+
+    if (amount < 1) {
+      if (this.amountInput && this.amountInput.value.length > 0) {
+        this.error = html`The minimum donation amount is $1.`;
+      }
+      return;
+    }
+
+    this.error = undefined;
+
     const event = new CustomEvent('amountChanged', { detail: { amount: this.amount } });
     this.dispatchEvent(event);
   }
@@ -80,6 +118,8 @@ export class UpsellModalContent extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
+    const yesButtonColor = css`var(--upsellYesButtonColor, rgb(109,148,201))`;
+    const yesButtonDisabledColor = css`var(--upsellYesButtonDisabledColor, rgba(109,148,201,0.5))`;
     const noThanksFontSize = css`var(--upsellNoThanksFontSize, 14px)`;
     const amountInputOffset = css`var(--upsellAmountInputOffset, -10px)`;
 
@@ -126,7 +166,7 @@ export class UpsellModalContent extends LitElement {
         width: 100%;
         padding: 0.625em;
         margin-top: 1em;
-        background-color: #6d94c9;
+        background-color: ${yesButtonColor};
         color: #fff;
         border-radius: 5px;
         border: 0;
@@ -134,6 +174,11 @@ export class UpsellModalContent extends LitElement {
         line-height: normal;
         outline: none;
         cursor: pointer;
+      }
+
+      .yes-button:disabled {
+        background-color: ${yesButtonDisabledColor};
+        cursor: not-allowed;
       }
 
       .no-thanks-button {
@@ -149,6 +194,12 @@ export class UpsellModalContent extends LitElement {
 
       .paypal-upsell-slot {
         text-align: center;
+      }
+
+      .error {
+        font-size: 14px;
+        margin: 5px 0;
+        color: red;
       }
     `;
   }
