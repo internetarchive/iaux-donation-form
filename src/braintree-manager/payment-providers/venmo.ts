@@ -38,6 +38,7 @@ export class VenmoHandler implements VenmoHandlerInterface {
   private venmoProfileId: string;
 
   async isBrowserSupported(): Promise<boolean> {
+    if (this.isMobileFirefox()) { return false; }
     const instance = await this.instance.get();
     return instance?.isBrowserSupported() ?? false;
   }
@@ -45,5 +46,22 @@ export class VenmoHandler implements VenmoHandlerInterface {
   async startPayment(): Promise<braintree.VenmoTokenizePayload> {
     const instance = await this.instance.get();
     return instance?.tokenize();
+  }
+
+  /**
+   * Venmo does not work in mobile Firefox, but their browser detector returns supported for it.
+   *
+   * On iOS, it opens the Venmo app, but returns you to Safari.
+   * On Android, it takes you to the "Download Venmo" page.
+   *
+   * @private
+   * @returns {boolean}
+   * @memberof VenmoHandler
+   */
+  private isMobileFirefox(): boolean {
+    const isFirefoxIos = navigator.userAgent.indexOf("FxiOS") !== -1;
+    const isFirefox = navigator.userAgent.indexOf("Firefox") !== -1;
+    const isMobile = navigator.userAgent.indexOf("Mobile") !== -1;
+    return (isFirefox || isFirefoxIos) && isMobile;
   }
 }
