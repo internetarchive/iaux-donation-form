@@ -8,6 +8,8 @@ export interface CreditCardHandlerInterface {
   tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined>;
   markFieldErrors(fields: HostedFieldName[]): void;
   removeFieldErrors(fields: HostedFieldName[]): void;
+  showErrorMessage(message?: string): void;
+  hideErrorMessage(): void;
 }
 
 export class CreditCardHandler implements CreditCardHandlerInterface {
@@ -48,5 +50,13 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
 
   removeFieldErrors(fields: HostedFieldName[]): void {
     this.hostedFieldConfig.hostedFieldContainer.removeFieldErrors(fields);
+  }
+
+  showErrorMessage(message?: string): void {
+    this.hostedFieldConfig.hostedFieldContainer.showErrorMessage(message);
+  }
+
+  hideErrorMessage(): void {
+    this.hostedFieldConfig.hostedFieldContainer.hideErrorMessage();
   }
 }

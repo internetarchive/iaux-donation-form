@@ -39,9 +39,7 @@ export class BraintreeEndpointManager implements BraintreeEndpointManagerInterfa
     const payload: { [key: string]: string | undefined } = {
       amount: `${response.amount}`,
       'charge-id': response.transaction_id,
-      'donation-type': upsellResponse
-        ? 'upsell'
-        : response.donationType,
+      'donation-type': upsellResponse ? 'upsell' : response.donationType,
       first_name: response.customer.firstName,
       last_name: response.customer.lastName,
       email: response.customer.email,

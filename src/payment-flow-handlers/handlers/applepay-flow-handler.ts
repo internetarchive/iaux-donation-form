@@ -6,8 +6,6 @@ import {
 import { DonationResponse } from '../../models/response-models/donation-response';
 import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
 import { SuccessResponse } from '../../models/response-models/success-models/success-response';
-import { DonationRequest } from '../../models/request-models/donation-request';
-import { PaymentProvider } from '../../models/common/payment-provider-name';
 import { DonationType } from '../../models/donation-info/donation-type';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
 import { ErrorResponse } from '../../models/response-models/error-models/error-response';
@@ -46,26 +44,15 @@ export class ApplePayFlowHandler
     oneTimeDonationResponse: SuccessResponse,
     amount: number,
   ): Promise<void> {
-    const donationRequest = new DonationRequest({
-      paymentMethodNonce: oneTimeDonationResponse.paymentMethodNonce,
-      paymentProvider: PaymentProvider.CreditCard,
-      recaptchaToken: undefined,
-      customerId: oneTimeDonationResponse.customer_id,
-      deviceData: this.braintreeManager.deviceData,
-      amount: amount,
-      donationType: DonationType.Upsell,
-      customer: oneTimeDonationResponse.customer,
-      billing: oneTimeDonationResponse.billing,
-      customFields: undefined,
-      upsellOnetimeTransactionId: oneTimeDonationResponse.transaction_id,
-    });
-
     this.donationFlowModalManager.showProcessingModal();
 
-    const response = await this.braintreeManager.submitDataToEndpoint(donationRequest);
+    const response = await this.braintreeManager.submitUpsellDonation({
+      oneTimeDonationResponse: oneTimeDonationResponse,
+      amount: amount,
+    });
 
     if (response.success) {
-      this.showThankYouModal({
+      this.donationFlowModalManager.showThankYouModal({
         successResponse: oneTimeDonationResponse,
         upsellSuccessResponse: response.value as SuccessResponse,
       });
@@ -77,14 +64,6 @@ export class ApplePayFlowHandler
     }
   }
 
-  private showThankYouModal(options: {
-    successResponse: SuccessResponse;
-    upsellSuccessResponse?: SuccessResponse;
-  }): void {
-    this.donationFlowModalManager.showThankYouModal();
-    this.braintreeManager.donationSuccessful(options);
-  }
-
   // MARK - ApplePaySessionDataSourceDelegate
   paymentComplete(response: DonationResponse): void {
     if (response.success) {
@@ -93,11 +72,15 @@ export class ApplePayFlowHandler
         this.donationFlowModalManager.showUpsellModal({
           oneTimeAmount: successResponse.amount,
           yesSelected: this.modalYesSelected.bind(this, successResponse),
-          noSelected: this.showThankYouModal.bind(this, { successResponse }),
-          userClosedModalCallback: this.showThankYouModal.bind(this, { successResponse }),
+          noSelected: this.donationFlowModalManager.showThankYouModal.bind(this, {
+            successResponse,
+          }),
+          userClosedModalCallback: this.donationFlowModalManager.showThankYouModal.bind(this, {
+            successResponse,
+          }),
         });
       } else {
-        this.showThankYouModal({ successResponse });
+        this.donationFlowModalManager.showThankYouModal({ successResponse });
       }
     } else {
       const errorResponse = response.value as ErrorResponse;

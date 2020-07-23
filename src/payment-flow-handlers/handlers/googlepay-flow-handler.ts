@@ -1,13 +1,9 @@
 import { BraintreeManagerInterface } from '../../braintree-manager/braintree-interfaces';
 import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
-import { SuccessResponse } from '../../models/response-models/success-models/success-response';
-import { DonationRequest } from '../../models/request-models/donation-request';
 import { PaymentProvider } from '../../models/common/payment-provider-name';
-import { DonationType } from '../../models/donation-info/donation-type';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
 import { CustomerInfo } from '../../models/common/customer-info';
 import { BillingInfo } from '../../models/common/billing-info';
-import { ErrorResponse } from '../../models/response-models/error-models/error-response';
 
 export interface GooglePayFlowHandlerInterface {
   paymentInitiated(donationInfo: DonationPaymentInfo): Promise<void>;
@@ -28,7 +24,6 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
 
   // GooglePayFlowHandlerInterface conformance
   async paymentInitiated(donationInfo: DonationPaymentInfo): Promise<void> {
-    this.donationFlowModalManager.showProcessingModal();
     const handler = await this.braintreeManager?.paymentProviders.googlePayHandler.get();
     const instance = await handler.instance.get();
 
@@ -82,122 +77,19 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
         countryCodeAlpha2: billingInfo?.countryCode,
       });
 
-      const donationRequest = new DonationRequest({
+      this.donationFlowModalManager.startDonationSubmissionFlow({
+        nonce: result.nonce,
         paymentProvider: PaymentProvider.GooglePay,
-        paymentMethodNonce: result.nonce,
-
-        bin: result.details.bin, // first 6 digits of CC
-        binName: result.binData.issuingBank, // credit card bank name
-
-        amount: donationInfo.total,
-        donationType: donationInfo.donationType,
-
-        customer,
-        billing,
-        customFields: {
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          fee_amount_covered: donationInfo.feeAmountCovered,
-        },
+        bin: result.details.bin,
+        binName: result.binData.issuingBank,
+        donationInfo: donationInfo,
+        customerInfo: customer,
+        billingInfo: billing,
       });
-
-      const response = await this.braintreeManager.submitDataToEndpoint(donationRequest);
-
-      if (response.success) {
-        this.handleSuccessfulResponse(donationInfo, response.value as SuccessResponse);
-      } else {
-        const error = response.value as ErrorResponse;
-        this.donationFlowModalManager.showErrorModal({
-          message: `Error setting up donation: ${error.message}, ${error.errors}`,
-        });
-      }
 
       console.debug('result', paymentData, result);
     } catch {
       this.donationFlowModalManager.closeModal();
-    }
-  }
-
-  private handleSuccessfulResponse(
-    donationInfo: DonationPaymentInfo,
-    response: SuccessResponse,
-  ): void {
-    console.debug('handleSuccessfulResponse', this);
-    switch (donationInfo.donationType) {
-      case DonationType.OneTime:
-        this.donationFlowModalManager.showUpsellModal({
-          oneTimeAmount: response.amount,
-          yesSelected: (amount: number) => {
-            console.debug('yesSelected', this);
-            this.modalYesSelected(response, amount);
-          },
-          noSelected: () => {
-            console.debug('noSelected');
-            this.showThankYouModal({ successResponse: response });
-          },
-          userClosedModalCallback: () => {
-            console.debug('modal closed');
-            this.showThankYouModal({ successResponse: response });
-          },
-        });
-        break;
-      case DonationType.Monthly:
-        this.showThankYouModal({ successResponse: response });
-        break;
-      // This case will never be reached, it is only here for completeness.
-      // The upsell case gets handled in `modalYesSelected()` below
-      case DonationType.Upsell:
-        break;
-      default:
-        break;
-    }
-  }
-
-  private showThankYouModal(options: {
-    successResponse: SuccessResponse;
-    upsellSuccessResponse?: SuccessResponse;
-  }): void {
-    this.donationFlowModalManager.showThankYouModal();
-    this.braintreeManager.donationSuccessful(options);
-  }
-
-  private async modalYesSelected(
-    oneTimeDonationResponse: SuccessResponse,
-    amount: number,
-  ): Promise<void> {
-    console.debug('yesSelected, oneTimeDonationResponse', oneTimeDonationResponse, 'e', amount);
-
-    const donationRequest = new DonationRequest({
-      paymentMethodNonce: oneTimeDonationResponse.paymentMethodNonce,
-      paymentProvider: PaymentProvider.CreditCard,
-      recaptchaToken: undefined,
-      customerId: oneTimeDonationResponse.customer_id,
-      deviceData: this.braintreeManager.deviceData,
-      amount,
-      donationType: DonationType.Upsell,
-      customer: oneTimeDonationResponse.customer,
-      billing: oneTimeDonationResponse.billing,
-      customFields: undefined,
-      upsellOnetimeTransactionId: oneTimeDonationResponse.transaction_id,
-    });
-
-    this.donationFlowModalManager.showProcessingModal();
-
-    console.debug('yesSelected, donationRequest', donationRequest);
-
-    const response = await this.braintreeManager.submitDataToEndpoint(donationRequest);
-
-    console.debug('yesSelected, UpsellResponse', response);
-
-    if (response.success) {
-      this.showThankYouModal({
-        successResponse: oneTimeDonationResponse,
-        upsellSuccessResponse: response.value as SuccessResponse,
-      });
-    } else {
-      const error = response.value as ErrorResponse;
-      this.donationFlowModalManager.showErrorModal({
-        message: `Error setting up monthly donation: ${error.message}, ${error.errors}`,
-      });
     }
   }
 }

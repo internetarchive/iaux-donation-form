@@ -64,6 +64,10 @@ export class DonationFormController extends LitElement {
 
   @property({ type: String }) analyticsCategory = 'DonationForm';
 
+  @property({ type: String }) referrer?: string;
+
+  @property({ type: String }) loggedInUser?: string;
+
   @property({ type: Object }) endpointManager?: BraintreeEndpointManagerInterface;
 
   @property({ type: Object }) analyticsHandler?: AnalyticsHandlerInterface;
@@ -88,10 +92,20 @@ export class DonationFormController extends LitElement {
 
   @query('#braintree-expiration') private braintreeExpirationDateInput!: HTMLInputElement;
 
+  @query('#braintree-error-message') private braintreeErrorMessage!: HTMLDivElement;
+
   private lazyLoaderService: LazyLoaderServiceInterface = new LazyLoaderService();
 
   /** @inheritdoc */
   updated(changedProperties: PropertyValues): void {
+    if (changedProperties.has('referrer') && this.referrer) {
+      this.braintreeManager?.setReferrer(this.referrer);
+    }
+
+    if (changedProperties.has('loggedInUser') && this.loggedInUser) {
+      this.braintreeManager?.setLoggedInUser(this.loggedInUser);
+    }
+
     if (
       this.braintreeManager === undefined &&
       (changedProperties.has('paymentClients') ||
@@ -138,6 +152,8 @@ export class DonationFormController extends LitElement {
         googlePayMerchantId: this.googlePayMerchantId,
         hostedFieldConfig: this.hostedFieldConfig,
         hostingEnvironment: this.environment,
+        referrer: this.referrer,
+        loggedInUser: this.loggedInUser,
       });
     }
   }
@@ -202,6 +218,7 @@ export class DonationFormController extends LitElement {
       number: this.braintreeNumberInput,
       cvv: this.braintreeCVVInput,
       expirationDate: this.braintreeExpirationDateInput,
+      errorContainer: this.braintreeErrorMessage
     });
 
     const config: HostedFieldConfiguration = new HostedFieldConfiguration({
@@ -231,6 +248,7 @@ export class DonationFormController extends LitElement {
             - https://github.com/paypal/paypal-checkout-components/issues/353#issuecomment-595956216
           -->
           <div slot="braintree-hosted-fields">
+            <div id="braintree-error-message"></div>
             <div class="braintree-row">
               <badged-input .icon=${creditCardImg} class="creditcard">
                 <div class="braintree-input" id="braintree-creditcard"></div>
@@ -319,6 +337,12 @@ export class DonationFormController extends LitElement {
 
         .donation-form-controller-container .braintree-input {
           width: 100%;
+        }
+
+        .donation-form-controller-container #braintree-error-message {
+          color: red;
+          font-size: 14px;
+          margin-bottom: 6px;
         }
       </style>
     `;

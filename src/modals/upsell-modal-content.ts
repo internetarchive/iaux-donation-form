@@ -33,7 +33,8 @@ export class UpsellModalContent extends LitElement {
             type="text"
             value=${this.amount}
             @input=${this.amountChanged}
-            @keydown=${this.currencyValidator.keydown} />
+            @keydown=${this.currencyValidator.keydown}
+          />
         </div>
       </div>
 

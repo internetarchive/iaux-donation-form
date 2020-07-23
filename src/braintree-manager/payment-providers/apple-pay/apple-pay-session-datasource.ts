@@ -2,10 +2,7 @@ import { DonationPaymentInfo } from '../../../models/donation-info/donation-paym
 import { BraintreeManagerInterface } from '../../braintree-interfaces';
 import { BillingInfo } from '../../../models/common/billing-info';
 import { CustomerInfo } from '../../../models/common/customer-info';
-import {
-  DonationRequest,
-  DonationRequestCustomFields,
-} from '../../../models/request-models/donation-request';
+import { DonationRequestCustomFields } from '../../../models/request-models/donation-request';
 import { DonationResponse } from '../../../models/response-models/donation-response';
 import { PaymentProvider } from '../../../models/common/payment-provider-name';
 
@@ -111,18 +108,14 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
     // eslint-disable-next-line @typescript-eslint/camelcase
     customFields.fee_amount_covered = this.donationInfo.feeAmountCovered;
 
-    const donationRequest = new DonationRequest({
-      paymentProvider: PaymentProvider.ApplePay,
-      paymentMethodNonce: payload.nonce,
-      amount: this.donationInfo.total,
-      donationType: this.donationInfo.donationType,
-      customer: customerInfo,
-      billing: billingInfo,
-      customFields: customFields,
-    });
-
     try {
-      const donationResponse = await this.braintreeManager.submitDataToEndpoint(donationRequest);
+      const donationResponse = await this.braintreeManager.submitDonation({
+        nonce: payload.nonce,
+        paymentProvider: PaymentProvider.ApplePay,
+        donationInfo: this.donationInfo,
+        billingInfo: billingInfo,
+        customerInfo: customerInfo,
+      });
       if (donationResponse.success) {
         this.delegate?.paymentComplete(donationResponse);
         this.session.completePayment(ApplePaySession.STATUS_SUCCESS);

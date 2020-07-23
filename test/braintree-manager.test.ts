@@ -140,11 +140,13 @@ describe('Braintree Manager', () => {
     const numberField = document.createElement('input');
     const cvvField = document.createElement('input');
     const expField = document.createElement('input');
+    const errorDiv = document.createElement('div');
 
     const hostedFieldContainer: HostedFieldContainerInterface = new HostedFieldContainer({
       number: numberField,
       cvv: cvvField,
       expirationDate: expField,
+      errorContainer: errorDiv
     });
 
     const config: HostedFieldConfiguration = new HostedFieldConfiguration({

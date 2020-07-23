@@ -13,7 +13,10 @@ import { SuccessResponse } from '../../models/response-models/success-models/suc
 import { CustomerInfo } from '../../models/common/customer-info';
 import { BillingInfo } from '../../models/common/billing-info';
 import { PaymentProvider } from '../../models/common/payment-provider-name';
-import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
+import {
+  DonationFlowModalManagerInterface,
+  DonationFlowModalManager,
+} from '../donation-flow-modal-manager';
 
 export interface PayPalFlowHandlerInterface {
   updateDonationInfo(donationInfo: DonationPaymentInfo): void;
@@ -91,7 +94,6 @@ export class PayPalFlowHandler
       dataSource.donationInfo,
       options,
     );
-    // this.donationFlowModalManager.showProcessingModal();
   }
 
   async payPalPaymentAuthorized(
@@ -109,23 +111,42 @@ export class PayPalFlowHandler
 
     const donationType = dataSource.donationInfo.donationType;
 
-    const request = this.buildDonationRequest({
-      donationInfo: dataSource.donationInfo,
-      payload,
+    const details = payload?.details;
+
+    const customerInfo = new CustomerInfo({
+      email: details?.email,
+      firstName: details?.firstName,
+      lastName: details?.lastName,
     });
 
-    if (this.upsellButtonDataSourceContainer) {
-      request.upsellOnetimeTransactionId = this.upsellButtonDataSourceContainer.oneTimeSuccessResponse.transaction_id;
-    }
+    const shippingAddress = details.shippingAddress;
 
-    const response: DonationResponse = await this.braintreeManager.submitDataToEndpoint(request);
+    const billingInfo = new BillingInfo({
+      streetAddress: shippingAddress?.line1,
+      extendedAddress: shippingAddress?.line2,
+      locality: shippingAddress?.city,
+      region: shippingAddress?.state,
+      postalCode: shippingAddress?.postalCode,
+      countryCodeAlpha2: shippingAddress?.countryCode,
+    });
+
+    const oneTimeTransaction = this.upsellButtonDataSourceContainer
+      ? this.upsellButtonDataSourceContainer.oneTimeSuccessResponse.transaction_id
+      : undefined;
+
+    const response: DonationResponse = await this.braintreeManager.submitDonation({
+      nonce: payload.nonce,
+      paymentProvider: PaymentProvider.PayPal,
+      donationInfo: dataSource.donationInfo,
+      customerInfo: customerInfo,
+      billingInfo: billingInfo,
+      upsellOnetimeTransactionId: oneTimeTransaction,
+    });
 
     if (!response.success) {
       this.donationFlowModalManager.showErrorModal({
         message: 'Error setting up donation',
       });
-      // alert('ERROR DURING payPalPaymentAuthorized');
-      console.error('Error during payPalPaymentAuthorized', response);
       return;
     }
 
@@ -139,12 +160,12 @@ export class PayPalFlowHandler
       case DonationType.Monthly:
         console.debug('MONTHLY, SHOW THANKS');
         // show thank you, redirect
-        this.showThankYouModal({ successResponse });
+        this.donationFlowModalManager.showThankYouModal({ successResponse });
         break;
       case DonationType.Upsell:
         console.debug('UPSELL, SHOW THANKS');
         if (this.upsellButtonDataSourceContainer) {
-          this.showThankYouModal({
+          this.donationFlowModalManager.showThankYouModal({
             successResponse: this.upsellButtonDataSourceContainer.oneTimeSuccessResponse,
             upsellSuccessResponse: successResponse,
           });
@@ -202,14 +223,6 @@ export class PayPalFlowHandler
     }
   }
 
-  private showThankYouModal(options: {
-    successResponse: SuccessResponse;
-    upsellSuccessResponse?: SuccessResponse;
-  }): void {
-    this.donationFlowModalManager.showThankYouModal();
-    this.braintreeManager.donationSuccessful(options);
-  }
-
   private async showUpsellModal(
     oneTimePayload: paypal.TokenizePayload,
     oneTimeSuccessResponse: SuccessResponse,
@@ -221,17 +234,23 @@ export class PayPalFlowHandler
       amountChanged: this.upsellAmountChanged.bind(this),
       noSelected: () => {
         console.debug('noSelected');
-        this.showThankYouModal({ successResponse: oneTimeSuccessResponse });
+        this.donationFlowModalManager.showThankYouModal({
+          successResponse: oneTimeSuccessResponse,
+        });
       },
       ctaMode: UpsellModalCTAMode.Slot,
       userClosedModalCallback: () => {
         console.debug('userClosedModalCallback');
-        this.showThankYouModal({ successResponse: oneTimeSuccessResponse });
+        this.donationFlowModalManager.showThankYouModal({
+          successResponse: oneTimeSuccessResponse,
+        });
       },
     });
 
+    const amount = DonationFlowModalManager.getDefaultUpsellAmount(oneTimeSuccessResponse.amount);
+
     const upsellDonationInfo = new DonationPaymentInfo({
-      amount: 5, // TODO: <-- this should be dynamic based on the one-time amount
+      amount: amount,
       donationType: DonationType.Upsell,
       coverFees: false,
     });

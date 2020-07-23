@@ -137,6 +137,7 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
     this.recaptchaManager = options.recaptchaManager;
 
     this.donationFlowModalManager = new DonationFlowModalManager({
+      braintreeManager: this.braintreeManager,
       modalManager: this.modalManager,
     });
   }

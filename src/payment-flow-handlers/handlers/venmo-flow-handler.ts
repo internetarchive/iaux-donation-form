@@ -1,16 +1,12 @@
 import { BraintreeManagerInterface } from '../../braintree-manager/braintree-interfaces';
 import { DonorContactInfo } from '../../models/common/donor-contact-info';
 import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
-import { DonationRequest } from '../../models/request-models/donation-request';
 import { PaymentProvider } from '../../models/common/payment-provider-name';
 import {
   VenmoRestorationStateHandlerInterface,
   VenmoRestorationStateHandler,
 } from './venmo-restoration-state-handler';
-import { SuccessResponse } from '../../models/response-models/success-models/success-response';
-import { DonationType } from '../../models/donation-info/donation-type';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
-import { ErrorResponse } from '../../models/response-models/error-models/error-response';
 
 export interface VenmoFlowHandlerInterface {
   startup(): Promise<void>;
@@ -89,7 +85,7 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
       this.restorationStateHandler.clearState();
       this.handleTokenizationError(tokenizeError);
       this.donationFlowModalManager.showErrorModal({
-        message: 'Error loading donation information',
+        message: `Error loading donation information: ${tokenizeError}`,
       });
     }
   }
@@ -99,58 +95,15 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
     contactInfo: DonorContactInfo,
     donationInfo: DonationPaymentInfo,
   ): Promise<void> {
-    // This is interesting. In Safari, `donationInfo` actually comes through as a DonationPaymentInfo object,
-    // but in Chrome, it comes through as a plain object so you can't call `.total()` on it to get the total
-    // amount and instead have to calculate the total
-    const total = DonationPaymentInfo.calculateTotal(donationInfo.amount, donationInfo.coverFees);
-
-    const donationRequest = new DonationRequest({
-      paymentMethodNonce: payload.nonce,
-      paymentProvider: PaymentProvider.Venmo,
-      recaptchaToken: undefined,
-      deviceData: this.braintreeManager.deviceData,
-      amount: total,
-      donationType: donationInfo.donationType,
-      customer: contactInfo.customer,
-      billing: contactInfo.billing,
-      customFields: {
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        fee_amount_covered: donationInfo.feeAmountCovered,
-      },
-    });
-
-    this.donationFlowModalManager.showProcessingModal();
-
-    const response = await this.braintreeManager.submitDataToEndpoint(donationRequest);
-
     this.restorationStateHandler.clearState();
 
-    if (response.success) {
-      const successResponse = response.value as SuccessResponse;
-      switch (donationInfo.donationType) {
-        case DonationType.OneTime:
-          this.donationFlowModalManager.showUpsellModal({
-            oneTimeAmount: successResponse.amount,
-            yesSelected: this.modalYesSelected.bind(this, successResponse),
-            noSelected: () => {
-              this.showThankYouModal({ successResponse });
-            },
-            userClosedModalCallback: () => {
-              console.debug('modal closed');
-              this.showThankYouModal({ successResponse });
-            },
-          });
-          break;
-        case DonationType.Monthly:
-          this.showThankYouModal({ successResponse });
-          break;
-      }
-    } else {
-      const error = response.value as ErrorResponse;
-      this.donationFlowModalManager.showErrorModal({
-        message: `Error setting up donation: ${error.message}, ${error.errors}`,
-      });
-    }
+    this.donationFlowModalManager.startDonationSubmissionFlow({
+      nonce: payload.nonce,
+      paymentProvider: PaymentProvider.Venmo,
+      donationInfo: donationInfo,
+      customerInfo: contactInfo.customer,
+      billingInfo: contactInfo.billing,
+    });
   }
 
   private handleTokenizationError(tokenizeError: braintree.BraintreeError): void {
@@ -167,59 +120,5 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
         console.error('Error!', tokenizeError);
     }
     // alert(`Tokenization Error: ${tokenizeError.code}`);
-  }
-
-  private async modalYesSelected(
-    oneTimeDonationResponse: SuccessResponse,
-    amount: number,
-  ): Promise<void> {
-    console.debug(
-      'yesSelected, oneTimeDonationResponse',
-      oneTimeDonationResponse,
-      'amount',
-      amount,
-    );
-
-    const donationRequest = new DonationRequest({
-      paymentMethodNonce: oneTimeDonationResponse.paymentMethodNonce,
-      paymentProvider: PaymentProvider.Venmo,
-      recaptchaToken: undefined,
-      customerId: oneTimeDonationResponse.customer_id,
-      deviceData: this.braintreeManager.deviceData,
-      amount: amount,
-      donationType: DonationType.Upsell,
-      customer: oneTimeDonationResponse.customer,
-      billing: oneTimeDonationResponse.billing,
-      customFields: undefined,
-      upsellOnetimeTransactionId: oneTimeDonationResponse.transaction_id,
-    });
-
-    this.donationFlowModalManager.showProcessingModal();
-
-    console.debug('yesSelected, donationRequest', donationRequest);
-
-    const response = await this.braintreeManager.submitDataToEndpoint(donationRequest);
-
-    console.debug('yesSelected, UpsellResponse', response);
-
-    if (response.success) {
-      this.showThankYouModal({
-        successResponse: oneTimeDonationResponse,
-        upsellSuccessResponse: response.value as SuccessResponse,
-      });
-    } else {
-      const error = response.value as ErrorResponse;
-      this.donationFlowModalManager.showErrorModal({
-        message: `Error setting up monthly donation: ${error.message}, ${error.errors}`,
-      });
-    }
-  }
-
-  private showThankYouModal(options: {
-    successResponse: SuccessResponse;
-    upsellSuccessResponse?: SuccessResponse;
-  }): void {
-    this.donationFlowModalManager.showThankYouModal();
-    this.braintreeManager.donationSuccessful(options);
   }
 }
