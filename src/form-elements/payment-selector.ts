@@ -151,8 +151,8 @@ export class PaymentSelector extends LitElement {
       .get()
       .then(handler => {
         if (!handler) {
-          console.debug('google pay handler unavailable');
-          this.googlePayMode = PaymentButtonMode.Unavailable;
+          console.debug('google pay handler Available');
+          this.googlePayMode = PaymentButtonMode.Available;
           return;
         }
 
@@ -206,7 +206,7 @@ export class PaymentSelector extends LitElement {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-gap: 10px;
-        max-width: 320px;
+        max-width: 230px;
       }
 
       .provider-button {
@@ -222,6 +222,9 @@ export class PaymentSelector extends LitElement {
 
       .provider-button.loading {
         border: 1px solid #ddd;
+        /* account for the borders that don't exist once the provider loads, otherwise the layout shifts */
+        margin-right: -2px;
+        margin-bottom: -2px;
       }
 
       .provider-button.loading .payment-image {
@@ -252,7 +255,7 @@ export class PaymentSelector extends LitElement {
         height: ${paymentButtonHeightCss};
         cursor: pointer;
         margin: 0;
-        padding: 3px 6px;
+        padding: 2px 3px;
       }
 
       .credit-card-button .cc-background {
