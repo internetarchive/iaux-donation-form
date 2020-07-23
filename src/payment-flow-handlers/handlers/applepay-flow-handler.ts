@@ -72,10 +72,10 @@ export class ApplePayFlowHandler
         this.donationFlowModalManager.showUpsellModal({
           oneTimeAmount: successResponse.amount,
           yesSelected: this.modalYesSelected.bind(this, successResponse),
-          noSelected: this.donationFlowModalManager.showThankYouModal.bind(this, {
+          noSelected: this.donationFlowModalManager.showThankYouModal.bind(this.donationFlowModalManager, {
             successResponse,
           }),
-          userClosedModalCallback: this.donationFlowModalManager.showThankYouModal.bind(this, {
+          userClosedModalCallback: this.donationFlowModalManager.showThankYouModal.bind(this.donationFlowModalManager, {
             successResponse,
           }),
         });
