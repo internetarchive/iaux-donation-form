@@ -10,8 +10,9 @@ import {
 
 export class BraintreeEndpointManager implements BraintreeEndpointManagerInterface {
   async submitData(request: DonationRequest): Promise<DonationResponse> {
+    console.debug('submitData, request', request);
     const response = await fetch(
-      'https://review-1963.archive.org/services/donations/braintree-charge.php',
+      'https://review-1963.archive.org/services/donations/braintree-charge.php?debug=true',
       {
         method: 'POST',
         headers: {
