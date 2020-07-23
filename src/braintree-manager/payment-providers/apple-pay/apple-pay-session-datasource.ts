@@ -79,6 +79,7 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
 
     const payment = event.payment;
     const billingContact = payment.billingContact;
+    const shippingContact = payment.shippingContact;
     const addressLines = billingContact?.addressLines;
 
     let line1: string | undefined = undefined;
@@ -99,14 +100,10 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
     });
 
     const customerInfo = new CustomerInfo({
-      email: billingContact?.emailAddress,
-      firstName: billingContact?.givenName,
-      lastName: billingContact?.familyName,
+      email: shippingContact?.emailAddress,
+      firstName: shippingContact?.givenName,
+      lastName: shippingContact?.familyName,
     });
-
-    const customFields = new DonationRequestCustomFields();
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    customFields.fee_amount_covered = this.donationInfo.feeAmountCovered;
 
     try {
       const donationResponse = await this.braintreeManager.submitDonation({
