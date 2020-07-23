@@ -22,6 +22,7 @@ enum SelectionGroup {
 }
 
 export enum DonationInfoError {
+  InvalidDonationAmount = 'invalid_donation_amount',
   DonationTooHigh = 'donation_too_high',
   DonationTooLow = 'donation_too_low',
 }
@@ -34,9 +35,11 @@ export class EditDonation extends LitElement {
 
   @property({ type: Object }) private error?: TemplateResult;
 
-  @query('#custom-amount-button') customAmountButton!: HTMLInputElement;
+  @property({ type: Boolean }) private customAmountInputHasFocus = false;
 
-  @query('#custom-amount-input') customAmountInput!: HTMLInputElement;
+  @query('#custom-amount-button') customAmountButton?: HTMLInputElement;
+
+  @query('#custom-amount-input') customAmountInput?: HTMLInputElement;
 
   private currencyValidator: CurrencyValidator = new CurrencyValidator();
 
@@ -111,23 +114,26 @@ export class EditDonation extends LitElement {
   private get presetAmountsTemplate(): TemplateResult {
     return html`
       ${this.amountOptions.map(
-        amount => html`
-          <li>
-            ${this.getRadioButton({
-              group: SelectionGroup.Amount,
-              value: `${amount}`,
-              displayText: `$${amount}`,
-              checked: amount === this.donationInfo.amount,
-            })}
-          </li>
-        `,
+        amount => {
+          const checked = !this.customAmountButton?.checked && amount === this.donationInfo.amount;
+          return html`
+            <li>
+              ${this.getRadioButton({
+                group: SelectionGroup.Amount,
+                value: `${amount}`,
+                displayText: `$${amount}`,
+                checked: checked,
+              })}
+            </li>
+          `;
+        }
       )}
     `;
   }
 
   private get customAmountTemplate(): TemplateResult {
-    const selected = !this.amountOptions.includes(this.donationInfo.amount);
-    const value = selected ? this.donationInfo.amount : '';
+    const isCustomAmount = !this.amountOptions.includes(this.donationInfo.amount);
+    const value = isCustomAmount ? this.donationInfo.amount : '';
 
     return html`
       <div class="selection-button">
@@ -136,7 +142,6 @@ export class EditDonation extends LitElement {
           name=${SelectionGroup.Amount}
           value="custom"
           id="custom-amount-button"
-          .checked=${selected}
           @change=${this.customRadioSelected}
         />
 
@@ -149,6 +154,7 @@ export class EditDonation extends LitElement {
             @input=${this.customAmountChanged}
             @keydown=${this.currencyValidator.keydown}
             @focus=${this.customAmountFocused}
+            @blur=${this.customAmountBlurred}
           />
         </label>
       </div>
@@ -156,14 +162,20 @@ export class EditDonation extends LitElement {
   }
 
   private customRadioSelected(): void {
-    this.customAmountInput.focus();
+    this.customAmountInput?.focus();
   }
 
-  private customAmountFocused(): void {
-    this.customAmountButton.checked = true;
-    const parsed = parseFloat(this.customAmountInput.value);
-    const amount = isNaN(parsed) ? 0 : parsed;
-    this.amountChanged(amount);
+  private customAmountBlurred(): void {
+    this.customAmountInputHasFocus = false;
+  }
+
+  private customAmountFocused(e: Event): void {
+    this.customAmountInputHasFocus = true;
+    const target = e.target as HTMLInputElement;
+    if (this.customAmountButton) {
+      this.customAmountButton.checked = true;
+    }
+    this.handleCustomAmountInput(target.value);
   }
 
   private coverFeesChecked(e: Event): void {
@@ -180,8 +192,20 @@ export class EditDonation extends LitElement {
   private customAmountChanged(e: Event): void {
     const target = e.target as HTMLInputElement;
     const amount = target.value;
-    const parsed = parseFloat(amount);
-    this.amountChanged(parsed);
+    if (this.customAmountButton) {
+      this.customAmountButton.checked = true;
+    }
+    this.handleCustomAmountInput(amount);
+  }
+
+  private handleCustomAmountInput(value: string): void {
+    const amount = parseFloat(value);
+    console.debug('parsed', value, amount)
+    if (isNaN(amount)) {
+      this.dispatchEditDonationError(DonationInfoError.InvalidDonationAmount);
+    } else {
+      this.amountChanged(amount);
+    }
   }
 
   private amountChanged(amount: number): void {
@@ -195,7 +219,7 @@ export class EditDonation extends LitElement {
     }
 
     if (amount < 1) {
-      if (this.customAmountInput.value.length > 0) {
+      if (this.customAmountInput && this.customAmountInput.value.length > 0) {
         this.error = html`
           Please select an amount (minimum $1)
         `;
