@@ -35,8 +35,6 @@ export class EditDonation extends LitElement {
 
   @property({ type: Object }) private error?: TemplateResult;
 
-  @property({ type: Boolean }) private customAmountInputHasFocus = false;
-
   @query('#custom-amount-button') customAmountButton?: HTMLInputElement;
 
   @query('#custom-amount-input') customAmountInput?: HTMLInputElement;
@@ -47,23 +45,7 @@ export class EditDonation extends LitElement {
     return html`
       <form-section number="1" headline="Choose a frequency">
         <ul class="frequency-selector">
-          <li>
-            ${this.getRadioButton({
-              group: SelectionGroup.DonationType,
-              value: DonationType.OneTime,
-              displayText: 'One time',
-              checked: this.donationInfo.donationType === DonationType.OneTime,
-            })}
-          </li>
-
-          <li>
-            ${this.getRadioButton({
-              group: SelectionGroup.DonationType,
-              value: DonationType.Monthly,
-              displayText: 'Monthly',
-              checked: this.donationInfo.donationType === DonationType.Monthly,
-            })}
-          </li>
+          ${this.frequencyTemplate}
         </ul>
       </form-section>
 
@@ -89,25 +71,25 @@ export class EditDonation extends LitElement {
     `;
   }
 
-  private getRadioButton(options: {
-    group: SelectionGroup;
-    value: string;
-    displayText: string;
-    checked: boolean;
-  }): TemplateResult {
-    const radioId = `${options.group}-${options.value}-option`;
+  private get frequencyTemplate(): TemplateResult {
     return html`
-      <div class="selection-button">
-        <input
-          type="radio"
-          name=${options.group}
-          value=${options.value}
-          id=${radioId}
-          .checked=${options.checked}
-          @change=${this.radioSelected}
-        />
-        <label for=${radioId}>${options.displayText}</label>
-      </div>
+      <li>
+        ${this.getRadioButton({
+          group: SelectionGroup.DonationType,
+          value: DonationType.OneTime,
+          displayText: 'One time',
+          checked: this.donationInfo.donationType === DonationType.OneTime,
+        })}
+      </li>
+
+      <li>
+        ${this.getRadioButton({
+          group: SelectionGroup.DonationType,
+          value: DonationType.Monthly,
+          displayText: 'Monthly',
+          checked: this.donationInfo.donationType === DonationType.Monthly,
+        })}
+      </li>
     `;
   }
 
@@ -128,6 +110,28 @@ export class EditDonation extends LitElement {
           `;
         }
       )}
+    `;
+  }
+
+  private getRadioButton(options: {
+    group: SelectionGroup;
+    value: string;
+    displayText: string;
+    checked: boolean;
+  }): TemplateResult {
+    const radioId = `${options.group}-${options.value}-option`;
+    return html`
+      <div class="selection-button">
+        <input
+          type="radio"
+          name=${options.group}
+          value=${options.value}
+          id=${radioId}
+          .checked=${options.checked}
+          @change=${this.radioSelected}
+        />
+        <label for=${radioId}>${options.displayText}</label>
+      </div>
     `;
   }
 
@@ -154,7 +158,6 @@ export class EditDonation extends LitElement {
             @input=${this.customAmountChanged}
             @keydown=${this.currencyValidator.keydown}
             @focus=${this.customAmountFocused}
-            @blur=${this.customAmountBlurred}
           />
         </label>
       </div>
@@ -165,12 +168,7 @@ export class EditDonation extends LitElement {
     this.customAmountInput?.focus();
   }
 
-  private customAmountBlurred(): void {
-    this.customAmountInputHasFocus = false;
-  }
-
   private customAmountFocused(e: Event): void {
-    this.customAmountInputHasFocus = true;
     const target = e.target as HTMLInputElement;
     if (this.customAmountButton) {
       this.customAmountButton.checked = true;
