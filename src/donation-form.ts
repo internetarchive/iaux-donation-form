@@ -174,17 +174,25 @@ export class DonationForm extends LitElement {
   }
 
   private async creditCardSelected(): Promise<void> {
+    if (!this.donationInfoValid) {
+      this.showInvalidDonationInfoAlert();
+      return;
+    }
     this.selectedPaymentProvider = PaymentProvider.CreditCard;
     this.contactFormVisible = true;
     this.creditCardVisible = true;
-    this.scrollToContactForm();
+    this.focusContactForm();
   }
 
   private async venmoSelected(): Promise<void> {
+    if (!this.donationInfoValid) {
+      this.showInvalidDonationInfoAlert();
+      return;
+    }
     this.selectedPaymentProvider = PaymentProvider.Venmo;
     this.contactFormVisible = true;
     this.creditCardVisible = false;
-    this.scrollToContactForm();
+    this.focusContactForm();
   }
 
   private paypalBlockerSelected(): void {
@@ -193,7 +201,7 @@ export class DonationForm extends LitElement {
     this.showInvalidDonationInfoAlert();
   }
 
-  private async scrollToContactForm(): Promise<void> {
+  private async focusContactForm(): Promise<void> {
     await this.updateComplete;
     if (this.contactFormSection) {
       this.contactForm?.focus();
