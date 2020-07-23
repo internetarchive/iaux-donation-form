@@ -12,7 +12,7 @@ export class BraintreeEndpointManager implements BraintreeEndpointManagerInterfa
   async submitData(request: DonationRequest): Promise<DonationResponse> {
     console.debug('submitData, request', request);
     const response = await fetch(
-      'https://review-1963.archive.org/services/donations/braintree-charge.php?debug=true',
+      'https://www-jasonb.archive.org/services/donations/braintree-charge.php?debug=true',
       {
         method: 'POST',
         headers: {
@@ -50,7 +50,7 @@ export class BraintreeEndpointManager implements BraintreeEndpointManagerInterfa
     const service = encodeURI(response.paymentProvider);
 
     submitFormWith({
-      action: `https://review-1963.archive.org/services/donate.php?service=${service}`,
+      action: `https://www-jasonb.archive.org/services/donate.php?service=${service}`,
       fields: payload,
     });
   }
