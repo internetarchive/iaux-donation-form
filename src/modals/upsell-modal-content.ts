@@ -63,7 +63,10 @@ export class UpsellModalContent extends LitElement {
         `;
       case UpsellModalCTAMode.Slot:
         return html`
-          <slot class="paypal-upsell-slot"></slot>
+          <div class="paypal-upsell-slot-container">
+            <div class="paypal-upsell-slot-blocker ${this.error ? '' : 'hidden'}"></div>
+            <slot class="paypal-upsell-slot"></slot>
+          </div>
         `;
     }
   }
@@ -194,6 +197,23 @@ export class UpsellModalContent extends LitElement {
 
       .paypal-upsell-slot {
         text-align: center;
+      }
+
+      .paypal-upsell-slot-blocker {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 250;
+        cursor: not-allowed;
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+
+      .paypal-upsell-slot-blocker.hidden {
+        display: none;
+      }
+
+      .paypal-upsell-slot-container {
+        position: relative;
       }
 
       .error {
