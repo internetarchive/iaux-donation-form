@@ -275,6 +275,8 @@ export class EditDonation extends LitElement {
     return css`
       .errors {
         color: red;
+        font-size: 14px;
+        margin-top: 5px;
       }
 
       ul {
