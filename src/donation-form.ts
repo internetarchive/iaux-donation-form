@@ -200,7 +200,7 @@ export class DonationForm extends LitElement {
     }
   }
 
-  private donateClicked(): void {
+  private async donateClicked(): Promise<void> {
     if (!this.contactForm) {
       alert('Please enter contact info.');
       return;
@@ -209,6 +209,9 @@ export class DonationForm extends LitElement {
       this.showInvalidDonationInfoAlert();
       return;
     }
+
+    const creditCardHandler = await this.braintreeManager?.paymentProviders.creditCardHandler.get();
+    creditCardHandler?.hideErrorMessage();
 
     const valid = this.contactForm.validate();
 
