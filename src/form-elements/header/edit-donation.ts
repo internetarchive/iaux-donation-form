@@ -266,6 +266,7 @@ export class EditDonation extends LitElement {
 
   private presetAmountChanged(amount: number): void {
     this.error = undefined;
+    if (this.customAmountInput) this.customAmountInput.value = '';
     this.donationInfo.amount = amount;
     this.dispatchDonationInfoChangedEvent();
   }
