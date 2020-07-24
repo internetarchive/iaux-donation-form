@@ -72,6 +72,9 @@ export class PayPalHandler implements PayPalHandlerInterface {
       {
         env,
         style: params.style,
+        funding: {
+          disallowed: [ paypal.FUNDING.VENMO ]
+        },
         payment: dataSource.payment.bind(dataSource),
         onAuthorize: dataSource.onAuthorize.bind(dataSource),
         onCancel: dataSource.onCancel.bind(dataSource),
