@@ -19,6 +19,7 @@ import { BillingInfo } from '../models/common/billing-info';
 import { CustomerInfo } from '../models/common/customer-info';
 import { DonationType } from '../models/donation-info/donation-type';
 
+/** @inheritdoc */
 export class BraintreeManager implements BraintreeManagerInterface {
   private referrer?: string;
 
@@ -35,22 +36,18 @@ export class BraintreeManager implements BraintreeManagerInterface {
    */
   private deviceData?: string;
 
-  /**
-   * This contains all of the individual payment providers so as to not clutter the
-   * top-level BraintreeManager class.
-   *
-   * @type {PaymentProvidersInterface}
-   * @memberof BraintreeManager
-   */
+  /** @inheritdoc */
   paymentProviders: PaymentProvidersInterface;
 
+  /** @inheritdoc */
   async startup(): Promise<void> {
-    console.debug('braintree startup');
     this.collectDeviceData();
   }
 
+  /** @inheritdoc */
   instance: PromisedSingleton<braintree.Client>;
 
+  /** @inheritdoc */
   async submitDonation(options: {
     nonce: string;
     paymentProvider: PaymentProvider;
@@ -100,6 +97,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
     return modeledResponse;
   }
 
+  /** @inheritdoc */
   async submitUpsellDonation(options: {
     oneTimeDonationResponse: SuccessResponse;
     amount: number;
@@ -123,6 +121,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
     });
   }
 
+  /** @inheritdoc */
   donationSuccessful(options: {
     successResponse: SuccessResponse;
     upsellSuccessResponse?: SuccessResponse;
@@ -132,6 +131,13 @@ export class BraintreeManager implements BraintreeManagerInterface {
 
   private deviceDataCollectionStarted = false;
 
+  /**
+   * Collect Braintree device data. This is used to help fraud detection.
+   *
+   * @private
+   * @returns {Promise<void>}
+   * @memberof BraintreeManager
+   */
   private async collectDeviceData(): Promise<void> {
     if (this.deviceDataCollectionStarted) {
       return;
@@ -153,10 +159,31 @@ export class BraintreeManager implements BraintreeManagerInterface {
       });
   }
 
+  /**
+   * Braintree Authorization Token
+   *
+   * @private
+   * @type {string}
+   * @memberof BraintreeManager
+   */
   private authorizationToken: string;
 
+  /**
+   * The endpoint manager for network communications
+   *
+   * @private
+   * @type {BraintreeEndpointManagerInterface}
+   * @memberof BraintreeManager
+   */
   private endpointManager: BraintreeEndpointManagerInterface;
 
+  /**
+   * The payment clients container containing the braintree, paypal, and google clients
+   *
+   * @private
+   * @type {PaymentClientsInterface}
+   * @memberof BraintreeManager
+   */
   private paymentClients: PaymentClientsInterface;
 
   private hostingEnvironment: HostingEnvironment = HostingEnvironment.Development;
@@ -196,10 +223,12 @@ export class BraintreeManager implements BraintreeManagerInterface {
     });
   }
 
+  /** @inheritdoc */
   setReferrer(referrer: string): void {
     this.referrer = referrer;
   }
 
+  /** @inheritdoc */
   setLoggedInUser(loggedInUser: string): void {
     this.loggedInUser = loggedInUser;
   }

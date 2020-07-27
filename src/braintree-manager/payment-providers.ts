@@ -25,6 +25,9 @@ export interface PaymentProvidersInterface {
  * The PaymentProviders class contains the IA-specific handlers for each of the
  * different payment providers.
  *
+ * They are generally data-focused, as opposed to UI-focused, but there
+ * is some cross-polination between PaymentProviders and FlowHandlers.
+ *
  * @export
  * @class PaymentProviders
  * @implements {PaymentProvidersInterface}
