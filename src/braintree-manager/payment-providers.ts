@@ -106,7 +106,7 @@ export class PaymentProviders implements PaymentProvidersInterface {
         const handler = new PayPalHandler({
           braintreeManager: this.braintreeManager,
           paypalClient: values[0],
-          paypalLibrary: values[1],
+          paypalButton: values[1].Button,
           hostingEnvironment: this.hostingEnvironment,
         });
         resolve(handler);

@@ -22,13 +22,12 @@ export class PayPalHandler implements PayPalHandlerInterface {
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;
     paypalClient: braintree.PayPalCheckout;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    paypalLibrary: any;
+    paypalButton: paypal.ButtonRenderer;
     hostingEnvironment: HostingEnvironment;
   }) {
     this.braintreeManager = options.braintreeManager;
     this.paypalClient = options.paypalClient;
-    this.paypalLibrary = options.paypalLibrary;
+    this.paypalButtonGenerator = options.paypalButton;
     this.hostingEnvironment = options.hostingEnvironment;
 
     this.instance = new PromisedSingleton<braintree.PayPalCheckout | undefined>({
@@ -44,8 +43,7 @@ export class PayPalHandler implements PayPalHandlerInterface {
 
   private paypalClient: braintree.PayPalCheckout;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private paypalLibrary: any;
+  private paypalButtonGenerator: paypal.ButtonRenderer;
 
   private hostingEnvironment: HostingEnvironment;
 
@@ -68,17 +66,17 @@ export class PayPalHandler implements PayPalHandlerInterface {
       paypalInstance: paypalInstance,
     });
 
-    await this.paypalLibrary.Button.render(
+    this.paypalButtonGenerator.render(
       {
         env,
         style: params.style,
-        funding: {
-          disallowed: [ paypal.FUNDING.VENMO ]
-        },
         payment: dataSource.payment.bind(dataSource),
         onAuthorize: dataSource.onAuthorize.bind(dataSource),
         onCancel: dataSource.onCancel.bind(dataSource),
         onError: dataSource.onError.bind(dataSource),
+        funding: {
+          disallowed: [paypal.FUNDING.VENMO]
+        }
       },
       params.selector,
     );

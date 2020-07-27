@@ -66,7 +66,7 @@ export class PayPalButtonDataSource implements PayPalButtonDataSourceInterface {
     return this.paypalInstance.createPayment(options);
   }
 
-  async onAuthorize(data: paypal.AuthorizationData): Promise<paypal.TokenizePayload | undefined> {
+  async onAuthorize(data: paypal.AuthorizationData): Promise<paypal.TokenizePayload> {
     const payload: paypal.TokenizePayload = await this.paypalInstance.tokenizePayment(data);
 
     console.debug('onAuthorize data', data, 'payload', payload);
