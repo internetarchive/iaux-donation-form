@@ -57,7 +57,11 @@ export class UpsellModalContent extends LitElement {
     switch (this.yesButtonMode) {
       case UpsellModalCTAMode.YesButton:
         return html`
-          <button class="yes-button" @click=${this.yesSelected} .disabled=${this.error !== undefined}>
+          <button
+            class="yes-button"
+            @click=${this.yesSelected}
+            .disabled=${this.error !== undefined}
+          >
             YES, I'll become a monthly donor
           </button>
         `;
@@ -74,15 +78,19 @@ export class UpsellModalContent extends LitElement {
   private amountChanged(e: Event): void {
     const target = e.target as HTMLInputElement;
     const amount = target.value;
-    if (amount.length === 0) { return; }
+    if (amount.length === 0) {
+      return;
+    }
     this.handleCustomAmountInput(amount);
   }
 
   private handleCustomAmountInput(value: string): void {
     const amount = parseFloat(value);
-    console.debug('parsed', value, amount)
+    console.debug('parsed', value, amount);
     if (isNaN(amount)) {
-      this.error = html`Please enter a valid amount.`;
+      this.error = html`
+        Please enter a valid amount.
+      `;
     } else {
       this.processAmount(amount);
     }
@@ -99,7 +107,9 @@ export class UpsellModalContent extends LitElement {
 
     if (amount < 1) {
       if (this.amountInput && this.amountInput.value.length > 0) {
-        this.error = html`The minimum donation amount is $1.`;
+        this.error = html`
+          The minimum donation amount is $1.
+        `;
       }
       return;
     }

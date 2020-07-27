@@ -38,7 +38,9 @@ export class VenmoHandler implements VenmoHandlerInterface {
   private venmoProfileId: string;
 
   async isBrowserSupported(): Promise<boolean> {
-    if (this.isMobileFirefox()) { return false; }
+    if (this.isMobileFirefox()) {
+      return false;
+    }
     const instance = await this.instance.get();
     return instance?.isBrowserSupported() ?? false;
   }
@@ -59,9 +61,9 @@ export class VenmoHandler implements VenmoHandlerInterface {
    * @memberof VenmoHandler
    */
   private isMobileFirefox(): boolean {
-    const isFirefoxIos = navigator.userAgent.indexOf("FxiOS") !== -1;
-    const isFirefox = navigator.userAgent.indexOf("Firefox") !== -1;
-    const isMobile = navigator.userAgent.indexOf("Mobile") !== -1;
+    const isFirefoxIos = navigator.userAgent.indexOf('FxiOS') !== -1;
+    const isFirefox = navigator.userAgent.indexOf('Firefox') !== -1;
+    const isMobile = navigator.userAgent.indexOf('Mobile') !== -1;
     return (isFirefox || isFirefoxIos) && isMobile;
   }
 }

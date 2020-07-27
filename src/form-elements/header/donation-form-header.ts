@@ -65,7 +65,6 @@ export class DonationFormHeader extends LitElement {
   }
 
   private donationInfoChanged(e: CustomEvent): void {
-    console.log('DonationFormHeader frequencyChanged', e.detail.donationInfo);
     this.donationInfo = e.detail.donationInfo as DonationPaymentInfo;
     const event = new CustomEvent('donationInfoChanged', {
       detail: { donationInfo: this.donationInfo },

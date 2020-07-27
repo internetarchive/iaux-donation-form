@@ -49,7 +49,7 @@ export class HostedFieldContainer implements HostedFieldContainerInterface {
   }
 
   showErrorMessage(message?: string): void {
-    const error = message ?? 'Some payment information below is missing or incorrect.'
+    const error = message ?? 'Some payment information below is missing or incorrect.';
     this.errorContainer.innerHTML = error;
     this.errorContainer.style.display = 'block';
   }

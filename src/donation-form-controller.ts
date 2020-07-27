@@ -218,7 +218,7 @@ export class DonationFormController extends LitElement {
       number: this.braintreeNumberInput,
       cvv: this.braintreeCVVInput,
       expirationDate: this.braintreeExpirationDateInput,
-      errorContainer: this.braintreeErrorMessage
+      errorContainer: this.braintreeErrorMessage,
     });
 
     const config: HostedFieldConfiguration = new HostedFieldConfiguration({

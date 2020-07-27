@@ -273,7 +273,10 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       const response = await this.braintreeManager.submitDonation(options);
 
       if (response.success) {
-        this.handleSuccessfulDonationResponse(options.donationInfo, response.value as SuccessResponse);
+        this.handleSuccessfulDonationResponse(
+          options.donationInfo,
+          response.value as SuccessResponse,
+        );
         return response;
       } else {
         const error = response.value as ErrorResponse;

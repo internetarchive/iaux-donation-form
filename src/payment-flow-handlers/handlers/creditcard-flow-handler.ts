@@ -10,7 +10,6 @@ import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manage
 import { HostedFieldName } from '../../braintree-manager/payment-providers/credit-card/hosted-field-container';
 import { BadgedInput } from '../../form-elements/badged-input';
 import { SuccessResponse } from '../../models/response-models/success-models/success-response';
-import { ErrorResponse } from '../../models/response-models/error-models/error-response';
 
 export interface CreditCardFlowHandlerInterface {
   startup(): Promise<void>;
@@ -140,7 +139,10 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       });
 
       if (response.success) {
-        this.donationFlowModalManager.handleSuccessfulDonationResponse(donationInfo, response.value as SuccessResponse);
+        this.donationFlowModalManager.handleSuccessfulDonationResponse(
+          donationInfo,
+          response.value as SuccessResponse,
+        );
       } else {
         this.donationFlowModalManager.closeModal();
         handler.showErrorMessage();

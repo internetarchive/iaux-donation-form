@@ -136,9 +136,8 @@ export class DonationForm extends LitElement {
     this.contactInfoValid = e.detail.isValid;
   }
 
-  private editDonationError(e: CustomEvent): void {
+  private editDonationError(): void {
     this.donationInfoValid = false;
-    console.debug('editDonationError', e.detail);
   }
 
   private paymentSelectorFirstUpdated(): void {

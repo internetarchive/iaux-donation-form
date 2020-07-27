@@ -95,21 +95,19 @@ export class EditDonation extends LitElement {
 
   private get presetAmountsTemplate(): TemplateResult {
     return html`
-      ${this.amountOptions.map(
-        amount => {
-          const checked = !this.customAmountButton?.checked && amount === this.donationInfo.amount;
-          return html`
-            <li>
-              ${this.getRadioButton({
-                group: SelectionGroup.Amount,
-                value: `${amount}`,
-                displayText: `$${amount}`,
-                checked: checked,
-              })}
-            </li>
-          `;
-        }
-      )}
+      ${this.amountOptions.map(amount => {
+        const checked = !this.customAmountButton?.checked && amount === this.donationInfo.amount;
+        return html`
+          <li>
+            ${this.getRadioButton({
+              group: SelectionGroup.Amount,
+              value: `${amount}`,
+              displayText: `$${amount}`,
+              checked: checked,
+            })}
+          </li>
+        `;
+      })}
     `;
   }
 
@@ -198,7 +196,7 @@ export class EditDonation extends LitElement {
 
   private handleCustomAmountInput(value: string): void {
     const amount = parseFloat(value);
-    console.debug('parsed', value, amount)
+    console.debug('parsed', value, amount);
     if (isNaN(amount)) {
       this.dispatchEditDonationError(DonationInfoError.InvalidDonationAmount);
     } else {

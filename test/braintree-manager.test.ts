@@ -146,7 +146,7 @@ describe('Braintree Manager', () => {
       number: numberField,
       cvv: cvvField,
       expirationDate: expField,
-      errorContainer: errorDiv
+      errorContainer: errorDiv,
     });
 
     const config: HostedFieldConfiguration = new HostedFieldConfiguration({

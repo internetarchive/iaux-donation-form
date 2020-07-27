@@ -75,8 +75,8 @@ export class PayPalHandler implements PayPalHandlerInterface {
         onCancel: dataSource.onCancel.bind(dataSource),
         onError: dataSource.onError.bind(dataSource),
         funding: {
-          disallowed: [paypal.FUNDING.VENMO]
-        }
+          disallowed: [paypal.FUNDING.VENMO],
+        },
       },
       params.selector,
     );

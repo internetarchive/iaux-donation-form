@@ -83,7 +83,6 @@ export class PaymentSelector extends LitElement {
 
   /** @inheritdoc */
   updated(changed: PropertyValues): void {
-    console.debug('updated', changed);
     if (changed.has('paymentProviders')) {
       this.setButtonVisibility();
     }
