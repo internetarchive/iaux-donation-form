@@ -106,6 +106,8 @@ export class UpsellModalContent extends LitElement {
 
     this.error = undefined;
 
+    this.amount = amount;
+
     const event = new CustomEvent('amountChanged', { detail: { amount: this.amount } });
     this.dispatchEvent(event);
   }
