@@ -12,7 +12,7 @@ import { CurrencyValidator } from '../form-elements/header/currency-validator';
 
 export enum UpsellModalCTAMode {
   YesButton = 'YesButton',
-  Slot = 'Slot',
+  PayPalUpsellSlot = 'PayPalUpsellSlot',
 }
 
 @customElement('upsell-modal-content')
@@ -61,7 +61,7 @@ export class UpsellModalContent extends LitElement {
             YES, I'll become a monthly donor
           </button>
         `;
-      case UpsellModalCTAMode.Slot:
+      case UpsellModalCTAMode.PayPalUpsellSlot:
         return html`
           <div class="paypal-upsell-slot-container">
             <div class="paypal-upsell-slot-blocker ${this.error ? '' : 'hidden'}"></div>

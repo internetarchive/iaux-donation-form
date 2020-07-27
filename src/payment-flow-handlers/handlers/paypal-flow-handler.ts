@@ -238,7 +238,7 @@ export class PayPalFlowHandler
           successResponse: oneTimeSuccessResponse,
         });
       },
-      ctaMode: UpsellModalCTAMode.Slot,
+      ctaMode: UpsellModalCTAMode.PayPalUpsellSlot,
       userClosedModalCallback: () => {
         console.debug('userClosedModalCallback');
         this.donationFlowModalManager.showThankYouModal({
