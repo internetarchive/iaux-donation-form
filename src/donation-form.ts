@@ -141,8 +141,8 @@ export class DonationForm extends LitElement {
   }
 
   private paymentSelectorFirstUpdated(): void {
-    if (this.paypalButtonNeedsRender && this.paymentFlowHandlers?.paypalHandler) {
-      this.renderPayPalButton();
+    if (this.paymentFlowHandlers?.paypalHandler) {
+      this.renderPayPalButtonIfNeeded();
     }
   }
 
@@ -276,10 +276,11 @@ export class DonationForm extends LitElement {
     this.donationInfo = donationInfo;
   }
 
-  private async renderPayPalButton(): Promise<void> {
+  private async renderPayPalButtonIfNeeded(): Promise<void> {
+    if (!this.paypalButtonNeedsRender) { return; }
+    this.paypalButtonNeedsRender = false;
     await this.paymentFlowHandlers?.paypalHandler?.renderPayPalButton(this.donationInfo);
     this.paymentSelector.showPaypalButton();
-    this.paypalButtonNeedsRender = false;
   }
 
   updated(changedProperties: PropertyValues): void {
@@ -300,9 +301,7 @@ export class DonationForm extends LitElement {
   }
 
   private setupFlowHandlers(): void {
-    if (this.paypalButtonNeedsRender) {
-      this.renderPayPalButton();
-    }
+    this.renderPayPalButtonIfNeeded();
     this.paymentFlowHandlers?.paypalHandler?.updateDonationInfo(this.donationInfo);
     this.paymentFlowHandlers?.creditCardHandler?.startup();
     this.paymentFlowHandlers?.creditCardHandler?.on('validityChanged', (isValid: boolean) => {

@@ -159,6 +159,10 @@ export class DonationFormController extends LitElement {
   }
 
   private setupPaymentFlowHandlers(): void {
+    // only set up once
+    if (this.paymentFlowHandlers) { return; }
+
+    // verify we have all of the dependencies
     if (
       !this.braintreeManager ||
       !this.recaptchaManager ||
