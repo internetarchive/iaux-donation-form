@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { submitFormWith } from './submit-form-with';
+import currency from 'currency.js';
 
 import {
   SuccessResponse,
@@ -33,19 +34,24 @@ export class BraintreeEndpointManager implements BraintreeEndpointManagerInterfa
     const response = options.successResponse;
     const upsellResponse = options.upsellSuccessResponse;
 
-    const upsellAmount = upsellResponse?.amount;
-    const upsellChargeId = upsellResponse?.transaction_id;
+    const displayAmount = currency(response.amount);
 
     const payload: { [key: string]: string | undefined } = {
-      amount: `${response.amount}`,
+      amount: `${displayAmount}`,
       'charge-id': response.transaction_id,
       'donation-type': upsellResponse ? 'upsell' : response.donationType,
       first_name: response.customer.firstName,
       last_name: response.customer.lastName,
-      email: response.customer.email,
-      'upsell-amount': `${upsellAmount}`,
-      'upsell-charge-id': upsellChargeId,
+      email: response.customer.email
     };
+
+    if (upsellResponse) {
+      const upsellAmount = upsellResponse.amount;
+      const upsellChargeId = upsellResponse.transaction_id;
+      const displayUpsellAmount = currency(upsellAmount);
+      payload['upsell-amount'] = `${displayUpsellAmount}`;
+      payload['upsell-charge-id'] = upsellChargeId;
+    }
 
     const service = encodeURI(response.paymentProvider);
 
