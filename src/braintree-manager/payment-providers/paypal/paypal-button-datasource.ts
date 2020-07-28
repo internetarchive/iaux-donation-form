@@ -169,7 +169,7 @@ export class PayPalButtonDataSource implements PayPalButtonDataSourceInterface {
     } else {
       options.billingAgreementDescription = `Subscribe to donate ${currency(
         this.donationInfo.total,
-        { formatWithSymbol: true },
+        { symbol: '$' },
       ).format()} monthly`;
     }
 
