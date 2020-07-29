@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/donation-form",
-  "version": "0.0.0-alpha.53",
+  "version": "0.0.0-alpha.56",
   "description": "The Internet Archive Donation Form",
   "license": "AGPL-3.0-only",
   "main": "dist/index.js",
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@internetarchive/lazy-loader-service": "0.0.0-alpha.4",
-    "@internetarchive/modal-manager": "0.0.0-alpha.20",
+    "@internetarchive/modal-manager": "0.0.0-alpha.23",
     "@internetarchive/promised-singleton": "0.0.0-alpha.1",
     "@types/smoothscroll-polyfill": "^0.3.1",
     "currency.js": "^2.0.2",
