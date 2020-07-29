@@ -22,6 +22,14 @@
       overflow: hidden;
     }
 
+    modal-manager {
+      display: none;
+    }
+
+    modal-manager[mode='open'] {
+      display: block;
+    }
+
     #demo {
       margin: 0;
       padding: 0;
@@ -43,15 +51,9 @@
 
     const braintreeEndpointManager = new BraintreeEndpointManager();
 
-    const slotContent = html`
-      <div slot="paypal-upsell-button">
-        <slot name="paypal-upsell-button"></slot>
-      </div>
-    `;
-
     render(
       html`
-        <modal-manager-controller .slotContent=${slotContent}>
+        <modal-manager>
           <!--
             The PayPal buttons cannot exist in the shadowDOM so they have to be slotted
             from the top.
@@ -59,7 +61,7 @@
           <div slot="paypal-upsell-button">
             <div id="paypal-upsell-button"></div>
           </div>
-        </modal-manager-controller>
+        </modal-manager>
 
         <donation-form-controller
           environment='dev'
@@ -78,7 +80,7 @@
     );
 
     const recaptchaElement = document.querySelector('#recaptcha');
-    const modalManager = document.querySelector('modal-manager-controller');
+    const modalManager = document.querySelector('modal-manager');
     const formController = document.querySelector('donation-form-controller');
     formController.modalManager = modalManager;
     formController.recaptchaElement = recaptchaElement;

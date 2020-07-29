@@ -128,6 +128,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     modalConfig.showProcessingIndicator = true;
     modalConfig.closeOnBackdropClick = false;
     modalConfig.showCloseButton = false;
+    modalConfig.processingImageMode = 'processing';
     modalConfig.title = html`
       Processing...
     `;
