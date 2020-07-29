@@ -62,9 +62,8 @@ export class EditDonation extends LitElement {
         <div class="cover-fees-container">
           <input type="checkbox" id="cover-fees" @input=${this.coverFeesChecked} />
           <label for="cover-fees">
-            I'll generously add
-            ${currency(this.donationInfo.fee, { symbol: '$' }).format()} to cover the
-            transaction fees so you can keep 100% of my donation.
+            I'll generously add ${currency(this.donationInfo.fee, { symbol: '$' }).format()} to
+            cover the transaction fees so you can keep 100% of my donation.
           </label>
         </div>
       </form-section>

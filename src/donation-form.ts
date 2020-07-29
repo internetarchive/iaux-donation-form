@@ -277,7 +277,9 @@ export class DonationForm extends LitElement {
   }
 
   private async renderPayPalButtonIfNeeded(): Promise<void> {
-    if (!this.paypalButtonNeedsRender) { return; }
+    if (!this.paypalButtonNeedsRender) {
+      return;
+    }
     this.paypalButtonNeedsRender = false;
     await this.paymentFlowHandlers?.paypalHandler?.renderPayPalButton(this.donationInfo);
     this.paymentSelector.showPaypalButton();

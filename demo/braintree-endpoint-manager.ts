@@ -42,7 +42,7 @@ export class BraintreeEndpointManager implements BraintreeEndpointManagerInterfa
       'donation-type': upsellResponse ? 'upsell' : response.donationType,
       first_name: response.customer.firstName,
       last_name: response.customer.lastName,
-      email: response.customer.email
+      email: response.customer.email,
     };
 
     if (upsellResponse) {

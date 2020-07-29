@@ -19,7 +19,10 @@ export class MockCreditCardFlowHandler implements CreditCardFlowHandlerInterface
   async startup(): Promise<void> {
     console.debug('startup');
   }
-  async paymentInitiated(donationInfo: DonationPaymentInfo, donorContactInfo: DonorContactInfo): Promise<void> {
+  async paymentInitiated(
+    donationInfo: DonationPaymentInfo,
+    donorContactInfo: DonorContactInfo,
+  ): Promise<void> {
     console.debug('paymentInitiated');
   }
   on<E extends keyof Events>(event: E, callback: Events[E]): Unsubscribe {
@@ -30,7 +33,7 @@ export class MockCreditCardFlowHandler implements CreditCardFlowHandlerInterface
 
 export class MockPaymentFlowHandlers implements PaymentFlowHandlersInterface {
   startup(): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   creditCardHandler: CreditCardFlowHandlerInterface | undefined;
   paypalHandler: PayPalFlowHandlerInterface | undefined;

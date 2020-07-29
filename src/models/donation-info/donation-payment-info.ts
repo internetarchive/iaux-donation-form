@@ -43,7 +43,9 @@ export class DonationPaymentInfo {
   static calculateTotal(amount: number, coverFees: boolean): number {
     const fee = coverFees ? this.calculateFeeAmount(amount) : 0;
     const total = amount + fee;
-    if (isNaN(total)) { return 0; }
+    if (isNaN(total)) {
+      return 0;
+    }
     const roundedValue = this.roundAmount(total);
     return roundedValue;
   }
@@ -60,8 +62,10 @@ export class DonationPaymentInfo {
    */
   static calculateFeeAmount(amount: number): number {
     const fee = amount * 0.022 + 0.3;
-    if (isNaN(fee)) { return 0; }
-    const currencyValue = this.roundAmount(fee);;
+    if (isNaN(fee)) {
+      return 0;
+    }
+    const currencyValue = this.roundAmount(fee);
     return currencyValue;
   }
 
