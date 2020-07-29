@@ -48,7 +48,7 @@ export class UpsellModalContent extends LitElement {
       ${this.yesButton}
 
       <button class="no-thanks-button" @click=${this.noThanksSelected}>
-        No, thanks. Maybe next year.
+        No, thanks. Maybe next time.
       </button>
     `;
   }
