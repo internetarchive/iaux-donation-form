@@ -321,8 +321,8 @@ export class DonationForm extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const donateButtonFontSize = css`var(--donateButtonFontSize, 26px)`;
-    const donateButtonHeight = css`var(--donateButtonHeight, 40px)`;
+    const donateButtonFontSize = css`var(--donateButtonFontSize, 2.6rem)`;
+    const donateButtonHeight = css`var(--donateButtonHeight, 4rem)`;
     const donateButtonColor = css`var(--donateButtonColor, rgba(49, 164, 129, 1))`;
     const donateButtonDisabledColor = css`var(--donateButtonDisabledColor, rgba(49, 164, 129, 0.5))`;
 
@@ -343,8 +343,8 @@ export class DonationForm extends LitElement {
       }
 
       .secure-process-note svg {
-        width: 12px;
-        height: 15px;
+        width: 1.2rem;
+        height: 1.5rem;
         vertical-align: bottom;
       }
 
@@ -360,8 +360,8 @@ export class DonationForm extends LitElement {
         border: none;
         border-radius: 5px;
         background-color: ${donateButtonColor};
-        padding-top: 5px;
-        padding-bottom: 5px;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
         height: ${donateButtonHeight};
       }
 

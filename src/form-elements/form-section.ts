@@ -37,13 +37,13 @@ export class FormSection extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const numberMargin = css`var(--formSectionNumberMargin, 10px)`;
+    const numberMargin = css`var(--formSectionNumberMargin, 1rem)`;
     const numberBackgroundColor = css`var(--formSectionNumberBackgroundColor, #333)`;
-    const numberRadius = css`var(--formSectionNumberRadius, 12px)`;
-    const numberFontSize = css`var(--formSectionNumberFontSize, 18px)`;
+    const numberRadius = css`var(--formSectionNumberRadius, 1.2rem)`;
+    const numberFontSize = css`var(--formSectionNumberFontSize, 1.8rem)`;
     const numberFontWeight = css`var(--formSectionNumberFontWeight, bold)`;
     const numberFontColor = css`var(--formSectionNumberFontColor, #fff)`;
-    const titleFontSize = css`var(--formSectionTitleFontSize, 18px)`;
+    const titleFontSize = css`var(--formSectionTitleFontSize, 1.8rem)`;
     const titleFontWeight = css`var(--formSectionTitleFontWeight, bold)`;
 
     const lineHeightCss = css`calc(${numberRadius} * 2)`;
@@ -51,7 +51,7 @@ export class FormSection extends LitElement {
     return css`
       .container {
         display: flex;
-        margin-bottom: 1em;
+        margin-bottom: 1rem;
       }
 
       .right {
@@ -74,7 +74,7 @@ export class FormSection extends LitElement {
 
       .title {
         line-height: ${lineHeightCss};
-        margin-bottom: 0.5em;
+        margin-bottom: 0.5rem;
         font-size: ${titleFontSize};
         font-weight: ${titleFontWeight};
       }

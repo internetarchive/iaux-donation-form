@@ -135,13 +135,13 @@ export class UpsellModalContent extends LitElement {
   static get styles(): CSSResult {
     const yesButtonColor = css`var(--upsellYesButtonColor, rgb(109,148,201))`;
     const yesButtonDisabledColor = css`var(--upsellYesButtonDisabledColor, rgba(109,148,201,0.5))`;
-    const noThanksFontSize = css`var(--upsellNoThanksFontSize, 14px)`;
-    const amountInputOffset = css`var(--upsellAmountInputOffset, -10px)`;
+    const noThanksFontSize = css`var(--upsellNoThanksFontSize, 1.4rem)`;
+    const amountInputOffset = css`var(--upsellAmountInputOffset, -1rem)`;
 
     return css`
       .monthly-amount {
         background-color: #fff;
-        padding: 5px 0.625em;
+        padding: 0.5rem 0.625rem;
         border-radius: 5px;
         text-align: center;
         margin-bottom: 1em;
@@ -149,7 +149,7 @@ export class UpsellModalContent extends LitElement {
       }
 
       .monthly-amount h1 {
-        font-size: 18px;
+        font-size: 1.8rem;
         font-weight: bold;
         text-align: center;
         line-height: 1.2em;
@@ -162,7 +162,7 @@ export class UpsellModalContent extends LitElement {
       }
 
       .amount-input .dollar-symbol {
-        font-size: 18px;
+        font-size: 1.8rem;
         font-weight: bold;
       }
 
@@ -172,15 +172,15 @@ export class UpsellModalContent extends LitElement {
         border: none;
         border-bottom: 1px solid gray;
         font-weight: bold;
-        font-size: 34px;
+        font-size: 3.4rem;
       }
 
       .yes-button {
-        font-size: 24px;
+        font-size: 2.4rem;
         display: block;
         width: 100%;
-        padding: 0.625em;
-        margin-top: 1em;
+        padding: 0.625rem;
+        margin-top: 1rem;
         background-color: ${yesButtonColor};
         color: #fff;
         border-radius: 5px;
@@ -197,7 +197,7 @@ export class UpsellModalContent extends LitElement {
       }
 
       .no-thanks-button {
-        margin-top: 1em;
+        margin-top: 1rem;
         width: 100%;
         text-align: center;
         color: red;
@@ -229,8 +229,8 @@ export class UpsellModalContent extends LitElement {
       }
 
       .error {
-        font-size: 14px;
-        margin: 5px 0;
+        font-size: 1.4rem;
+        margin: 0.5rem 0;
         color: red;
       }
     `;

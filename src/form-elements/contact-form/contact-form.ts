@@ -216,12 +216,12 @@ export class ContactForm extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 10px)`;
-    const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 30px)`;
+    const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 1rem)`;
+    const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 3rem)`;
 
-    const fieldSetSpacing = css`var(--fieldSetSpacing, 10px)`;
+    const fieldSetSpacing = css`var(--fieldSetSpacing, 1rem)`;
     const fieldFontFamily = css`var(--fontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
-    const fieldFontSize = css`var(--contactFieldFontSize, 16px)`;
+    const fieldFontSize = css`var(--contactFieldFontSize, 1.6rem)`;
     const fieldFontColor = css`var(--inputFieldFontColor, #333)`;
 
     const iconFieldWidth = css`calc(100% - ${iconSpacerWidth})`;

@@ -46,10 +46,10 @@ export class BadgedInput extends LitElement {
   static get styles(): CSSResult {
     const outlineCss = css`var(--inputBorder, 1px solid #d9d9d9)`;
     const outlineErrorCss = css`var(--badgedInputBorderErrorColor, red)`;
-    const iconSize = css`var(--badgedInputIconSize, 14px)`;
-    const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 30px)`;
-    const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 10px)`;
-    const fieldHeight = css`var(--badgedInputHeight, 30px)`;
+    const iconSize = css`var(--badgedInputIconSize, 1.4rem)`;
+    const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 3rem)`;
+    const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 1rem)`;
+    const fieldHeight = css`var(--badgedInputHeight, 3rem)`;
 
     return css`
       .input-wrapper {

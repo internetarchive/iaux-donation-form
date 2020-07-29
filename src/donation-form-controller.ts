@@ -326,8 +326,8 @@ export class DonationFormController extends LitElement {
 
         .donation-form-controller-container #paypal-button {
           opacity: 0.001;
-          width: 50px;
-          height: 30px;
+          width: 5rem;
+          height: 3rem;
           overflow: hidden;
         }
 
@@ -345,8 +345,8 @@ export class DonationFormController extends LitElement {
 
         .donation-form-controller-container #braintree-error-message {
           color: red;
-          font-size: 14px;
-          margin-bottom: 6px;
+          font-size: 1.4rem;
+          margin-bottom: 0.6rem;
         }
       </style>
     `;

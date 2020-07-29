@@ -283,21 +283,21 @@ export class EditDonation extends LitElement {
   /** @inheritdoc */
   static get styles(): CSSResult {
     const buttonBorderColorCss = css`var(--paymentButtonBorderColor, #333)`;
-    const buttonGridGapCss = css`var(--paymentButtonGridGap, 10px)`;
-    const buttonFontSizeCss = css`var(--paymentButtonFontSize, 16px)`;
+    const buttonGridGapCss = css`var(--paymentButtonGridGap, 1rem)`;
+    const buttonFontSizeCss = css`var(--paymentButtonFontSize, 1.6rem)`;
     const buttonSelectedColorCss = css`var(--paymentButtonSelectedColor, #f9bf3b)`;
     const buttonColorCss = css`var(--paymentButtonColor, #fff)`;
-    const coverFeesFontSizeCss = css`var(--coverFeesFontSize, 12px)`;
+    const coverFeesFontSizeCss = css`var(--coverFeesFontSize, 1.2rem)`;
     const coverFeesFontWeightCss = css`var(--coverFeesFontWeight, bold)`;
-    const customAmountWidth = css`var(--customAmountWidth, 40px)`;
+    const customAmountWidth = css`var(--customAmountWidth, 4rem)`;
     const fieldFontColor = css`var(--inputFieldFontColor, #333)`;
     const customAmountBorderCss = css`var(--inputBorder, 1px solid #d9d9d9)`;
 
     return css`
       .errors {
         color: red;
-        font-size: 14px;
-        margin-top: 5px;
+        font-size: 1.4rem;
+        margin-top: 0.5rem;
       }
 
       ul {
@@ -315,11 +315,11 @@ export class EditDonation extends LitElement {
       }
 
       .selection-button {
-        height: 30px;
+        height: 3rem;
       }
 
       .selection-button label {
-        padding: 0 3px;
+        padding: 0 0.3rem;
         display: flex;
         cursor: pointer;
         text-align: center;
@@ -342,7 +342,7 @@ export class EditDonation extends LitElement {
 
       .custom-amount-text {
         white-space: nowrap;
-        margin-right: 5px;
+        margin-right: 0.5rem;
       }
 
       input[type='radio'] {
@@ -358,14 +358,14 @@ export class EditDonation extends LitElement {
       }
 
       .cover-fees-container {
-        margin-top: 10px;
+        margin-top: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
       }
 
       .cover-fees-container input {
-        width: 20px;
+        width: 2rem;
       }
 
       .cover-fees-container label {
@@ -389,10 +389,10 @@ export class EditDonation extends LitElement {
 
       #custom-amount-input {
         width: ${customAmountWidth};
-        font-size: 16px;
+        font-size: 1.6rem;
         font-weight: bold;
         color: ${fieldFontColor};
-        padding: 1px;
+        padding: 0.1rem;
         border: ${customAmountBorderCss};
         appearance: none;
         -moz-appearance: none;

@@ -108,7 +108,7 @@ describe('Braintree Manager', () => {
 
     const hostedFieldStyle: object = {
       input: {
-        'font-size': '14px',
+        'font-size': '16px',
         'font-family': '"Helvetica Neue", Helvetica, Arial, sans-serif',
         'font-weight': '700',
         color: '#333',
