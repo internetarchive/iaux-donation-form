@@ -50,7 +50,7 @@ export class MockPaymentClients implements PaymentClientsInterface {
         generator: new Promise((resolve, reject) => {
           resolve(new MockDeviceDataCollector());
         }),
-    });
+      });
     this.hostedFields =
       generators?.hostedFields ??
       new PromisedSingleton<HostedFields>({

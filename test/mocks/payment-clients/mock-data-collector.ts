@@ -1,4 +1,6 @@
 export class MockDeviceDataCollector implements braintree.DataCollector {
+  static mockDeviceData = 'foo-mock-device-data'
+
   async create(options: {
     client: braintree.Client;
     kount: boolean;
@@ -8,7 +10,7 @@ export class MockDeviceDataCollector implements braintree.DataCollector {
   }
 
   VERSION = 'foo';
-  deviceData = 'foo-mock-device-data';
+  deviceData = MockDeviceDataCollector.mockDeviceData;
   teardown(callback?: braintree.callback | undefined): void {
     throw new Error('Method not implemented.');
   }

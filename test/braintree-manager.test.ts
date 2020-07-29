@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { expect } from '@open-wc/testing';
 
@@ -18,6 +19,9 @@ import { MockBillingInfo } from './mocks/mock-billing-info';
 import { MockCustomerInfo } from './mocks/mock-customer-info';
 import { callback } from 'braintree-web';
 import { Configuration } from 'braintree-web/modules/client';
+import { MockDeviceDataCollector } from './mocks/payment-clients/mock-data-collector';
+import { SuccessResponse } from '../src/models/response-models/success-models/success-response';
+import { mockSuccessResponse } from './mocks/mock-success-response';
 
 describe('Braintree Manager', () => {
   it('can be initialized', async () => {
@@ -35,7 +39,7 @@ describe('Braintree Manager', () => {
     expect(braintreeManager).to.not.equal(undefined);
   });
 
-  it('collects device data on startup', async () => {
+  it('collects device data on startup and submits it', async () => {
     const paymentClients = new MockPaymentClients();
     const endpointManager = new MockEndpointManager();
 
@@ -49,20 +53,122 @@ describe('Braintree Manager', () => {
 
     await braintreeManager.startup();
 
-    const donationInfo = new DonationPaymentInfo({
-      donationType: DonationType.OneTime,
-      amount: 5,
-      coverFees: false,
+    await braintreeManager.submitDonation({
+      nonce: 'boop',
+      paymentProvider: PaymentProvider.CreditCard,
+      donationInfo: DonationPaymentInfo.default,
+      billingInfo: new MockBillingInfo(),
+      customerInfo: new MockCustomerInfo(),
+    });
+
+    expect(endpointManager.requestSubmitted?.deviceData).to.equal(MockDeviceDataCollector.mockDeviceData);
+  });
+
+  it('does not collect device data if startup not called', async () => {
+    const paymentClients = new MockPaymentClients();
+    const endpointManager = new MockEndpointManager();
+
+    const braintreeManager = new BraintreeManager({
+      authorizationToken: 'foo',
+      paymentClients,
+      endpointManager,
+      hostedFieldConfig: mockHostedFieldConfig,
+      hostingEnvironment: HostingEnvironment.Development,
     });
 
     await braintreeManager.submitDonation({
       nonce: 'boop',
       paymentProvider: PaymentProvider.CreditCard,
-      donationInfo: donationInfo,
+      donationInfo: DonationPaymentInfo.default,
       billingInfo: new MockBillingInfo(),
       customerInfo: new MockCustomerInfo(),
     });
 
-    expect(endpointManager.requestSubmitted?.deviceData).to.equal('foo-mock-device-data');
+    expect(endpointManager.requestSubmitted?.deviceData).to.equal(undefined);
+  });
+
+  it('can properly set referrer and logged in user and submits them to the endpoint', async () => {
+    const paymentClients = new MockPaymentClients();
+    const endpointManager = new MockEndpointManager();
+
+    const braintreeManager = new BraintreeManager({
+      authorizationToken: 'foo',
+      paymentClients,
+      endpointManager,
+      hostedFieldConfig: mockHostedFieldConfig,
+      hostingEnvironment: HostingEnvironment.Development,
+    });
+
+    await braintreeManager.submitDonation({
+      nonce: 'boop',
+      paymentProvider: PaymentProvider.CreditCard,
+      donationInfo: DonationPaymentInfo.default,
+      billingInfo: new MockBillingInfo(),
+      customerInfo: new MockCustomerInfo(),
+    });
+
+    // verify they're empty
+    expect(endpointManager.requestSubmitted?.customFields.referrer).to.equal(undefined);
+    expect(endpointManager.requestSubmitted?.customFields.logged_in_user).to.equal(undefined);
+
+    braintreeManager.setLoggedInUser('foo-user');
+    braintreeManager.setReferrer('foo-referrer');
+
+    await braintreeManager.submitDonation({
+      nonce: 'boop',
+      paymentProvider: PaymentProvider.CreditCard,
+      donationInfo: DonationPaymentInfo.default,
+      billingInfo: new MockBillingInfo(),
+      customerInfo: new MockCustomerInfo(),
+    });
+
+    expect(endpointManager.requestSubmitted?.customFields.referrer).to.equal('foo-referrer');
+    expect(endpointManager.requestSubmitted?.customFields.logged_in_user).to.equal('foo-user');
+  });
+
+  it('properly submits an upsell donation', async () => {
+    const paymentClients = new MockPaymentClients();
+    const endpointManager = new MockEndpointManager();
+
+    const braintreeManager = new BraintreeManager({
+      authorizationToken: 'foo',
+      paymentClients,
+      endpointManager,
+      hostedFieldConfig: mockHostedFieldConfig,
+      hostingEnvironment: HostingEnvironment.Development,
+    });
+
+    await braintreeManager.submitUpsellDonation({
+      oneTimeDonationResponse: mockSuccessResponse,
+      amount: 3.50
+    });
+
+    const requestSubmitted = endpointManager.requestSubmitted;
+
+    expect(requestSubmitted?.donationType).to.equal(DonationType.Upsell);
+    expect(requestSubmitted?.amount).to.equal(3.5);
+    expect(requestSubmitted?.customFields.fee_amount_covered).to.equal(0);
+  });
+
+  it('handles successful donation', async () => {
+    const paymentClients = new MockPaymentClients();
+    const endpointManager = new MockEndpointManager();
+
+    const braintreeManager = new BraintreeManager({
+      authorizationToken: 'foo',
+      paymentClients,
+      endpointManager,
+      hostedFieldConfig: mockHostedFieldConfig,
+      hostingEnvironment: HostingEnvironment.Development,
+    });
+
+    await braintreeManager.donationSuccessful({
+      successResponse: mockSuccessResponse
+    });
+
+    const successResponseSubmitted = endpointManager.successResponseSubmitted;
+
+    expect(successResponseSubmitted?.donationType).to.equal(DonationType.OneTime);
+    expect(successResponseSubmitted?.amount).to.equal(5);
   });
 });
