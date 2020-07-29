@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 export class MockDeviceDataCollector implements braintree.DataCollector {
-  static mockDeviceData = 'foo-mock-device-data'
+  static mockDeviceData = 'foo-mock-device-data';
 
   async create(options: {
     client: braintree.Client;

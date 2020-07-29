@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 export class MockBraintreeClient implements braintree.Client {
   authorization = 'mock-auth';
   async create(options: { authorization: string }): Promise<braintree.Client> {

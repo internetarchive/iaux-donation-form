@@ -61,7 +61,9 @@ describe('Braintree Manager', () => {
       customerInfo: new MockCustomerInfo(),
     });
 
-    expect(endpointManager.requestSubmitted?.deviceData).to.equal(MockDeviceDataCollector.mockDeviceData);
+    expect(endpointManager.requestSubmitted?.deviceData).to.equal(
+      MockDeviceDataCollector.mockDeviceData,
+    );
   });
 
   it('does not collect device data if startup not called', async () => {
@@ -140,7 +142,7 @@ describe('Braintree Manager', () => {
 
     await braintreeManager.submitUpsellDonation({
       oneTimeDonationResponse: mockSuccessResponse,
-      amount: 3.50
+      amount: 3.5,
     });
 
     const requestSubmitted = endpointManager.requestSubmitted;
@@ -163,7 +165,7 @@ describe('Braintree Manager', () => {
     });
 
     await braintreeManager.donationSuccessful({
-      successResponse: mockSuccessResponse
+      successResponse: mockSuccessResponse,
     });
 
     const successResponseSubmitted = endpointManager.successResponseSubmitted;

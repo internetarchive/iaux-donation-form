@@ -121,7 +121,6 @@ export class PaymentSelector extends LitElement {
     this.paymentProviders?.applePayHandler
       .get()
       .then(handler => {
-        console.debug('getApplePayHandler inside');
         if (!handler) {
           console.error('applePayHandler unavailable');
           this.applePayMode = PaymentButtonMode.Unavailable;
@@ -131,7 +130,6 @@ export class PaymentSelector extends LitElement {
         handler
           .isAvailable()
           .then(supported => {
-            console.debug('applePay: isAvailable', supported);
             this.applePayMode = supported
               ? PaymentButtonMode.Available
               : PaymentButtonMode.Unavailable;
@@ -150,15 +148,14 @@ export class PaymentSelector extends LitElement {
       .get()
       .then(handler => {
         if (!handler) {
-          console.debug('google pay handler Available');
-          this.googlePayMode = PaymentButtonMode.Available;
+          console.error('google pay handler unavailable');
+          this.googlePayMode = PaymentButtonMode.Unavailable;
           return;
         }
 
         handler
           .isBrowserSupported()
           .then(supported => {
-            console.debug('googlePay: isAvailable', supported);
             this.googlePayMode = supported
               ? PaymentButtonMode.Available
               : PaymentButtonMode.Unavailable;

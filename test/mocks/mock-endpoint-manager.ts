@@ -29,6 +29,6 @@ export class MockEndpointManager implements BraintreeEndpointManagerInterface {
     upsellSuccessResponse?: SuccessResponse | undefined;
   }): void {
     this.successResponseSubmitted = options.successResponse;
-    this.upsellSuccessResponseSubmitted = options.upsellSuccessResponse
+    this.upsellSuccessResponseSubmitted = options.upsellSuccessResponse;
   }
 }

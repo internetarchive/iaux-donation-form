@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { SuccessResponse } from "../../src/models/response-models/success-models/success-response";
+import { SuccessResponse } from '../../src/models/response-models/success-models/success-response';
 import { DonationType } from '../../src/models/donation-info/donation-type';
 import { PaymentProvider } from '../../src/models/common/payment-provider-name';
 import { MockCustomerInfo } from './mock-customer-info';
@@ -13,5 +13,5 @@ export const mockSuccessResponse = new SuccessResponse({
   transaction_id: '123',
   customer_id: '123',
   customer: new MockCustomerInfo(),
-  billing: new MockBillingInfo()
-})
+  billing: new MockBillingInfo(),
+});
