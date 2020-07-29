@@ -41,7 +41,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
 
   /** @inheritdoc */
   async startup(): Promise<void> {
-    this.collectDeviceData();
+    return this.collectDeviceData();
   }
 
   /** @inheritdoc */
@@ -149,7 +149,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
       return;
     }
 
-    this.paymentClients.dataCollector
+    return this.paymentClients.dataCollector
       .get()
       .then((collector?: braintree.DataCollector) => {
         return collector?.create({ client: instance, kount: false, paypal: true });

@@ -3,13 +3,13 @@ export class CustomerInfo {
   firstName: string | undefined;
   lastName: string | undefined;
 
-  constructor(params: {
+  constructor(params?: {
     email: string | undefined;
     firstName: string | undefined;
     lastName: string | undefined;
   }) {
-    this.email = params.email;
-    this.firstName = params.firstName;
-    this.lastName = params.lastName;
+    this.email = params?.email;
+    this.firstName = params?.firstName;
+    this.lastName = params?.lastName;
   }
 }
