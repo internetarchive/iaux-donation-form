@@ -127,7 +127,9 @@ export class EditDonation extends LitElement {
           .checked=${options.checked}
           @change=${this.radioSelected}
         />
-        <label for=${radioId}>${options.displayText}</label>
+        <label for=${radioId}>
+          ${options.displayText}
+        </label>
       </div>
     `;
   }

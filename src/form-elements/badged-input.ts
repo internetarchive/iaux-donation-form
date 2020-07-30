@@ -36,7 +36,7 @@ export class BadgedInput extends LitElement {
   }
 
   private get iconSpaceOptionClass(): string {
-    return this.iconSpaceOption === IconSpaceOption.NoIconSpace ? 'no-icon-space' : ''
+    return this.iconSpaceOption === IconSpaceOption.NoIconSpace ? 'no-icon-space' : '';
   }
 
   /** @inheritdoc */
