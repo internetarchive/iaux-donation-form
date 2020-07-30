@@ -182,8 +182,6 @@ export class PayPalButtonDataSource implements PayPalButtonDataSourceInterface {
   async onAuthorize(data: paypal.AuthorizationData): Promise<paypal.TokenizePayload> {
     const payload: paypal.TokenizePayload = await this.paypalInstance.tokenizePayment(data);
 
-    console.debug('onAuthorize data', data, 'payload', payload);
-
     this.delegate?.payPalPaymentAuthorized(this, payload);
 
     return payload;
@@ -191,13 +189,12 @@ export class PayPalButtonDataSource implements PayPalButtonDataSourceInterface {
 
   /** @inheritdoc */
   onCancel(data: object): void {
-    console.debug('cancel', data);
     this.delegate?.payPalPaymentCancelled(this, data);
   }
 
   /** @inheritdoc */
   onError(error: string): void {
-    console.error('error', error);
+    console.error('PayPal error', error);
     this.delegate?.payPalPaymentError(this, error);
   }
 }

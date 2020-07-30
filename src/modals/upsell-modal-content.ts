@@ -86,7 +86,6 @@ export class UpsellModalContent extends LitElement {
 
   private handleCustomAmountInput(value: string): void {
     const amount = parseFloat(value);
-    console.debug('parsed', value, amount);
     if (isNaN(amount)) {
       this.error = html`
         Please enter a valid amount.

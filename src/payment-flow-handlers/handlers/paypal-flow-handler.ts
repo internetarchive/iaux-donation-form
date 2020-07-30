@@ -84,28 +84,18 @@ export class PayPalFlowHandler
   }
 
   async payPalPaymentStarted(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     dataSource: PayPalButtonDataSourceInterface,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options: object,
   ): Promise<void> {
-    console.debug(
-      'PaymentSector:payPalPaymentStarted options:',
-      dataSource,
-      dataSource.donationInfo,
-      options,
-    );
+    return
   }
 
   async payPalPaymentAuthorized(
     dataSource: PayPalButtonDataSourceInterface,
     payload: paypal.TokenizePayload,
   ): Promise<void> {
-    console.debug(
-      'PaymentSector:payPalPaymentAuthorized payload,response',
-      dataSource,
-      dataSource.donationInfo,
-      payload,
-    );
-
     this.donationFlowModalManager.showProcessingModal();
 
     const donationType = dataSource.donationInfo.donationType;
@@ -153,16 +143,13 @@ export class PayPalFlowHandler
 
     switch (donationType) {
       case DonationType.OneTime:
-        console.debug('ONE TIME, SHOW MODAL');
         this.showUpsellModal(payload, successResponse);
         break;
       case DonationType.Monthly:
-        console.debug('MONTHLY, SHOW THANKS');
         // show thank you, redirect
         this.donationFlowModalManager.showThankYouModal({ successResponse });
         break;
       case DonationType.Upsell:
-        console.debug('UPSELL, SHOW THANKS');
         if (this.upsellButtonDataSourceContainer) {
           this.donationFlowModalManager.showThankYouModal({
             successResponse: this.upsellButtonDataSourceContainer.oneTimeSuccessResponse,
@@ -179,22 +166,19 @@ export class PayPalFlowHandler
   }
 
   async payPalPaymentCancelled(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     dataSource: PayPalButtonDataSourceInterface,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     data: object,
   ): Promise<void> {
-    console.debug(
-      'PaymentSector:payPalPaymentCancelled data:',
-      dataSource,
-      dataSource.donationInfo,
-      data,
-    );
+    return;
   }
 
   async payPalPaymentError(
     dataSource: PayPalButtonDataSourceInterface,
     error: string,
   ): Promise<void> {
-    console.debug(
+    console.error(
       'PaymentSector:payPalPaymentError error:',
       dataSource,
       dataSource.donationInfo,
@@ -226,20 +210,16 @@ export class PayPalFlowHandler
     oneTimePayload: paypal.TokenizePayload,
     oneTimeSuccessResponse: SuccessResponse,
   ): Promise<void> {
-    console.debug('showUpsellModal', oneTimePayload, oneTimeSuccessResponse);
-
     this.donationFlowModalManager.showUpsellModal({
       oneTimeAmount: oneTimeSuccessResponse.amount,
       amountChanged: this.upsellAmountChanged.bind(this),
       noSelected: () => {
-        console.debug('noSelected');
         this.donationFlowModalManager.showThankYouModal({
           successResponse: oneTimeSuccessResponse,
         });
       },
       ctaMode: UpsellModalCTAMode.PayPalUpsellSlot,
       userClosedModalCallback: () => {
-        console.debug('userClosedModalCallback');
         this.donationFlowModalManager.showThankYouModal({
           successResponse: oneTimeSuccessResponse,
         });
@@ -264,7 +244,6 @@ export class PayPalFlowHandler
   }
 
   private upsellAmountChanged(amount: number): void {
-    console.debug('upsellAmountChanged', amount);
     if (this.upsellButtonDataSourceContainer) {
       this.upsellButtonDataSourceContainer.upsellButtonDataSource.donationInfo.amount = amount;
     }
@@ -338,8 +317,6 @@ export class PayPalFlowHandler
         fee_amount_covered: params.donationInfo.feeAmountCovered,
       },
     });
-
-    console.debug('buildDonationRequest, request', request);
 
     return request;
   }

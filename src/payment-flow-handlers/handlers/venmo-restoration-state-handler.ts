@@ -64,7 +64,6 @@ export class VenmoRestorationStateHandler implements VenmoRestorationStateHandle
 
   /** @inheritdoc */
   clearState(): void {
-    console.debug('clearState');
     localStorage.removeItem(this.persistanceKey);
   }
 
@@ -86,15 +85,12 @@ export class VenmoRestorationStateHandler implements VenmoRestorationStateHandle
       return undefined;
     }
 
-    console.debug('restoreState, stored data', stored);
-
     const deserialized = JSON.parse(stored);
     if (!deserialized) {
       console.error('restoreState: Data could not be deserializd');
       return undefined;
     }
 
-    console.debug('Venmo startup, deserialized data', deserialized);
     const donationInfo = new VenmoRestorationState(deserialized);
 
     return donationInfo;

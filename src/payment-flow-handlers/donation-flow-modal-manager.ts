@@ -17,6 +17,17 @@ enum ModalHeaderColor {
   Red = '#691916',
 }
 
+/**
+ * The DonationFlowModalManager is responsible for most of the high-level modal flows.
+ *
+ * Each of the payment providers has slightly different interactions, ie the PayPal button,
+ * ApplePay popup, Venmo launching the app, etc. The modal flow is the same for all of them
+ * so this class gets called by the individual payment flow handlers to take the user
+ * through the modal flow.
+ *
+ * @export
+ * @interface DonationFlowModalManagerInterface
+ */
 export interface DonationFlowModalManagerInterface {
   /**
    * Close the modal
@@ -109,16 +120,11 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
   }) {
     this.modalManager = options.modalManager;
     this.braintreeManager = options.braintreeManager;
-    this.modalManager.addEventListener('modeChanged', this.modalModeChanged as EventListener);
   }
 
   /** @inheritdoc */
   closeModal(): void {
     this.modalManager.closeModal();
-  }
-
-  private modalModeChanged(event: CustomEvent): void {
-    console.debug('modalModeChanged', event.detail.mode);
   }
 
   /** @inheritdoc */
@@ -222,8 +228,6 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     oneTimeDonationResponse: SuccessResponse,
     amount: number,
   ): Promise<DonationResponse | undefined> {
-    console.debug('yesSelected, oneTimeDonationResponse', oneTimeDonationResponse, amount, this);
-
     this.showProcessingModal();
 
     try {
@@ -231,8 +235,6 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
         oneTimeDonationResponse: oneTimeDonationResponse,
         amount: amount,
       });
-
-      console.debug('yesSelected, UpsellResponse', response);
 
       if (response.success) {
         this.completeUpsell({
@@ -318,21 +320,17 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     donationInfo: DonationPaymentInfo,
     response: SuccessResponse,
   ): void {
-    console.debug('handleSuccessfulResponse', this);
     switch (donationInfo.donationType) {
       case DonationType.OneTime:
         this.showUpsellModal({
           oneTimeAmount: response.amount,
           yesSelected: (amount: number) => {
-            console.debug('yesSelected', this);
             this.upsellModalYesSelected(response, amount);
           },
           noSelected: () => {
-            console.debug('noSelected');
             this.showThankYouModal({ successResponse: response });
           },
           userClosedModalCallback: () => {
-            console.debug('modal closed');
             this.showThankYouModal({ successResponse: response });
           },
         });

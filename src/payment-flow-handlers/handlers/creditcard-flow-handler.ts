@@ -51,8 +51,6 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
   private started = false;
 
   async startup(): Promise<void> {
-    console.debug('startup');
-
     if (this.started) {
       return;
     }
@@ -102,7 +100,6 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     try {
       hostedFieldsResponse = await handler?.tokenizeHostedFields();
     } catch (error) {
-      console.debug(error);
       this.handleHostedFieldTokenizationError(error);
       return;
     }

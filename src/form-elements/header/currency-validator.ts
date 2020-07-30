@@ -6,8 +6,6 @@ export class CurrencyValidator implements FieldValidator {
   keydown(e: KeyboardEvent): void {
     const char = e.key;
 
-    console.debug('keydown', char);
-
     // if user is holding down command/ctrl for like select all, allow it
     if (e.metaKey) {
       return;

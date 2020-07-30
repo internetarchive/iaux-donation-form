@@ -43,8 +43,6 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
       phoneNumberRequired: false,
     };
 
-    console.debug('paymentDataRequest', cardPaymentMethod, paymentDataRequest);
-
     try {
       const paymentData = await handler.paymentsClient.loadPaymentData(paymentDataRequest);
       const result: braintree.GooglePaymentTokenizePayload = await instance.parseResponse(
@@ -86,8 +84,6 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
         customerInfo: customer,
         billingInfo: billing,
       });
-
-      console.debug('result', paymentData, result);
     } catch {
       this.donationFlowModalManager.closeModal();
     }

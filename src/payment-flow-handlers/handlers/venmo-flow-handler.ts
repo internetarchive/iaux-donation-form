@@ -40,12 +40,9 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
    * @memberof VenmoFlowHandler
    */
   async startup(): Promise<void> {
-    console.debug('Venmo startup');
     const handler = await this.braintreeManager.paymentProviders.venmoHandler.get();
     const instance = await handler?.instance.get();
     if (instance?.hasTokenizationResult()) {
-      console.debug('Venmo startup, has tokenization results');
-
       // if we get redirected back from venmo in a different tab, we need to restore the data
       // that was persisted when the payment was initiated
       const restoredInfo = await this.restorationStateHandler.getRestorationState();
@@ -79,7 +76,6 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
         });
         return;
       }
-      console.debug('paymentInitiated', result);
       this.handleTokenizationResult(result, contactInfo, donationInfo);
     } catch (tokenizeError) {
       this.restorationStateHandler.clearState();
@@ -107,18 +103,14 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
   }
 
   private handleTokenizationError(tokenizeError: braintree.BraintreeError): void {
-    console.debug('tokenizeError', tokenizeError);
     // Handle flow errors or premature flow closure
     switch (tokenizeError.code) {
       case 'VENMO_APP_CANCELED':
-        console.log('User canceled Venmo flow.');
         break;
       case 'VENMO_CANCELED':
-        console.log('User canceled Venmo, or Venmo app is not available.');
         break;
       default:
         console.error('Error!', tokenizeError);
     }
-    // alert(`Tokenization Error: ${tokenizeError.code}`);
   }
 }

@@ -197,7 +197,6 @@ export class EditDonation extends LitElement {
 
   private handleCustomAmountInput(value: string): void {
     const amount = parseFloat(value);
-    console.debug('parsed', value, amount);
     if (isNaN(amount)) {
       this.dispatchEditDonationError(DonationInfoError.InvalidDonationAmount);
     } else {
