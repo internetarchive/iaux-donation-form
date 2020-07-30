@@ -37,9 +37,9 @@ import {
 
 import './form-elements/badged-input';
 
-import creditCardImg from './assets/img/icons/ccard';
-import calendarImg from './assets/img/icons/calendar';
-import lockImg from './assets/img/icons/lock';
+import creditCardImg from '@internetarchive/icon-credit-card';
+import calendarImg from '@internetarchive/icon-calendar';
+import lockImg from '@internetarchive/icon-lock';
 import { AnalyticsHandlerInterface } from './@types/analytics-handler';
 
 /**

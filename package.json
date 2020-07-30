@@ -26,13 +26,22 @@
     "test:watch": "concurrently --kill-others --names tsc,karma \"npm run tsc:watch\" \"karma start --auto-watch=true --single-run=false\""
   },
   "dependencies": {
+    "@internetarchive/icon-applepay": "^0.3.2-alpha.4",
+    "@internetarchive/icon-calendar": "^0.3.2-alpha.6",
+    "@internetarchive/icon-credit-card": "^0.3.2-alpha.8",
+    "@internetarchive/icon-email": "^0.3.2-alpha.6",
+    "@internetarchive/icon-googlepay": "^0.3.2-alpha.4",
+    "@internetarchive/icon-locale-pin": "^0.3.2-alpha.6",
+    "@internetarchive/icon-lock": "^0.3.2-alpha.6",
+    "@internetarchive/icon-paypal": "^0.3.2-alpha.4",
+    "@internetarchive/icon-user": "^0.3.1-alpha.3",
+    "@internetarchive/icon-venmo": "^0.3.2-alpha.4",
     "@internetarchive/lazy-loader-service": "0.0.0-alpha.4",
     "@internetarchive/modal-manager": "0.0.0-alpha.25",
     "@internetarchive/promised-singleton": "0.0.0-alpha.1",
-    "@types/smoothscroll-polyfill": "^0.3.1",
     "currency.js": "^2.0.2",
     "lit-element": "^2.2.1",
-    "lit-html": "^1.0.0",
+    "lit-html": "^1.2.1",
     "nanoevents": "^5.1.8"
   },
   "devDependencies": {

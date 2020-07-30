@@ -10,6 +10,8 @@ import {
   PropertyValues,
 } from 'lit-element';
 
+import lockImg from '@internetarchive/icon-lock';
+
 // we have to import the registered component independently from the definition below
 // because inside each of these files, we're registering the custom element inside
 // these files and by simply importing the class name, you lose that behavior
@@ -32,7 +34,6 @@ import { DonationType } from './models/donation-info/donation-type';
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
 import { PaymentProvider } from './models/common/payment-provider-name';
 
-import lockImg from './assets/img/icons/lock';
 import { FormSection } from './form-elements/form-section';
 
 @customElement('donation-form')

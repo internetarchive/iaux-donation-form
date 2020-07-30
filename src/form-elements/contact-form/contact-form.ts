@@ -15,9 +15,9 @@ import { AutoCompleteFieldOptions } from './autocomplete-field-options';
 import { IconSpaceOption } from '../badged-input';
 import '../badged-input';
 
-import emailImg from '../../assets/img/icons/email';
-import localePinImg from '../../assets/img/icons/locale-pin';
-import personImg from '../../assets/img/icons/person';
+import emailImg from '@internetarchive/icon-email';
+import localePinImg from '@internetarchive/icon-locale-pin';
+import userIcon from '@internetarchive/icon-user';
 
 import countries from './countries';
 
@@ -67,7 +67,7 @@ export class ContactForm extends LitElement {
               placeholder: 'First name',
               required: true,
               autocomplete: 'given-name',
-              icon: personImg,
+              icon: userIcon,
             })}
           </div>
 

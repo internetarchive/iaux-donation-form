@@ -9,10 +9,11 @@ import {
   PropertyValues,
 } from 'lit-element';
 
-import applePayButtonImage from '../assets/img/payment-providers/applepay';
-import googlePayButtonImage from '../assets/img/payment-providers/googlepay';
-import paypalButtonImage from '../assets/img/payment-providers/paypal';
-import venmoButtonImage from '../assets/img/payment-providers/venmo';
+import applePayButtonImage from '@internetarchive/icon-applepay';
+import googlePayButtonImage from '@internetarchive/icon-googlepay';
+import paypalButtonImage from '@internetarchive/icon-paypal';
+import venmoButtonImage from '@internetarchive/icon-venmo';
+
 import { PaymentProvidersInterface } from '../braintree-manager/payment-providers';
 
 enum PaymentButtonMode {
