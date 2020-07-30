@@ -24,22 +24,19 @@ export class BadgedInput extends LitElement {
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
-      <div
-        class="input-wrapper ${this.error ? 'error' : ''} ${this.iconSpaceOption ===
-        IconSpaceOption.NoIconSpace
-          ? 'no-icon-space'
-          : ''}"
-      >
+      <div class="input-wrapper ${this.errorClass} ${this.iconSpaceOptionClass}">
         <div class="icon-container">${this.icon}</div>
         <slot></slot>
       </div>
     `;
   }
 
-  get iconTemplate(): TemplateResult {
-    return html`
-      <div class="icon-container">${this.icon}</div>
-    `;
+  private get errorClass(): string {
+    return this.error ? 'error' : '';
+  }
+
+  private get iconSpaceOptionClass(): string {
+    return this.iconSpaceOption === IconSpaceOption.NoIconSpace ? 'no-icon-space' : ''
   }
 
   /** @inheritdoc */
