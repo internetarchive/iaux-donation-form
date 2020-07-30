@@ -153,8 +153,6 @@ export class PayPalButtonDataSource implements PayPalButtonDataSourceInterface {
 
   /** @inheritdoc */
   async payment(): Promise<string> {
-    console.log('PayPalButtonDataSource payment, donationInfo', this, this.donationInfo);
-
     const donationType = this.donationInfo.donationType;
     const flow = donationType === DonationType.OneTime ? 'checkout' : 'vault';
 
