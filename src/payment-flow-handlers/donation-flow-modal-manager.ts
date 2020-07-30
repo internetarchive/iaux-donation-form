@@ -129,15 +129,16 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
 
   /** @inheritdoc */
   showProcessingModal(): void {
-    const modalConfig = new ModalConfig();
-    modalConfig.headerColor = ModalHeaderColor.Blue;
-    modalConfig.showProcessingIndicator = true;
-    modalConfig.closeOnBackdropClick = false;
-    modalConfig.showCloseButton = false;
-    modalConfig.processingImageMode = 'processing';
-    modalConfig.title = html`
-      Processing...
-    `;
+    const modalConfig = new ModalConfig({
+      headerColor: ModalHeaderColor.Blue,
+      showProcessingIndicator: true,
+      closeOnBackdropClick: false,
+      showCloseButton: false,
+      processingImageMode: 'processing',
+      title: html`
+        Processing...
+      `,
+    });
     this.modalManager.showModal({ config: modalConfig });
   }
 
@@ -146,13 +147,14 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     successResponse: SuccessResponse;
     upsellSuccessResponse?: SuccessResponse;
   }): void {
-    const modalConfig = new ModalConfig();
-    modalConfig.showProcessingIndicator = true;
-    modalConfig.processingImageMode = 'complete';
-    modalConfig.headerColor = ModalHeaderColor.Green;
-    modalConfig.title = html`
-      Thank You!
-    `;
+    const modalConfig = new ModalConfig({
+      showProcessingIndicator: true,
+      processingImageMode: 'complete',
+      headerColor: ModalHeaderColor.Green,
+      title: html`
+        Thank You!
+      `,
+    });
     this.modalManager.showModal({
       config: modalConfig,
     });
@@ -161,14 +163,16 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
 
   /** @inheritdoc */
   showErrorModal(options: { message: string; userClosedModalCallback?: () => void }): void {
-    const modalConfig = new ModalConfig();
-    modalConfig.headerColor = '#691916';
-    modalConfig.headline = html`
-      An Error Occurred
-    `;
-    modalConfig.message = html`
-      ${options?.message}
-    `;
+    const modalConfig = new ModalConfig({
+      headerColor: ModalHeaderColor.Red,
+      headline: html`
+        An Error Occurred
+      `,
+      message: html`
+        ${options?.message}
+      `,
+    });
+
     this.modalManager.showModal({
       config: modalConfig,
       userClosedModalCallback: options?.userClosedModalCallback,
@@ -184,20 +188,21 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     userClosedModalCallback?: () => void;
     ctaMode?: UpsellModalCTAMode;
   }): Promise<void> {
-    const modalConfig = new ModalConfig();
-    modalConfig.headerColor = ModalHeaderColor.Green;
-    modalConfig.title = html`
-      Donation received
-    `;
-    modalConfig.headline = html`
-      Thanks for donating. Would you consider becoming a monthly donor starting next month?
-    `;
-    modalConfig.message = html`
-      Monthly support helps ensure that anyone curious enough to seek knowledge will be able to find
-      it here. For free. Together we are building the public libraries of the future.
-    `;
-    modalConfig.processingImageMode = 'complete';
-    modalConfig.showProcessingIndicator = true;
+    const modalConfig = new ModalConfig({
+      headerColor: ModalHeaderColor.Green,
+      title: html`
+        Donation received
+      `,
+      headline: html`
+        Thanks for donating. Would you consider becoming a monthly donor starting next month?
+      `,
+      message: html`
+        Monthly support helps ensure that anyone curious enough to seek knowledge will be able to
+        find it here. For free. Together we are building the public libraries of the future.
+      `,
+      processingImageMode: 'complete',
+      showProcessingIndicator: true,
+    });
 
     const upsellAmount = DonationFlowModalManager.getDefaultUpsellAmount(options.oneTimeAmount);
     if (options.amountChanged) {
