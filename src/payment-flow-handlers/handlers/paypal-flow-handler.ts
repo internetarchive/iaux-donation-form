@@ -89,7 +89,7 @@ export class PayPalFlowHandler
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options: object,
   ): Promise<void> {
-    return
+    return;
   }
 
   async payPalPaymentAuthorized(
