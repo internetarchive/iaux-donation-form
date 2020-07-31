@@ -22,14 +22,16 @@ export class VenmoHandler implements VenmoHandlerInterface {
     this.venmoClient = options.venmoClient;
     this.venmoProfileId = options.venmoProfileId;
 
-    this.instance = options.instancePromisedSingleton ?? new PromisedSingleton<braintree.Venmo>({
-      generator: this.braintreeManager.instance.get().then(braintreeInstance => {
-        return this.venmoClient.create({
-          client: braintreeInstance,
-          profileId: this.venmoProfileId,
-        });
-      }),
-    });
+    this.instance =
+      options.instancePromisedSingleton ??
+      new PromisedSingleton<braintree.Venmo>({
+        generator: this.braintreeManager.instance.get().then(braintreeInstance => {
+          return this.venmoClient.create({
+            client: braintreeInstance,
+            profileId: this.venmoProfileId,
+          });
+        }),
+      });
   }
 
   private braintreeManager: BraintreeManagerInterface;

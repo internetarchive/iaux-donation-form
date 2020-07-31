@@ -31,21 +31,23 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
     this.applePaySessionManager = options.applePaySessionManager;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.instance = options.instancePromisedSingleton ?? new PromisedSingleton<any | undefined>({
-      generator: new Promise(resolve => {
-        if (!this.applePaySessionManager.canMakePayments()) {
-          return resolve(undefined);
-        }
+    this.instance =
+      options.instancePromisedSingleton ??
+      new PromisedSingleton<any | undefined>({
+        generator: new Promise(resolve => {
+          if (!this.applePaySessionManager.canMakePayments()) {
+            return resolve(undefined);
+          }
 
-        return this.braintreeManager.instance.get().then(async braintreeClient => {
-          const instance = await this.applePayClient.create({
-            client: braintreeClient,
+          return this.braintreeManager.instance.get().then(async braintreeClient => {
+            const instance = await this.applePayClient.create({
+              client: braintreeClient,
+            });
+
+            resolve(instance);
           });
-
-          resolve(instance);
-        });
-      }),
-    });
+        }),
+      });
   }
 
   private braintreeManager: BraintreeManagerInterface;

@@ -1,10 +1,7 @@
 import { HostedFieldConfiguration } from '../../src/braintree-manager/payment-providers/credit-card/hosted-field-configuration';
-import {
-  HostedFieldContainerInterface,
-  HostedFieldContainer,
-} from '../../src/braintree-manager/payment-providers/credit-card/hosted-field-container';
+import { MockHostedFieldContainer } from './mock-hosted-fields-container';
 
-const hostedFieldStyle: object = {
+export const mockHostedFieldStyle: object = {
   input: {
     'font-size': '16px',
     'font-family': '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -20,7 +17,7 @@ const hostedFieldStyle: object = {
   },
 };
 
-const hostedFieldFieldOptions: braintree.HostedFieldFieldOptions = {
+export const mockHostedFieldFieldOptions: braintree.HostedFieldFieldOptions = {
   number: {
     selector: '#braintree-creditcard',
     placeholder: 'Card number',
@@ -35,20 +32,10 @@ const hostedFieldFieldOptions: braintree.HostedFieldFieldOptions = {
   },
 };
 
-const numberField = document.createElement('input');
-const cvvField = document.createElement('input');
-const expField = document.createElement('input');
-const errorDiv = document.createElement('div');
-
-const hostedFieldContainer: HostedFieldContainerInterface = new HostedFieldContainer({
-  number: numberField,
-  cvv: cvvField,
-  expirationDate: expField,
-  errorContainer: errorDiv,
-});
+const mockHostedFieldContainer = new MockHostedFieldContainer();
 
 export const mockHostedFieldConfig: HostedFieldConfiguration = new HostedFieldConfiguration({
-  hostedFieldStyle,
-  hostedFieldFieldOptions,
-  hostedFieldContainer,
+  hostedFieldStyle: mockHostedFieldStyle,
+  hostedFieldFieldOptions: mockHostedFieldFieldOptions,
+  hostedFieldContainer: mockHostedFieldContainer,
 });

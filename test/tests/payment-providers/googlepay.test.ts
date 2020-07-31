@@ -10,13 +10,13 @@ describe('GooglePayHandler', () => {
       const braintreeManager = new MockBraintreeManager();
       const googlePayBraintreeClient = new MockGooglePaymentClient();
       const googlePayLibrary = new MockGooglePayLibrary({
-        isReadyToPay: true
+        isReadyToPay: true,
       });
 
       const handler = new GooglePayHandler({
         braintreeManager: braintreeManager,
         googlePayBraintreeClient: googlePayBraintreeClient,
-        googlePaymentsClient: googlePayLibrary
+        googlePaymentsClient: googlePayLibrary,
       });
 
       const supported = await handler.isBrowserSupported();
@@ -28,18 +28,18 @@ describe('GooglePayHandler', () => {
       const braintreeManager = new MockBraintreeManager();
       const googlePayBraintreeClient = new MockGooglePaymentClient();
       const googlePayLibrary = new MockGooglePayLibrary({
-        isReadyToPay: false
+        isReadyToPay: false,
       });
 
       const handler = new GooglePayHandler({
         braintreeManager: braintreeManager,
         googlePayBraintreeClient: googlePayBraintreeClient,
-        googlePaymentsClient: googlePayLibrary
+        googlePaymentsClient: googlePayLibrary,
       });
 
       const supported = await handler.isBrowserSupported();
 
       expect(supported).to.be.false;
     });
-  })
+  });
 });

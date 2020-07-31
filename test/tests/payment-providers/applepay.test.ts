@@ -12,13 +12,13 @@ describe('ApplePayHandler', () => {
       const braintreeManager = new MockBraintreeManager();
       const applePayClient = new MockApplePayClient();
       const sessionManager = new MockApplePaySessionManager({
-        canMakePayments: true
-      })
+        canMakePayments: true,
+      });
       const handler = new ApplePayHandler({
         braintreeManager: braintreeManager,
         applePayClient: applePayClient,
-        applePaySessionManager: sessionManager
-      })
+        applePaySessionManager: sessionManager,
+      });
       const supported = await handler.isAvailable();
       expect(supported).to.be.true;
     });
@@ -27,13 +27,13 @@ describe('ApplePayHandler', () => {
       const braintreeManager = new MockBraintreeManager();
       const applePayClient = new MockApplePayClient();
       const sessionManager = new MockApplePaySessionManager({
-        canMakePayments: false
-      })
+        canMakePayments: false,
+      });
       const handler = new ApplePayHandler({
         braintreeManager: braintreeManager,
         applePayClient: applePayClient,
-        applePaySessionManager: sessionManager
-      })
+        applePaySessionManager: sessionManager,
+      });
       const supported = await handler.isAvailable();
       expect(supported).to.be.false;
     });
@@ -42,19 +42,19 @@ describe('ApplePayHandler', () => {
       const braintreeManager = new MockBraintreeManager();
       const applePayClient = new MockApplePayClient();
       const sessionManager = new MockApplePaySessionManager({
-        canMakePayments: true // should be true, but will be short circuited by the rejection
-      })
+        canMakePayments: true, // should be true, but will be short circuited by the rejection
+      });
       const instancePromisedSingleton = new PromisedSingleton<any>({
         generator: new Promise((resolve, reject) => {
           reject();
-        })
+        }),
       });
       const handler = new ApplePayHandler({
         braintreeManager: braintreeManager,
         applePayClient: applePayClient,
         applePaySessionManager: sessionManager,
-        instancePromisedSingleton: instancePromisedSingleton
-      })
+        instancePromisedSingleton: instancePromisedSingleton,
+      });
       const supported = await handler.isAvailable();
       expect(supported).to.be.false;
     });
@@ -65,13 +65,13 @@ describe('ApplePayHandler', () => {
       const braintreeManager = new MockBraintreeManager();
       const applePayClient = new MockApplePayClient();
       const sessionManager = new MockApplePaySessionManager({
-        canMakePayments: true
-      })
+        canMakePayments: true,
+      });
       const handler = new ApplePayHandler({
         braintreeManager: braintreeManager,
         applePayClient: applePayClient,
-        applePaySessionManager: sessionManager
-      })
+        applePaySessionManager: sessionManager,
+      });
       const event = new Event('boop');
       const datasource = await handler.createPaymentRequest(event, DonationPaymentInfo.default);
       expect(datasource.donationInfo.amount).to.equal(5);

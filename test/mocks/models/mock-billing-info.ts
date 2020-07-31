@@ -7,4 +7,4 @@ export const mockBillingInfo = new BillingInfo({
   region: 'CA',
   postalCode: '12345',
   countryCodeAlpha2: 'US',
-})
+});

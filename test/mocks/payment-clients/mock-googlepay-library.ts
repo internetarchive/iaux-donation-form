@@ -18,9 +18,7 @@ export class MockGooglePayLibrary implements google.payments.api.PaymentsClient 
     throw new Error('Method not implemented.');
   }
 
-  constructor(options: {
-    isReadyToPay: boolean;
-  }) {
+  constructor(options: { isReadyToPay: boolean }) {
     this.readyToPay = options.isReadyToPay;
   }
 

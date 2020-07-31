@@ -4,5 +4,5 @@ import { DonationRequestCustomFields } from '../../../src/models/request-models/
 export const mockCustomFields = new DonationRequestCustomFields({
   logged_in_user: 'some-username',
   referrer: 'some-referrer',
-  fee_amount_covered: 0.42
+  fee_amount_covered: 0.42,
 });

@@ -10,13 +10,18 @@ import { MockCreditCardHandler } from './individual-providers/mock-creditcard-ha
 import { MockApplePayHandler } from './individual-providers/mock-applepay-handler';
 import { MockPayPalHandler } from './individual-providers/mock-paypal-handler';
 import { MockGooglePayHandler } from './individual-providers/mock-googlepay-handler';
+import { mockHostedFieldTokenizePayload } from '../payment-clients/mock-hostedfieldtokenizepayload';
 
 export class MockPaymentProviders implements PaymentProvidersInterface {
   creditCardHandler: PromisedSingleton<CreditCardHandlerInterface> = new PromisedSingleton<
     CreditCardHandlerInterface
   >({
     generator: new Promise<CreditCardHandlerInterface>(resolve => {
-      resolve(new MockCreditCardHandler());
+      resolve(
+        new MockCreditCardHandler({
+          mockPayload: this.mockHostedFieldTokenizePayload,
+        }),
+      );
     }),
   });
 
@@ -51,4 +56,13 @@ export class MockPaymentProviders implements PaymentProvidersInterface {
       resolve(new MockVenmoHandler());
     }),
   });
+
+  constructor(options?: {
+    mockHostedFieldTokenizePayload?: braintree.HostedFieldsTokenizePayload;
+  }) {
+    this.mockHostedFieldTokenizePayload =
+      options?.mockHostedFieldTokenizePayload ?? mockHostedFieldTokenizePayload;
+  }
+
+  mockHostedFieldTokenizePayload: braintree.HostedFieldsTokenizePayload;
 }

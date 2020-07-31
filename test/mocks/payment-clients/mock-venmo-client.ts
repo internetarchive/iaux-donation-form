@@ -11,7 +11,7 @@ export class MockVenmoClient implements braintree.Venmo {
     deepLinkReturnUrl?: string | undefined;
   }): Promise<braintree.Venmo> {
     return new MockVenmoClient({
-      isBrowserSupported: this.browserSupported
+      isBrowserSupported: this.browserSupported,
     });
   }
 
@@ -43,9 +43,7 @@ export class MockVenmoClient implements braintree.Venmo {
     return;
   }
 
-  constructor(options: {
-    isBrowserSupported: boolean;
-  }) {
+  constructor(options: { isBrowserSupported: boolean }) {
     this.browserSupported = options.isBrowserSupported;
   }
 

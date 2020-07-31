@@ -10,9 +10,7 @@ export class MockApplePaySessionManager implements ApplePaySessionManagerInterfa
     return new MockApplePaySession();
   }
 
-  constructor(options: {
-    canMakePayments: boolean;
-  }) {
+  constructor(options: { canMakePayments: boolean }) {
     this.makePayments = options.canMakePayments;
   }
 

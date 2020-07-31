@@ -83,9 +83,7 @@ describe('Donation Form', () => {
 
     const contactFormSection = el.shadowRoot?.querySelector('.contact-form-section');
     const paymentSelector = el.shadowRoot?.querySelector('payment-selector') as PaymentSelector;
-    const venmoButton = paymentSelector.shadowRoot?.querySelector(
-      '.venmo',
-    ) as HTMLButtonElement;
+    const venmoButton = paymentSelector.shadowRoot?.querySelector('.venmo') as HTMLButtonElement;
 
     expect(contactFormSection?.classList.contains('hidden')).to.be.true;
 
@@ -105,9 +103,7 @@ describe('Donation Form', () => {
     el.braintreeManager = braintreeManager;
 
     const paymentSelector = el.shadowRoot?.querySelector('payment-selector') as PaymentSelector;
-    const venmoButton = paymentSelector.shadowRoot?.querySelector(
-      '.venmo',
-    ) as HTMLButtonElement;
+    const venmoButton = paymentSelector.shadowRoot?.querySelector('.venmo') as HTMLButtonElement;
 
     const clickEvent = new MouseEvent('click');
     venmoButton.dispatchEvent(clickEvent);

@@ -14,10 +14,10 @@ describe('DonationSummary', () => {
     const donationInfo = new DonationPaymentInfo({
       amount: 3.5,
       donationType: DonationType.OneTime,
-      coverFees: false
-    })
+      coverFees: false,
+    });
 
-    el.donationInfo = donationInfo
+    el.donationInfo = donationInfo;
 
     await elementUpdated(el);
 
@@ -34,10 +34,10 @@ describe('DonationSummary', () => {
     const donationInfo = new DonationPaymentInfo({
       amount: 7.5,
       donationType: DonationType.Monthly,
-      coverFees: false
-    })
+      coverFees: false,
+    });
 
-    el.donationInfo = donationInfo
+    el.donationInfo = donationInfo;
 
     await elementUpdated(el);
 

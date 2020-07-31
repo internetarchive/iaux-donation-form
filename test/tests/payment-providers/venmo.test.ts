@@ -8,21 +8,21 @@ describe('VenmoHandler', () => {
   it('calls tokenize on the client when startPayment() is called', async () => {
     const braintreeManager = new MockBraintreeManager();
     const venmoClient = new MockVenmoClient({
-      isBrowserSupported: true
-    })
+      isBrowserSupported: true,
+    });
 
     const instancePromisedSingleton = new PromisedSingleton<braintree.Venmo>({
       generator: new Promise(resolve => {
         resolve(venmoClient);
-      })
+      }),
     });
 
     const handler = new VenmoHandler({
       braintreeManager: braintreeManager,
       venmoClient: venmoClient,
       venmoProfileId: 'foo',
-      instancePromisedSingleton: instancePromisedSingleton
-    })
+      instancePromisedSingleton: instancePromisedSingleton,
+    });
     await handler.startPayment();
     expect(venmoClient.tokenizeCalled).to.be.true;
   });
@@ -31,13 +31,13 @@ describe('VenmoHandler', () => {
     it('returns true if the browser is supported', async () => {
       const braintreeManager = new MockBraintreeManager();
       const venmoClient = new MockVenmoClient({
-        isBrowserSupported: true
-      })
+        isBrowserSupported: true,
+      });
       const handler = new VenmoHandler({
         braintreeManager: braintreeManager,
         venmoClient: venmoClient,
-        venmoProfileId: 'foo'
-      })
+        venmoProfileId: 'foo',
+      });
       const supported = await handler.isBrowserSupported();
       expect(supported).to.be.true;
     });
@@ -45,13 +45,13 @@ describe('VenmoHandler', () => {
     it('returns false if the browser is not supported', async () => {
       const braintreeManager = new MockBraintreeManager();
       const venmoClient = new MockVenmoClient({
-        isBrowserSupported: false
-      })
+        isBrowserSupported: false,
+      });
       const handler = new VenmoHandler({
         braintreeManager: braintreeManager,
         venmoClient: venmoClient,
-        venmoProfileId: 'foo'
-      })
+        venmoProfileId: 'foo',
+      });
       const supported = await handler.isBrowserSupported();
       expect(supported).to.be.false;
     });
@@ -66,13 +66,13 @@ describe('VenmoHandler', () => {
 
       const braintreeManager = new MockBraintreeManager();
       const venmoClient = new MockVenmoClient({
-        isBrowserSupported: true // should be true but will be short-circuited by FireFox
-      })
+        isBrowserSupported: true, // should be true but will be short-circuited by FireFox
+      });
       const handler = new VenmoHandler({
         braintreeManager: braintreeManager,
         venmoClient: venmoClient,
-        venmoProfileId: 'foo'
-      })
+        venmoProfileId: 'foo',
+      });
       const supported = await handler.isBrowserSupported();
       expect(supported).to.be.false;
 

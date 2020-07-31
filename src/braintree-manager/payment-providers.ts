@@ -86,7 +86,7 @@ export class PaymentProviders implements PaymentProvidersInterface {
         return new ApplePayHandler({
           braintreeManager: this.braintreeManager,
           applePayClient: client,
-          applePaySessionManager: applePaySessionManager
+          applePaySessionManager: applePaySessionManager,
         });
       }),
     });

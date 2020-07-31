@@ -18,7 +18,7 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
     generator: new Promise(resolve => {
       resolve(new MockBraintreeClient());
     }),
-});
+  });
 
   setReferrer(referrer: string): void {
     console.debug('setReferrer', referrer);
@@ -47,8 +47,8 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
     console.debug('submitDonation', options);
     const response = new DonationResponse({
       success: true,
-      value: mockSuccessResponse
-    })
+      value: mockSuccessResponse,
+    });
     return response;
   }
 
@@ -59,8 +59,8 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
     console.debug('submitUpsellDonation', options);
     const response = new DonationResponse({
       success: true,
-      value: mockSuccessResponse
-    })
+      value: mockSuccessResponse,
+    });
     return response;
   }
 
