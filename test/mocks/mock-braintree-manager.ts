@@ -9,7 +9,7 @@ import { DonationResponse } from '../../src/models/response-models/donation-resp
 import { CustomerInfo } from '../../src/models/common/customer-info';
 import { SuccessResponse } from '../../src/models/response-models/success-models/success-response';
 import { MockPaymentProviders } from './payment-providers/mock-payment-providers';
-import { mockSuccessResponse } from './mock-success-response';
+import { mockSuccessResponse } from './models/mock-success-response';
 import { MockBraintreeClient } from './payment-clients/mock-braintree-client';
 
 export class MockBraintreeManager implements BraintreeManagerInterface {

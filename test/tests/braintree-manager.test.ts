@@ -10,10 +10,10 @@ import { mockHostedFieldConfig } from '../mocks/mock-hosted-fields-config';
 import { PaymentProvider } from '../../src/models/common/payment-provider-name';
 import { DonationPaymentInfo } from '../../src/models/donation-info/donation-payment-info';
 import { DonationType } from '../../src/models/donation-info/donation-type';
-import { MockBillingInfo } from '../mocks/mock-billing-info';
-import { MockCustomerInfo } from '../mocks/mock-customer-info';
+import { mockBillingInfo } from '../mocks/models/mock-billing-info';
+import { mockCustomerInfo } from '../mocks/models/mock-customer-info';
 import { MockDeviceDataCollector } from '../mocks/payment-clients/mock-data-collector';
-import { mockSuccessResponse } from '../mocks/mock-success-response';
+import { mockSuccessResponse } from '../mocks/models/mock-success-response';
 
 describe('Braintree Manager', () => {
   it('can be initialized', async () => {
@@ -49,8 +49,8 @@ describe('Braintree Manager', () => {
       nonce: 'boop',
       paymentProvider: PaymentProvider.CreditCard,
       donationInfo: DonationPaymentInfo.default,
-      billingInfo: new MockBillingInfo(),
-      customerInfo: new MockCustomerInfo(),
+      billingInfo: mockBillingInfo,
+      customerInfo: mockCustomerInfo,
     });
 
     expect(endpointManager.requestSubmitted?.deviceData).to.equal(
@@ -74,8 +74,8 @@ describe('Braintree Manager', () => {
       nonce: 'boop',
       paymentProvider: PaymentProvider.CreditCard,
       donationInfo: DonationPaymentInfo.default,
-      billingInfo: new MockBillingInfo(),
-      customerInfo: new MockCustomerInfo(),
+      billingInfo: mockBillingInfo,
+      customerInfo: mockCustomerInfo,
     });
 
     expect(endpointManager.requestSubmitted?.deviceData).to.equal(undefined);
@@ -97,8 +97,8 @@ describe('Braintree Manager', () => {
       nonce: 'boop',
       paymentProvider: PaymentProvider.CreditCard,
       donationInfo: DonationPaymentInfo.default,
-      billingInfo: new MockBillingInfo(),
-      customerInfo: new MockCustomerInfo(),
+      billingInfo: mockBillingInfo,
+      customerInfo: mockCustomerInfo,
     });
 
     // verify they're empty
@@ -112,8 +112,8 @@ describe('Braintree Manager', () => {
       nonce: 'boop',
       paymentProvider: PaymentProvider.CreditCard,
       donationInfo: DonationPaymentInfo.default,
-      billingInfo: new MockBillingInfo(),
-      customerInfo: new MockCustomerInfo(),
+      billingInfo: mockBillingInfo,
+      customerInfo: mockCustomerInfo,
     });
 
     expect(endpointManager.requestSubmitted?.customFields.referrer).to.equal('foo-referrer');

@@ -23,7 +23,7 @@ export class MockCreditCardFlowHandler implements CreditCardFlowHandlerInterface
     donationInfo: DonationPaymentInfo,
     donorContactInfo: DonorContactInfo,
   ): Promise<void> {
-    console.debug('paymentInitiated');
+    console.debug('paymentInitiated', donationInfo, donorContactInfo);
   }
   on<E extends keyof Events>(event: E, callback: Events[E]): Unsubscribe {
     console.debug('on');
