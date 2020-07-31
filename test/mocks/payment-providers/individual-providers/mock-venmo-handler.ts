@@ -5,7 +5,9 @@ import { MockVenmoClient } from '../../payment-clients/mock-venmo-client';
 export class MockVenmoHandler implements VenmoHandlerInterface {
   instance: PromisedSingleton<braintree.Venmo> = new PromisedSingleton<braintree.Venmo>({
     generator: new Promise<braintree.Venmo>(resolve => {
-      resolve(new MockVenmoClient());
+      resolve(new MockVenmoClient({
+        isBrowserSupported: true
+      }));
     }),
   });
   async isBrowserSupported(): Promise<boolean> {

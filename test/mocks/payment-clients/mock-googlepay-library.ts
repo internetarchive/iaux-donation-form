@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export class MockGooglePayLibrary implements google.payments.api.PaymentsClient {
-  isReadyToPay(
+  async isReadyToPay(
     request: google.payments.api.IsReadyToPayRequest,
   ): Promise<google.payments.api.IsReadyToPayResponse> {
-    throw new Error('Method not implemented.');
+    return { result: this.readyToPay };
   }
+
   createButton(options: google.payments.api.ButtonOptions): HTMLElement {
     throw new Error('Method not implemented.');
   }
@@ -16,4 +17,12 @@ export class MockGooglePayLibrary implements google.payments.api.PaymentsClient 
   prefetchPaymentData(request: google.payments.api.PaymentDataRequest): void {
     throw new Error('Method not implemented.');
   }
+
+  constructor(options: {
+    isReadyToPay: boolean;
+  }) {
+    this.readyToPay = options.isReadyToPay;
+  }
+
+  private readyToPay: boolean;
 }

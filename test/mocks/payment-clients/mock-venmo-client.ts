@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export class MockVenmoClient implements braintree.Venmo {
+  tokenizeCalled = false;
+
   async create(options: {
     client?: braintree.Client | undefined;
     authorization?: string | undefined;
@@ -8,13 +10,15 @@ export class MockVenmoClient implements braintree.Venmo {
     profileId?: string | undefined;
     deepLinkReturnUrl?: string | undefined;
   }): Promise<braintree.Venmo> {
-    return new MockVenmoClient();
+    return new MockVenmoClient({
+      isBrowserSupported: this.browserSupported
+    });
   }
 
   VERSION = 'foo';
 
   isBrowserSupported(): boolean {
-    return true;
+    return this.browserSupported;
   }
 
   hasTokenizationResult(): boolean {
@@ -30,10 +34,20 @@ export class MockVenmoClient implements braintree.Venmo {
       details: { username: 'boo' },
     };
 
+    this.tokenizeCalled = true;
+
     return payload;
   }
 
   async teardown(): Promise<void> {
     return;
   }
+
+  constructor(options: {
+    isBrowserSupported: boolean;
+  }) {
+    this.browserSupported = options.isBrowserSupported;
+  }
+
+  private browserSupported: boolean;
 }
