@@ -8,7 +8,6 @@ export class DonationRequestCustomFields {
   logged_in_user?: string;
   referrer?: string;
   fee_amount_covered?: number;
-  paypal_checkout_id?: string;
 }
 
 export class DonationRequest {

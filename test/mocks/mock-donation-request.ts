@@ -32,7 +32,5 @@ export const mockSuccessResponse = new DonationRequest({
     // eslint-disable-next-line @typescript-eslint/camelcase
     logged_in_user: 'some-username',
     referrer: 'https://wayback/some-url',
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    paypal_checkout_id: '12345',
   }
 });

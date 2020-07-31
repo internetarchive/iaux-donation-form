@@ -67,13 +67,6 @@ export class BraintreeManager implements BraintreeManagerInterface {
     customFields.logged_in_user = this.loggedInUser;
     customFields.referrer = this.referrer;
 
-    // we have some special handling in Civi for PayPal so we need to associate
-    // the one-time transaction as a customField separately
-    if (options.paymentProvider === PaymentProvider.PayPal) {
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      customFields.paypal_checkout_id = options.upsellOnetimeTransactionId;
-    }
-
     // This is interesting and applies only to Venmo, but will work for other providers as well.
     // In Safari, `donationInfo` actually comes through as a DonationPaymentInfo object,
     // but in Chrome, it comes through as a plain object so you can't call `.total()` on it to
