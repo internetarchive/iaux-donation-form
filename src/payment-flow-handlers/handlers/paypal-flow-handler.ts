@@ -281,43 +281,4 @@ export class PayPalFlowHandler
       console.error('error rendering paypal upsell button');
     }
   }
-
-  private buildDonationRequest(params: {
-    donationInfo: DonationPaymentInfo;
-    payload: paypal.TokenizePayload;
-  }): DonationRequest {
-    const details = params.payload?.details;
-
-    const customerInfo = new CustomerInfo({
-      email: details?.email,
-      firstName: details?.firstName,
-      lastName: details?.lastName,
-    });
-
-    const shippingAddress = details.shippingAddress;
-
-    const billingInfo = new BillingInfo({
-      streetAddress: shippingAddress?.line1,
-      extendedAddress: shippingAddress?.line2,
-      locality: shippingAddress?.city,
-      region: shippingAddress?.state,
-      postalCode: shippingAddress?.postalCode,
-      countryCodeAlpha2: shippingAddress?.countryCode,
-    });
-
-    const request = new DonationRequest({
-      paymentProvider: PaymentProvider.PayPal,
-      paymentMethodNonce: params.payload.nonce,
-      amount: params.donationInfo.total,
-      donationType: params.donationInfo.donationType,
-      customer: customerInfo,
-      billing: billingInfo,
-      customFields: {
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        fee_amount_covered: params.donationInfo.feeAmountCovered,
-      },
-    });
-
-    return request;
-  }
 }
