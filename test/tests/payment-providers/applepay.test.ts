@@ -4,6 +4,7 @@ import { ApplePayHandler } from '../../../src/braintree-manager/payment-provider
 import { MockApplePayClient } from '../../mocks/payment-clients/mock-applepay-client';
 import { MockApplePaySessionManager } from '../../mocks/payment-clients/mock-applepay-sessionmanager';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
+import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
 
 describe('ApplePayHandler', () => {
   describe('isAvailable', () => {
@@ -57,5 +58,23 @@ describe('ApplePayHandler', () => {
       const supported = await handler.isAvailable();
       expect(supported).to.be.false;
     });
-  })
+  });
+
+  describe('createPaymentRequest', () => {
+    it('creates a datasource properly', async () => {
+      const braintreeManager = new MockBraintreeManager();
+      const applePayClient = new MockApplePayClient();
+      const sessionManager = new MockApplePaySessionManager({
+        canMakePayments: true
+      })
+      const handler = new ApplePayHandler({
+        braintreeManager: braintreeManager,
+        applePayClient: applePayClient,
+        applePaySessionManager: sessionManager
+      })
+      const event = new Event('boop');
+      const datasource = await handler.createPaymentRequest(event, DonationPaymentInfo.default);
+      expect(datasource.donationInfo.amount).to.equal(5);
+    });
+  });
 });

@@ -9,8 +9,21 @@ export class MockApplePayClient implements braintree.ApplePay {
   VERSION = 'foo';
 
   createPaymentRequest(paymentRequest: ApplePayPaymentRequest): ApplePayPaymentRequest {
-    throw new Error('Method not implemented.');
+    return {
+      total: {
+        label: 'Foo Donation',
+        amount: '3.50',
+      },
+      countryCode: 'US',
+      currencyCode: 'USD',
+      supportedNetworks: ['Foo', 'Bar'],
+      merchantCapabilities: ['Foo'],
+
+      requiredBillingContactFields: ['postalAddress'],
+      requiredShippingContactFields: ['name', 'email'],
+    };
   }
+
   performValidation(
     options: {
       validationURL: string;
