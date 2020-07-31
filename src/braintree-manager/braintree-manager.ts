@@ -67,6 +67,8 @@ export class BraintreeManager implements BraintreeManagerInterface {
     customFields.logged_in_user = this.loggedInUser;
     customFields.referrer = this.referrer;
 
+    // we have some special handling in Civi for PayPal so we need to associate
+    // the one-time transaction as a customField separately
     if (options.paymentProvider === PaymentProvider.PayPal) {
       // eslint-disable-next-line @typescript-eslint/camelcase
       customFields.paypal_checkout_id = options.upsellOnetimeTransactionId;
