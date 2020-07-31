@@ -4,6 +4,24 @@ import '../src/donation-form';
 import { DonationForm } from '../src/donation-form';
 import { DonationType } from '../src/models/donation-info/donation-type';
 import { PaymentSelector } from '../src/form-elements/payment-selector';
+import { MockBraintreeManager } from './mocks/mock-braintree-manager';
+import { ContactForm } from '../src/form-elements/contact-form/contact-form';
+
+function fillInContactForm(contactForm: ContactForm): void {
+  contactForm.emailField.value = 'foo@bar.com';
+  contactForm.firstNameField.value = 'Fooey';
+  contactForm.lastNameField.value = 'McBarrison';
+  contactForm.streetAddressField.value = '123 Fake St';
+  contactForm.extendedAddressField.value = 'Apt 123';
+  contactForm.localityField.value = 'SF';
+  contactForm.regionField.value = 'CA';
+  contactForm.postalCodeField.value = '12345';
+
+  // setting the values above does not trigger any validations
+  // you have to send an `input` Event like what would happen in the browser
+  const inputEvent = new Event('input');
+  contactForm.postalCodeField.dispatchEvent(inputEvent);
+}
 
 describe('Donation Form', () => {
   describe('Configuration', () => {
@@ -51,5 +69,59 @@ describe('Donation Form', () => {
     await elementUpdated(el);
 
     expect(contactFormSection?.classList.contains('hidden')).to.be.false;
+  });
+
+  it('shows the contact form when Venmo is selected', async () => {
+    const el = (await fixture(html`
+      <donation-form></donation-form>
+    `)) as DonationForm;
+
+    const braintreeManager = new MockBraintreeManager();
+    el.braintreeManager = braintreeManager;
+
+    await elementUpdated(el);
+
+    const contactFormSection = el.shadowRoot?.querySelector('.contact-form-section');
+    const paymentSelector = el.shadowRoot?.querySelector('payment-selector') as PaymentSelector;
+    const venmoButton = paymentSelector.shadowRoot?.querySelector(
+      '.venmo',
+    ) as HTMLButtonElement;
+
+    expect(contactFormSection?.classList.contains('hidden')).to.be.true;
+
+    const clickEvent = new MouseEvent('click');
+    venmoButton.dispatchEvent(clickEvent);
+    await elementUpdated(el);
+
+    expect(contactFormSection?.classList.contains('hidden')).to.be.false;
+  });
+
+  it('activates the donate button when contact info is valid', async () => {
+    const el = (await fixture(html`
+      <donation-form></donation-form>
+    `)) as DonationForm;
+
+    const braintreeManager = new MockBraintreeManager();
+    el.braintreeManager = braintreeManager;
+
+    const paymentSelector = el.shadowRoot?.querySelector('payment-selector') as PaymentSelector;
+    const venmoButton = paymentSelector.shadowRoot?.querySelector(
+      '.venmo',
+    ) as HTMLButtonElement;
+
+    const clickEvent = new MouseEvent('click');
+    venmoButton.dispatchEvent(clickEvent);
+    await elementUpdated(el);
+
+    const donateButton = el.shadowRoot?.querySelector('#donate-button') as HTMLButtonElement;
+
+    expect(donateButton.disabled).to.be.true;
+
+    const contactForm = el.shadowRoot?.querySelector('contact-form') as ContactForm;
+    fillInContactForm(contactForm);
+
+    await elementUpdated(el);
+
+    expect(donateButton.disabled).to.be.false;
   });
 });

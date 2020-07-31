@@ -1,5 +1,9 @@
-export default {
-  paymentProvider: 'Credit Card',
+import { DonationRequest } from '../../src/models/request-models/donation-request';
+import { DonationType } from '../../src/models/donation-info/donation-type';
+import { PaymentProvider } from '../../src/models/common/payment-provider-name';
+
+export const mockSuccessResponse = new DonationRequest({
+  paymentProvider: PaymentProvider.CreditCard,
   paymentMethodNonce: 'fake-valid-nonce',
   recaptchaToken: 'fake-recaptcha-token',
   customerId: 'fake-customer-id',
@@ -9,7 +13,7 @@ export default {
   binName: 'Foo Bank of Bar Islands',
 
   amount: 5.0,
-  donationType: 'one-time',
+  donationType: DonationType.OneTime,
 
   customer: {
     email: 'foo@bar.com',
@@ -29,9 +33,6 @@ export default {
     logged_in_user: 'some-username',
     referrer: 'https://wayback/some-url',
     // eslint-disable-next-line @typescript-eslint/camelcase
-    paypal_checkout_id: 'if-applicable',
-  },
-  options: {
-    submitForSettlement: false,
-  },
-};
+    paypal_checkout_id: '12345',
+  }
+});
