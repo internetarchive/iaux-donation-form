@@ -83,7 +83,11 @@ export class PaymentProviders implements PaymentProvidersInterface {
     this.applePayHandler = new PromisedSingleton<ApplePayHandlerInterface>({
       generator: this.paymentClients.applePay.get().then(client => {
         const applePaySessionManager = new ApplePaySessionManager();
-        return new ApplePayHandler(this.braintreeManager, client, applePaySessionManager);
+        return new ApplePayHandler({
+          braintreeManager: this.braintreeManager,
+          applePayClient: client,
+          applePaySessionManager: applePaySessionManager
+        });
       }),
     });
 

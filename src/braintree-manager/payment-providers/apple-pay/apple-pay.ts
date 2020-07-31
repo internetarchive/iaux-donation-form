@@ -19,17 +19,19 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   instance: PromisedSingleton<any | undefined>;
 
-  constructor(
-    braintreeManager: BraintreeManagerInterface,
-    applePayClient: braintree.ApplePay,
-    applePaySessionManager: ApplePaySessionManagerInterface,
-  ) {
-    this.braintreeManager = braintreeManager;
-    this.applePayClient = applePayClient;
-    this.applePaySessionManager = applePaySessionManager;
+  constructor(options: {
+    braintreeManager: BraintreeManagerInterface;
+    applePayClient: braintree.ApplePay;
+    applePaySessionManager: ApplePaySessionManagerInterface;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    instancePromisedSingleton?: PromisedSingleton<any | undefined>;
+  }) {
+    this.braintreeManager = options.braintreeManager;
+    this.applePayClient = options.applePayClient;
+    this.applePaySessionManager = options.applePaySessionManager;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.instance = new PromisedSingleton<any | undefined>({
+    this.instance = options.instancePromisedSingleton ?? new PromisedSingleton<any | undefined>({
       generator: new Promise(resolve => {
         if (!this.applePaySessionManager.canMakePayments()) {
           return resolve(undefined);
