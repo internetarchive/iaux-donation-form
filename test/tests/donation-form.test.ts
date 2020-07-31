@@ -1,11 +1,11 @@
 import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
 
-import '../src/donation-form';
-import { DonationForm } from '../src/donation-form';
-import { DonationType } from '../src/models/donation-info/donation-type';
-import { PaymentSelector } from '../src/form-elements/payment-selector';
-import { MockBraintreeManager } from './mocks/mock-braintree-manager';
-import { ContactForm } from '../src/form-elements/contact-form/contact-form';
+import '../../src/donation-form';
+import { DonationForm } from '../../src/donation-form';
+import { DonationType } from '../../src/models/donation-info/donation-type';
+import { PaymentSelector } from '../../src/form-elements/payment-selector';
+import { MockBraintreeManager } from '../mocks/mock-braintree-manager';
+import { ContactForm } from '../../src/form-elements/contact-form/contact-form';
 
 function fillInContactForm(contactForm: ContactForm): void {
   contactForm.emailField.value = 'foo@bar.com';

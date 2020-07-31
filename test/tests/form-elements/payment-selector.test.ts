@@ -1,8 +1,8 @@
 import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
-import { PaymentSelector } from '../../src/form-elements/payment-selector';
-import '../../src/form-elements/payment-selector';
-import { MockPaymentProviders } from '../mocks/payment-providers/mock-payment-providers';
-import { promisedSleep } from '../helpers/promisedSleep';
+import { PaymentSelector } from '../../../src/form-elements/payment-selector';
+import '../../../src/form-elements/payment-selector';
+import { MockPaymentProviders } from '../../mocks/payment-providers/mock-payment-providers';
+import { promisedSleep } from '../../helpers/promisedSleep';
 
 describe('Payment Selector', () => {
   it('shows Venmo if it is available', async () => {
