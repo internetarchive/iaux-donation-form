@@ -35,9 +35,9 @@ export class EditDonation extends LitElement {
 
   @property({ type: Object }) private error?: TemplateResult;
 
-  @query('#custom-amount-button') customAmountButton?: HTMLInputElement;
+  @query('#custom-amount-button') private customAmountButton?: HTMLInputElement;
 
-  @query('#custom-amount-input') customAmountInput?: HTMLInputElement;
+  @query('#custom-amount-input') private customAmountInput?: HTMLInputElement;
 
   private currencyValidator: CurrencyValidator = new CurrencyValidator();
 
