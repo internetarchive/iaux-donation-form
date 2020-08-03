@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -6,6 +7,7 @@ export class MockApplePaySession implements ApplePaySession {
   paymentRequestCheck?: ApplePayJS.ApplePayPaymentRequest;
   completeMerchantValidationCalled = false;
   abortCalled = false;
+  completePaymentResult?: number | ApplePayJS.ApplePayPaymentAuthorizationResult;
 
   constructor(version?: number, paymentRequest?: ApplePayJS.ApplePayPaymentRequest) {
     this.versionCheck = version ?? 3;
@@ -20,54 +22,40 @@ export class MockApplePaySession implements ApplePaySession {
     return true;
   }
 
-  oncancel: (event: ApplePayJS.Event) => void = (event: ApplePayJS.Event) => {
-    console.debug('oncancel', event);
-  };
+  oncancel: (event: ApplePayJS.Event) => void = (event: ApplePayJS.Event) => {};
 
   onpaymentauthorized: (event: ApplePayJS.ApplePayPaymentAuthorizedEvent) => void = (
     event: ApplePayJS.ApplePayPaymentAuthorizedEvent,
-  ) => {
-    console.debug('onpaymentauthorized', event);
-  };
+  ) => {};
 
   onpaymentmethodselected: (event: ApplePayJS.ApplePayPaymentMethodSelectedEvent) => void = (
     event: ApplePayJS.ApplePayPaymentMethodSelectedEvent,
-  ) => {
-    console.debug('onpaymentmethodselected', event);
-  };
+  ) => {};
 
   onshippingcontactselected: (event: ApplePayJS.ApplePayShippingContactSelectedEvent) => void = (
     event: ApplePayJS.ApplePayShippingContactSelectedEvent,
-  ) => {
-    console.debug('onshippingcontactselected', event);
-  };
+  ) => {};
 
   onshippingmethodselected: (event: ApplePayJS.ApplePayShippingMethodSelectedEvent) => void = (
     event: ApplePayJS.ApplePayShippingMethodSelectedEvent,
-  ) => {
-    console.debug('onshippingmethodselected', event);
-  };
+  ) => {};
 
   onvalidatemerchant: (event: ApplePayJS.ApplePayValidateMerchantEvent) => void = (
     event: ApplePayJS.ApplePayValidateMerchantEvent,
-  ) => {
-    console.debug('onvalidatemerchant', event);
-  };
+  ) => {};
 
   abort(): void {
     this.abortCalled = true;
   }
 
-  begin(): void {
-    console.debug('begin');
-  }
+  begin(): void {}
 
   completeMerchantValidation(merchantSession: any): void {
     this.completeMerchantValidationCalled = true;
   }
 
   completePayment(result: number | ApplePayJS.ApplePayPaymentAuthorizationResult): void {
-    throw new Error('Method not implemented.');
+    this.completePaymentResult = result;
   }
 
   completePaymentMethodSelection(

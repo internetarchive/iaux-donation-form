@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { BraintreeManagerInterface } from '../../src/braintree-manager/braintree-interfaces';
 import { PaymentProvidersInterface } from '../../src/braintree-manager/payment-providers';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
@@ -11,8 +13,20 @@ import { SuccessResponse } from '../../src/models/response-models/success-models
 import { MockPaymentProviders } from './payment-providers/mock-payment-providers';
 import { mockSuccessResponse } from './models/mock-success-response';
 import { MockBraintreeClient } from './payment-clients/mock-braintree-client';
+import { ErrorResponse } from '../../src/models/response-models/error-models/error-response';
 
 export class MockBraintreeManager implements BraintreeManagerInterface {
+  private submitDonationError = false;
+  private submitDonationResponse: 'success' | 'failure' = 'success';
+
+  constructor(options?: {
+    submitDonationError?: boolean;
+    submitDonationResponse?: 'success' | 'failure';
+  }) {
+    this.submitDonationError = options?.submitDonationError ?? false;
+    this.submitDonationResponse = options?.submitDonationResponse ?? 'success';
+  }
+
   paymentProviders: PaymentProvidersInterface = new MockPaymentProviders();
   instance: PromisedSingleton<Client> = new PromisedSingleton<Client>({
     generator: new Promise(resolve => {
@@ -20,17 +34,11 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
     }),
   });
 
-  setReferrer(referrer: string): void {
-    console.debug('setReferrer', referrer);
-  }
+  setReferrer(referrer: string): void {}
 
-  setLoggedInUser(loggedInUser: string): void {
-    console.debug('setLoggedInUser', loggedInUser);
-  }
+  setLoggedInUser(loggedInUser: string): void {}
 
-  startup(): void {
-    console.debug('startup');
-  }
+  startup(): void {}
 
   async submitDonation(options: {
     nonce: string;
@@ -44,19 +52,27 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
     bin?: string | undefined;
     binName?: string | undefined;
   }): Promise<DonationResponse> {
-    console.debug('submitDonation', options);
-    const response = new DonationResponse({
-      success: true,
-      value: mockSuccessResponse,
-    });
-    return response;
+    if (this.submitDonationError) {
+      throw 'oh no';
+    }
+
+    if (this.submitDonationResponse === 'success') {
+      return new DonationResponse({
+        success: true,
+        value: mockSuccessResponse,
+      });
+    } else {
+      return new DonationResponse({
+        success: false,
+        value: new ErrorResponse({ message: 'error' }),
+      });
+    }
   }
 
   async submitUpsellDonation(options: {
     oneTimeDonationResponse: SuccessResponse;
     amount: number;
   }): Promise<DonationResponse> {
-    console.debug('submitUpsellDonation', options);
     const response = new DonationResponse({
       success: true,
       value: mockSuccessResponse,
@@ -67,7 +83,5 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
   donationSuccessful(options: {
     successResponse: SuccessResponse;
     upsellSuccessResponse?: SuccessResponse | undefined;
-  }): void {
-    console.debug('submitUpsellDonation', options);
-  }
+  }): void {}
 }

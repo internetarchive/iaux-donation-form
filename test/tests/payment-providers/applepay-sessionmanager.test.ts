@@ -34,7 +34,6 @@ describe('ApplePaySessionManager', () => {
       requiredShippingContactFields: ['name', 'email'],
     };
     const session = sessionManager.createNewPaymentSession(request) as MockApplePaySession;
-    // console.debug(session);
     expect(session.versionCheck).to.equal(ApplePaySessionManager.VERSION);
     expect(session.paymentRequestCheck).to.deep.equal(request);
   });

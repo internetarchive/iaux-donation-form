@@ -15,7 +15,8 @@ export interface ApplePaySessionDataSourceInterface {
 
 export interface ApplePaySessionDataSourceDelegate {
   paymentComplete(response: DonationResponse): void;
-  paymentFailed(error: string): void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  paymentFailed(error: any): void;
   paymentCancelled(): void;
 }
 
@@ -69,7 +70,6 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
 
   async onpaymentauthorized(event: ApplePayJS.ApplePayPaymentAuthorizedEvent): Promise<void> {
     let payload;
-
     try {
       payload = await this.applePayInstance.tokenize({
         token: event.payment.token,

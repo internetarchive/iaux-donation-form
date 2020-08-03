@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createNanoEvents, Emitter, Unsubscribe } from 'nanoevents';
 
 import { PaymentFlowHandlersInterface } from '../../src/payment-flow-handlers/payment-flow-handlers';
@@ -16,17 +18,14 @@ interface Events {
 export class MockCreditCardFlowHandler implements CreditCardFlowHandlerInterface {
   private emitter: Emitter<Events> = createNanoEvents<Events>();
 
-  async startup(): Promise<void> {
-    console.debug('startup');
-  }
+  async startup(): Promise<void> {}
+
   async paymentInitiated(
     donationInfo: DonationPaymentInfo,
     donorContactInfo: DonorContactInfo,
-  ): Promise<void> {
-    console.debug('paymentInitiated', donationInfo, donorContactInfo);
-  }
+  ): Promise<void> {}
+
   on<E extends keyof Events>(event: E, callback: Events[E]): Unsubscribe {
-    console.debug('on');
     return this.emitter.on(event, callback);
   }
 }

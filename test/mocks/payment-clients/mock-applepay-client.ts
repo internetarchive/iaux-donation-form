@@ -5,9 +5,14 @@ import { BraintreeError } from 'braintree-web';
 
 export class MockApplePayClient implements braintree.ApplePay {
   private shouldValidateMerchant = true;
+  private shouldTokenizeSuccessfully = true;
 
-  constructor(options?: { shouldValidateMerchant?: boolean }) {
+  constructor(options?: {
+    shouldValidateMerchant?: boolean;
+    shouldTokenizeSuccessfully?: boolean;
+  }) {
     this.shouldValidateMerchant = options?.shouldValidateMerchant ?? true;
+    this.shouldTokenizeSuccessfully = options?.shouldTokenizeSuccessfully ?? true;
   }
 
   async create(options: { client: braintree.Client }): Promise<braintree.ApplePay> {
@@ -53,7 +58,25 @@ export class MockApplePayClient implements braintree.ApplePay {
     }
   }
 
-  tokenize(options: { token: any }, callback: braintree.callback): void {
-    throw new Error('Method not implemented.');
+  async tokenize(options: { token: any }, callback?: braintree.callback): Promise<any> {
+    if (this.shouldTokenizeSuccessfully) {
+      if (callback) {
+        callback(undefined, { foo: 'bar' });
+      } else {
+        return { foo: 'bar' };
+      }
+    } else {
+      const error: BraintreeError = {
+        code: 'foo',
+        message: 'bar',
+        type: 'CUSTOMER',
+        details: 'foo bar',
+      };
+      if (callback) {
+        callback(error, undefined);
+      } else {
+        throw error;
+      }
+    }
   }
 }
