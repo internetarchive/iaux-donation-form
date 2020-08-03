@@ -61,7 +61,7 @@ export class DonationPaymentInfo {
    * @memberof DonationPaymentInfo
    */
   static calculateFeeAmount(amount: number): number {
-    const fee = amount * 0.022 + 0.3;
+    const fee = (amount * 0.022) + 0.3;
     if (isNaN(fee)) {
       return 0;
     }
