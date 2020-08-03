@@ -2,7 +2,6 @@ import { DonationPaymentInfo } from '../../../models/donation-info/donation-paym
 import { BraintreeManagerInterface } from '../../braintree-interfaces';
 import { BillingInfo } from '../../../models/common/billing-info';
 import { CustomerInfo } from '../../../models/common/customer-info';
-import { DonationRequestCustomFields } from '../../../models/request-models/donation-request';
 import { DonationResponse } from '../../../models/response-models/donation-response';
 import { PaymentProvider } from '../../../models/common/payment-provider-name';
 
@@ -43,21 +42,25 @@ export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInter
   }
 
   async onvalidatemerchant(event: ApplePayJS.ApplePayValidateMerchantEvent): Promise<void> {
-    this.applePayInstance.performValidation(
-      {
-        validationURL: event.validationURL,
-        displayName: 'Internet Archive',
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (validationErr: any, validationData: any) => {
-        if (validationErr) {
-          this.delegate?.paymentFailed(validationErr);
-          this.session.abort();
-          return;
-        }
-        this.session.completeMerchantValidation(validationData);
-      },
-    );
+    return new Promise((resolve, reject) => {
+      this.applePayInstance.performValidation(
+        {
+          validationURL: event.validationURL,
+          displayName: 'Internet Archive',
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (validationErr: any, validationData: any) => {
+          if (validationErr) {
+            this.delegate?.paymentFailed(validationErr);
+            this.session.abort();
+            reject(`Merchant validation error: ${validationErr}`);
+          } else {
+            this.session.completeMerchantValidation(validationData);
+            resolve();
+          }
+        },
+      );
+    });
   }
 
   async oncancel(): Promise<void> {

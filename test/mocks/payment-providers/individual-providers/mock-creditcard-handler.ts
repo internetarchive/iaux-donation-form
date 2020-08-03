@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CreditCardHandlerInterface } from '../../../../src/braintree-manager/payment-providers/credit-card/credit-card';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { HostedFieldName } from '../../../../src/braintree-manager/payment-providers/credit-card/hosted-field-container';

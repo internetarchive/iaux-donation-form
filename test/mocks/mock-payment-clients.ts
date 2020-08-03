@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PaymentClientsInterface } from '../../src/braintree-manager/payment-clients';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';

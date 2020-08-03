@@ -1,5 +1,4 @@
 import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
-import { MockPaymentProviders } from '../../mocks/payment-providers/mock-payment-providers';
 import { DonationSummary } from '../../../src/form-elements/header/donation-summary';
 import '../../../src/form-elements/header/donation-summary';
 import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';

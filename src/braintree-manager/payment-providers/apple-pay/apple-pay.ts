@@ -33,6 +33,7 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.instance =
       options.instancePromisedSingleton ??
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       new PromisedSingleton<any | undefined>({
         generator: new Promise(resolve => {
           if (!this.applePaySessionManager.canMakePayments()) {

@@ -7,15 +7,15 @@ export class MockPayPalClient implements braintree.PayPalCheckout {
     called: boolean;
     options?: PayPalCheckoutCreatePaymentOptions;
   } = {
-    called: false
-  }
+    called: false,
+  };
 
   tokenizePaymentResults: {
     called: boolean;
     tokenizeOptions?: PayPalCheckoutTokenizationOptions;
   } = {
-    called: false
-  }
+    called: false,
+  };
 
   async create(options: {
     client?: braintree.Client | undefined;

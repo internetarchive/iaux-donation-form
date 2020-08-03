@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { expect } from '@open-wc/testing';
 import { MockBraintreeManager } from '../../mocks/mock-braintree-manager';
 import { PayPalHandler } from '../../../src/braintree-manager/payment-providers/paypal/paypal';
@@ -20,7 +21,7 @@ describe('PayPalHandler', () => {
       braintreeManager: braintreeManager,
       paypalClient: client,
       paypalButton: buttonRenderer,
-      hostingEnvironment: HostingEnvironment.Development
+      hostingEnvironment: HostingEnvironment.Development,
     });
 
     const datasource = await handler.renderPayPalButton({
@@ -32,11 +33,11 @@ describe('PayPalHandler', () => {
         size: 'medium' as paypal.ButtonSizeOption,
         tagline: false,
       },
-      donationInfo: DonationPaymentInfo.default
-    })
+      donationInfo: DonationPaymentInfo.default,
+    });
 
     expect(datasource?.donationInfo.amount).to.equal(5);
 
-    (window['paypal'] as any) = undefined;
+    delete window['paypal' as any];
   });
 });

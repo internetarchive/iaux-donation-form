@@ -6,7 +6,6 @@ import {
   query,
   TemplateResult,
   customElement,
-  css,
 } from 'lit-element';
 
 import {

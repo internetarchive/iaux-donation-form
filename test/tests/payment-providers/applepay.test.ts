@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { expect } from '@open-wc/testing';
 import { MockBraintreeManager } from '../../mocks/mock-braintree-manager';
 import { ApplePayHandler } from '../../../src/braintree-manager/payment-providers/apple-pay/apple-pay';

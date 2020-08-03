@@ -1,23 +1,24 @@
 import { expect } from '@open-wc/testing';
-import { MockBraintreeManager } from '../../mocks/mock-braintree-manager';
-import { PayPalHandler } from '../../../src/braintree-manager/payment-providers/paypal/paypal';
 import { MockPayPalClient } from '../../mocks/payment-clients/mock-paypal-client';
 import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
 import { PayPalButtonDataSource } from '../../../src/braintree-manager/payment-providers/paypal/paypal-button-datasource';
 import { MockPayPalButtonDataSourceDelegate } from '../../mocks/payment-providers/individual-providers/mock-paypal-button-datasource';
 import { DonationType } from '../../../src/models/donation-info/donation-type';
-// import paypal from 'paypal-checkout-components'
 
 describe('PayPalButtonDataSource', () => {
   describe('Payment start', () => {
     it('notifies the delegate and creates the payment when the `payment()` callback is triggered from a button press', async () => {
       const delegate = new MockPayPalButtonDataSourceDelegate();
       const paypalInstance = new MockPayPalClient();
-      const donation = new DonationPaymentInfo({ donationType: DonationType.Monthly, amount: 3.50, coverFees: false })
+      const donation = new DonationPaymentInfo({
+        donationType: DonationType.Monthly,
+        amount: 3.5,
+        coverFees: false,
+      });
       const datasource = new PayPalButtonDataSource({
         donationInfo: donation,
-        paypalInstance: paypalInstance
-      })
+        paypalInstance: paypalInstance,
+      });
 
       datasource.delegate = delegate;
 
@@ -30,73 +31,89 @@ describe('PayPalButtonDataSource', () => {
     it('sends the proper one-time donation request', async () => {
       const delegate = new MockPayPalButtonDataSourceDelegate();
       const paypalInstance = new MockPayPalClient();
-      const donation = new DonationPaymentInfo({ donationType: DonationType.OneTime, amount: 3.50, coverFees: false })
+      const donation = new DonationPaymentInfo({
+        donationType: DonationType.OneTime,
+        amount: 3.5,
+        coverFees: false,
+      });
       const datasource = new PayPalButtonDataSource({
         donationInfo: donation,
-        paypalInstance: paypalInstance
-      })
+        paypalInstance: paypalInstance,
+      });
       datasource.delegate = delegate;
       await datasource.payment();
       expect(delegate.paymentStartedResults.options).to.deep.equal({
         flow: 'checkout',
         enableShippingAddress: true,
         amount: 3.5,
-        currency: 'USD'
+        currency: 'USD',
       });
     });
 
     it('sends the proper one-time donation request with fees covered', async () => {
-      const baseAmount = 3.5
-      const expectedTotal = DonationPaymentInfo.calculateTotal(baseAmount, true)
+      const baseAmount = 3.5;
+      const expectedTotal = DonationPaymentInfo.calculateTotal(baseAmount, true);
       const delegate = new MockPayPalButtonDataSourceDelegate();
       const paypalInstance = new MockPayPalClient();
-      const donation = new DonationPaymentInfo({ donationType: DonationType.OneTime, amount: baseAmount, coverFees: true })
+      const donation = new DonationPaymentInfo({
+        donationType: DonationType.OneTime,
+        amount: baseAmount,
+        coverFees: true,
+      });
       const datasource = new PayPalButtonDataSource({
         donationInfo: donation,
-        paypalInstance: paypalInstance
-      })
+        paypalInstance: paypalInstance,
+      });
       datasource.delegate = delegate;
       await datasource.payment();
       expect(delegate.paymentStartedResults.options).to.deep.equal({
         flow: 'checkout',
         enableShippingAddress: true,
         amount: expectedTotal,
-        currency: 'USD'
+        currency: 'USD',
       });
     });
 
     it('sends the proper monthly donation request', async () => {
       const delegate = new MockPayPalButtonDataSourceDelegate();
       const paypalInstance = new MockPayPalClient();
-      const donation = new DonationPaymentInfo({ donationType: DonationType.Monthly, amount: 1.50, coverFees: false })
+      const donation = new DonationPaymentInfo({
+        donationType: DonationType.Monthly,
+        amount: 1.5,
+        coverFees: false,
+      });
       const datasource = new PayPalButtonDataSource({
         donationInfo: donation,
-        paypalInstance: paypalInstance
-      })
+        paypalInstance: paypalInstance,
+      });
       datasource.delegate = delegate;
       await datasource.payment();
       expect(delegate.paymentStartedResults.options).to.deep.equal({
         flow: 'vault',
         enableShippingAddress: true,
-        billingAgreementDescription: "Subscribe to donate $1.50 monthly"
+        billingAgreementDescription: 'Subscribe to donate $1.50 monthly',
       });
     });
-  })
+  });
 
   describe('Payment authorized', () => {
     it('it tokenizes the payment and notifies the delegate when the payment is authorized', async () => {
       const delegate = new MockPayPalButtonDataSourceDelegate();
       const paypalInstance = new MockPayPalClient();
-      const donation = new DonationPaymentInfo({ donationType: DonationType.OneTime, amount: 3.50, coverFees: false })
+      const donation = new DonationPaymentInfo({
+        donationType: DonationType.OneTime,
+        amount: 3.5,
+        coverFees: false,
+      });
       const datasource = new PayPalButtonDataSource({
         donationInfo: donation,
-        paypalInstance: paypalInstance
-      })
+        paypalInstance: paypalInstance,
+      });
 
       const authData: paypal.AuthorizationData = {
         payerId: 'foo',
-        paymentId: '1234'
-      }
+        paymentId: '1234',
+      };
 
       datasource.delegate = delegate;
 
@@ -114,15 +131,19 @@ describe('PayPalButtonDataSource', () => {
     it('it notifies the delegate when the payment is cancelled', async () => {
       const delegate = new MockPayPalButtonDataSourceDelegate();
       const paypalInstance = new MockPayPalClient();
-      const donation = new DonationPaymentInfo({ donationType: DonationType.OneTime, amount: 3.50, coverFees: false })
+      const donation = new DonationPaymentInfo({
+        donationType: DonationType.OneTime,
+        amount: 3.5,
+        coverFees: false,
+      });
       const datasource = new PayPalButtonDataSource({
         donationInfo: donation,
-        paypalInstance: paypalInstance
-      })
+        paypalInstance: paypalInstance,
+      });
 
       const cancelData = {
         foo: 'bar',
-      }
+      };
 
       datasource.delegate = delegate;
 
@@ -137,11 +158,15 @@ describe('PayPalButtonDataSource', () => {
     it('it notifies the delegate when there has been a payment error', async () => {
       const delegate = new MockPayPalButtonDataSourceDelegate();
       const paypalInstance = new MockPayPalClient();
-      const donation = new DonationPaymentInfo({ donationType: DonationType.OneTime, amount: 3.50, coverFees: false })
+      const donation = new DonationPaymentInfo({
+        donationType: DonationType.OneTime,
+        amount: 3.5,
+        coverFees: false,
+      });
       const datasource = new PayPalButtonDataSource({
         donationInfo: donation,
-        paypalInstance: paypalInstance
-      })
+        paypalInstance: paypalInstance,
+      });
 
       const error = 'foo-error';
 
@@ -153,7 +178,4 @@ describe('PayPalButtonDataSource', () => {
       expect(delegate.paymentErrorResults.error).to.equal(error);
     });
   });
-
-
-
 });

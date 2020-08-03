@@ -1,4 +1,25 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export class MockApplePaySession implements ApplePaySession {
+  versionCheck: number;
+  paymentRequestCheck?: ApplePayJS.ApplePayPaymentRequest;
+  completeMerchantValidationCalled = false;
+  abortCalled = false;
+
+  constructor(version?: number, paymentRequest?: ApplePayJS.ApplePayPaymentRequest) {
+    this.versionCheck = version ?? 3;
+    this.paymentRequestCheck = paymentRequest;
+  }
+
+  static canMakePayments(): boolean {
+    return true;
+  }
+
+  static supportsVersion(version: number): boolean {
+    return true;
+  }
+
   oncancel: (event: ApplePayJS.Event) => void = (event: ApplePayJS.Event) => {
     console.debug('oncancel', event);
   };
@@ -34,25 +55,32 @@ export class MockApplePaySession implements ApplePaySession {
   };
 
   abort(): void {
-    throw new Error('Method not implemented.');
+    this.abortCalled = true;
   }
+
   begin(): void {
     console.debug('begin');
   }
+
   completeMerchantValidation(merchantSession: any): void {
-    throw new Error('Method not implemented.');
+    this.completeMerchantValidationCalled = true;
   }
+
   completePayment(result: number | ApplePayJS.ApplePayPaymentAuthorizationResult): void {
     throw new Error('Method not implemented.');
   }
+
   completePaymentMethodSelection(
     newTotal: ApplePayJS.ApplePayLineItem,
     newLineItems: ApplePayJS.ApplePayLineItem[],
   ): void;
+
   completePaymentMethodSelection(update: ApplePayJS.ApplePayPaymentMethodUpdate): void;
+
   completePaymentMethodSelection(newTotal: any, newLineItems?: any) {
     throw new Error('Method not implemented.');
   }
+
   completeShippingContactSelection(
     status: number,
     newShippingMethods: ApplePayJS.ApplePayShippingMethod[],

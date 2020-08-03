@@ -8,7 +8,6 @@ import { DonationType } from '../../models/donation-info/donation-type';
 import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
 
 import { UpsellModalCTAMode } from '../../modals/upsell-modal-content';
-import { DonationRequest } from '../../models/request-models/donation-request';
 import { SuccessResponse } from '../../models/response-models/success-models/success-response';
 import { CustomerInfo } from '../../models/common/customer-info';
 import { BillingInfo } from '../../models/common/billing-info';

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApplePayHandlerInterface } from '../../../../src/braintree-manager/payment-providers/apple-pay/apple-pay';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';

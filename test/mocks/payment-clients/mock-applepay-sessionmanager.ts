@@ -7,7 +7,7 @@ export class MockApplePaySessionManager implements ApplePaySessionManagerInterfa
   }
 
   createNewPaymentSession(paymentRequest: ApplePayJS.ApplePayPaymentRequest): ApplePaySession {
-    return new MockApplePaySession();
+    return new MockApplePaySession(1, paymentRequest);
   }
 
   constructor(options: { canMakePayments: boolean }) {
