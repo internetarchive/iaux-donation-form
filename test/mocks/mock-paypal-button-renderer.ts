@@ -8,7 +8,6 @@ export class MockPayPalButtonRenderer implements paypal.ButtonRenderer {
     options: paypal.ButtonRenderOptions,
     selector: string,
   ): void {
-    console.debug('MOCK RENDER');
     this.options = options;
     this.selector = selector;
   }

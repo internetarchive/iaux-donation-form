@@ -5,9 +5,13 @@ import { MockPayPalClient } from '../../mocks/payment-clients/mock-paypal-client
 import { MockPayPalButtonRenderer } from '../../mocks/mock-paypal-button-renderer';
 import { HostingEnvironment } from '../../../src/braintree-manager/braintree-interfaces';
 import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
+// import paypal from 'paypal-checkout-components'
 
-describe('ApplePayHandler', () => {
+describe('PayPalHandler', () => {
   it('can render the paypal button', async () => {
+    // This is the only way I can figure out how to mock window.paypal
+    (window['paypal'] as any) = { FUNDING: { VENMO: 'venmo' } };
+
     const braintreeManager = new MockBraintreeManager();
     const client = new MockPayPalClient();
     const buttonRenderer = new MockPayPalButtonRenderer();
@@ -22,7 +26,7 @@ describe('ApplePayHandler', () => {
     const datasource = await handler.renderPayPalButton({
       selector: 'foo',
       style: {
-        color: 'blue' as paypal.ButtonColorOption, // I'm not sure why I can't access the enum directly here.. I get a UMD error
+        color: 'blue' as paypal.ButtonColorOption,
         label: 'paypal' as paypal.ButtonLabelOption,
         shape: 'rect' as paypal.ButtonShapeOption,
         size: 'medium' as paypal.ButtonSizeOption,
@@ -32,5 +36,7 @@ describe('ApplePayHandler', () => {
     })
 
     expect(datasource?.donationInfo.amount).to.equal(5);
+
+    (window['paypal'] as any) = undefined;
   });
 });
