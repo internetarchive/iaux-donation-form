@@ -38,7 +38,7 @@
     "@internetarchive/icon-user": "^0.4.0",
     "@internetarchive/icon-venmo": "^0.4.0",
     "@internetarchive/lazy-loader-service": "0.0.0-alpha.4",
-    "@internetarchive/modal-manager": "0.0.0-alpha.26",
+    "@internetarchive/modal-manager": "0.0.0-alpha.27",
     "@internetarchive/promised-singleton": "0.0.0-alpha.1",
     "currency.js": "^2.0.2",
     "lit-element": "^2.2.1",
