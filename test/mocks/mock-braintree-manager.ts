@@ -15,6 +15,11 @@ import { MockBraintreeClient } from './payment-clients/mock-braintree-client';
 import { ErrorResponse } from '../../src/models/response-models/error-models/error-response';
 
 export class MockBraintreeManager implements BraintreeManagerInterface {
+  donationSuccessfulOptions?: {
+    successResponse: SuccessResponse;
+    upsellSuccessResponse?: SuccessResponse | undefined;
+  };
+
   private submitDonationError = false;
   private submitDonationResponse: 'success' | 'failure' = 'success';
 
@@ -82,5 +87,7 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
   donationSuccessful(options: {
     successResponse: SuccessResponse;
     upsellSuccessResponse?: SuccessResponse | undefined;
-  }): void {}
+  }): void {
+    this.donationSuccessfulOptions = options;
+  }
 }
