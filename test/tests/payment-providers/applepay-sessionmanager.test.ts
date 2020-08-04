@@ -2,7 +2,6 @@
 import { expect } from '@open-wc/testing';
 import { ApplePaySessionManager } from '../../../src/braintree-manager/payment-providers/apple-pay/apple-pay-session-manager';
 import { MockApplePaySession } from '../../mocks/payment-clients/mock-applepay-session';
-import { ApplePayPaymentRequest } from 'braintree-web/modules/apple-pay';
 
 describe('ApplePaySessionManager', () => {
   it('properly determines if payments can be made', async () => {

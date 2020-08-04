@@ -3,7 +3,6 @@
 import { BraintreeManagerInterface } from '../../src/braintree-manager/braintree-interfaces';
 import { PaymentProvidersInterface } from '../../src/braintree-manager/payment-providers';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
-import { Client } from 'braintree-web';
 import { PaymentProvider } from '../../src/models/common/payment-provider-name';
 import { DonationPaymentInfo } from '../../src/models/donation-info/donation-payment-info';
 import { BillingInfo } from '../../src/models/common/billing-info';
@@ -28,7 +27,7 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
   }
 
   paymentProviders: PaymentProvidersInterface = new MockPaymentProviders();
-  instance: PromisedSingleton<Client> = new PromisedSingleton<Client>({
+  instance: PromisedSingleton<braintree.Client> = new PromisedSingleton<braintree.Client>({
     generator: new Promise(resolve => {
       resolve(new MockBraintreeClient());
     }),

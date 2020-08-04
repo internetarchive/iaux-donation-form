@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PayPalCheckoutCreatePaymentOptions } from 'braintree-web';
-import { PayPalCheckoutTokenizationOptions } from 'braintree-web/modules/paypal-checkout';
-
 export class MockPayPalClient implements braintree.PayPalCheckout {
   createPaymentResults: {
     called: boolean;
-    options?: PayPalCheckoutCreatePaymentOptions;
+    options?: braintree.PayPalCheckoutCreatePaymentOptions;
   } = {
     called: false,
   };
 
   tokenizePaymentResults: {
     called: boolean;
-    tokenizeOptions?: PayPalCheckoutTokenizationOptions;
+    tokenizeOptions?: braintree.PayPalCheckoutTokenizationOptions;
   } = {
     called: false,
   };
@@ -28,7 +25,7 @@ export class MockPayPalClient implements braintree.PayPalCheckout {
   VERSION = 'foo';
 
   async createPayment(
-    options: PayPalCheckoutCreatePaymentOptions,
+    options: braintree.PayPalCheckoutCreatePaymentOptions,
     callback?: braintree.callback | undefined,
   ): Promise<string> {
     this.createPaymentResults.called = true;
@@ -37,7 +34,7 @@ export class MockPayPalClient implements braintree.PayPalCheckout {
   }
 
   async tokenizePayment(
-    tokenizeOptions: PayPalCheckoutTokenizationOptions,
+    tokenizeOptions: braintree.PayPalCheckoutTokenizationOptions,
   ): Promise<paypal.TokenizePayload> {
     this.tokenizePaymentResults.called = true;
     this.tokenizePaymentResults.tokenizeOptions = tokenizeOptions;

@@ -20,7 +20,7 @@ export class MockHostedFieldsClient implements braintree.HostedFields {
   VERSION = 'foo';
 
   on(
-    event: import('braintree-web/modules/hosted-fields').HostedFieldEventType,
+    event: braintree.HostedFieldEventType,
     handler: (event: braintree.HostedFieldsStateObject) => void,
   ): void {
     throw new Error('Method not implemented.');

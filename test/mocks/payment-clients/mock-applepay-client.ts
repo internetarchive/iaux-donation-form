@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ApplePayPaymentRequest } from 'braintree-web/modules/apple-pay';
-import { BraintreeError } from 'braintree-web';
-
 export class MockApplePayClient implements braintree.ApplePay {
   private shouldValidateMerchant = true;
   private shouldTokenizeSuccessfully = true;
@@ -21,7 +18,7 @@ export class MockApplePayClient implements braintree.ApplePay {
 
   VERSION = 'foo';
 
-  createPaymentRequest(paymentRequest: ApplePayPaymentRequest): ApplePayJS.ApplePayPaymentRequest {
+  createPaymentRequest(paymentRequest: braintree.ApplePayPaymentRequest): braintree.ApplePayPaymentRequest {
     return {
       total: {
         label: 'Foo Donation',
@@ -48,7 +45,7 @@ export class MockApplePayClient implements braintree.ApplePay {
     if (this.shouldValidateMerchant) {
       callback(undefined, { foo: 'bar' });
     } else {
-      const error: BraintreeError = {
+      const error: braintree.BraintreeError = {
         code: 'foo',
         message: 'bar',
         type: 'CUSTOMER',
@@ -66,7 +63,7 @@ export class MockApplePayClient implements braintree.ApplePay {
         return { foo: 'bar' };
       }
     } else {
-      const error: BraintreeError = {
+      const error: braintree.BraintreeError = {
         code: 'foo',
         message: 'bar',
         type: 'CUSTOMER',

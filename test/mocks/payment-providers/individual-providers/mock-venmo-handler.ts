@@ -15,7 +15,7 @@ export class MockVenmoHandler implements VenmoHandlerInterface {
   async isBrowserSupported(): Promise<boolean> {
     return true;
   }
-  startPayment(): Promise<import('braintree-web').VenmoTokenizePayload> {
+  startPayment(): Promise<braintree.VenmoTokenizePayload> {
     throw new Error('Method not implemented.');
   }
 }

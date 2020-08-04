@@ -3,7 +3,6 @@ import { expect } from '@open-wc/testing';
 import { MockApplePaySession } from '../../mocks/payment-clients/mock-applepay-session';
 import { MockApplePaySessionDataSourceDelegate } from '../../mocks/payment-providers/individual-providers/mock-applepay-datasource-delegate';
 import { ApplePaySessionDataSource } from '../../../src/braintree-manager/payment-providers/apple-pay/apple-pay-session-datasource';
-import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
 import { MockBraintreeManager } from '../../mocks/mock-braintree-manager';
 import { MockApplePayClient } from '../../mocks/payment-clients/mock-applepay-client';
 import { MockApplePayValidateMerchantEvent } from '../../mocks/payment-clients/mock-applepay-validatemerchantevent';
