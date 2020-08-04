@@ -3,15 +3,18 @@ import '../../../src/form-elements/header/edit-donation';
 import { EditDonation, DonationInfoError } from '../../../src/form-elements/header/edit-donation';
 import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
 import { DonationType } from '../../../src/models/donation-info/donation-type';
+import { MockDonationInfo } from '../../mocks/mock-donation-info';
 
 describe('EditDonation', () => {
   it('emits donationInfoChanged event when preset amount selected', async () => {
     const el = (await fixture(html`
-      <edit-donation .donationInfo=${DonationPaymentInfo.default}></edit-donation>>
+      <edit-donation .donationInfo=${new MockDonationInfo()}></edit-donation>>
     `)) as EditDonation;
     const preset10Button = el.shadowRoot?.querySelector('#amount-10-option');
     const clickEvent = new MouseEvent('click');
-    setTimeout(() => { preset10Button?.dispatchEvent(clickEvent); });
+    setTimeout(() => {
+      preset10Button?.dispatchEvent(clickEvent);
+    });
     const response = await oneEvent(el, 'donationInfoChanged');
     const donationInfo = response.detail.donationInfo as DonationPaymentInfo;
     expect(donationInfo.amount).to.equal(10);
@@ -19,11 +22,13 @@ describe('EditDonation', () => {
 
   it('emits donationInfoChanged event when frequency selected', async () => {
     const el = (await fixture(html`
-      <edit-donation .donationInfo=${DonationPaymentInfo.default}></edit-donation>>
+      <edit-donation .donationInfo=${new MockDonationInfo()}></edit-donation>>
     `)) as EditDonation;
     const monthlyButton = el.shadowRoot?.querySelector('#donationType-monthly-option');
     const clickEvent = new MouseEvent('click');
-    setTimeout(() => { monthlyButton?.dispatchEvent(clickEvent); });
+    setTimeout(() => {
+      monthlyButton?.dispatchEvent(clickEvent);
+    });
     const response = await oneEvent(el, 'donationInfoChanged');
     const donationInfo = response.detail.donationInfo as DonationPaymentInfo;
     expect(donationInfo.amount).to.equal(5);
@@ -45,11 +50,13 @@ describe('EditDonation', () => {
 
   it('emits donationInfoChanged event when cover fees checked', async () => {
     const el = (await fixture(html`
-      <edit-donation .donationInfo=${DonationPaymentInfo.default}></edit-donation>>
+      <edit-donation .donationInfo=${new MockDonationInfo()}></edit-donation>>
     `)) as EditDonation;
     const coverFeesCheckbox = el.shadowRoot?.querySelector('#cover-fees');
     const clickEvent = new MouseEvent('click');
-    setTimeout(() => { coverFeesCheckbox?.dispatchEvent(clickEvent); });
+    setTimeout(() => {
+      coverFeesCheckbox?.dispatchEvent(clickEvent);
+    });
     const response = await oneEvent(el, 'donationInfoChanged');
     const donationInfo = response.detail.donationInfo as DonationPaymentInfo;
     expect(donationInfo.amount).to.equal(5);
@@ -58,14 +65,18 @@ describe('EditDonation', () => {
 
   it('ensure cover fees can be unchecked', async () => {
     const el = (await fixture(html`
-      <edit-donation .donationInfo=${DonationPaymentInfo.default}></edit-donation>>
+      <edit-donation .donationInfo=${new MockDonationInfo()}></edit-donation>>
     `)) as EditDonation;
     const coverFeesCheckbox = el.shadowRoot?.querySelector('#cover-fees');
     const clickEvent = new MouseEvent('click');
-    setTimeout(() => { coverFeesCheckbox?.dispatchEvent(clickEvent); });
+    setTimeout(() => {
+      coverFeesCheckbox?.dispatchEvent(clickEvent);
+    });
     await oneEvent(el, 'donationInfoChanged');
     const clickEvent2 = new MouseEvent('click');
-    setTimeout(() => { coverFeesCheckbox?.dispatchEvent(clickEvent2); });
+    setTimeout(() => {
+      coverFeesCheckbox?.dispatchEvent(clickEvent2);
+    });
     const response2 = await oneEvent(el, 'donationInfoChanged');
     const donationInfo = response2.detail.donationInfo as DonationPaymentInfo;
     expect(donationInfo.amount).to.equal(5);
@@ -74,11 +85,13 @@ describe('EditDonation', () => {
 
   it('selects the custom amount radio button when custom amount input changed', async () => {
     const el = (await fixture(html`
-      <edit-donation></edit-donation>>
+      <edit-donation .donationInfo=${new MockDonationInfo()}></edit-donation>>
     `)) as EditDonation;
     const customInput = el.shadowRoot?.querySelector('#custom-amount-input') as HTMLInputElement;
-    const customRadioButton = el.shadowRoot?.querySelector('#custom-amount-button') as HTMLInputElement;
-    customInput.value = '3.50'
+    const customRadioButton = el.shadowRoot?.querySelector(
+      '#custom-amount-button',
+    ) as HTMLInputElement;
+    customInput.value = '3.50';
     expect(customRadioButton?.checked).to.be.false;
     const inputEvent = new Event('input');
     customInput.dispatchEvent(inputEvent);
@@ -88,12 +101,14 @@ describe('EditDonation', () => {
 
   it('emits a `editDonationError` event if the custom amount is too low', async () => {
     const el = (await fixture(html`
-      <edit-donation></edit-donation>>
+      <edit-donation .donationInfo=${new MockDonationInfo()}></edit-donation>>
     `)) as EditDonation;
     const customInput = el.shadowRoot?.querySelector('#custom-amount-input') as HTMLInputElement;
-    customInput.value = '0.50'
+    customInput.value = '0.50';
     const inputEvent = new Event('input');
-    setTimeout(() => { customInput?.dispatchEvent(inputEvent); });
+    setTimeout(() => {
+      customInput?.dispatchEvent(inputEvent);
+    });
     const response = await oneEvent(el, 'editDonationError');
     const error = response.detail.error;
     expect(error).to.equal(DonationInfoError.DonationTooLow);
@@ -101,12 +116,14 @@ describe('EditDonation', () => {
 
   it('emits a `editDonationError` event if the custom amount is too high', async () => {
     const el = (await fixture(html`
-      <edit-donation></edit-donation>>
+      <edit-donation .donationInfo=${new MockDonationInfo()}></edit-donation>>
     `)) as EditDonation;
     const customInput = el.shadowRoot?.querySelector('#custom-amount-input') as HTMLInputElement;
-    customInput.value = '10000'
+    customInput.value = '10000';
     const inputEvent = new Event('input');
-    setTimeout(() => { customInput?.dispatchEvent(inputEvent); });
+    setTimeout(() => {
+      customInput?.dispatchEvent(inputEvent);
+    });
     const response = await oneEvent(el, 'editDonationError');
     const error = response.detail.error;
     expect(error).to.equal(DonationInfoError.DonationTooHigh);
@@ -114,12 +131,14 @@ describe('EditDonation', () => {
 
   it('emits a `editDonationError` event if the custom amount is empty', async () => {
     const el = (await fixture(html`
-      <edit-donation></edit-donation>>
+      <edit-donation .donationInfo=${new MockDonationInfo()}></edit-donation>>
     `)) as EditDonation;
     const customInput = el.shadowRoot?.querySelector('#custom-amount-input') as HTMLInputElement;
-    customInput.value = ''
+    customInput.value = '';
     const inputEvent = new Event('input');
-    setTimeout(() => { customInput?.dispatchEvent(inputEvent); });
+    setTimeout(() => {
+      customInput?.dispatchEvent(inputEvent);
+    });
     const response = await oneEvent(el, 'editDonationError');
     const error = response.detail.error;
     expect(error).to.equal(DonationInfoError.InvalidDonationAmount);
@@ -127,19 +146,17 @@ describe('EditDonation', () => {
 
   it('displays an error message if there is one', async () => {
     const el = (await fixture(html`
-      <edit-donation></edit-donation>>
+      <edit-donation .donationInfo=${new MockDonationInfo()}></edit-donation>>
     `)) as EditDonation;
     const errorsContainer = el.shadowRoot?.querySelector('.errors') as HTMLDivElement;
     expect(errorsContainer.innerText).to.be.empty;
-
     const customInput = el.shadowRoot?.querySelector('#custom-amount-input') as HTMLInputElement;
-    customInput.value = '10000'
-
+    customInput.value = '10000';
     const inputEvent = new Event('input');
-    setTimeout(() => { customInput?.dispatchEvent(inputEvent); });
+    setTimeout(() => {
+      customInput?.dispatchEvent(inputEvent);
+    });
     await oneEvent(el, 'editDonationError');
-
     expect(errorsContainer.innerText).to.not.be.empty;
   });
-
 });

@@ -29,7 +29,7 @@ export enum DonationInfoError {
 
 @customElement('edit-donation')
 export class EditDonation extends LitElement {
-  @property({ type: Object }) donationInfo: DonationPaymentInfo = DonationPaymentInfo.default;
+  @property({ type: Object }) donationInfo?: DonationPaymentInfo;
 
   @property({ type: Array }) amountOptions: number[] = [5, 10, 25, 50, 100, 500, 1000];
 
@@ -62,11 +62,21 @@ export class EditDonation extends LitElement {
         <div class="cover-fees-container">
           <input type="checkbox" id="cover-fees" @input=${this.coverFeesChecked} />
           <label for="cover-fees">
-            I'll generously add ${currency(this.donationInfo.fee, { symbol: '$' }).format()} to
-            cover the transaction fees so you can keep 100% of my donation.
+            ${this.coverFeesTextTemplate}
           </label>
         </div>
       </form-section>
+    `;
+  }
+
+  private get coverFeesTextTemplate(): TemplateResult {
+    if (!this.donationInfo) {
+      return html``;
+    }
+
+    return html`
+      I'll generously add ${currency(this.donationInfo.fee, { symbol: '$' }).format()} to cover the
+      transaction fees so you can keep 100% of my donation.
     `;
   }
 
@@ -77,7 +87,7 @@ export class EditDonation extends LitElement {
           group: SelectionGroup.DonationType,
           value: DonationType.OneTime,
           displayText: 'One time',
-          checked: this.donationInfo.donationType === DonationType.OneTime,
+          checked: this.donationInfo?.donationType === DonationType.OneTime,
         })}
       </li>
 
@@ -86,7 +96,7 @@ export class EditDonation extends LitElement {
           group: SelectionGroup.DonationType,
           value: DonationType.Monthly,
           displayText: 'Monthly',
-          checked: this.donationInfo.donationType === DonationType.Monthly,
+          checked: this.donationInfo?.donationType === DonationType.Monthly,
         })}
       </li>
     `;
@@ -95,7 +105,7 @@ export class EditDonation extends LitElement {
   private get presetAmountsTemplate(): TemplateResult {
     return html`
       ${this.amountOptions.map(amount => {
-        const checked = !this.customAmountButton?.checked && amount === this.donationInfo.amount;
+        const checked = !this.customAmountButton?.checked && amount === this.donationInfo?.amount;
         return html`
           <li>
             ${this.getRadioButton({
@@ -135,6 +145,10 @@ export class EditDonation extends LitElement {
   }
 
   private get customAmountTemplate(): TemplateResult {
+    if (!this.donationInfo) {
+      return html``;
+    }
+
     const isCustomAmount = !this.amountOptions.includes(this.donationInfo.amount);
     const value = isCustomAmount ? this.donationInfo.amount : '';
 
@@ -176,6 +190,9 @@ export class EditDonation extends LitElement {
   }
 
   private coverFeesChecked(e: Event): void {
+    if (!this.donationInfo) {
+      return;
+    }
     const target = e.target as HTMLInputElement;
     const coverFees = target.checked;
     this.donationInfo = new DonationPaymentInfo({
@@ -205,6 +222,10 @@ export class EditDonation extends LitElement {
   }
 
   private amountChanged(amount: number): void {
+    if (!this.donationInfo) {
+      return;
+    }
+
     if (amount >= 10000) {
       this.error = html`
         To make a donation of $10,000 or more, please contact our philanthropy department at
@@ -256,11 +277,17 @@ export class EditDonation extends LitElement {
   }
 
   private donationTypeChanged(donationType: DonationType): void {
+    if (!this.donationInfo) {
+      return;
+    }
     this.donationInfo.donationType = donationType;
     this.dispatchDonationInfoChangedEvent();
   }
 
   private presetAmountChanged(amount: number): void {
+    if (!this.donationInfo) {
+      return;
+    }
     this.error = undefined;
     if (this.customAmountInput) this.customAmountInput.value = '';
     this.donationInfo.amount = amount;
@@ -268,6 +295,10 @@ export class EditDonation extends LitElement {
   }
 
   private dispatchDonationInfoChangedEvent(): void {
+    if (!this.donationInfo) {
+      return;
+    }
+
     const newDonationInfo = new DonationPaymentInfo({
       donationType: this.donationInfo.donationType,
       amount: this.donationInfo.amount,

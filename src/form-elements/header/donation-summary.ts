@@ -15,7 +15,7 @@ import { DonationPaymentInfo } from '../../models/donation-info/donation-payment
 
 @customElement('donation-summary')
 export class DonationSummary extends LitElement {
-  @property({ type: Object }) donationInfo: DonationPaymentInfo = DonationPaymentInfo.default;
+  @property({ type: Object }) donationInfo?: DonationPaymentInfo;
 
   /** @inheritdoc */
   render(): TemplateResult {
@@ -26,6 +26,10 @@ export class DonationSummary extends LitElement {
   }
 
   get displayTitle(): string {
+    if (!this.donationInfo) {
+      return '';
+    }
+
     const monthlyString = this.donationInfo.donationType === DonationType.Monthly ? 'Monthly' : '';
     const amount = this.donationInfo.amount;
     let precision = 2;

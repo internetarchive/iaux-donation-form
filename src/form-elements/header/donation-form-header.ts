@@ -21,7 +21,7 @@ export enum DonationFormHeaderMode {
 
 @customElement('donation-form-header')
 export class DonationFormHeader extends LitElement {
-  @property({ type: Object }) donationInfo: DonationPaymentInfo = DonationPaymentInfo.default;
+  @property({ type: Object }) donationInfo?: DonationPaymentInfo;
 
   @property({ type: String }) mode: DonationFormHeaderMode = DonationFormHeaderMode.Edit;
 

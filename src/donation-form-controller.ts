@@ -40,6 +40,8 @@ import creditCardImg from '@internetarchive/icon-credit-card';
 import calendarImg from '@internetarchive/icon-calendar';
 import lockImg from '@internetarchive/icon-lock';
 import { AnalyticsHandlerInterface } from './@types/analytics-handler';
+import { DonationPaymentInfo } from './models/donation-info/donation-payment-info';
+import { DonationType } from './models/donation-info/donation-type';
 
 /**
  * The DonationFormController orchestrates several of the interactions between
@@ -157,6 +159,44 @@ export class DonationFormController extends LitElement {
     }
   }
 
+  /** @inheritdoc */
+  firstUpdated(): void {
+    this.readQueryParams();
+  }
+
+  private readQueryParams(): void {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const frequencyParam = urlParams.get('frequency');
+    const amountParam = urlParams.get('amount');
+    const coverFeesParam = urlParams.get('coverFees');
+
+    if (!frequencyParam && !amountParam && !coverFeesParam) {
+      return;
+    }
+
+    let frequency = DonationType.OneTime;
+    if (frequencyParam === 'monthly') {
+      frequency = DonationType.Monthly;
+    }
+
+    let amount = this.defaultDonationInfo.amount;
+    if (amountParam) {
+      const parsedAmount = parseFloat(amountParam);
+      if (!isNaN(parsedAmount)) {
+        amount = parsedAmount;
+      }
+    }
+
+    const donationInfo = new DonationPaymentInfo({
+      donationType: frequency,
+      amount: amount,
+      coverFees: coverFeesParam === 'true',
+    });
+
+    this.donationForm.donationInfo = donationInfo;
+  }
+
   private setupPaymentFlowHandlers(): void {
     // only set up once
     if (this.paymentFlowHandlers) {
@@ -235,11 +275,21 @@ export class DonationFormController extends LitElement {
     return config;
   }
 
+  private defaultDonationInfo: DonationPaymentInfo = new DonationPaymentInfo({
+    donationType: DonationType.OneTime,
+    amount: 5,
+    coverFees: false,
+  });
+
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
       <div class="donation-form-controller-container">
-        <donation-form .environment=${this.environment} .braintreeManager=${this.braintreeManager}>
+        <donation-form
+          .donationInfo=${this.defaultDonationInfo}
+          .environment=${this.environment}
+          .braintreeManager=${this.braintreeManager}
+        >
           <!--
             Why are these slots here?
 

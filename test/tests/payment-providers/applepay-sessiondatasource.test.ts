@@ -9,6 +9,7 @@ import { MockApplePayClient } from '../../mocks/payment-clients/mock-applepay-cl
 import { MockApplePayValidateMerchantEvent } from '../../mocks/payment-clients/mock-applepay-validatemerchantevent';
 import { MockApplePayPaymentAuthorizedEvent } from '../../mocks/payment-clients/mock-applepay-paymentauthorizedevent';
 import { SuccessResponse } from '../../../src/models/response-models/success-models/success-response';
+import { MockDonationInfo } from '../../mocks/mock-donation-info';
 
 describe('ApplePaySessionDataSource', () => {
   describe('onvalidatemerchant', () => {
@@ -18,7 +19,7 @@ describe('ApplePaySessionDataSource', () => {
       const braintreeManager = new MockBraintreeManager();
       const delegate = new MockApplePaySessionDataSourceDelegate();
       const datasource = new ApplePaySessionDataSource({
-        donationInfo: DonationPaymentInfo.default,
+        donationInfo: new MockDonationInfo(),
         session: session,
         applePayInstance: instance,
         braintreeManager: braintreeManager,
@@ -37,7 +38,7 @@ describe('ApplePaySessionDataSource', () => {
       const braintreeManager = new MockBraintreeManager();
       const delegate = new MockApplePaySessionDataSourceDelegate();
       const datasource = new ApplePaySessionDataSource({
-        donationInfo: DonationPaymentInfo.default,
+        donationInfo: new MockDonationInfo(),
         session: session,
         applePayInstance: instance,
         braintreeManager: braintreeManager,
@@ -62,7 +63,7 @@ describe('ApplePaySessionDataSource', () => {
       const braintreeManager = new MockBraintreeManager();
       const delegate = new MockApplePaySessionDataSourceDelegate();
       const datasource = new ApplePaySessionDataSource({
-        donationInfo: DonationPaymentInfo.default,
+        donationInfo: new MockDonationInfo(),
         session: session,
         applePayInstance: instance,
         braintreeManager: braintreeManager,
@@ -88,7 +89,7 @@ describe('ApplePaySessionDataSource', () => {
       const braintreeManager = new MockBraintreeManager();
       const delegate = new MockApplePaySessionDataSourceDelegate();
       const datasource = new ApplePaySessionDataSource({
-        donationInfo: DonationPaymentInfo.default,
+        donationInfo: new MockDonationInfo(),
         session: session,
         applePayInstance: instance,
         braintreeManager: braintreeManager,
@@ -117,7 +118,7 @@ describe('ApplePaySessionDataSource', () => {
       const braintreeManager = new MockBraintreeManager();
       const delegate = new MockApplePaySessionDataSourceDelegate();
       const datasource = new ApplePaySessionDataSource({
-        donationInfo: DonationPaymentInfo.default,
+        donationInfo: new MockDonationInfo(),
         session: session,
         applePayInstance: instance,
         braintreeManager: braintreeManager,
@@ -143,7 +144,7 @@ describe('ApplePaySessionDataSource', () => {
       const braintreeManager = new MockBraintreeManager({ submitDonationResponse: 'failure' });
       const delegate = new MockApplePaySessionDataSourceDelegate();
       const datasource = new ApplePaySessionDataSource({
-        donationInfo: DonationPaymentInfo.default,
+        donationInfo: new MockDonationInfo(),
         session: session,
         applePayInstance: instance,
         braintreeManager: braintreeManager,
@@ -164,7 +165,7 @@ describe('ApplePaySessionDataSource', () => {
       const braintreeManager = new MockBraintreeManager({ submitDonationError: true });
       const delegate = new MockApplePaySessionDataSourceDelegate();
       const datasource = new ApplePaySessionDataSource({
-        donationInfo: DonationPaymentInfo.default,
+        donationInfo: new MockDonationInfo(),
         session: session,
         applePayInstance: instance,
         braintreeManager: braintreeManager,

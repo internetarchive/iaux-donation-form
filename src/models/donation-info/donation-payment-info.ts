@@ -70,22 +70,6 @@ export class DonationPaymentInfo {
   }
 
   /**
-   * A default DonationInfo object
-   *
-   * @readonly
-   * @static
-   * @type {DonationPaymentInfo}
-   * @memberof DonationPaymentInfo
-   */
-  static get default(): DonationPaymentInfo {
-    return new DonationPaymentInfo({
-      donationType: DonationType.OneTime,
-      amount: 5,
-      coverFees: false,
-    });
-  }
-
-  /**
    * Round the amount to closest cent
    *
    * @private

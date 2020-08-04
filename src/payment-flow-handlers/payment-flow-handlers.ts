@@ -53,6 +53,7 @@ export interface PaymentFlowHandlersInterface {
 export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
   async startup(): Promise<void> {
     this.venmoHandler?.startup();
+    this.creditCardHandler?.startup();
   }
 
   get creditCardHandler(): CreditCardFlowHandlerInterface | undefined {

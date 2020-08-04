@@ -6,6 +6,7 @@ import { MockPayPalClient } from '../../mocks/payment-clients/mock-paypal-client
 import { MockPayPalButtonRenderer } from '../../mocks/mock-paypal-button-renderer';
 import { HostingEnvironment } from '../../../src/braintree-manager/braintree-interfaces';
 import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
+import { MockDonationInfo } from '../../mocks/mock-donation-info';
 // import paypal from 'paypal-checkout-components'
 
 describe('PayPalHandler', () => {
@@ -24,6 +25,8 @@ describe('PayPalHandler', () => {
       hostingEnvironment: HostingEnvironment.Development,
     });
 
+    const donationInfo = new MockDonationInfo();
+
     const datasource = await handler.renderPayPalButton({
       selector: 'foo',
       style: {
@@ -33,7 +36,7 @@ describe('PayPalHandler', () => {
         size: 'medium' as paypal.ButtonSizeOption,
         tagline: false,
       },
-      donationInfo: DonationPaymentInfo.default,
+      donationInfo: donationInfo,
     });
 
     expect(datasource?.donationInfo.amount).to.equal(5);

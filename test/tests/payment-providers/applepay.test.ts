@@ -6,6 +6,7 @@ import { MockApplePayClient } from '../../mocks/payment-clients/mock-applepay-cl
 import { MockApplePaySessionManager } from '../../mocks/payment-clients/mock-applepay-sessionmanager';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
+import { MockDonationInfo } from '../../mocks/mock-donation-info';
 
 describe('ApplePayHandler', () => {
   describe('isAvailable', () => {
@@ -74,8 +75,8 @@ describe('ApplePayHandler', () => {
         applePaySessionManager: sessionManager,
       });
       const event = new Event('boop');
-      const datasource = await handler.createPaymentRequest(event, DonationPaymentInfo.default);
-      expect(datasource.donationInfo.amount).to.equal(5);
+      const datasource = await handler.createPaymentRequest(event, new MockDonationInfo());
+      expect(datasource.donationInfo.amount).to.equal(new MockDonationInfo().amount);
     });
   });
 });

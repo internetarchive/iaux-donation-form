@@ -14,6 +14,7 @@ import { mockBillingInfo } from '../mocks/models/mock-billing-info';
 import { mockCustomerInfo } from '../mocks/models/mock-customer-info';
 import { MockDeviceDataCollector } from '../mocks/payment-clients/mock-data-collector';
 import { mockSuccessResponse } from '../mocks/models/mock-success-response';
+import { MockDonationInfo } from '../mocks/mock-donation-info';
 
 describe('Braintree Manager', () => {
   it('can be initialized', async () => {
@@ -48,7 +49,7 @@ describe('Braintree Manager', () => {
     await braintreeManager.submitDonation({
       nonce: 'boop',
       paymentProvider: PaymentProvider.CreditCard,
-      donationInfo: DonationPaymentInfo.default,
+      donationInfo: new MockDonationInfo(),
       billingInfo: mockBillingInfo,
       customerInfo: mockCustomerInfo,
     });
@@ -73,7 +74,7 @@ describe('Braintree Manager', () => {
     await braintreeManager.submitDonation({
       nonce: 'boop',
       paymentProvider: PaymentProvider.CreditCard,
-      donationInfo: DonationPaymentInfo.default,
+      donationInfo: new MockDonationInfo(),
       billingInfo: mockBillingInfo,
       customerInfo: mockCustomerInfo,
     });
@@ -96,7 +97,7 @@ describe('Braintree Manager', () => {
     await braintreeManager.submitDonation({
       nonce: 'boop',
       paymentProvider: PaymentProvider.CreditCard,
-      donationInfo: DonationPaymentInfo.default,
+      donationInfo: new MockDonationInfo(),
       billingInfo: mockBillingInfo,
       customerInfo: mockCustomerInfo,
     });
@@ -111,7 +112,7 @@ describe('Braintree Manager', () => {
     await braintreeManager.submitDonation({
       nonce: 'boop',
       paymentProvider: PaymentProvider.CreditCard,
-      donationInfo: DonationPaymentInfo.default,
+      donationInfo: new MockDonationInfo(),
       billingInfo: mockBillingInfo,
       customerInfo: mockCustomerInfo,
     });

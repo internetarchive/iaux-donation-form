@@ -44,7 +44,7 @@ export class DonationForm extends LitElement {
 
   @property({ type: Object }) donationRequest: DonationRequest | undefined;
 
-  @property({ type: Object }) donationInfo: DonationPaymentInfo = DonationPaymentInfo.default;
+  @property({ type: Object }) donationInfo?: DonationPaymentInfo;
 
   @property({ type: Boolean }) private creditCardVisible = false;
 
@@ -158,7 +158,8 @@ export class DonationForm extends LitElement {
     }
 
     const originalEvent = e.detail.originalEvent;
-    this.paymentFlowHandlers?.applePayHandler?.paymentInitiated(this.donationInfo, originalEvent);
+    this.donationInfo &&
+      this.paymentFlowHandlers?.applePayHandler?.paymentInitiated(this.donationInfo, originalEvent);
   }
 
   private googlePaySelected(): void {
@@ -169,7 +170,8 @@ export class DonationForm extends LitElement {
     if (!this.donationInfoValid) {
       this.showInvalidDonationInfoAlert();
     } else {
-      this.paymentFlowHandlers?.googlePayHandler?.paymentInitiated(this.donationInfo);
+      this.donationInfo &&
+        this.paymentFlowHandlers?.googlePayHandler?.paymentInitiated(this.donationInfo);
     }
   }
 
@@ -231,13 +233,15 @@ export class DonationForm extends LitElement {
 
     switch (this.selectedPaymentProvider) {
       case PaymentProvider.CreditCard:
-        this.paymentFlowHandlers?.creditCardHandler?.paymentInitiated(
-          this.donationInfo,
-          contactInfo,
-        );
+        this.donationInfo &&
+          this.paymentFlowHandlers?.creditCardHandler?.paymentInitiated(
+            this.donationInfo,
+            contactInfo,
+          );
         break;
       case PaymentProvider.Venmo:
-        this.paymentFlowHandlers?.venmoHandler?.paymentInitiated(contactInfo, this.donationInfo);
+        this.donationInfo &&
+          this.paymentFlowHandlers?.venmoHandler?.paymentInitiated(contactInfo, this.donationInfo);
         break;
     }
   }
@@ -246,56 +250,30 @@ export class DonationForm extends LitElement {
     alert('Please enter valid donation info.');
   }
 
-  /** @inheritdoc */
-  firstUpdated(): void {
-    this.readQueryParams();
-  }
-
-  private readQueryParams(): void {
-    const urlParams = new URLSearchParams(window.location.search);
-
-    const frequencyParam = urlParams.get('frequency');
-    const amountParam = urlParams.get('amount');
-    const coverFeesParam = urlParams.get('coverFees');
-
-    let frequency = DonationType.OneTime;
-    if (frequencyParam === 'monthly') {
-      frequency = DonationType.Monthly;
-    }
-
-    let amount = 5;
-    if (amountParam) {
-      amount = parseFloat(amountParam);
-    }
-
-    const donationInfo = new DonationPaymentInfo({
-      donationType: frequency,
-      amount: amount,
-      coverFees: coverFeesParam === 'true',
-    });
-
-    this.donationInfo = donationInfo;
-  }
-
   private async renderPayPalButtonIfNeeded(): Promise<void> {
     if (!this.paypalButtonNeedsRender) {
       return;
     }
     this.paypalButtonNeedsRender = false;
-    await this.paymentFlowHandlers?.paypalHandler?.renderPayPalButton(this.donationInfo);
+    this.donationInfo &&
+      (await this.paymentFlowHandlers?.paypalHandler?.renderPayPalButton(this.donationInfo));
     this.paymentSelector.showPaypalButton();
   }
 
   updated(changedProperties: PropertyValues): void {
-    if (changedProperties.has('paymentFlowHandlers')) {
-      this.setupFlowHandlers();
-    }
-
-    if (changedProperties.has('donationInfo')) {
+    if (changedProperties.has('donationInfo') && this.donationInfo) {
       // The PayPal button has a standalone datasource since we don't initiate the payment
       // through code so it has to have the donation info ready when the user taps the button.
       this.paymentFlowHandlers?.paypalHandler?.updateDonationInfo(this.donationInfo);
       this.donationFormHeader.donationInfo = this.donationInfo;
+    }
+
+    if (
+      (changedProperties.has('paymentFlowHandlers') || changedProperties.has('donationInfo')) &&
+      this.donationInfo &&
+      this.paymentFlowHandlers
+    ) {
+      this.setupFlowHandlers();
     }
 
     if (changedProperties.has('donationInfoValid')) {
@@ -303,10 +281,16 @@ export class DonationForm extends LitElement {
     }
   }
 
+  private flowHandlersConfigured = false;
+
   private setupFlowHandlers(): void {
+    if (this.flowHandlersConfigured) {
+      return;
+    }
+    this.flowHandlersConfigured = true;
     this.renderPayPalButtonIfNeeded();
-    this.paymentFlowHandlers?.paypalHandler?.updateDonationInfo(this.donationInfo);
-    this.paymentFlowHandlers?.creditCardHandler?.startup();
+    this.donationInfo &&
+      this.paymentFlowHandlers?.paypalHandler?.updateDonationInfo(this.donationInfo);
     this.paymentFlowHandlers?.creditCardHandler?.on('validityChanged', (isValid: boolean) => {
       this.hostedFieldsValid = isValid;
     });

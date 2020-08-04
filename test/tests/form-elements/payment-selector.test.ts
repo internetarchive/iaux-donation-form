@@ -35,7 +35,9 @@ describe('Payment Selector', () => {
     `)) as PaymentSelector;
     const paypalBlocker = el.shadowRoot?.querySelector('.paypal-local-button');
     const clickEvent = new MouseEvent('click');
-    setTimeout(() => { paypalBlocker?.dispatchEvent(clickEvent); });
+    setTimeout(() => {
+      paypalBlocker?.dispatchEvent(clickEvent);
+    });
     const response = await oneEvent(el, 'paypalBlockerSelected');
     expect(response).to.exist;
   });
@@ -46,7 +48,9 @@ describe('Payment Selector', () => {
     `)) as PaymentSelector;
     const paypalBlocker = el.shadowRoot?.querySelector('.applepay.provider-button');
     const clickEvent = new MouseEvent('click');
-    setTimeout(() => { paypalBlocker?.dispatchEvent(clickEvent); });
+    setTimeout(() => {
+      paypalBlocker?.dispatchEvent(clickEvent);
+    });
     const response = await oneEvent(el, 'applePaySelected');
     const event = response.detail.originalEvent;
     expect(event).to.equal(clickEvent);
@@ -58,10 +62,10 @@ describe('Payment Selector', () => {
     `)) as PaymentSelector;
     const paypalBlocker = el.shadowRoot?.querySelector('.googlepay.provider-button');
     const clickEvent = new MouseEvent('click');
-    setTimeout(() => { paypalBlocker?.dispatchEvent(clickEvent); });
+    setTimeout(() => {
+      paypalBlocker?.dispatchEvent(clickEvent);
+    });
     const response = await oneEvent(el, 'googlePaySelected');
     expect(response).to.exist;
   });
-
-
 });
