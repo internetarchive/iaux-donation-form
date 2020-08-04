@@ -17,7 +17,9 @@ export interface PaymentClientsInterface {
 }
 
 /**
- * The PaymentClients class is a container for all of the payment libraries that get loaded.
+ * The PaymentClients class is responsible for loading and passing around
+ * all of the payment libraries. Internally it uses the LazyLoaderService to lazy load
+ * the javascript clients.
  *
  * For instance, it carries around the braintree and paypal libraries, as well as the specific
  * payment-provider clients for each of the providers. This allows us to pass around typed
