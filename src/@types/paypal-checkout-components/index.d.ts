@@ -4,9 +4,7 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 3.1
 
-import {
-  ButtonRenderer, ButtonRenderOptions, FUNDING
-} from './modules/button';
+import { ButtonRenderer, ButtonRenderOptions, FUNDING } from './modules/button';
 
 interface PayPal {
   button: ButtonRenderer;

@@ -7,15 +7,36 @@
 
 import { VERSION, BraintreeError, callback } from './modules/core';
 import { AmericanExpress } from './modules/american-express';
-import { ApplePay, ApplePaySession, ApplePayStatusCodes, ApplePayPayload, ApplePayPaymentRequest } from './modules/apple-pay';
+import {
+  ApplePay,
+  ApplePaySession,
+  ApplePayStatusCodes,
+  ApplePayPayload,
+  ApplePayPaymentRequest,
+} from './modules/apple-pay';
 import { Client, Configuration, CreditCardInfo } from './modules/client';
 import { DataCollector } from './modules/data-collector';
 import { GooglePayment, GooglePaymentTokenizePayload } from './modules/google-payment';
-import { HostedFields, HostedFieldFieldOptions, HostedFieldsTokenizePayload, HostedFieldsStateObject, HostedFieldEventType } from './modules/hosted-fields';
+import {
+  HostedFields,
+  HostedFieldFieldOptions,
+  HostedFieldsTokenizePayload,
+  HostedFieldsStateObject,
+  HostedFieldEventType,
+} from './modules/hosted-fields';
 import { PayPal, PayPalTokenizePayload } from './modules/paypal';
-import { PayPalCheckout, PayPalCheckoutCreatePaymentOptions, PayPalCheckoutTokenizationOptions } from './modules/paypal-checkout';
+import {
+  PayPalCheckout,
+  PayPalCheckoutCreatePaymentOptions,
+  PayPalCheckoutTokenizationOptions,
+} from './modules/paypal-checkout';
 import { ThreeDSecure, ThreeDSecureVerifyPayload } from './modules/three-d-secure';
-import { UnionPay, UnionPayFetchCapabilitiesPayload, UnionPayEnrollPayload, UnionPayTokenizePayload } from './modules/unionpay';
+import {
+  UnionPay,
+  UnionPayFetchCapabilitiesPayload,
+  UnionPayEnrollPayload,
+  UnionPayTokenizePayload,
+} from './modules/unionpay';
 import { USBankAccount } from './modules/us-bank-account';
 import { Venmo, VenmoTokenizePayload } from './modules/venmo';
 
@@ -33,19 +54,40 @@ export const usBankAccount: USBankAccount;
 export const venmo: Venmo;
 
 export {
-  VERSION, BraintreeError, callback,
+  VERSION,
+  BraintreeError,
+  callback,
   AmericanExpress,
-  ApplePay, ApplePaySession, ApplePayStatusCodes, ApplePayPayload, ApplePayPaymentRequest,
-  Client, Configuration, CreditCardInfo,
+  ApplePay,
+  ApplePaySession,
+  ApplePayStatusCodes,
+  ApplePayPayload,
+  ApplePayPaymentRequest,
+  Client,
+  Configuration,
+  CreditCardInfo,
   DataCollector,
-  GooglePayment, GooglePaymentTokenizePayload,
-  HostedFields, HostedFieldFieldOptions, HostedFieldsTokenizePayload, HostedFieldsStateObject, HostedFieldEventType,
-  PayPal, PayPalTokenizePayload,
-  PayPalCheckout, PayPalCheckoutCreatePaymentOptions, PayPalCheckoutTokenizationOptions,
-  ThreeDSecure, ThreeDSecureVerifyPayload,
-  UnionPay, UnionPayFetchCapabilitiesPayload, UnionPayEnrollPayload, UnionPayTokenizePayload,
+  GooglePayment,
+  GooglePaymentTokenizePayload,
+  HostedFields,
+  HostedFieldFieldOptions,
+  HostedFieldsTokenizePayload,
+  HostedFieldsStateObject,
+  HostedFieldEventType,
+  PayPal,
+  PayPalTokenizePayload,
+  PayPalCheckout,
+  PayPalCheckoutCreatePaymentOptions,
+  PayPalCheckoutTokenizationOptions,
+  ThreeDSecure,
+  ThreeDSecureVerifyPayload,
+  UnionPay,
+  UnionPayFetchCapabilitiesPayload,
+  UnionPayEnrollPayload,
+  UnionPayTokenizePayload,
   USBankAccount,
-  Venmo, VenmoTokenizePayload
+  Venmo,
+  VenmoTokenizePayload,
 };
 
 export as namespace braintree;

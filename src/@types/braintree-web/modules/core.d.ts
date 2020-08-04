@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @description The current version of the SDK, i.e. `3.0.2`.
  */
@@ -11,23 +12,23 @@ export type callback = (err?: BraintreeError, data?: any) => void;
 export type BraintreeErrorTypes = 'CUSTOMER' | 'MERCHANT' | 'NETWORK' | 'INTERNAL' | 'UNKNOWN';
 
 export interface BraintreeError {
-    /**
-     * @description A code that corresponds to specific errors.
-     */
-    code: string;
+  /**
+   * @description A code that corresponds to specific errors.
+   */
+  code: string;
 
-    /**
-     * @description A short description of the error.
-     */
-    message: string;
+  /**
+   * @description A short description of the error.
+   */
+  message: string;
 
-    /**
-     * @description The type of error.
-     */
-    type: BraintreeErrorTypes;
+  /**
+   * @description The type of error.
+   */
+  type: BraintreeErrorTypes;
 
-    /**
-     * @description Additional information about the error, such as an underlying network error response.
-     */
-    details: any;
+  /**
+   * @description Additional information about the error, such as an underlying network error response.
+   */
+  details: any;
 }

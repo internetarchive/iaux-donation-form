@@ -29,7 +29,6 @@ import { BraintreeManagerInterface } from './braintree-manager/braintree-interfa
 
 import { DonationRequest } from './models/request-models/donation-request';
 import { DonationPaymentInfo } from './models/donation-info/donation-payment-info';
-import { DonationType } from './models/donation-info/donation-type';
 
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
 import { PaymentProvider } from './models/common/payment-provider-name';

@@ -18,7 +18,9 @@ export class MockApplePayClient implements braintree.ApplePay {
 
   VERSION = 'foo';
 
-  createPaymentRequest(paymentRequest: braintree.ApplePayPaymentRequest): braintree.ApplePayPaymentRequest {
+  createPaymentRequest(
+    paymentRequest: braintree.ApplePayPaymentRequest,
+  ): braintree.ApplePayPaymentRequest {
     return {
       total: {
         label: 'Foo Donation',

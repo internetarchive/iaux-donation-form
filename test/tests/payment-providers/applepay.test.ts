@@ -5,7 +5,6 @@ import { ApplePayHandler } from '../../../src/braintree-manager/payment-provider
 import { MockApplePayClient } from '../../mocks/payment-clients/mock-applepay-client';
 import { MockApplePaySessionManager } from '../../mocks/payment-clients/mock-applepay-sessionmanager';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
-import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
 import { MockDonationInfo } from '../../mocks/mock-donation-info';
 
 describe('ApplePayHandler', () => {
