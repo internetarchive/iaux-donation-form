@@ -5,9 +5,7 @@ import { PayPalHandler } from '../../../src/braintree-manager/payment-providers/
 import { MockPayPalClient } from '../../mocks/payment-clients/mock-paypal-client';
 import { MockPayPalButtonRenderer } from '../../mocks/mock-paypal-button-renderer';
 import { HostingEnvironment } from '../../../src/braintree-manager/braintree-interfaces';
-import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
 import { MockDonationInfo } from '../../mocks/mock-donation-info';
-// import paypal from 'paypal-checkout-components'
 
 describe('PayPalHandler', () => {
   it('can render the paypal button', async () => {
