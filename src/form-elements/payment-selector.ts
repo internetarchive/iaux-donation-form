@@ -13,8 +13,7 @@ import applePayButtonImage from '@internetarchive/icon-applepay';
 import googlePayButtonImage from '@internetarchive/icon-googlepay';
 import paypalButtonImage from '@internetarchive/icon-paypal';
 import venmoButtonImage from '@internetarchive/icon-venmo';
-
-import { PaymentProvidersInterface } from '../braintree-manager/payment-providers';
+import { PaymentProvidersInterface } from '../braintree-manager/payment-providers-interface';
 
 enum PaymentButtonMode {
   Loading = 'loading',

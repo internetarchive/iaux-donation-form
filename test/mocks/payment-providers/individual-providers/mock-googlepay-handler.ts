@@ -1,7 +1,7 @@
-import { GooglePayHandlerInterface } from '../../../../src/braintree-manager/payment-providers/google-pay';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { MockGooglePaymentClient } from '../../payment-clients/mock-googlepay-client';
 import { MockGooglePayLibrary } from '../../payment-clients/mock-googlepay-library';
+import { GooglePayHandlerInterface } from '../../../../src/braintree-manager/payment-providers/google-pay-interface';
 
 export class MockGooglePayHandler implements GooglePayHandlerInterface {
   paymentsClient: google.payments.api.PaymentsClient = new MockGooglePayLibrary({

@@ -1,6 +1,6 @@
-import { VenmoHandlerInterface } from '../../../../src/braintree-manager/payment-providers/venmo';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { MockVenmoClient } from '../../payment-clients/mock-venmo-client';
+import { VenmoHandlerInterface } from '../../../../src/braintree-manager/payment-providers/venmo-interface';
 
 export class MockVenmoHandler implements VenmoHandlerInterface {
   instance: PromisedSingleton<braintree.Venmo> = new PromisedSingleton<braintree.Venmo>({

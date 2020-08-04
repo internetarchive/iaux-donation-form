@@ -1,13 +1,7 @@
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 
 import { BraintreeManagerInterface } from '../braintree-interfaces';
-
-export interface GooglePayHandlerInterface {
-  paymentsClient: google.payments.api.PaymentsClient;
-  instance: PromisedSingleton<braintree.GooglePayment>;
-
-  isBrowserSupported(): Promise<boolean>;
-}
+import { GooglePayHandlerInterface } from './google-pay-interface';
 
 export class GooglePayHandler implements GooglePayHandlerInterface {
   paymentsClient: google.payments.api.PaymentsClient;

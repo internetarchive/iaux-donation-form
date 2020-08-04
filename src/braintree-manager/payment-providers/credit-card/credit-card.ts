@@ -2,15 +2,7 @@ import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { BraintreeManagerInterface } from '../../braintree-interfaces';
 import { HostedFieldConfiguration } from './hosted-field-configuration';
 import { HostedFieldName } from './hosted-field-container';
-
-export interface CreditCardHandlerInterface {
-  instance: PromisedSingleton<braintree.HostedFields | undefined>;
-  tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined>;
-  markFieldErrors(fields: HostedFieldName[]): void;
-  removeFieldErrors(fields: HostedFieldName[]): void;
-  showErrorMessage(message?: string): void;
-  hideErrorMessage(): void;
-}
+import { CreditCardHandlerInterface } from './credit-card-interface';
 
 export class CreditCardHandler implements CreditCardHandlerInterface {
   instance: PromisedSingleton<braintree.HostedFields | undefined>;

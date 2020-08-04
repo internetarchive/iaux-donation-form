@@ -3,7 +3,7 @@ import {
   DonationRequest,
   DonationRequestCustomFields,
 } from '../models/request-models/donation-request';
-import { PaymentProvidersInterface, PaymentProviders } from './payment-providers';
+import { PaymentProviders } from './payment-providers';
 import { PaymentClientsInterface } from './payment-clients';
 import {
   BraintreeManagerInterface,
@@ -18,6 +18,7 @@ import { DonationPaymentInfo } from '../models/donation-info/donation-payment-in
 import { BillingInfo } from '../models/common/billing-info';
 import { CustomerInfo } from '../models/common/customer-info';
 import { DonationType } from '../models/donation-info/donation-type';
+import { PaymentProvidersInterface } from './payment-providers-interface';
 
 /** @inheritdoc */
 export class BraintreeManager implements BraintreeManagerInterface {

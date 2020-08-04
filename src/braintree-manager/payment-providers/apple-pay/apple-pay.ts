@@ -4,16 +4,7 @@ import { ApplePaySessionManagerInterface } from './apple-pay-session-manager';
 import { DonationType } from '../../../models/donation-info/donation-type';
 import { ApplePaySessionDataSource } from './apple-pay-session-datasource';
 import { DonationPaymentInfo } from '../../../models/donation-info/donation-payment-info';
-
-export interface ApplePayHandlerInterface {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  instance: PromisedSingleton<any | undefined>;
-  isAvailable(): Promise<boolean>;
-  createPaymentRequest(
-    e: Event,
-    donationInfo: DonationPaymentInfo,
-  ): Promise<ApplePaySessionDataSource>;
-}
+import { ApplePayHandlerInterface } from './apple-pay-interface';
 
 export class ApplePayHandler implements ApplePayHandlerInterface {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

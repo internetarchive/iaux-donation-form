@@ -2,23 +2,9 @@ import { DonationPaymentInfo } from '../../../models/donation-info/donation-paym
 import { BraintreeManagerInterface } from '../../braintree-interfaces';
 import { BillingInfo } from '../../../models/common/billing-info';
 import { CustomerInfo } from '../../../models/common/customer-info';
-import { DonationResponse } from '../../../models/response-models/donation-response';
 import { PaymentProvider } from '../../../models/common/payment-provider-name';
-
-export interface ApplePaySessionDataSourceInterface {
-  delegate?: ApplePaySessionDataSourceDelegate;
-  donationInfo: DonationPaymentInfo;
-  onvalidatemerchant(event: ApplePayJS.ApplePayValidateMerchantEvent): Promise<void>;
-  onpaymentauthorized(event: ApplePayJS.ApplePayPaymentAuthorizedEvent): Promise<void>;
-  oncancel(): Promise<void>;
-}
-
-export interface ApplePaySessionDataSourceDelegate {
-  paymentComplete(response: DonationResponse): void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  paymentFailed(error: any): void;
-  paymentCancelled(): void;
-}
+import { ApplePaySessionDataSourceInterface } from './apple-pay-session-datasource-interface';
+import { ApplePaySessionDataSourceDelegate } from './apple-pay-session-datasource-delegate';
 
 export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInterface {
   delegate?: ApplePaySessionDataSourceDelegate;

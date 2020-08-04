@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BraintreeManagerInterface } from '../../src/braintree-manager/braintree-interfaces';
-import { PaymentProvidersInterface } from '../../src/braintree-manager/payment-providers';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { PaymentProvider } from '../../src/models/common/payment-provider-name';
 import { DonationPaymentInfo } from '../../src/models/donation-info/donation-payment-info';
@@ -13,6 +12,7 @@ import { MockPaymentProviders } from './payment-providers/mock-payment-providers
 import { mockSuccessResponse } from './models/mock-success-response';
 import { MockBraintreeClient } from './payment-clients/mock-braintree-client';
 import { ErrorResponse } from '../../src/models/response-models/error-models/error-response';
+import { PaymentProvidersInterface } from '../../src/braintree-manager/payment-providers-interface';
 
 export class MockBraintreeManager implements BraintreeManagerInterface {
   donationSuccessfulOptions?: {

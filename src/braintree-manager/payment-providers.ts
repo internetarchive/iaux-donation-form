@@ -1,25 +1,20 @@
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 
-import {
-  CreditCardHandlerInterface,
-  CreditCardHandler,
-} from './payment-providers/credit-card/credit-card';
-import { ApplePayHandlerInterface, ApplePayHandler } from './payment-providers/apple-pay/apple-pay';
-import { VenmoHandlerInterface, VenmoHandler } from './payment-providers/venmo';
-import { PayPalHandlerInterface, PayPalHandler } from './payment-providers/paypal/paypal';
+import { CreditCardHandler } from './payment-providers/credit-card/credit-card';
+import { ApplePayHandler } from './payment-providers/apple-pay/apple-pay';
+import { VenmoHandler } from './payment-providers/venmo';
+import { PayPalHandler } from './payment-providers/paypal/paypal';
 import { ApplePaySessionManager } from './payment-providers/apple-pay/apple-pay-session-manager';
 import { PaymentClientsInterface } from './payment-clients';
-import { GooglePayHandlerInterface, GooglePayHandler } from './payment-providers/google-pay';
+import { GooglePayHandler } from './payment-providers/google-pay';
 import { BraintreeManagerInterface, HostingEnvironment } from './braintree-interfaces';
 import { HostedFieldConfiguration } from './payment-providers/credit-card/hosted-field-configuration';
-
-export interface PaymentProvidersInterface {
-  creditCardHandler: PromisedSingleton<CreditCardHandlerInterface>;
-  applePayHandler: PromisedSingleton<ApplePayHandlerInterface>;
-  venmoHandler: PromisedSingleton<VenmoHandlerInterface | undefined>;
-  paypalHandler: PromisedSingleton<PayPalHandlerInterface>;
-  googlePayHandler: PromisedSingleton<GooglePayHandlerInterface>;
-}
+import { PaymentProvidersInterface } from './payment-providers-interface';
+import { ApplePayHandlerInterface } from './payment-providers/apple-pay/apple-pay-interface';
+import { CreditCardHandlerInterface } from './payment-providers/credit-card/credit-card-interface';
+import { VenmoHandlerInterface } from './payment-providers/venmo-interface';
+import { PayPalHandlerInterface } from './payment-providers/paypal/paypal-interface';
+import { GooglePayHandlerInterface } from './payment-providers/google-pay-interface';
 
 /**
  * The PaymentProviders class contains the IA-specific handlers for each of the

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ApplePaySessionDataSourceDelegate } from '../../../../src/braintree-manager/payment-providers/apple-pay/apple-pay-session-datasource';
 import { DonationResponse } from '../../../../src/models/response-models/donation-response';
+import { ApplePaySessionDataSourceDelegate } from '../../../../src/braintree-manager/payment-providers/apple-pay/apple-pay-session-datasource-delegate';
 
 export class MockApplePaySessionDataSourceDelegate implements ApplePaySessionDataSourceDelegate {
   paymentCompleteResponse?: DonationResponse;

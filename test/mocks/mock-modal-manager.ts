@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ModalManager, ModalConfig } from '@internetarchive/modal-manager';
-import { ModalManagerMode } from '@internetarchive/modal-manager/dist/src/modal-manager';
+import { ModalManager, ModalConfig, ModalManagerMode } from '@internetarchive/modal-manager';
 import { TemplateResult } from 'lit-html';
 import { customElement } from 'lit-element';
 

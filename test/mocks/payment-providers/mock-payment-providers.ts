@@ -1,16 +1,16 @@
-import { PaymentProvidersInterface } from '../../../src/braintree-manager/payment-providers';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
-import { CreditCardHandlerInterface } from '../../../src/braintree-manager/payment-providers/credit-card/credit-card';
-import { ApplePayHandlerInterface } from '../../../src/braintree-manager/payment-providers/apple-pay/apple-pay';
-import { PayPalHandlerInterface } from '../../../src/braintree-manager/payment-providers/paypal/paypal';
-import { GooglePayHandlerInterface } from '../../../src/braintree-manager/payment-providers/google-pay';
-import { VenmoHandlerInterface } from '../../../src/braintree-manager/payment-providers/venmo';
 import { MockVenmoHandler } from './individual-providers/mock-venmo-handler';
 import { MockCreditCardHandler } from './individual-providers/mock-creditcard-handler';
 import { MockApplePayHandler } from './individual-providers/mock-applepay-handler';
 import { MockPayPalHandler } from './individual-providers/mock-paypal-handler';
 import { MockGooglePayHandler } from './individual-providers/mock-googlepay-handler';
 import { mockHostedFieldTokenizePayload } from '../payment-clients/mock-hostedfieldtokenizepayload';
+import { PaymentProvidersInterface } from '../../../src/braintree-manager/payment-providers-interface';
+import { CreditCardHandlerInterface } from '../../../src/braintree-manager/payment-providers/credit-card/credit-card-interface';
+import { ApplePayHandlerInterface } from '../../../src/braintree-manager/payment-providers/apple-pay/apple-pay-interface';
+import { PayPalHandlerInterface } from '../../../src/braintree-manager/payment-providers/paypal/paypal-interface';
+import { GooglePayHandlerInterface } from '../../../src/braintree-manager/payment-providers/google-pay-interface';
+import { VenmoHandlerInterface } from '../../../src/braintree-manager/payment-providers/venmo-interface';
 
 export class MockPaymentProviders implements PaymentProvidersInterface {
   creditCardHandler: PromisedSingleton<CreditCardHandlerInterface> = new PromisedSingleton<

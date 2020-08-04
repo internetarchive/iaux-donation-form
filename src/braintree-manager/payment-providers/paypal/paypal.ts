@@ -5,16 +5,7 @@ import {
   PayPalButtonDataSourceInterface,
   PayPalButtonDataSource,
 } from './paypal-button-datasource';
-
-export interface PayPalHandlerInterface {
-  instance: PromisedSingleton<braintree.PayPalCheckout | undefined>;
-
-  renderPayPalButton(params: {
-    selector: string;
-    style: paypal.ButtonStyle;
-    donationInfo: DonationPaymentInfo;
-  }): Promise<PayPalButtonDataSourceInterface | undefined>;
-}
+import { PayPalHandlerInterface } from './paypal-interface';
 
 export class PayPalHandler implements PayPalHandlerInterface {
   instance: PromisedSingleton<braintree.PayPalCheckout | undefined>;

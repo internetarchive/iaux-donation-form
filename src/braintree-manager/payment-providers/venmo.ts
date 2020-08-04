@@ -1,13 +1,7 @@
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 
 import { BraintreeManagerInterface } from '../braintree-interfaces';
-
-export interface VenmoHandlerInterface {
-  instance: PromisedSingleton<braintree.Venmo>;
-
-  isBrowserSupported(): Promise<boolean>;
-  startPayment(): Promise<braintree.VenmoTokenizePayload>;
-}
+import { VenmoHandlerInterface } from './venmo-interface';
 
 export class VenmoHandler implements VenmoHandlerInterface {
   instance: PromisedSingleton<braintree.Venmo>;

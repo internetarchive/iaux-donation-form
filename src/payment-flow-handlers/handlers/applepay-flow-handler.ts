@@ -1,14 +1,12 @@
 import { BraintreeManagerInterface } from '../../braintree-manager/braintree-interfaces';
-import {
-  ApplePaySessionDataSourceDelegate,
-  ApplePaySessionDataSourceInterface,
-} from '../../braintree-manager/payment-providers/apple-pay/apple-pay-session-datasource';
 import { DonationResponse } from '../../models/response-models/donation-response';
 import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
 import { SuccessResponse } from '../../models/response-models/success-models/success-response';
 import { DonationType } from '../../models/donation-info/donation-type';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
 import { ErrorResponse } from '../../models/response-models/error-models/error-response';
+import { ApplePaySessionDataSourceDelegate } from '../../braintree-manager/payment-providers/apple-pay/apple-pay-session-datasource-delegate';
+import { ApplePaySessionDataSourceInterface } from '../../braintree-manager/payment-providers/apple-pay/apple-pay-session-datasource-interface';
 
 export interface ApplePayFlowHandlerInterface {
   paymentInitiated(donationInfo: DonationPaymentInfo, e: Event): Promise<void>;
