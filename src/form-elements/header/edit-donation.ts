@@ -46,13 +46,13 @@ export class EditDonation extends LitElement {
   render(): TemplateResult {
     return html`
       <form-section number="1" headline="Choose a frequency">
-        <ul class="frequency-selector" tabindex="0">
+        <ul class="frequency-selector" tabindex=0>
           ${this.frequencyTemplate}
         </ul>
       </form-section>
 
       <form-section number="2" headline="Choose an amount (USD)">
-        <ul class="amount-selector" tabindex="3">
+        <ul class="amount-selector" tabindex=0>
           ${this.presetAmountsTemplate}
           <li class="custom-amount">${this.customAmountTemplate}</li>
         </ul>
@@ -62,7 +62,7 @@ export class EditDonation extends LitElement {
         </div>
 
         <div class="cover-fees-container">
-          <input type="checkbox" id="cover-fees" @input=${this.coverFeesChecked} tabindex="12" />
+          <input type="checkbox" id="cover-fees" @input=${this.coverFeesChecked} tabindex=0 />
           <label for="cover-fees">
             ${this.coverFeesTextTemplate}
           </label>
@@ -140,7 +140,6 @@ export class EditDonation extends LitElement {
           name=${options.group}
           value=${options.value}
           id=${radioId}
-          tabindex=${options.tabindex}
           .checked=${options.checked}
           @change=${this.radioSelected}
         />
@@ -166,7 +165,7 @@ export class EditDonation extends LitElement {
           name=${SelectionGroup.Amount}
           value="custom"
           id="custom-amount-button"
-          tabindex=11
+          tabindex=0
           @change=${this.customRadioSelected}
         />
 

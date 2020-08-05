@@ -37,7 +37,7 @@ export class UpsellModalContent extends LitElement {
           <input
             id="amount-input"
             type="text"
-            tabindex="20"
+            tabindex=0
             value=${this.amount}
             @input=${this.amountChanged}
             @keydown=${this.currencyValidator.keydown}
@@ -48,7 +48,7 @@ export class UpsellModalContent extends LitElement {
 
       ${this.yesButton}
 
-      <button class="no-thanks-button" @click=${this.noThanksSelected} tabindex="22">
+      <button class="no-thanks-button" @click=${this.noThanksSelected} tabindex=0>
         No, thanks. Maybe next time.
       </button>
     `;
@@ -60,7 +60,7 @@ export class UpsellModalContent extends LitElement {
         return html`
           <button
             class="yes-button"
-            tabindex="21"
+            tabindex=0
             @click=${this.yesSelected}
             .disabled=${this.error !== undefined}
           >

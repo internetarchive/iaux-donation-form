@@ -43,23 +43,23 @@ export class PaymentSelector extends LitElement {
           ? 'donation-info-valid'
           : 'donation-info-invalid'}"
       >
-        <div class="applepay provider-button ${this.applePayMode}" @click=${this.applePaySelected} tabindex="14">
+        <button class="applepay provider-button ${this.applePayMode}" @click=${this.applePaySelected} tabindex=0>
           <div class="payment-image">${applePayButtonImage}</div>
-        </div>
+        </button>
 
-        <div
+        <button
           class="googlepay provider-button ${this.googlePayMode}"
           @click=${this.googlePaySelected}
-          tabindex="15"
+          tabindex=0
         >
           <div class="payment-image">${googlePayButtonImage}</div>
-        </div>
+        </button>
 
-        <div class="venmo provider-button ${this.venmoMode}" @click=${this.venmoSelected} tabindex="16">
+        <button class="venmo provider-button ${this.venmoMode}" @click=${this.venmoSelected} tabindex=0>
           <div class="payment-image">${venmoButtonImage}</div>
-        </div>
+        </button>
 
-        <div class="paypal-container provider-button ${this.payPalMode}" tabindex="17">
+        <div class="paypal-container provider-button ${this.payPalMode}" tabindex=0>
           <div class="payment-image">
             <div class="paypal-local-button" @click=${this.localPaypalButtonClicked}>
               ${paypalButtonImage}
@@ -68,7 +68,7 @@ export class PaymentSelector extends LitElement {
           </div>
         </div>
 
-        <button @click=${this.creditCardSelected} class="button-style credit-card-button" tabindex="18">
+        <button @click=${this.creditCardSelected} class="button-style credit-card-button" tabindex=0>
           <div class="cc-background">
             <span class="cc-title">Credit Card</span>
           </div>
@@ -207,10 +207,12 @@ export class PaymentSelector extends LitElement {
       }
 
       .provider-button {
+        border: 0;
+        padding: 0;
+        background: none;
         cursor: pointer;
         width: ${paymentButtonWidthCss};
         height: ${paymentButtonHeightCss};
-        border-radius: 4px;
       }
 
       .provider-button.unavailable {
