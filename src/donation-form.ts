@@ -86,6 +86,7 @@ export class DonationForm extends LitElement {
           @applePaySelected=${this.applePaySelected}
           @googlePaySelected=${this.googlePaySelected}
           @paypalBlockerSelected=${this.paypalBlockerSelected}
+          tabindex="13"
         >
           <slot name="paypal-button" slot="paypal-button"></slot>
         </payment-selector>

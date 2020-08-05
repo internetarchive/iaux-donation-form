@@ -46,13 +46,13 @@ export class EditDonation extends LitElement {
   render(): TemplateResult {
     return html`
       <form-section number="1" headline="Choose a frequency">
-        <ul class="frequency-selector">
+        <ul class="frequency-selector" tabindex="0">
           ${this.frequencyTemplate}
         </ul>
       </form-section>
 
       <form-section number="2" headline="Choose an amount (USD)">
-        <ul class="amount-selector">
+        <ul class="amount-selector" tabindex="3">
           ${this.presetAmountsTemplate}
           <li class="custom-amount">${this.customAmountTemplate}</li>
         </ul>
@@ -62,7 +62,7 @@ export class EditDonation extends LitElement {
         </div>
 
         <div class="cover-fees-container">
-          <input type="checkbox" id="cover-fees" @input=${this.coverFeesChecked} />
+          <input type="checkbox" id="cover-fees" @input=${this.coverFeesChecked} tabindex="12" />
           <label for="cover-fees">
             ${this.coverFeesTextTemplate}
           </label>
@@ -90,6 +90,7 @@ export class EditDonation extends LitElement {
           value: DonationType.OneTime,
           displayText: 'One time',
           checked: this.donationInfo?.donationType === DonationType.OneTime,
+          tabindex: 0,
         })}
       </li>
 
@@ -99,6 +100,7 @@ export class EditDonation extends LitElement {
           value: DonationType.Monthly,
           displayText: 'Monthly',
           checked: this.donationInfo?.donationType === DonationType.Monthly,
+          tabindex: 1
         })}
       </li>
     `;
@@ -106,7 +108,7 @@ export class EditDonation extends LitElement {
 
   private get presetAmountsTemplate(): TemplateResult {
     return html`
-      ${this.amountOptions.map(amount => {
+      ${this.amountOptions.map((amount, index) => {
         const checked = !this.customAmountButton?.checked && amount === this.donationInfo?.amount;
         return html`
           <li>
@@ -115,6 +117,7 @@ export class EditDonation extends LitElement {
               value: `${amount}`,
               displayText: `$${amount}`,
               checked: checked,
+              tabindex: index + 4
             })}
           </li>
         `;
@@ -127,6 +130,7 @@ export class EditDonation extends LitElement {
     value: string;
     displayText: string;
     checked: boolean;
+    tabindex: number;
   }): TemplateResult {
     const radioId = `${options.group}-${options.value}-option`;
     return html`
@@ -136,6 +140,7 @@ export class EditDonation extends LitElement {
           name=${options.group}
           value=${options.value}
           id=${radioId}
+          tabindex=${options.tabindex}
           .checked=${options.checked}
           @change=${this.radioSelected}
         />
@@ -161,6 +166,7 @@ export class EditDonation extends LitElement {
           name=${SelectionGroup.Amount}
           value="custom"
           id="custom-amount-button"
+          tabindex=11
           @change=${this.customRadioSelected}
         />
 
@@ -169,6 +175,7 @@ export class EditDonation extends LitElement {
           ><input
             type="text"
             id="custom-amount-input"
+            tabindex="-1"
             value=${value}
             @input=${this.customAmountChanged}
             @keydown=${this.currencyValidator.keydown}
@@ -324,6 +331,7 @@ export class EditDonation extends LitElement {
     const buttonGridGapCss = css`var(--paymentButtonGridGap, 1rem)`;
     const buttonFontSizeCss = css`var(--paymentButtonFontSize, 1.6rem)`;
     const buttonSelectedColorCss = css`var(--paymentButtonSelectedColor, #f9bf3b)`;
+    const buttonFocusedOutlineColorCss = css`var(--paymentButtonFocusedOutlineColor, #7fb3f9)`;
     const buttonColorCss = css`var(--paymentButtonColor, #fff)`;
     const coverFeesFontSizeCss = css`var(--coverFeesFontSize, 1.2rem)`;
     const coverFeesFontWeightCss = css`var(--coverFeesFontWeight, bold)`;
@@ -384,7 +392,10 @@ export class EditDonation extends LitElement {
       }
 
       input[type='radio'] {
-        display: none;
+        opacity: 0;
+        width: 0;
+        height: 0;
+        position: absolute;
       }
 
       input[type='radio'] + label {
@@ -393,6 +404,10 @@ export class EditDonation extends LitElement {
 
       input[type='radio']:checked + label {
         background-color: ${buttonSelectedColorCss};
+      }
+
+      input[type='radio']:focus + label {
+        outline: 2px solid ${buttonFocusedOutlineColorCss};
       }
 
       .cover-fees-container {

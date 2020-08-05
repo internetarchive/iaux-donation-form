@@ -12,6 +12,7 @@ export class CurrencyValidator implements FieldValidator {
     }
 
     switch (char) {
+      case 'Tab':
       case 'Delete':
       case 'Backspace':
       case 'ArrowLeft':

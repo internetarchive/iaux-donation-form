@@ -43,22 +43,23 @@ export class PaymentSelector extends LitElement {
           ? 'donation-info-valid'
           : 'donation-info-invalid'}"
       >
-        <div class="applepay provider-button ${this.applePayMode}" @click=${this.applePaySelected}>
+        <div class="applepay provider-button ${this.applePayMode}" @click=${this.applePaySelected} tabindex="14">
           <div class="payment-image">${applePayButtonImage}</div>
         </div>
 
         <div
           class="googlepay provider-button ${this.googlePayMode}"
           @click=${this.googlePaySelected}
+          tabindex="15"
         >
           <div class="payment-image">${googlePayButtonImage}</div>
         </div>
 
-        <div class="venmo provider-button ${this.venmoMode}" @click=${this.venmoSelected}>
+        <div class="venmo provider-button ${this.venmoMode}" @click=${this.venmoSelected} tabindex="16">
           <div class="payment-image">${venmoButtonImage}</div>
         </div>
 
-        <div class="paypal-container provider-button ${this.payPalMode}">
+        <div class="paypal-container provider-button ${this.payPalMode}" tabindex="17">
           <div class="payment-image">
             <div class="paypal-local-button" @click=${this.localPaypalButtonClicked}>
               ${paypalButtonImage}
@@ -67,7 +68,7 @@ export class PaymentSelector extends LitElement {
           </div>
         </div>
 
-        <button @click=${this.creditCardSelected} class="button-style credit-card-button">
+        <button @click=${this.creditCardSelected} class="button-style credit-card-button" tabindex="18">
           <div class="cc-background">
             <span class="cc-title">Credit Card</span>
           </div>
