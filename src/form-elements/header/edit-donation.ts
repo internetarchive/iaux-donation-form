@@ -7,6 +7,7 @@ import {
   TemplateResult,
   property,
   query,
+  PropertyValues,
 } from 'lit-element';
 
 import currency from 'currency.js';
@@ -43,6 +44,7 @@ export class EditDonation extends LitElement {
 
   private currencyValidator: CurrencyValidator = new CurrencyValidator();
 
+  /** @inheritdoc */
   render(): TemplateResult {
     return html`
       <form-section number="1" headline="Choose a frequency">
@@ -71,6 +73,20 @@ export class EditDonation extends LitElement {
     `;
   }
 
+  updated(changedProperties: PropertyValues): void {
+    if (changedProperties.has('donationInfo')) {
+      this.selectCustomAmountIfNeeded();
+    }
+  }
+
+  private selectCustomAmountIfNeeded(): void {
+    if (!this.donationInfo || !this.customAmountButton) { return; }
+
+    if (!this.amountOptions.includes(this.donationInfo.amount)) {
+      this.customAmountButton.checked = true;
+    }
+  }
+
   private get coverFeesTextTemplate(): TemplateResult {
     if (!this.donationInfo) {
       return html``;
@@ -89,8 +105,7 @@ export class EditDonation extends LitElement {
           group: SelectionGroup.DonationType,
           value: DonationType.OneTime,
           displayText: 'One time',
-          checked: this.donationInfo?.donationType === DonationType.OneTime,
-          tabindex: 0,
+          checked: this.donationInfo?.donationType === DonationType.OneTime
         })}
       </li>
 
@@ -99,8 +114,7 @@ export class EditDonation extends LitElement {
           group: SelectionGroup.DonationType,
           value: DonationType.Monthly,
           displayText: 'Monthly',
-          checked: this.donationInfo?.donationType === DonationType.Monthly,
-          tabindex: 1
+          checked: this.donationInfo?.donationType === DonationType.Monthly
         })}
       </li>
     `;
@@ -108,7 +122,7 @@ export class EditDonation extends LitElement {
 
   private get presetAmountsTemplate(): TemplateResult {
     return html`
-      ${this.amountOptions.map((amount, index) => {
+      ${this.amountOptions.map(amount => {
         const checked = !this.customAmountButton?.checked && amount === this.donationInfo?.amount;
         return html`
           <li>
@@ -116,8 +130,7 @@ export class EditDonation extends LitElement {
               group: SelectionGroup.Amount,
               value: `${amount}`,
               displayText: `$${amount}`,
-              checked: checked,
-              tabindex: index + 4
+              checked: checked
             })}
           </li>
         `;
@@ -130,7 +143,6 @@ export class EditDonation extends LitElement {
     value: string;
     displayText: string;
     checked: boolean;
-    tabindex: number;
   }): TemplateResult {
     const radioId = `${options.group}-${options.value}-option`;
     return html`
@@ -140,6 +152,7 @@ export class EditDonation extends LitElement {
           name=${options.group}
           value=${options.value}
           id=${radioId}
+          tabindex=0
           .checked=${options.checked}
           @change=${this.radioSelected}
         />
