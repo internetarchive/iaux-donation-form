@@ -162,26 +162,22 @@ export class DonationFormController extends LitElement {
 
   /** @inheritdoc */
   firstUpdated(): void {
-    this.readQueryParams();
+    this.setInitialDonationAmount();
   }
 
-  private readQueryParams(): void {
+  private setInitialDonationAmount(): void {
     const urlParams = new URLSearchParams(window.location.search);
-
-    const frequencyParam = urlParams.get('frequency');
-    const amountParam = urlParams.get('amount');
+    const frequencyParam = urlParams.get('contrib_type');
+    const amountParam = urlParams.get('amt');
     const coverFeesParam = urlParams.get('coverFees');
-
-    if (!frequencyParam && !amountParam && !coverFeesParam) {
-      return;
-    }
+    const coverFees = coverFeesParam === 'true';
 
     let frequency = DonationType.OneTime;
     if (frequencyParam === 'monthly') {
       frequency = DonationType.Monthly;
     }
 
-    let amount = this.defaultDonationInfo.amount;
+    let amount = 5;
     if (amountParam) {
       const parsedAmount = parseFloat(amountParam);
       if (!isNaN(parsedAmount)) {
@@ -192,7 +188,7 @@ export class DonationFormController extends LitElement {
     const donationInfo = new DonationPaymentInfo({
       donationType: frequency,
       amount: amount,
-      coverFees: coverFeesParam === 'true',
+      coverFees: coverFees,
     });
 
     this.donationForm.donationInfo = donationInfo;
@@ -276,18 +272,11 @@ export class DonationFormController extends LitElement {
     return config;
   }
 
-  private defaultDonationInfo: DonationPaymentInfo = new DonationPaymentInfo({
-    donationType: DonationType.OneTime,
-    amount: 5,
-    coverFees: false,
-  });
-
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
       <div class="donation-form-controller-container">
         <donation-form
-          .donationInfo=${this.defaultDonationInfo}
           .environment=${this.environment}
           .braintreeManager=${this.braintreeManager}
           @donationInfoChanged=${this.donationInfoChanged}
