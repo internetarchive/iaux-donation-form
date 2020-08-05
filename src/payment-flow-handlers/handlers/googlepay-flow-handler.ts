@@ -4,9 +4,15 @@ import { PaymentProvider } from '../../models/common/payment-provider-name';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
 import { CustomerInfo } from '../../models/common/customer-info';
 import { BillingInfo } from '../../models/common/billing-info';
+import { Emitter, createNanoEvents, Unsubscribe } from 'nanoevents';
 
 export interface GooglePayFlowHandlerInterface {
   paymentInitiated(donationInfo: DonationPaymentInfo): Promise<void>;
+  on<E extends keyof GooglePayFlowHandlerEvents>(event: E, callback: GooglePayFlowHandlerEvents[E]): Unsubscribe;
+}
+
+export interface GooglePayFlowHandlerEvents {
+  paymentCancelled: () => void;
 }
 
 export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
@@ -14,12 +20,18 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
 
   private braintreeManager: BraintreeManagerInterface;
 
+  private emitter: Emitter<GooglePayFlowHandlerEvents> = createNanoEvents<GooglePayFlowHandlerEvents>();
+
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;
     donationFlowModalManager: DonationFlowModalManagerInterface;
   }) {
     this.braintreeManager = options.braintreeManager;
     this.donationFlowModalManager = options.donationFlowModalManager;
+  }
+
+  on<E extends keyof GooglePayFlowHandlerEvents>(event: E, callback: GooglePayFlowHandlerEvents[E]): Unsubscribe {
+    return this.emitter.on(event, callback);
   }
 
   // GooglePayFlowHandlerInterface conformance
@@ -53,7 +65,6 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
       const name = billingInfo?.name;
       let firstName: string | undefined = name;
       let lastName: string | undefined = '';
-      // TODO: use the name parsing library
       const lastSpace = name?.lastIndexOf(' ');
       if (lastSpace && lastSpace !== -1) {
         firstName = name?.substr(0, lastSpace);
@@ -85,6 +96,7 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
         billingInfo: billing,
       });
     } catch {
+      this.emitter.emit('paymentCancelled');
       this.donationFlowModalManager.closeModal();
     }
   }

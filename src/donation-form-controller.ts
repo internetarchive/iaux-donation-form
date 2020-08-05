@@ -42,6 +42,7 @@ import lockImg from '@internetarchive/icon-lock';
 import { AnalyticsHandlerInterface } from './@types/analytics-handler';
 import { DonationPaymentInfo } from './models/donation-info/donation-payment-info';
 import { DonationType } from './models/donation-info/donation-type';
+import { PaymentProvider } from './models/common/payment-provider-name';
 
 /**
  * The DonationFormController orchestrates several of the interactions between
@@ -289,6 +290,10 @@ export class DonationFormController extends LitElement {
           .donationInfo=${this.defaultDonationInfo}
           .environment=${this.environment}
           .braintreeManager=${this.braintreeManager}
+          @donationInfoChanged=${this.donationInfoChanged}
+          @paymentFlowStarted=${this.paymentFlowStarted}
+          @paymentFlowCancelled=${this.paymentFlowCancelled}
+          @paymentFlowError=${this.paymentFlowError}
         >
           <!--
             Why are these slots here?
@@ -340,6 +345,39 @@ export class DonationFormController extends LitElement {
     return this;
   }
 
+  private donationInfoChanged(e: CustomEvent): void {
+    const donationInfo = e.detail.donationInfo as DonationPaymentInfo;
+
+    this.logEvent('donationInfoChanged', {
+      amount: donationInfo.amount,
+      donationType: donationInfo.donationType,
+      coverFees: donationInfo.coverFees
+    });
+  }
+
+  private paymentFlowStarted(e: CustomEvent): void {
+    const selectedProvider = e.detail.paymentProvider as PaymentProvider;
+    this.logEvent('paymentFlowStarted', {
+      paymentProvider: selectedProvider
+    });
+  }
+
+  private paymentFlowCancelled(e: CustomEvent): void {
+    const selectedProvider = e.detail.paymentProvider as PaymentProvider;
+    this.logEvent('paymentFlowCancelled', {
+      paymentProvider: selectedProvider
+    });
+  }
+
+  private paymentFlowError(e: CustomEvent): void {
+    const selectedProvider = e.detail.paymentProvider as PaymentProvider;
+    const error = e.detail.error as PaymentProvider;
+    this.logEvent('paymentFlowError', {
+      paymentProvider: selectedProvider,
+      error: error
+    });
+  }
+
   /**
    * Log an event
    *
@@ -347,6 +385,7 @@ export class DonationFormController extends LitElement {
    * @param {object} params Additional tracking parameters
    */
   private logEvent(name: string, params: object): void {
+    console.debug('logEvent', name, params);
     this.analyticsHandler?.sendEvent(
       this.analyticsCategory,
       name,

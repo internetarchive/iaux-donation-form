@@ -34,6 +34,7 @@ import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-fl
 import { PaymentProvider } from './models/common/payment-provider-name';
 
 import { FormSection } from './form-elements/form-section';
+import { PayPalButtonDataSourceInterface } from './braintree-manager/payment-providers/paypal/paypal-button-datasource';
 
 @customElement('donation-form')
 export class DonationForm extends LitElement {
@@ -159,6 +160,7 @@ export class DonationForm extends LitElement {
     const originalEvent = e.detail.originalEvent;
     this.donationInfo &&
       this.paymentFlowHandlers?.applePayHandler?.paymentInitiated(this.donationInfo, originalEvent);
+    this.emitPaymentFlowStartedEvent();
   }
 
   private googlePaySelected(): void {
@@ -171,6 +173,7 @@ export class DonationForm extends LitElement {
     } else {
       this.donationInfo &&
         this.paymentFlowHandlers?.googlePayHandler?.paymentInitiated(this.donationInfo);
+      this.emitPaymentFlowStartedEvent();
     }
   }
 
@@ -230,6 +233,8 @@ export class DonationForm extends LitElement {
 
     const contactInfo = this.contactForm.donorContactInfo;
 
+    this.emitPaymentFlowStartedEvent();
+
     switch (this.selectedPaymentProvider) {
       case PaymentProvider.CreditCard:
         this.donationInfo &&
@@ -243,6 +248,24 @@ export class DonationForm extends LitElement {
           this.paymentFlowHandlers?.venmoHandler?.paymentInitiated(contactInfo, this.donationInfo);
         break;
     }
+  }
+
+  private emitPaymentFlowStartedEvent(): void {
+    if (!this.selectedPaymentProvider) { return; }
+    const event = new CustomEvent('paymentFlowStarted', { detail: { paymentProvider: this.selectedPaymentProvider } })
+    this.dispatchEvent(event);
+  }
+
+  private emitPaymentFlowCancelledEvent(): void {
+    if (!this.selectedPaymentProvider) { return; }
+    const event = new CustomEvent('paymentFlowCancelled', { detail: { paymentProvider: this.selectedPaymentProvider } })
+    this.dispatchEvent(event);
+  }
+
+  private emitPaymentFlowErrorEvent(error?: string): void {
+    if (!this.selectedPaymentProvider) { return; }
+    const event = new CustomEvent('paymentFlowError', { detail: { paymentProvider: this.selectedPaymentProvider, error: error } })
+    this.dispatchEvent(event);
   }
 
   private showInvalidDonationInfoAlert(): void {
@@ -287,12 +310,38 @@ export class DonationForm extends LitElement {
       return;
     }
     this.flowHandlersConfigured = true;
+    this.bindFlowListenerEvents();
     this.renderPayPalButtonIfNeeded();
     this.donationInfo &&
       this.paymentFlowHandlers?.paypalHandler?.updateDonationInfo(this.donationInfo);
     this.paymentFlowHandlers?.creditCardHandler?.on('validityChanged', (isValid: boolean) => {
       this.hostedFieldsValid = isValid;
     });
+  }
+
+  private flowHandlerListenersBound = false;
+
+  private bindFlowListenerEvents(): void {
+    if (this.flowHandlerListenersBound) { return; }
+    this.flowHandlerListenersBound = true;
+
+    this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentStarted', () => {
+      this.selectedPaymentProvider = PaymentProvider.PayPal;
+      this.emitPaymentFlowStartedEvent();
+    });
+    this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentCancelled', () => {
+      this.selectedPaymentProvider = PaymentProvider.PayPal;
+      this.emitPaymentFlowCancelledEvent();
+    })
+    this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentError', () => {
+      this.selectedPaymentProvider = PaymentProvider.PayPal;
+      this.emitPaymentFlowErrorEvent();
+    })
+
+    this.paymentFlowHandlers?.googlePayHandler?.on('paymentCancelled', () => {
+      this.selectedPaymentProvider = PaymentProvider.GooglePay;
+      this.emitPaymentFlowCancelledEvent();
+    })
   }
 
   private donationInfoChanged(e: CustomEvent): void {
@@ -303,6 +352,8 @@ export class DonationForm extends LitElement {
       coverFees: donationInfo.coverFees,
     });
     this.donationInfoValid = true;
+    const event = new CustomEvent('donationInfoChanged', { detail: { donationInfo } })
+    this.dispatchEvent(event);
   }
 
   /** @inheritdoc */

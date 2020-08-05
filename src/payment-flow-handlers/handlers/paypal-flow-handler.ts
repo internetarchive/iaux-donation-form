@@ -1,3 +1,5 @@
+import { createNanoEvents, Emitter, Unsubscribe } from 'nanoevents';
+
 import {
   PayPalButtonDataSourceInterface,
   PayPalButtonDataSourceDelegate,
@@ -21,6 +23,7 @@ export interface PayPalFlowHandlerInterface {
   updateDonationInfo(donationInfo: DonationPaymentInfo): void;
   updateUpsellDonationInfo(donationInfo: DonationPaymentInfo): void;
   renderPayPalButton(donationInfo: DonationPaymentInfo): Promise<void>;
+  on<E extends keyof PayPalFlowHandlerEvents>(event: E, callback: PayPalFlowHandlerEvents[E]): Unsubscribe;
 }
 
 /**
@@ -44,6 +47,12 @@ class UpsellDataSourceContainer {
   }
 }
 
+export interface PayPalFlowHandlerEvents {
+  payPalPaymentStarted: (dataSource: PayPalButtonDataSourceInterface, options: object) => void;
+  payPalPaymentCancelled: (dataSource: PayPalButtonDataSourceInterface, data: object) => void;
+  payPalPaymentError: (dataSource: PayPalButtonDataSourceInterface, error: string) => void;
+}
+
 /**
  * This class manages the user-flow for PayPal.
  *
@@ -61,6 +70,8 @@ export class PayPalFlowHandler
   private donationFlowModalManager: DonationFlowModalManagerInterface;
 
   private braintreeManager: BraintreeManagerInterface;
+
+  private emitter: Emitter<PayPalFlowHandlerEvents> = createNanoEvents<PayPalFlowHandlerEvents>();
 
   updateDonationInfo(donationInfo: DonationPaymentInfo): void {
     if (this.buttonDataSource) {
@@ -82,13 +93,17 @@ export class PayPalFlowHandler
     this.donationFlowModalManager = options.donationFlowModalManager;
   }
 
+  on<E extends keyof PayPalFlowHandlerEvents>(event: E, callback: PayPalFlowHandlerEvents[E]): Unsubscribe {
+    return this.emitter.on(event, callback);
+  }
+
   async payPalPaymentStarted(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     dataSource: PayPalButtonDataSourceInterface,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options: object,
   ): Promise<void> {
-    return;
+    this.emitter.emit('payPalPaymentStarted', dataSource, options);
   }
 
   async payPalPaymentAuthorized(
@@ -170,13 +185,14 @@ export class PayPalFlowHandler
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     data: object,
   ): Promise<void> {
-    return;
+    this.emitter.emit('payPalPaymentCancelled', dataSource, data);
   }
 
   async payPalPaymentError(
     dataSource: PayPalButtonDataSourceInterface,
     error: string,
   ): Promise<void> {
+    this.emitter.emit('payPalPaymentError', dataSource, error);
     console.error(
       'PaymentSector:payPalPaymentError error:',
       dataSource,
