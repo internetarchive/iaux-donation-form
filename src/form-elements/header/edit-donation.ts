@@ -35,6 +35,8 @@ export class EditDonation extends LitElement {
 
   @property({ type: Object }) private error?: TemplateResult;
 
+  @property({ type: Boolean }) private amountIsValid = true;
+
   @query('#custom-amount-button') private customAmountButton?: HTMLInputElement;
 
   @query('#custom-amount-input') private customAmountInput?: HTMLInputElement;
@@ -215,6 +217,7 @@ export class EditDonation extends LitElement {
   private handleCustomAmountInput(value: string): void {
     const amount = parseFloat(value);
     if (isNaN(amount)) {
+      this.amountIsValid = false;
       this.dispatchEditDonationError(DonationInfoError.InvalidDonationAmount);
     } else {
       this.amountChanged(amount);
@@ -227,6 +230,7 @@ export class EditDonation extends LitElement {
     }
 
     if (amount >= 10000) {
+      this.amountIsValid = false;
       this.error = html`
         To make a donation of $10,000 or more, please contact our philanthropy department at
         <a href="mailto:donations@archive.org">donations@archive.org</a>
@@ -236,6 +240,7 @@ export class EditDonation extends LitElement {
     }
 
     if (amount < 1) {
+      this.amountIsValid = false;
       if (this.customAmountInput && this.customAmountInput.value.length > 0) {
         this.error = html`
           Please select an amount (minimum $1)
@@ -245,6 +250,7 @@ export class EditDonation extends LitElement {
       return;
     }
 
+    this.amountIsValid = true;
     this.error = undefined;
     this.donationInfo.amount = amount;
     this.dispatchDonationInfoChangedEvent();
@@ -288,6 +294,7 @@ export class EditDonation extends LitElement {
     if (!this.donationInfo) {
       return;
     }
+    this.amountIsValid = true;
     this.error = undefined;
     if (this.customAmountInput) this.customAmountInput.value = '';
     this.donationInfo.amount = amount;
@@ -295,7 +302,7 @@ export class EditDonation extends LitElement {
   }
 
   private dispatchDonationInfoChangedEvent(): void {
-    if (!this.donationInfo) {
+    if (!this.donationInfo || !this.amountIsValid) {
       return;
     }
 
