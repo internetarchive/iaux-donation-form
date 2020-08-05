@@ -34,7 +34,6 @@ import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-fl
 import { PaymentProvider } from './models/common/payment-provider-name';
 
 import { FormSection } from './form-elements/form-section';
-import { PayPalButtonDataSourceInterface } from './braintree-manager/payment-providers/paypal/paypal-button-datasource';
 
 @customElement('donation-form')
 export class DonationForm extends LitElement {
