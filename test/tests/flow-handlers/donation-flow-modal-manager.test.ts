@@ -1,9 +1,15 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { html, fixture, expect } from '@open-wc/testing';
 import { DonationFlowModalManager } from '../../../src/payment-flow-handlers/donation-flow-modal-manager';
 import { MockModalManager } from '../../mocks/mock-modal-manager';
 import '../../mocks/mock-modal-manager';
 import { MockBraintreeManager } from '../../mocks/mock-braintree-manager';
 import { mockSuccessResponse } from '../../mocks/models/mock-success-response';
+import { PaymentProvider } from '../../../src/models/common/payment-provider-name';
+import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
+import { DonationType } from '../../../src/models/donation-info/donation-type';
+import { mockBillingInfo } from '../../mocks/models/mock-billing-info';
+import { mockCustomerInfo } from '../../mocks/models/mock-customer-info';
 
 describe('Donation Flow Modal Manager', () => {
   it('can close the modal', async () => {
@@ -97,5 +103,50 @@ describe('Donation Flow Modal Manager', () => {
     expect(response).to.deep.equal(mockSuccessResponse);
   });
 
-  it('can ');
+  it('can start the donation submission flow', async () => {
+    const mockModalManager = (await fixture(html`
+      <mock-modal-manager></mock-modal-manager>
+    `)) as MockModalManager;
+    const mockBraintreeManager = new MockBraintreeManager();
+    const manager = new DonationFlowModalManager({
+      braintreeManager: mockBraintreeManager,
+      modalManager: mockModalManager,
+    });
+    const result = await manager.startDonationSubmissionFlow({
+      nonce: 'foo',
+      paymentProvider: PaymentProvider.CreditCard,
+      donationInfo: new DonationPaymentInfo({
+        donationType: DonationType.OneTime,
+        amount: 5,
+        coverFees: false,
+      }),
+      billingInfo: mockBillingInfo,
+      customerInfo: mockCustomerInfo,
+    });
+
+    expect(result).to.deep.equal({
+      success: true,
+      value: {
+        amount: 5,
+        billing: {
+          countryCodeAlpha2: 'US',
+          extendedAddress: 'Apt 123',
+          locality: 'San Francisco',
+          postalCode: '12345',
+          region: 'CA',
+          streetAddress: '123 Fake St',
+        },
+        customer: {
+          email: 'foo@bar.com',
+          firstName: 'Fooey',
+          lastName: 'McBarrison',
+        },
+        customer_id: 'bar',
+        donationType: 'one-time',
+        paymentMethodNonce: 'foo',
+        paymentProvider: 'Credit Card',
+        transaction_id: 'foo',
+      },
+    });
+  });
 });

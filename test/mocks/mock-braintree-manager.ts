@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BraintreeManagerInterface } from '../../src/braintree-manager/braintree-interfaces';
@@ -61,9 +62,20 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
     }
 
     if (this.submitDonationResponse === 'success') {
+      const response = new SuccessResponse({
+        paymentMethodNonce: options.nonce,
+        paymentProvider: options.paymentProvider,
+        amount: options.donationInfo.amount,
+        donationType: options.donationInfo.donationType,
+        transaction_id: 'foo',
+        customer_id: 'bar',
+        customer: options.customerInfo,
+        billing: options.billingInfo,
+      });
+
       return new DonationResponse({
         success: true,
-        value: mockSuccessResponse,
+        value: response,
       });
     } else {
       return new DonationResponse({
