@@ -19,6 +19,23 @@ describe('Donation Flow Modal Manager', () => {
     expect(mockModalManager.closeCalled).to.be.true;
   });
 
+  it('can calculate the proper default upsell amount', async () => {
+    let amount = DonationFlowModalManager.getDefaultUpsellAmount(1);
+    expect(amount).to.equal(5);
+    amount = DonationFlowModalManager.getDefaultUpsellAmount(10);
+    expect(amount).to.equal(5);
+    amount = DonationFlowModalManager.getDefaultUpsellAmount(10.01);
+    expect(amount).to.equal(10);
+    amount = DonationFlowModalManager.getDefaultUpsellAmount(25);
+    expect(amount).to.equal(10);
+    amount = DonationFlowModalManager.getDefaultUpsellAmount(25.01);
+    expect(amount).to.equal(25);
+    amount = DonationFlowModalManager.getDefaultUpsellAmount(100);
+    expect(amount).to.equal(25);
+    amount = DonationFlowModalManager.getDefaultUpsellAmount(100.01);
+    expect(amount).to.equal(50);
+  });
+
   it('can show the processing modal', async () => {
     const mockModalManager = (await fixture(html`
       <mock-modal-manager></mock-modal-manager>

@@ -85,11 +85,6 @@ export interface DonationFlowModalManagerInterface {
     userClosedModalCallback?: () => void;
   }): Promise<void>;
 
-  upsellModalYesSelected(
-    oneTimeDonationResponse: SuccessResponse,
-    amount: number,
-  ): Promise<DonationResponse | undefined>;
-
   startDonationSubmissionFlow(options: {
     nonce: string;
     paymentProvider: PaymentProvider;
@@ -229,40 +224,6 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     });
   }
 
-  async upsellModalYesSelected(
-    oneTimeDonationResponse: SuccessResponse,
-    amount: number,
-  ): Promise<DonationResponse | undefined> {
-    this.showProcessingModal();
-
-    try {
-      const response = await this.braintreeManager.submitUpsellDonation({
-        oneTimeDonationResponse: oneTimeDonationResponse,
-        amount: amount,
-      });
-
-      if (response.success) {
-        this.completeUpsell({
-          successResponse: oneTimeDonationResponse,
-          upsellSuccessResponse: response.value as SuccessResponse,
-        });
-      } else {
-        const error = response.value as ErrorResponse;
-        this.showErrorModal({
-          message: `Error setting up monthly donation: ${error.message}, ${error.errors}`,
-        });
-      }
-
-      return response;
-    } catch (error) {
-      this.showErrorModal({
-        message: `Error setting up monthly donation: ${error}`,
-      });
-      console.error('error getting a response', error);
-      return undefined;
-    }
-  }
-
   async startDonationSubmissionFlow(options: {
     nonce: string;
     paymentProvider: PaymentProvider;
@@ -296,6 +257,40 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     } catch (error) {
       this.showErrorModal({
         message: `Error setting up donation: ${error}`,
+      });
+      console.error('error getting a response', error);
+      return undefined;
+    }
+  }
+
+  private async upsellModalYesSelected(
+    oneTimeDonationResponse: SuccessResponse,
+    amount: number,
+  ): Promise<DonationResponse | undefined> {
+    this.showProcessingModal();
+
+    try {
+      const response = await this.braintreeManager.submitUpsellDonation({
+        oneTimeDonationResponse: oneTimeDonationResponse,
+        amount: amount,
+      });
+
+      if (response.success) {
+        this.completeUpsell({
+          successResponse: oneTimeDonationResponse,
+          upsellSuccessResponse: response.value as SuccessResponse,
+        });
+      } else {
+        const error = response.value as ErrorResponse;
+        this.showErrorModal({
+          message: `Error setting up monthly donation: ${error.message}, ${error.errors}`,
+        });
+      }
+
+      return response;
+    } catch (error) {
+      this.showErrorModal({
+        message: `Error setting up monthly donation: ${error}`,
       });
       console.error('error getting a response', error);
       return undefined;

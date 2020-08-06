@@ -9,7 +9,6 @@ import { PaymentProvider } from '../../models/common/payment-provider-name';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
 import { HostedFieldName } from '../../braintree-manager/payment-providers/credit-card/hosted-field-container';
 import { BadgedInput } from '../../form-elements/badged-input';
-import { SuccessResponse } from '../../models/response-models/success-models/success-response';
 
 export interface CreditCardFlowHandlerInterface {
   startup(): Promise<void>;
@@ -122,33 +121,15 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       return;
     }
 
-    try {
-      this.donationFlowModalManager.showProcessingModal();
-
-      const response = await this.braintreeManager.submitDonation({
-        nonce: hostedFieldsResponse.nonce,
-        paymentProvider: PaymentProvider.CreditCard,
-        recaptchaToken: recaptchaToken,
-        bin: hostedFieldsResponse.details.bin,
-        donationInfo: donationInfo,
-        customerInfo: donorContactInfo.customer,
-        billingInfo: donorContactInfo.billing,
-      });
-
-      if (response.success) {
-        this.donationFlowModalManager.handleSuccessfulDonationResponse(
-          donationInfo,
-          response.value as SuccessResponse,
-        );
-      } else {
-        this.donationFlowModalManager.closeModal();
-        handler.showErrorMessage();
-      }
-    } catch (error) {
-      this.donationFlowModalManager.showErrorModal({
-        message: `Error setting up donation: ${error}`,
-      });
-    }
+    this.donationFlowModalManager.startDonationSubmissionFlow({
+      nonce: hostedFieldsResponse.nonce,
+      paymentProvider: PaymentProvider.CreditCard,
+      recaptchaToken: recaptchaToken,
+      bin: hostedFieldsResponse.details.bin,
+      donationInfo: donationInfo,
+      customerInfo: donorContactInfo.customer,
+      billingInfo: donorContactInfo.billing,
+    });
   }
 
   private async handleHostedFieldTokenizationError(error: braintree.BraintreeError): Promise<void> {
