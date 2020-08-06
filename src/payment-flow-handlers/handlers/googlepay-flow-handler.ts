@@ -8,7 +8,10 @@ import { Emitter, createNanoEvents, Unsubscribe } from 'nanoevents';
 
 export interface GooglePayFlowHandlerInterface {
   paymentInitiated(donationInfo: DonationPaymentInfo): Promise<void>;
-  on<E extends keyof GooglePayFlowHandlerEvents>(event: E, callback: GooglePayFlowHandlerEvents[E]): Unsubscribe;
+  on<E extends keyof GooglePayFlowHandlerEvents>(
+    event: E,
+    callback: GooglePayFlowHandlerEvents[E],
+  ): Unsubscribe;
 }
 
 export interface GooglePayFlowHandlerEvents {
@@ -20,7 +23,9 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
 
   private braintreeManager: BraintreeManagerInterface;
 
-  private emitter: Emitter<GooglePayFlowHandlerEvents> = createNanoEvents<GooglePayFlowHandlerEvents>();
+  private emitter: Emitter<GooglePayFlowHandlerEvents> = createNanoEvents<
+    GooglePayFlowHandlerEvents
+  >();
 
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;
@@ -30,7 +35,10 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
     this.donationFlowModalManager = options.donationFlowModalManager;
   }
 
-  on<E extends keyof GooglePayFlowHandlerEvents>(event: E, callback: GooglePayFlowHandlerEvents[E]): Unsubscribe {
+  on<E extends keyof GooglePayFlowHandlerEvents>(
+    event: E,
+    callback: GooglePayFlowHandlerEvents[E],
+  ): Unsubscribe {
     return this.emitter.on(event, callback);
   }
 

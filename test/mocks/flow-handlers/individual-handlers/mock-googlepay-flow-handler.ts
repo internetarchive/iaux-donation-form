@@ -1,11 +1,19 @@
-import { GooglePayFlowHandlerInterface, GooglePayFlowHandlerEvents } from '../../../../src/payment-flow-handlers/handlers/googlepay-flow-handler';
+import {
+  GooglePayFlowHandlerInterface,
+  GooglePayFlowHandlerEvents,
+} from '../../../../src/payment-flow-handlers/handlers/googlepay-flow-handler';
 import { DonationPaymentInfo } from '../../../../src/models/donation-info/donation-payment-info';
 import { Unsubscribe, createNanoEvents, Emitter } from 'nanoevents';
 
 export class MockGooglePayFlowHandler implements GooglePayFlowHandlerInterface {
-  private emitter: Emitter<GooglePayFlowHandlerEvents> = createNanoEvents<GooglePayFlowHandlerEvents>();
+  private emitter: Emitter<GooglePayFlowHandlerEvents> = createNanoEvents<
+    GooglePayFlowHandlerEvents
+  >();
 
-  on<E extends keyof GooglePayFlowHandlerEvents>(event: E, callback: GooglePayFlowHandlerEvents[E]): Unsubscribe {
+  on<E extends keyof GooglePayFlowHandlerEvents>(
+    event: E,
+    callback: GooglePayFlowHandlerEvents[E],
+  ): Unsubscribe {
     return this.emitter.on(event, callback);
   }
 

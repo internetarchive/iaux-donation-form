@@ -340,21 +340,21 @@ export class DonationFormController extends LitElement {
     this.logEvent('donationInfoChanged', {
       amount: donationInfo.amount,
       donationType: donationInfo.donationType,
-      coverFees: donationInfo.coverFees
+      coverFees: donationInfo.coverFees,
     });
   }
 
   private paymentFlowStarted(e: CustomEvent): void {
     const selectedProvider = e.detail.paymentProvider as PaymentProvider;
     this.logEvent('paymentFlowStarted', {
-      paymentProvider: selectedProvider
+      paymentProvider: selectedProvider,
     });
   }
 
   private paymentFlowCancelled(e: CustomEvent): void {
     const selectedProvider = e.detail.paymentProvider as PaymentProvider;
     this.logEvent('paymentFlowCancelled', {
-      paymentProvider: selectedProvider
+      paymentProvider: selectedProvider,
     });
   }
 
@@ -363,7 +363,7 @@ export class DonationFormController extends LitElement {
     const error = e.detail.error as PaymentProvider;
     this.logEvent('paymentFlowError', {
       paymentProvider: selectedProvider,
-      error: error
+      error: error,
     });
   }
 

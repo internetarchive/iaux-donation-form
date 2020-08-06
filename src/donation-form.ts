@@ -85,7 +85,7 @@ export class DonationForm extends LitElement {
           @applePaySelected=${this.applePaySelected}
           @googlePaySelected=${this.googlePaySelected}
           @paypalBlockerSelected=${this.paypalBlockerSelected}
-          tabindex=0
+          tabindex="0"
         >
           <slot name="paypal-button" slot="paypal-button"></slot>
         </payment-selector>
@@ -251,20 +251,32 @@ export class DonationForm extends LitElement {
   }
 
   private emitPaymentFlowStartedEvent(): void {
-    if (!this.selectedPaymentProvider) { return; }
-    const event = new CustomEvent('paymentFlowStarted', { detail: { paymentProvider: this.selectedPaymentProvider } })
+    if (!this.selectedPaymentProvider) {
+      return;
+    }
+    const event = new CustomEvent('paymentFlowStarted', {
+      detail: { paymentProvider: this.selectedPaymentProvider },
+    });
     this.dispatchEvent(event);
   }
 
   private emitPaymentFlowCancelledEvent(): void {
-    if (!this.selectedPaymentProvider) { return; }
-    const event = new CustomEvent('paymentFlowCancelled', { detail: { paymentProvider: this.selectedPaymentProvider } })
+    if (!this.selectedPaymentProvider) {
+      return;
+    }
+    const event = new CustomEvent('paymentFlowCancelled', {
+      detail: { paymentProvider: this.selectedPaymentProvider },
+    });
     this.dispatchEvent(event);
   }
 
   private emitPaymentFlowErrorEvent(error?: string): void {
-    if (!this.selectedPaymentProvider) { return; }
-    const event = new CustomEvent('paymentFlowError', { detail: { paymentProvider: this.selectedPaymentProvider, error: error } })
+    if (!this.selectedPaymentProvider) {
+      return;
+    }
+    const event = new CustomEvent('paymentFlowError', {
+      detail: { paymentProvider: this.selectedPaymentProvider, error: error },
+    });
     this.dispatchEvent(event);
   }
 
@@ -322,7 +334,9 @@ export class DonationForm extends LitElement {
   private flowHandlerListenersBound = false;
 
   private bindFlowListenerEvents(): void {
-    if (this.flowHandlerListenersBound) { return; }
+    if (this.flowHandlerListenersBound) {
+      return;
+    }
     this.flowHandlerListenersBound = true;
 
     this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentStarted', () => {
@@ -332,16 +346,16 @@ export class DonationForm extends LitElement {
     this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentCancelled', () => {
       this.selectedPaymentProvider = PaymentProvider.PayPal;
       this.emitPaymentFlowCancelledEvent();
-    })
+    });
     this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentError', () => {
       this.selectedPaymentProvider = PaymentProvider.PayPal;
       this.emitPaymentFlowErrorEvent();
-    })
+    });
 
     this.paymentFlowHandlers?.googlePayHandler?.on('paymentCancelled', () => {
       this.selectedPaymentProvider = PaymentProvider.GooglePay;
       this.emitPaymentFlowCancelledEvent();
-    })
+    });
   }
 
   private donationInfoChanged(e: CustomEvent): void {
@@ -352,7 +366,7 @@ export class DonationForm extends LitElement {
       coverFees: donationInfo.coverFees,
     });
     this.donationInfoValid = true;
-    const event = new CustomEvent('donationInfoChanged', { detail: { donationInfo } })
+    const event = new CustomEvent('donationInfoChanged', { detail: { donationInfo } });
     this.dispatchEvent(event);
   }
 

@@ -23,7 +23,10 @@ export interface PayPalFlowHandlerInterface {
   updateDonationInfo(donationInfo: DonationPaymentInfo): void;
   updateUpsellDonationInfo(donationInfo: DonationPaymentInfo): void;
   renderPayPalButton(donationInfo: DonationPaymentInfo): Promise<void>;
-  on<E extends keyof PayPalFlowHandlerEvents>(event: E, callback: PayPalFlowHandlerEvents[E]): Unsubscribe;
+  on<E extends keyof PayPalFlowHandlerEvents>(
+    event: E,
+    callback: PayPalFlowHandlerEvents[E],
+  ): Unsubscribe;
 }
 
 /**
@@ -93,7 +96,10 @@ export class PayPalFlowHandler
     this.donationFlowModalManager = options.donationFlowModalManager;
   }
 
-  on<E extends keyof PayPalFlowHandlerEvents>(event: E, callback: PayPalFlowHandlerEvents[E]): Unsubscribe {
+  on<E extends keyof PayPalFlowHandlerEvents>(
+    event: E,
+    callback: PayPalFlowHandlerEvents[E],
+  ): Unsubscribe {
     return this.emitter.on(event, callback);
   }
 
