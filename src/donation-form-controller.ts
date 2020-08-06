@@ -109,11 +109,10 @@ export class DonationFormController extends LitElement {
     }
 
     if (
-      this.braintreeManager === undefined &&
-      (changedProperties.has('paymentClients') ||
-        changedProperties.has('braintreeAuthToken') ||
-        changedProperties.has('endpointManager') ||
-        changedProperties.has('environment'))
+      changedProperties.has('paymentClients') ||
+      changedProperties.has('braintreeAuthToken') ||
+      changedProperties.has('endpointManager') ||
+      changedProperties.has('environment')
     ) {
       this.setupBraintreeManager();
     }
@@ -141,6 +140,7 @@ export class DonationFormController extends LitElement {
 
   private setupBraintreeManager(): void {
     if (
+      this.braintreeManager === undefined &&
       this.braintreeAuthToken &&
       this.endpointManager &&
       this.paymentClients &&
