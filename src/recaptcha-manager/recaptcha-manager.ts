@@ -58,7 +58,6 @@ export class RecaptchaManager implements RecaptchaManagerInterface {
       });
     }
     this.isExecuting = true;
-    this.grecaptchaLibrary.execute();
     return new Promise((resolve, reject) => {
       this.executionSuccessBlock = (token: string): void => {
         this.finishExecution();
@@ -67,13 +66,15 @@ export class RecaptchaManager implements RecaptchaManagerInterface {
 
       this.executionExpiredBlock = (): void => {
         this.finishExecution();
-        reject();
+        reject('expired');
       };
 
       this.executionErrorBlock = (): void => {
         this.finishExecution();
-        reject();
+        reject('error');
       };
+
+      this.grecaptchaLibrary.execute();
     });
   }
 
