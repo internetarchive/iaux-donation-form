@@ -13,7 +13,7 @@ export class MockApplePayClient implements braintree.ApplePay {
   }
 
   async create(options: { client: braintree.Client }): Promise<braintree.ApplePay> {
-    return new MockApplePayClient();
+    return this;
   }
 
   VERSION = 'foo';

@@ -11,7 +11,8 @@ export class MockHostedFieldContainer implements HostedFieldContainerInterface {
   hideErrorMessageCalled = false;
 
   fieldFor(field: HostedFieldName): HTMLInputElement {
-    throw new Error('Method not implemented.');
+    const input = document.createElement('input') as HTMLInputElement;
+    return input;
   }
 
   markFieldErrors(fields: HostedFieldName[]): void {

@@ -10,22 +10,7 @@ import { MockPaymentFlowHandlers } from '../mocks/flow-handlers/mock-payment-flo
 import { promisedSleep } from '../helpers/promisedSleep';
 import { DonationPaymentInfo } from '../../src/models/donation-info/donation-payment-info';
 import { MockDonationInfo } from '../mocks/mock-donation-info';
-
-function fillInContactForm(contactForm: ContactForm): void {
-  contactForm.emailField.value = 'foo@bar.com';
-  contactForm.firstNameField.value = 'Fooey';
-  contactForm.lastNameField.value = 'McBarrison';
-  contactForm.streetAddressField.value = '123 Fake St';
-  contactForm.extendedAddressField.value = 'Apt 123';
-  contactForm.localityField.value = 'SF';
-  contactForm.regionField.value = 'CA';
-  contactForm.postalCodeField.value = '12345';
-
-  // setting the values above does not trigger any validations
-  // you have to send an `input` Event like what would happen in the browser
-  const inputEvent = new Event('input');
-  contactForm.postalCodeField.dispatchEvent(inputEvent);
-}
+import { fillInContactForm } from '../helpers/fillInContactForm';
 
 describe('Donation Form', () => {
   describe('Configuration', () => {

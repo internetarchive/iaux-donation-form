@@ -19,7 +19,7 @@ export class MockPayPalClient implements braintree.PayPalCheckout {
     authorization?: string | undefined;
     merchantAccountId?: string | undefined;
   }): Promise<braintree.PayPalCheckout> {
-    return new MockPayPalClient();
+    return this;
   }
 
   VERSION = 'foo';

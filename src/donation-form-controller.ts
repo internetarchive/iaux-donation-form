@@ -78,13 +78,13 @@ export class DonationFormController extends LitElement {
 
   @property({ type: Object }) recaptchaElement?: HTMLElement;
 
-  @property({ type: Object }) private braintreeManager?: BraintreeManagerInterface;
+  @property({ type: Object }) braintreeManager?: BraintreeManagerInterface;
 
-  @property({ type: Object }) private recaptchaManager?: RecaptchaManagerInterface;
+  @property({ type: Object }) recaptchaManager?: RecaptchaManagerInterface;
 
-  @property({ type: Object }) private paymentFlowHandlers?: PaymentFlowHandlersInterface;
+  @property({ type: Object }) paymentFlowHandlers?: PaymentFlowHandlersInterface;
 
-  @property({ type: Object }) private paymentClients?: PaymentClientsInterface;
+  @property({ type: Object }) paymentClients?: PaymentClientsInterface;
 
   @query('donation-form') private donationForm!: DonationForm;
 
@@ -133,7 +133,7 @@ export class DonationFormController extends LitElement {
       this.setupPaymentFlowHandlers();
     }
 
-    if (changedProperties.has('environment') && this.environment) {
+    if (changedProperties.has('environment') && this.environment && !this.paymentClients) {
       this.paymentClients = new PaymentClients(this.lazyLoaderService, this.environment);
     }
   }
@@ -374,7 +374,6 @@ export class DonationFormController extends LitElement {
    * @param {object} params Additional tracking parameters
    */
   private logEvent(name: string, params: object): void {
-    console.debug('logEvent', name, params);
     this.analyticsHandler?.sendEvent(
       this.analyticsCategory,
       name,

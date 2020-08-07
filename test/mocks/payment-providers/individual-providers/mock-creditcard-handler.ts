@@ -10,16 +10,15 @@ export class MockCreditCardHandler implements CreditCardHandlerInterface {
     braintree.HostedFields
   >({
     generator: new Promise<braintree.HostedFields>(resolve => {
-      resolve(
-        new MockHostedFieldsClient({
-          mockHostedFieldTokenizePayload: this.mockPayload,
-        }),
-      );
+      const client = new MockHostedFieldsClient({
+        mockHostedFieldTokenizePayload: this.mockPayload,
+      });
+      resolve(client);
     }),
   });
 
-  tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined> {
-    throw new Error('Method not implemented.');
+  async tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined> {
+    return this.mockPayload;
   }
 
   markFieldErrors(fields: HostedFieldName[]): void {

@@ -4,8 +4,19 @@ import { PaymentClientsInterface } from '../../src/braintree-manager/payment-cli
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { MockBraintreeClient } from './payment-clients/mock-braintree-client';
 import { MockDeviceDataCollector } from './payment-clients/mock-data-collector';
+import { MockHostedFieldsClient } from './payment-clients/mock-hostedfields-client';
+import { MockVenmoClient } from './payment-clients/mock-venmo-client';
+import { MockPayPalClient } from './payment-clients/mock-paypal-client';
+import { MockApplePayClient } from './payment-clients/mock-applepay-client';
+import { MockGooglePaymentClient } from './payment-clients/mock-googlepay-client';
+import { MockGooglePayLibrary } from './payment-clients/mock-googlepay-library';
 
 export class MockPaymentClients implements PaymentClientsInterface {
+  async emitValidityChangedEvent(valid: boolean): Promise<void> {
+    const hostedFields = (await this.hostedFields.get()) as MockHostedFieldsClient;
+    hostedFields.emitValidityChangedEvent(valid);
+  }
+
   braintreeClient: PromisedSingleton<braintree.Client>;
   dataCollector: PromisedSingleton<braintree.DataCollector>;
   hostedFields: PromisedSingleton<braintree.HostedFields>;
@@ -14,7 +25,6 @@ export class MockPaymentClients implements PaymentClientsInterface {
   applePay: PromisedSingleton<braintree.ApplePay>;
   googlePayBraintreeClient: PromisedSingleton<braintree.GooglePayment>;
   googlePaymentsClient: PromisedSingleton<google.payments.api.PaymentsClient>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   paypalLibrary: PromisedSingleton<any>;
 
   constructor(generators?: {
@@ -26,7 +36,6 @@ export class MockPaymentClients implements PaymentClientsInterface {
     applePay?: PromisedSingleton<braintree.ApplePay>;
     googlePayBraintreeClient?: PromisedSingleton<braintree.GooglePayment>;
     googlePaymentsClient?: PromisedSingleton<google.payments.api.PaymentsClient>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     paypalLibrary?: PromisedSingleton<any>;
   }) {
     this.braintreeClient =
@@ -47,42 +56,43 @@ export class MockPaymentClients implements PaymentClientsInterface {
       generators?.hostedFields ??
       new PromisedSingleton<braintree.HostedFields>({
         generator: new Promise((resolve, reject) => {
-          reject('Not implemented');
+          const client = new MockHostedFieldsClient();
+          resolve(client);
         }),
       });
     this.venmo =
       generators?.venmo ??
       new PromisedSingleton<braintree.Venmo>({
         generator: new Promise((resolve, reject) => {
-          reject('Not implemented');
+          resolve(new MockVenmoClient({ isBrowserSupported: true }));
         }),
       });
     this.payPal =
       generators?.payPal ??
       new PromisedSingleton<braintree.PayPalCheckout>({
         generator: new Promise((resolve, reject) => {
-          reject('Not implemented');
+          resolve(new MockPayPalClient());
         }),
       });
     this.applePay =
       generators?.applePay ??
       new PromisedSingleton<braintree.ApplePay>({
         generator: new Promise((resolve, reject) => {
-          reject('Not implemented');
+          resolve(new MockApplePayClient());
         }),
       });
     this.googlePayBraintreeClient =
       generators?.googlePayBraintreeClient ??
       new PromisedSingleton<braintree.GooglePayment>({
         generator: new Promise((resolve, reject) => {
-          reject('Not implemented');
+          resolve(new MockGooglePaymentClient());
         }),
       });
     this.googlePaymentsClient =
       generators?.googlePaymentsClient ??
       new PromisedSingleton<google.payments.api.PaymentsClient>({
         generator: new Promise((resolve, reject) => {
-          reject('Not implemented');
+          resolve(new MockGooglePayLibrary({ isReadyToPay: true }));
         }),
       });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

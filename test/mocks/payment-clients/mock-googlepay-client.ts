@@ -8,7 +8,7 @@ export class MockGooglePaymentClient implements braintree.GooglePayment {
     googlePayVersion?: number | undefined;
     googleMerchantId?: string | undefined;
   }): Promise<braintree.GooglePayment> {
-    return new MockGooglePaymentClient();
+    return this;
   }
 
   async createPaymentDataRequest(
@@ -22,6 +22,7 @@ export class MockGooglePaymentClient implements braintree.GooglePayment {
   ): Promise<google.payments.api.PaymentDataRequest> {
     throw new Error('Method not implemented.');
   }
+
   async parseResponse(response: any): Promise<braintree.GooglePaymentTokenizePayload> {
     return {
       nonce: 'foo-nonce',

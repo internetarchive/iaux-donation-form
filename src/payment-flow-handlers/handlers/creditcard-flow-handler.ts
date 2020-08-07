@@ -16,10 +16,13 @@ export interface CreditCardFlowHandlerInterface {
     donationInfo: DonationPaymentInfo,
     donorContactInfo: DonorContactInfo,
   ): Promise<void>;
-  on<E extends keyof Events>(event: E, callback: Events[E]): Unsubscribe;
+  on<E extends keyof CreditCardFlowHandlerEvents>(
+    event: E,
+    callback: CreditCardFlowHandlerEvents[E],
+  ): Unsubscribe;
 }
 
-interface Events {
+export interface CreditCardFlowHandlerEvents {
   validityChanged: (isValid: boolean) => void;
 }
 
@@ -30,7 +33,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
 
   private recaptchaManager: RecaptchaManagerInterface;
 
-  private emitter: Emitter<Events>;
+  private emitter: Emitter<CreditCardFlowHandlerEvents>;
 
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;
@@ -40,10 +43,13 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     this.braintreeManager = options.braintreeManager;
     this.donationFlowModalManager = options.donationFlowModalManager;
     this.recaptchaManager = options.recaptchaManager;
-    this.emitter = createNanoEvents<Events>();
+    this.emitter = createNanoEvents<CreditCardFlowHandlerEvents>();
   }
 
-  on<E extends keyof Events>(event: E, callback: Events[E]): Unsubscribe {
+  on<E extends keyof CreditCardFlowHandlerEvents>(
+    event: E,
+    callback: CreditCardFlowHandlerEvents[E],
+  ): Unsubscribe {
     return this.emitter.on(event, callback);
   }
 

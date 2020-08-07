@@ -7,11 +7,13 @@ export class MockDeviceDataCollector implements braintree.DataCollector {
     kount: boolean;
     paypal: boolean;
   }): Promise<braintree.DataCollector> {
-    return new MockDeviceDataCollector();
+    return this;
   }
 
   VERSION = 'foo';
+
   deviceData = MockDeviceDataCollector.mockDeviceData;
+
   teardown(callback?: braintree.callback | undefined): void {
     throw new Error('Method not implemented.');
   }

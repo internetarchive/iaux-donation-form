@@ -232,7 +232,6 @@ export class DonationForm extends LitElement {
     }
 
     const contactInfo = this.contactForm.donorContactInfo;
-
     this.emitPaymentFlowStartedEvent();
 
     switch (this.selectedPaymentProvider) {

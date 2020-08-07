@@ -10,9 +10,7 @@ export class MockVenmoClient implements braintree.Venmo {
     profileId?: string | undefined;
     deepLinkReturnUrl?: string | undefined;
   }): Promise<braintree.Venmo> {
-    return new MockVenmoClient({
-      isBrowserSupported: this.browserSupported,
-    });
+    return this;
   }
 
   VERSION = 'foo';
