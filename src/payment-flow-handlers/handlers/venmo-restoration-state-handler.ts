@@ -62,9 +62,23 @@ export class VenmoRestorationState {
 export class VenmoRestorationStateHandler implements VenmoRestorationStateHandlerInterface {
   private persistanceKey = 'venmoRestorationStateInfo';
 
+  private storageSystem?: Storage;
+
+  constructor(options?: {
+    storageSystem?: Storage;
+  }) {
+    if (options?.storageSystem) {
+      this.storageSystem = options.storageSystem;
+    } else if (this.storageSystemAvailable(localStorage)) {
+      this.storageSystem = localStorage;
+    } else if (this.storageSystemAvailable(sessionStorage)) {
+      this.storageSystem = sessionStorage;
+    }
+  }
+
   /** @inheritdoc */
   clearState(): void {
-    localStorage.removeItem(this.persistanceKey);
+    this.storageSystem?.removeItem(this.persistanceKey);
   }
 
   /** @inheritdoc */
@@ -74,12 +88,12 @@ export class VenmoRestorationStateHandler implements VenmoRestorationStateHandle
       donationInfo,
     });
     const serialized = JSON.stringify(venmoRestoration);
-    localStorage.setItem(this.persistanceKey, serialized);
+    this.storageSystem?.setItem(this.persistanceKey, serialized);
   }
 
   /** @inheritdoc */
   async getRestorationState(): Promise<VenmoRestorationState | undefined> {
-    const stored = localStorage.getItem(this.persistanceKey);
+    const stored = this.storageSystem?.getItem(this.persistanceKey);
     if (!stored) {
       console.error('restoreState: No stored data');
       return undefined;
@@ -87,12 +101,30 @@ export class VenmoRestorationStateHandler implements VenmoRestorationStateHandle
 
     const deserialized = JSON.parse(stored);
     if (!deserialized) {
-      console.error('restoreState: Data could not be deserializd');
+      console.error('restoreState: Data could not be deserialized');
       return undefined;
     }
 
     const donationInfo = new VenmoRestorationState(deserialized);
 
     return donationInfo;
+  }
+
+  /**
+   * Check if a particular storage system (localStorage/sessionStorage) is availble
+   *
+   * @private
+   * @param {Storage} system
+   * @returns {boolean}
+   * @memberof VenmoRestorationStateHandler
+   */
+  private storageSystemAvailable(system: Storage): boolean {
+    try {
+      system.setItem('foo', 'bar');
+      system.removeItem('foo');
+      return true;
+    } catch (exception) {
+      return false;
+    }
   }
 }
