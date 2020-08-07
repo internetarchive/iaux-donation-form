@@ -59,7 +59,9 @@ describe('Donation Form Controller', () => {
 
     // grab some internal elements to interact with
     const donationForm: DonationForm = controller.querySelector('donation-form') as DonationForm;
-    const paymentSelector: PaymentSelector = donationForm?.shadowRoot?.querySelector('payment-selector') as PaymentSelector;
+    const paymentSelector: PaymentSelector = donationForm?.shadowRoot?.querySelector(
+      'payment-selector',
+    ) as PaymentSelector;
     const creditCardButton = paymentSelector?.shadowRoot?.querySelector('.credit-card-button');
 
     // click on the credit card button
