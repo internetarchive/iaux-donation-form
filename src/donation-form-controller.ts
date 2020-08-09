@@ -374,7 +374,7 @@ export class DonationFormController extends LitElement {
    * @param {object} params Additional tracking parameters
    */
   private logEvent(name: string, params: object): void {
-    this.analyticsHandler?.sendEvent(
+    this.analyticsHandler?.send_event(
       this.analyticsCategory,
       name,
       window.location.pathname,

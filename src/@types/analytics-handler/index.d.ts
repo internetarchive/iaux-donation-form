@@ -11,5 +11,6 @@ export interface AnalyticsHandlerInterface {
    * @param {string} label Defaults to `window.location.pathname`
    * @param {Object} additionalEventParams
    */
-  sendEvent(category: string, action: string, label: string, additionalEventParams: object): void;
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  send_event(category: string, action: string, label: string, additionalEventParams: object): void;
 }
