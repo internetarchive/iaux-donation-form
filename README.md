@@ -2,9 +2,9 @@
 
 # \<donation-form>
 
-A Radio Player that displays closed captioning and allows searching.
+The Internet Archive Donation Form
 
-![Radio Player](./assets/img/donation-form.png "Radio Player Demo")
+![Donation Form](./assets/img/screenshot.png "Donation Form")
 
 ## Installation
 ```bash
@@ -12,103 +12,86 @@ npm add @internetarchive/donation-form
 ```
 
 ## Usage
-```js
-// donation-form.js
-import RadioPlayer from '@internetarchive/donation-form';
-export default RadioPlayer;
-```
-
 ```html
-<!-- index.html -->
 <script type="module">
-  import './donation-form.js';
+  import '@internetarchive/donation-form';
+  import '@internetarchive/modal-manager';
+  // create an endpoint manager that conforms to `BraintreeEndpointManagerInterface`
+  import BraintreeEndpointManager from  './braintree-endpoint-manager.js';
+
+  // instantiate the endpoint manager
+  const endpointManager = new BraintreeEndpointManager();
+  const formController = document.querySelector('donation-form-controller');
+  const modalManager = document.querySelector('modal-manager');
+  const recaptchaElement = document.querySelector('#recaptcha');
+
+  // pass in all of the dependencies to the <donation-form-controller>
+  formController.endpointManager = endpointManager;
+  formController.modalManager = modalManager;
+  formController.recaptchaElement = recaptchaElement;
+  formController.analyticsHandler = window.archive_analytics;
 </script>
 
+<!--
+  There's some environment-specific styling, depending on the host
+  layout and configuration
+-->
 <style>
-  donation-form {
-    line-height: 1.5rem;
-    color: white;
+  donation-form-controller {
+    min-height: 362px;
+    display: block;
+  }
 
-    --timeColor: white;
-    --timeColumnWidth: 3rem;
-    --transcriptHeight: 200px;
+  body.modal-manager-open {
+    overflow: hidden;
+  }
 
-    --autoScrollButtonFontColor: black;
-    --autoScrollButtonBackgroundColor: white;
+  modal-manager {
+    display: none;
+    --modalBottomMargin: 10px;
+    --modalWidth: 320px;
+  }
 
-    --normalTextColor: gray;
-    --activeTextColor: white;
-    --searchResultInactiveBorderColor: gray;
-    --searchResultActiveBorderColor: green;
+  modal-manager[mode='open'] {
+    display: block;
+  }
 
-    --trackColor: black;
-    --trackBorder: 1px solid white;
+  #recaptcha {
+    position: absolute;
+    z-index: 10;
   }
 </style>
 
-<donation-form></donation-form>
+<!--
+  The <donation-form-controller> orchestrates the interactions
+  between the donation-form itself and other dependencies like
+  the modal manager, recaptcha, and some clear DOM dependencies
+  like the PayPal button and Braintree hosted fields.
 
-<script>
-  // Configure the radio player
+  The <donation-form> component can be used independently of the
+  controller, but will need something to handle some of the interactions.
+ -->
+<donation-form-controller
+  environment='dev/prod'
+  braintreeAuthToken='{braintree_auth_token}'
+  recaptchaSiteKey='{recaptcha_key}'
+  venmoProfileId='{venmo_profile_id}'
+  googlePayMerchantId='{google_merchant_id}'
+  referrer='{referrer}'
+  loggedInUser='{logged_in_user}'>
+</donation-form-controller>
 
-  const radioPlayer = document.querySelector('donation-form');
+<div id="recaptcha"></div>
 
-  radioPlayer.addEventListener('searchRequested', e => {
-    console.log('Search requested', e.detail.searchTerm);
-  });
-
-  radioPlayer.addEventListener('searchCleared', e => {
-    console.log('Search cleared');
-  });
-
-  radioPlayer.addEventListener('playbackPaused', e => {
-    console.log('Playback paused');
-  });
-
-  radioPlayer.addEventListener('playbackStarted', e => {
-    console.log('Playback started');
-  });
-
-  radioPlayer.addEventListener('currentTimeChanged', e => {
-    console.log('Current time changed', e.detail.currentTime);
-  });
-
-  radioPlayer.addEventListener('timeChangedFromScrub', e => {
-    console.log('New time', e.detail.newTime);
-  });
-
-  radioPlayer.addEventListener('transcriptEntrySelected', e => {
-    console.log('New time', e.detail.newTime);
-  });
-
-  radioPlayer.addEventListener('canplay', e => {
-    console.log('Media can play');
-  });
-
-  const quickSearchTerms = [];
-
-  const audioSource = new AudioSource(
-    'https://ia803005.us.archive.org/30/items/BBC_Radio_2_20190502_180000/BBC_Radio_2_20190502_180000.mp3',
-    'audio/mpeg',
-  );
-
-  const radioConfig = new RadioPlayerConfig(
-    'Voice of America',
-    '7:00pm',
-    './logo.jpg',
-    './waveform.png',
-    [audioSource],
-    quickSearchTerms,
-  );
-
-  const transcriptEntries: TranscriptEntryConfig[] = [...];
-
-  const transcriptConfig = new TranscriptConfig(transcriptEntries);
-
-  radioPlayer.config = radioConfig;
-  radioPlayer.transcriptConfig = transcriptConfig
-</script>
-
+<modal-manager>
+  <!--
+    The PayPal button does not work in the shadow DOM so it
+    must be slotted in from the top.
+   -->
+  <div slot="paypal-upsell-button">
+    <div id="paypal-upsell-button"></div>
+  </div>
+</modal-manager>
 ```
 
 # Development
@@ -120,7 +103,7 @@ npm install
 
 ## Start Development Server
 ```bash
-npm run start  // start development server and typescript compiler
+npm run start
 ```
 
 ## Testing
