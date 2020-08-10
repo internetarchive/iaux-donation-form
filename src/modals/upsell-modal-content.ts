@@ -147,7 +147,7 @@ export class UpsellModalContent extends LitElement {
     const yesButtonColor = css`var(--upsellYesButtonColor, rgb(109,148,201))`;
     const yesButtonDisabledColor = css`var(--upsellYesButtonDisabledColor, rgba(109,148,201,0.5))`;
     const noThanksFontSize = css`var(--upsellNoThanksFontSize, 1.4rem)`;
-    const noThanksFontColor = css`var(--upsellNoThanksFontColor, #691916)`;
+    const noThanksFontColor = css`var(--upsellNoThanksFontColor, #c23e3e)`;
     const amountInputOffset = css`var(--upsellAmountInputOffset, -1rem)`;
 
     return css`
