@@ -22,10 +22,81 @@
       "slots": [],
       "cssProperties": [
         {
-          "name": "--placeholder-image-text-color",
-          "description": "Main Text Color",
+          "name": "--upsellYesButtonColor",
+          "description": "Upsell Yes Button Color",
           "type": "Color"
-        }
+        },
+        {
+          "name": "--upsellYesButtonDisabledColor",
+          "description": "Upsell Yes Button Disabled Color",
+          "type": "Color"
+        },
+        {
+          "name": "--upsellNoThanksFontSize",
+          "description": "Upsell No Thanks Font Size",
+          "type": "String"
+        },
+        {
+          "name": "--upsellNoThanksFontColor",
+          "description": "Upsell No Thanks Font Color",
+          "type": "Color"
+        },
+        {
+          "name": "--upsellAmountInputOffset",
+          "description": "Upsell Amount Input Horizontal Offset for centering the input",
+          "type": "String"
+        },
+        {
+          "name": "--donateButtonFontSize",
+          "description": "Donate Button Font Size",
+          "type": "String"
+        },
+        {
+          "name": "--donateButtonHeight",
+          "description": "Donate Button Height",
+          "type": "String"
+        },
+        {
+          "name": "--donateButtonColor",
+          "description": "Donate Button Color",
+          "type": "Color"
+        },
+        {
+          "name": "--donateButtonDisabledColor",
+          "description": "Donate Button Disabled Color",
+          "type": "Color"
+        },
+        {
+          "name": "--inputBorder",
+          "description": "Border for the contact form and custom amount inputs",
+          "type": "String"
+        },
+        {
+          "name": "--badgedInputBorderErrorColor",
+          "description": "Badged Input Border Error Color for the contact form",
+          "type": "Color"
+        },
+        {
+          "name": "--badgedInputIconSize",
+          "description": "Badged Input Icon Size",
+          "type": "String"
+        },
+        {
+          "name": "--badgedInputIconSpacerWidth",
+          "description": "The width of the icon section of the badged input",
+          "type": "String"
+        },
+        {
+          "name": "--badgedInputNoIconSpacerWidth",
+          "description": "The width of the icon section when there's no icon space",
+          "type": "String"
+        },
+        {
+          "name": "--badgedInputHeight",
+          "description": "Badged Input Height",
+          "type": "String"
+        },
+
       ]
     }
   ]

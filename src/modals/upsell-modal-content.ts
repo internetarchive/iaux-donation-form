@@ -15,6 +15,16 @@ export enum UpsellModalCTAMode {
   PayPalUpsellSlot = 'PayPalUpsellSlot',
 }
 
+/**
+ * This is the content that we show in the upsell modal.
+ *
+ * It has an amount input, "Yes" and "No Thanks" options and a switch to optionally
+ * show the PayPal upsell button.
+ *
+ * @export
+ * @class UpsellModalContent
+ * @extends {LitElement}
+ */
 @customElement('upsell-modal-content')
 export class UpsellModalContent extends LitElement {
   @property({ type: String }) yesButtonMode: UpsellModalCTAMode = UpsellModalCTAMode.YesButton;
@@ -137,6 +147,7 @@ export class UpsellModalContent extends LitElement {
     const yesButtonColor = css`var(--upsellYesButtonColor, rgb(109,148,201))`;
     const yesButtonDisabledColor = css`var(--upsellYesButtonDisabledColor, rgba(109,148,201,0.5))`;
     const noThanksFontSize = css`var(--upsellNoThanksFontSize, 1.4rem)`;
+    const noThanksFontColor = css`var(--upsellNoThanksFontColor, #691916)`;
     const amountInputOffset = css`var(--upsellAmountInputOffset, -1rem)`;
 
     return css`
@@ -201,7 +212,7 @@ export class UpsellModalContent extends LitElement {
         margin-top: 1rem;
         width: 100%;
         text-align: center;
-        color: red;
+        color: ${noThanksFontColor};
         border: 0;
         background: none;
         font-size: ${noThanksFontSize};
