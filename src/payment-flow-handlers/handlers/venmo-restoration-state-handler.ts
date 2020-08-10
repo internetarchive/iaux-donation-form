@@ -64,9 +64,7 @@ export class VenmoRestorationStateHandler implements VenmoRestorationStateHandle
 
   private storageSystem?: Storage;
 
-  constructor(options?: {
-    storageSystem?: Storage;
-  }) {
+  constructor(options?: { storageSystem?: Storage }) {
     if (options?.storageSystem) {
       this.storageSystem = options.storageSystem;
     } else if (this.storageSystemAvailable(localStorage)) {
