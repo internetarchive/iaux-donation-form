@@ -1,0 +1,58 @@
+{
+  "_args": [
+    [
+      "@types/paypal-checkout-components@4.0.0",
+      "/Users/jason/Projects/IA/iaux/iaux-donation-form"
+    ]
+  ],
+  "_development": true,
+  "_from": "@types/paypal-checkout-components@4.0.0",
+  "_id": "@types/paypal-checkout-components@4.0.0",
+  "_inBundle": false,
+  "_integrity": "sha512-nEIK2mFkXFpzI2Osss47DOhxgasgkvEGG3nyw+IAe/rk7CmKmRsW8CDoW2qCyFF1eSjsnEbLILxeUcGB9c7xgg==",
+  "_location": "/@types/paypal-checkout-components",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "@types/paypal-checkout-components@4.0.0",
+    "name": "@types/paypal-checkout-components",
+    "escapedName": "@types%2fpaypal-checkout-components",
+    "scope": "@types",
+    "rawSpec": "4.0.0",
+    "saveSpec": null,
+    "fetchSpec": "4.0.0"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "/@types/braintree-web"
+  ],
+  "_resolved": "https://registry.npmjs.org/@types/paypal-checkout-components/-/paypal-checkout-components-4.0.0.tgz",
+  "_spec": "4.0.0",
+  "_where": "/Users/jason/Projects/IA/iaux/iaux-donation-form",
+  "bugs": {
+    "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/issues"
+  },
+  "contributors": [
+    {
+      "name": "Jason Buckner",
+      "url": "https://github.com/jbuckner"
+    }
+  ],
+  "dependencies": {},
+  "description": "TypeScript definitions for paypal-checkout-components",
+  "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped#readme",
+  "license": "MIT",
+  "main": "",
+  "name": "@types/paypal-checkout-components",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+    "directory": "types/paypal-checkout-components"
+  },
+  "scripts": {},
+  "typeScriptVersion": "3.1",
+  "types": "index.d.ts",
+  "typesPublisherContentHash": "5583d512b996851d10cc8b59bacbdc5c19ed8d2ee715c6f95f9ffa0d5f1bdc6c",
+  "version": "4.0.0"
+}

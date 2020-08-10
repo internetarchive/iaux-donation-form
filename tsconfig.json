@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "lib": ["es2017", "dom"],
+    "strict": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "inlineSources": true,
+    "declaration": true,
+    "rootDir": "./",
+    "allowUmdGlobalAccess": true // this is only for paypal. I can't figure out how to use it properly without this.
+  },
+  "include": ["src/**/*.ts", "demo/**/*.ts", "test/**/*.ts"]
+}
