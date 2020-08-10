@@ -15,5 +15,5 @@ install:
 script:
   - npm run test
 
-after_success:
+after_script:
   - codecov
