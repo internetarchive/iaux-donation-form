@@ -160,17 +160,23 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
   showErrorModal(options: { message: string; userClosedModalCallback?: () => void }): void {
     const modalConfig = new ModalConfig({
       headerColor: ModalHeaderColor.Red,
+      title: html`Processing error`,
       headline: html`
-        An Error Occurred
+        There's been a problem processing your donation.
       `,
       message: html`
         ${options?.message}
-      `,
+      `
     });
 
     this.modalManager.showModal({
       config: modalConfig,
       userClosedModalCallback: options?.userClosedModalCallback,
+      customModalContent: html`
+        <a href="https://help.archive.org/hc/en-us/articles/360037568971-Why-is-there-a-problem-processing-my-donation-" style="color: black">
+          Questions?
+        </a>
+      `
     });
   }
 
