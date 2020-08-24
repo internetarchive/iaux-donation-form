@@ -250,7 +250,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       } else {
         const error = response.value as ErrorResponse;
         this.showErrorModal({
-          message: `Error setting up donation: ${error.message}, ${error.errors}`,
+          message: `Error setting up donation: ${error.message}`,
         });
         return response;
       }
@@ -283,7 +283,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       } else {
         const error = response.value as ErrorResponse;
         this.showErrorModal({
-          message: `Error setting up monthly donation: ${error.message}, ${error.errors}`,
+          message: `Error setting up monthly donation: ${error.message}`,
         });
       }
 
