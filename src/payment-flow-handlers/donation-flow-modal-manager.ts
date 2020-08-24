@@ -10,6 +10,7 @@ import { PaymentProvider } from '../models/common/payment-provider-name';
 import { BillingInfo } from '../models/common/billing-info';
 import { CustomerInfo } from '../models/common/customer-info';
 import { DonationResponse } from '../models/response-models/donation-response';
+import '../modals/error-modal-content';
 
 enum ModalHeaderColor {
   Blue = '#497fbf',
@@ -173,9 +174,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       config: modalConfig,
       userClosedModalCallback: options?.userClosedModalCallback,
       customModalContent: html`
-        <a href="https://help.archive.org/hc/en-us/articles/360037568971-Why-is-there-a-problem-processing-my-donation-" style="color: black">
-          Questions?
-        </a>
+        <donation-form-error-modal-content></donation-form-error-modal-content>
       `
     });
   }
