@@ -81,7 +81,7 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
       this.restorationStateHandler.clearState();
       this.handleTokenizationError(tokenizeError);
       this.donationFlowModalManager.showErrorModal({
-        message: `Error loading donation information: ${tokenizeError}`,
+        message: `Error loading donation information`,
       });
     }
   }
