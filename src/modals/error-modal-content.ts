@@ -1,11 +1,4 @@
-import {
-  LitElement,
-  html,
-  css,
-  customElement,
-  CSSResult,
-  TemplateResult,
-} from 'lit-element';
+import { LitElement, html, css, customElement, CSSResult, TemplateResult } from 'lit-element';
 
 /**
  * This is shown at the bottom of the error modal.
@@ -20,7 +13,11 @@ export class ErrorModalContent extends LitElement {
   render(): TemplateResult {
     return html`
       <div class="container">
-        <a href="https://help.archive.org/hc/en-us/articles/360037568971-Why-is-there-a-problem-processing-my-donation-" target="_blank">
+        <a
+          href="https://help.archive.org/hc/en-us/articles/360037568971-Why-is-there-a-problem-processing-my-donation-"
+          rel="noopener"
+          target="_blank"
+        >
           Questions?
         </a>
       </div>
@@ -39,9 +36,11 @@ export class ErrorModalContent extends LitElement {
         text-align: center;
       }
 
-      a, a:link, a:visited {
+      a,
+      a:link,
+      a:visited {
         color: ${questionsLinkFontColor};
-        font-size: ${questionsLinkFontSize}
+        font-size: ${questionsLinkFontSize};
       }
     `;
   }

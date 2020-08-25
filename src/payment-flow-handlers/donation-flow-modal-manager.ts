@@ -161,13 +161,15 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
   showErrorModal(options: { message: string; userClosedModalCallback?: () => void }): void {
     const modalConfig = new ModalConfig({
       headerColor: ModalHeaderColor.Red,
-      title: html`Processing error`,
+      title: html`
+        Processing error
+      `,
       headline: html`
         There's been a problem completing your donation.
       `,
       message: html`
         ${options?.message}
-      `
+      `,
     });
 
     this.modalManager.showModal({
@@ -175,7 +177,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       userClosedModalCallback: options?.userClosedModalCallback,
       customModalContent: html`
         <donation-form-error-modal-content></donation-form-error-modal-content>
-      `
+      `,
     });
   }
 
