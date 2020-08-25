@@ -163,7 +163,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       headerColor: ModalHeaderColor.Red,
       title: html`Processing error`,
       headline: html`
-        There's been a problem processing your donation.
+        There's been a problem completing your donation.
       `,
       message: html`
         ${options?.message}
@@ -255,13 +255,13 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       } else {
         const error = response.value as ErrorResponse;
         this.showErrorModal({
-          message: `Error setting up donation: ${error.message}`,
+          message: error.message,
         });
         return response;
       }
     } catch (error) {
       this.showErrorModal({
-        message: `Error setting up donation: ${error}`,
+        message: error,
       });
       console.error('error getting a response', error);
       return undefined;
@@ -288,14 +288,14 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       } else {
         const error = response.value as ErrorResponse;
         this.showErrorModal({
-          message: `Error setting up monthly donation: ${error.message}`,
+          message: error.message,
         });
       }
 
       return response;
     } catch (error) {
       this.showErrorModal({
-        message: `Error setting up monthly donation: ${error}`,
+        message: error,
       });
       console.error('error getting a response', error);
       return undefined;
