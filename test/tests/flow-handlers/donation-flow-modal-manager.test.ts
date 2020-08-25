@@ -76,7 +76,9 @@ describe('Donation Flow Modal Manager', () => {
     expect(modalOptions?.config.showProcessingIndicator).to.be.false;
     expect(modalOptions?.config.closeOnBackdropClick).to.be.true;
     expect(modalOptions?.config.showCloseButton).to.be.true;
-    expect(modalOptions?.config.headline?.getHTML().trim()).to.equal('An Error Occurred');
+    expect(modalOptions?.config.headline?.getHTML().trim()).to.equal(
+      "There's been a problem completing your donation.",
+    );
     expect(modalOptions?.config.message?.values[0]).to.equal('foo-error');
   });
 
