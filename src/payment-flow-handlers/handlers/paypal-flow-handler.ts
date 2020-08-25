@@ -299,8 +299,6 @@ export class PayPalFlowHandler
         oneTimeSuccessResponse: options.oneTimeSuccessResponse,
       });
     } else {
-      // this.showErrorModal();
-      // alert('ERROR RENDERING UPSELL PAYPAL BUTTON');
       console.error('error rendering paypal upsell button');
     }
   }
