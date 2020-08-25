@@ -122,7 +122,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       recaptchaToken = await this.recaptchaManager.execute();
     } catch (error) {
       this.donationFlowModalManager.showErrorModal({
-        message: `Recaptcha failure: ${error}`,
+        message: `Recaptcha failure`,
       });
       return;
     }

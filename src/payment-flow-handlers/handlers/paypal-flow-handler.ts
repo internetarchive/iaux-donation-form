@@ -18,6 +18,7 @@ import {
   DonationFlowModalManagerInterface,
   DonationFlowModalManager,
 } from '../donation-flow-modal-manager';
+import { ErrorResponse } from '../../models/response-models/error-models/error-response';
 
 export interface PayPalFlowHandlerInterface {
   updateDonationInfo(donationInfo: DonationPaymentInfo): void;
@@ -153,8 +154,9 @@ export class PayPalFlowHandler
     });
 
     if (!response.success) {
+      const error = response.value as ErrorResponse;
       this.donationFlowModalManager.showErrorModal({
-        message: 'Error setting up donation',
+        message: error.message,
       });
       return;
     }
@@ -297,8 +299,6 @@ export class PayPalFlowHandler
         oneTimeSuccessResponse: options.oneTimeSuccessResponse,
       });
     } else {
-      // this.showErrorModal();
-      // alert('ERROR RENDERING UPSELL PAYPAL BUTTON');
       console.error('error rendering paypal upsell button');
     }
   }

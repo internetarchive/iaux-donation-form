@@ -57,7 +57,7 @@ export class ApplePayFlowHandler
     } else {
       const error = response.value as ErrorResponse;
       this.donationFlowModalManager.showErrorModal({
-        message: `Error setting up monthly donation: ${error}`,
+        message: error.message,
       });
     }
   }
@@ -89,7 +89,7 @@ export class ApplePayFlowHandler
     } else {
       const errorResponse = response.value as ErrorResponse;
       this.donationFlowModalManager.showErrorModal({
-        message: `Error setting up donation: ${errorResponse.message}, ${errorResponse.errors}`,
+        message: errorResponse.message,
       });
     }
   }

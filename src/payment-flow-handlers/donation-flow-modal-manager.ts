@@ -10,6 +10,7 @@ import { PaymentProvider } from '../models/common/payment-provider-name';
 import { BillingInfo } from '../models/common/billing-info';
 import { CustomerInfo } from '../models/common/customer-info';
 import { DonationResponse } from '../models/response-models/donation-response';
+import '../modals/error-modal-content';
 
 enum ModalHeaderColor {
   Blue = '#497fbf',
@@ -160,8 +161,11 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
   showErrorModal(options: { message: string; userClosedModalCallback?: () => void }): void {
     const modalConfig = new ModalConfig({
       headerColor: ModalHeaderColor.Red,
+      title: html`
+        Processing error
+      `,
       headline: html`
-        An Error Occurred
+        There's been a problem completing your donation.
       `,
       message: html`
         ${options?.message}
@@ -171,6 +175,9 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     this.modalManager.showModal({
       config: modalConfig,
       userClosedModalCallback: options?.userClosedModalCallback,
+      customModalContent: html`
+        <donation-form-error-modal-content></donation-form-error-modal-content>
+      `,
     });
   }
 
@@ -250,13 +257,13 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       } else {
         const error = response.value as ErrorResponse;
         this.showErrorModal({
-          message: `Error setting up donation: ${error.message}, ${error.errors}`,
+          message: error.message,
         });
         return response;
       }
     } catch (error) {
       this.showErrorModal({
-        message: `Error setting up donation: ${error}`,
+        message: error,
       });
       console.error('error getting a response', error);
       return undefined;
@@ -283,14 +290,14 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       } else {
         const error = response.value as ErrorResponse;
         this.showErrorModal({
-          message: `Error setting up monthly donation: ${error.message}, ${error.errors}`,
+          message: error.message,
         });
       }
 
       return response;
     } catch (error) {
       this.showErrorModal({
-        message: `Error setting up monthly donation: ${error}`,
+        message: error,
       });
       console.error('error getting a response', error);
       return undefined;
