@@ -1,6 +1,5 @@
 import { VenmoFlowHandlerInterface } from '../../../../src/payment-flow-handlers/handlers/venmo-flow-handler';
-import { DonorContactInfo } from '../../../../src/models/common/donor-contact-info';
-import { DonationPaymentInfo } from '../../../../src/models/donation-info/donation-payment-info';
+import { DonorContactInfo, DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
 
 export class MockVenmoFlowHandler implements VenmoFlowHandlerInterface {
   startupCalled = false;

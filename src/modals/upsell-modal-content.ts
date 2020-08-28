@@ -8,7 +8,7 @@ import {
   property,
   query,
 } from 'lit-element';
-import { CurrencyValidator } from '../form-elements/header/currency-validator';
+import { CurrencyValidator } from '@internetarchive/donation-form-currency-validator';
 
 export enum UpsellModalCTAMode {
   YesButton = 'YesButton',

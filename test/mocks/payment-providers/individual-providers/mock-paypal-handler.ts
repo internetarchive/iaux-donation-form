@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { MockPayPalClient } from '../../payment-clients/mock-paypal-client';
-import { DonationPaymentInfo } from '../../../../src/models/donation-info/donation-payment-info';
+import { DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
 import { PayPalButtonDataSourceInterface } from '../../../../src/braintree-manager/payment-providers/paypal/paypal-button-datasource';
 import { PayPalHandlerInterface } from '../../../../src/braintree-manager/payment-providers/paypal/paypal-interface';
 

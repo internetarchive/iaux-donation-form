@@ -1,4 +1,4 @@
-import { DonationPaymentInfo } from '../../../models/donation-info/donation-payment-info';
+import { DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
 import { ApplePaySessionDataSourceDelegate } from './apple-pay-session-datasource-delegate';
 
 export interface ApplePaySessionDataSourceInterface {

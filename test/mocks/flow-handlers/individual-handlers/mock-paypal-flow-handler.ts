@@ -2,7 +2,7 @@ import {
   PayPalFlowHandlerInterface,
   PayPalFlowHandlerEvents,
 } from '../../../../src/payment-flow-handlers/handlers/paypal-flow-handler';
-import { DonationPaymentInfo } from '../../../../src/models/donation-info/donation-payment-info';
+import { DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
 import { Unsubscribe, createNanoEvents, Emitter } from 'nanoevents';
 
 export class MockPayPalFlowHandler implements PayPalFlowHandlerInterface {

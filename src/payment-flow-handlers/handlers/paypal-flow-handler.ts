@@ -4,21 +4,23 @@ import {
   PayPalButtonDataSourceInterface,
   PayPalButtonDataSourceDelegate,
 } from '../../braintree-manager/payment-providers/paypal/paypal-button-datasource';
-import { DonationResponse } from '../../models/response-models/donation-response';
+import {
+  DonationResponse,
+  DonationType,
+  DonationPaymentInfo,
+  SuccessResponse,
+  CustomerInfo,
+  BillingInfo,
+  PaymentProvider,
+  ErrorResponse,
+} from '@internetarchive/donation-form-data-models';
 import { BraintreeManagerInterface } from '../../braintree-manager/braintree-interfaces';
-import { DonationType } from '../../models/donation-info/donation-type';
-import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
 
 import { UpsellModalCTAMode } from '../../modals/upsell-modal-content';
-import { SuccessResponse } from '../../models/response-models/success-models/success-response';
-import { CustomerInfo } from '../../models/common/customer-info';
-import { BillingInfo } from '../../models/common/billing-info';
-import { PaymentProvider } from '../../models/common/payment-provider-name';
 import {
   DonationFlowModalManagerInterface,
   DonationFlowModalManager,
 } from '../donation-flow-modal-manager';
-import { ErrorResponse } from '../../models/response-models/error-models/error-response';
 
 export interface PayPalFlowHandlerInterface {
   updateDonationInfo(donationInfo: DonationPaymentInfo): void;

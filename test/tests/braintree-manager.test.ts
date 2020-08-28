@@ -7,9 +7,7 @@ import { HostingEnvironment } from '../../src/braintree-manager/braintree-interf
 import { MockPaymentClients } from '../mocks/mock-payment-clients';
 import { MockEndpointManager } from '../mocks/mock-endpoint-manager';
 import { mockHostedFieldConfig } from '../mocks/mock-hosted-fields-config';
-import { PaymentProvider } from '../../src/models/common/payment-provider-name';
-import { DonationPaymentInfo } from '../../src/models/donation-info/donation-payment-info';
-import { DonationType } from '../../src/models/donation-info/donation-type';
+import { PaymentProvider, DonationType } from '@internetarchive/donation-form-data-models';
 import { mockBillingInfo } from '../mocks/models/mock-billing-info';
 import { mockCustomerInfo } from '../mocks/models/mock-customer-info';
 import { MockDeviceDataCollector } from '../mocks/payment-clients/mock-data-collector';

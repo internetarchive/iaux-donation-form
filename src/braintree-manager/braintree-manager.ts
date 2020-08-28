@@ -1,8 +1,15 @@
-import { DonationResponse } from '../models/response-models/donation-response';
 import {
+  DonationResponse,
   DonationRequest,
   DonationRequestCustomFields,
-} from '../models/request-models/donation-request';
+  DonationType,
+  CustomerInfo,
+  BillingInfo,
+  DonationPaymentInfo,
+  PaymentProvider,
+  SuccessResponse,
+} from '@internetarchive/donation-form-data-models';
+
 import { PaymentProviders } from './payment-providers';
 import { PaymentClientsInterface } from './payment-clients';
 import {
@@ -10,14 +17,8 @@ import {
   BraintreeEndpointManagerInterface,
   HostingEnvironment,
 } from './braintree-interfaces';
-import { SuccessResponse } from '../models/response-models/success-models/success-response';
 import { HostedFieldConfiguration } from './payment-providers/credit-card/hosted-field-configuration';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
-import { PaymentProvider } from '../models/common/payment-provider-name';
-import { DonationPaymentInfo } from '../models/donation-info/donation-payment-info';
-import { BillingInfo } from '../models/common/billing-info';
-import { CustomerInfo } from '../models/common/customer-info';
-import { DonationType } from '../models/donation-info/donation-type';
 import { PaymentProvidersInterface } from './payment-providers-interface';
 
 /** @inheritdoc */

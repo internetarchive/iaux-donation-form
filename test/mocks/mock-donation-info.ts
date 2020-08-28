@@ -1,5 +1,4 @@
-import { DonationType } from '../../src/models/donation-info/donation-type';
-import { DonationPaymentInfo } from '../../src/models/donation-info/donation-payment-info';
+import { DonationType, DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
 
 export class MockDonationInfo extends DonationPaymentInfo {
   constructor() {

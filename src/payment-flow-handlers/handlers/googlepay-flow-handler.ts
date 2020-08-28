@@ -1,9 +1,11 @@
 import { BraintreeManagerInterface } from '../../braintree-manager/braintree-interfaces';
-import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
-import { PaymentProvider } from '../../models/common/payment-provider-name';
+import {
+  DonationPaymentInfo,
+  PaymentProvider,
+  CustomerInfo,
+  BillingInfo,
+} from '@internetarchive/donation-form-data-models';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
-import { CustomerInfo } from '../../models/common/customer-info';
-import { BillingInfo } from '../../models/common/billing-info';
 import { Emitter, createNanoEvents, Unsubscribe } from 'nanoevents';
 
 export interface GooglePayFlowHandlerInterface {

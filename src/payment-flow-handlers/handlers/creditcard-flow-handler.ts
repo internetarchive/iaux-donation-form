@@ -3,9 +3,11 @@ import { createNanoEvents, Emitter, Unsubscribe } from 'nanoevents';
 import { BraintreeManagerInterface } from '../../braintree-manager/braintree-interfaces';
 import { RecaptchaManagerInterface } from '../../recaptcha-manager/recaptcha-manager';
 
-import { DonorContactInfo } from '../../models/common/donor-contact-info';
-import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
-import { PaymentProvider } from '../../models/common/payment-provider-name';
+import {
+  DonorContactInfo,
+  DonationPaymentInfo,
+  PaymentProvider,
+} from '@internetarchive/donation-form-data-models';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
 import { HostedFieldName } from '../../braintree-manager/payment-providers/credit-card/hosted-field-container';
 import { BadgedInput } from '../../form-elements/badged-input';
