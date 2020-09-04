@@ -74,6 +74,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       const fieldInFocus = fields[emittedBy];
       const { container } = fieldInFocus;
       (container.parentElement as BadgedInput).error = false;
+      console.debug('focus, fields', fields);
       handler.hideErrorMessage();
     });
 
@@ -81,6 +82,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       const { emittedBy, fields } = event;
       const fieldInFocus = fields[emittedBy];
       const { container, isEmpty, isValid } = fieldInFocus;
+      console.debug('blur, isEmpty, isValid, fields', isEmpty, isValid, fields);
       if (isEmpty || !isValid) {
         (container.parentElement as BadgedInput).error = true;
       }
@@ -89,6 +91,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     instance?.on('validityChange', (event: braintree.HostedFieldsStateObject): void => {
       const { fields } = event;
       const isValid = fields.cvv.isValid && fields.expirationDate.isValid && fields.number.isValid;
+      console.debug('validityChange, isValid, fields, this.emitter', isValid, fields, this.emitter);
       this.emitter.emit('validityChanged', isValid);
     });
   }
