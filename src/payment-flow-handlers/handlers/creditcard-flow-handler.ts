@@ -56,13 +56,18 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
   private started = false;
 
   async startup(): Promise<void> {
+    console.debug('credit card flow handler startup');
+
     if (this.started) {
+      console.debug('credit card flow handler startup: ALREADY STARTED');
       return;
     }
     this.started = true;
 
     const handler = await this.braintreeManager?.paymentProviders.creditCardHandler.get();
     const instance = await handler?.instance.get();
+
+    console.debug('credit card flow handler startup: handler, instance', handler, instance);
 
     // NOTE: The `focus` and `blur` callback logic must work in conjunction with
     // the `HostedFieldContainer` class. We use the `HostedFieldContainer` for
