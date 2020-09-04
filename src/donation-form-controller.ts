@@ -227,7 +227,9 @@ export class DonationFormController extends LitElement {
     console.debug('setupPaymentFlowHandlers, dependencies found, starting up', this.paymentFlowHandlers, this.braintreeManager, this.recaptchaManager, this.modalManager, this.recaptchaElement);
 
     this.recaptchaManager.setup(this.recaptchaElement, 1, 'light', 'image');
+    console.debug('calling braintreeManager.startup()');
     this.braintreeManager.startup();
+    console.debug('calling paymentFlowHandlers.startup()');
     this.paymentFlowHandlers.startup();
   }
 

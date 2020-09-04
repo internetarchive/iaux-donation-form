@@ -89,6 +89,7 @@ export class RecaptchaManager implements RecaptchaManagerInterface {
     theme: ReCaptchaV2.Theme,
     type: ReCaptchaV2.Type,
   ): void {
+    console.debug('recaptcha-manager setup', container, tabIndex, theme, type);
     this.grecaptchaLibrary.render(container, {
       callback: this.responseHandler.bind(this),
       'expired-callback': this.expiredHandler.bind(this),

@@ -42,6 +42,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
 
   /** @inheritdoc */
   async startup(): Promise<void> {
+    console.debug('braintreeManager startup');
     return this.collectDeviceData();
   }
 
@@ -140,12 +141,15 @@ export class BraintreeManager implements BraintreeManagerInterface {
    * @memberof BraintreeManager
    */
   private async collectDeviceData(): Promise<void> {
+    console.debug('collectDeviceData start');
     if (this.deviceDataCollectionStarted) {
+      console.debug('collectDeviceData already started start');
       return;
     }
     this.deviceDataCollectionStarted = true;
 
     const instance = await this.instance.get();
+    console.debug('collectDeviceData instance, instance', instance);
     if (!instance) {
       return;
     }
@@ -156,6 +160,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
         return collector?.create({ client: instance, kount: false, paypal: true });
       })
       .then(instance => {
+        console.debug('collectDeviceData deviceData', instance?.deviceData);
         this.deviceData = instance?.deviceData;
       });
   }
