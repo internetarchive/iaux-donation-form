@@ -125,12 +125,20 @@ export class DonationForm extends LitElement {
   }
 
   private get donateButtonDisabled(): boolean {
-    return (
+    const disabled =
       this.donationInfoValid === false ||
       this.contactInfoValid === false ||
       (this.selectedPaymentProvider === PaymentProvider.CreditCard &&
-        this.hostedFieldsValid === false)
+        this.hostedFieldsValid === false);
+    console.debug(
+      'donateButtonDisabled, donationInfoValid, contactInfoValid, selectedPaymentProvider, hostedFieldsValid',
+      disabled,
+      this.donationInfoValid,
+      this.contactInfoValid,
+      this.selectedPaymentProvider,
+      this.hostedFieldsValid,
     );
+    return disabled;
   }
 
   private contactFormValidityChanged(e: CustomEvent): void {
