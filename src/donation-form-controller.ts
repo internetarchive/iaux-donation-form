@@ -161,7 +161,7 @@ export class DonationFormController extends LitElement {
   private recaptchaManagerSetup = false;
 
   private async setupRecaptchaManager(): Promise<void> {
-    if (!this.recaptchaSiteKey || !this.paymentClients || this.recaptchaManagerSetupStarted) {
+    if (!this.recaptchaSiteKey || !this.paymentClients || this.recaptchaManagerSetup) {
       return;
     }
     this.recaptchaManagerSetup = true;
