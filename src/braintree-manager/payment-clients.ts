@@ -102,7 +102,7 @@ export class PaymentClients implements PaymentClientsInterface {
     });
 
     this.recaptchaLibrary = new PromisedSingleton<ReCaptchaV2.ReCaptcha>({
-      generator: new Promise((resolve) => {
+      generator: new Promise(resolve => {
         // The loader for the recaptcha library is relying on an onload callback from the recaptcha
         // library because even when the library has loaded, it is still not ready
         // As recommended by Recaptcha, we attach a callback to the window object before starting
@@ -116,10 +116,12 @@ export class PaymentClients implements PaymentClientsInterface {
           resolve(window.grecaptcha);
         };
 
-        this.lazyLoader
-          .loadScript({ src: 'https://www.google.com/recaptcha/api.js?onload=donationFormGrecaptchaLoadedCallback&render=explicit' });
-      })
-    })
+        this.lazyLoader.loadScript({
+          src:
+            'https://www.google.com/recaptcha/api.js?onload=donationFormGrecaptchaLoadedCallback&render=explicit',
+        });
+      }),
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.paypalLibrary = new PromisedSingleton<any>({

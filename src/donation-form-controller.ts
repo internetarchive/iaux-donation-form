@@ -159,7 +159,9 @@ export class DonationFormController extends LitElement {
   }
 
   private async setupRecaptchaManager(): Promise<void> {
-    if (!this.recaptchaSiteKey || !this.paymentClients || this.recaptchaManager !== undefined) { return; }
+    if (!this.recaptchaSiteKey || !this.paymentClients || this.recaptchaManager !== undefined) {
+      return;
+    }
     const grecaptchaLibrary = await this.paymentClients.recaptchaLibrary.get();
 
     this.recaptchaManager = new RecaptchaManager({
