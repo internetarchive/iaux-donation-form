@@ -158,12 +158,14 @@ export class DonationFormController extends LitElement {
     }
   }
 
+  private recaptchaManagerSetup = false;
+
   private async setupRecaptchaManager(): Promise<void> {
-    if (!this.recaptchaSiteKey || !this.paymentClients || this.recaptchaManager !== undefined) {
+    if (!this.recaptchaSiteKey || !this.paymentClients || this.recaptchaManagerSetupStarted) {
       return;
     }
+    this.recaptchaManagerSetup = true;
     const grecaptchaLibrary = await this.paymentClients.recaptchaLibrary.get();
-
     this.recaptchaManager = new RecaptchaManager({
       grecaptchaLibrary: grecaptchaLibrary,
       siteKey: this.recaptchaSiteKey,
