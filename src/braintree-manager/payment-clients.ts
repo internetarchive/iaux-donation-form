@@ -113,11 +113,9 @@ export class PaymentClients implements PaymentClientsInterface {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             delete (window as any).donationFormGrecaptchaLoadedCallback;
           }, 10);
-          console.debug('window.grecaptcha loaded, resolving');
           resolve(window.grecaptcha);
         };
 
-        console.debug('starting window.grecaptcha load');
         this.lazyLoader
           .loadScript({ src: 'https://www.google.com/recaptcha/api.js?onload=donationFormGrecaptchaLoadedCallback&render=explicit' });
       })

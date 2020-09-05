@@ -130,14 +130,6 @@ export class DonationForm extends LitElement {
       this.contactInfoValid === false ||
       (this.selectedPaymentProvider === PaymentProvider.CreditCard &&
         this.hostedFieldsValid === false);
-    console.debug(
-      'donateButtonDisabled, donationInfoValid, contactInfoValid, selectedPaymentProvider, hostedFieldsValid',
-      disabled,
-      this.donationInfoValid,
-      this.contactInfoValid,
-      this.selectedPaymentProvider,
-      this.hostedFieldsValid,
-    );
     return disabled;
   }
 
@@ -326,9 +318,6 @@ export class DonationForm extends LitElement {
 
   private setupFlowHandlers(): void {
     if (this.flowHandlersConfigured) {
-      console.debug(
-        'setupFlowHandlers, flowHandlers have already been configured'
-      );
       return;
     }
     this.flowHandlersConfigured = true;
@@ -336,12 +325,7 @@ export class DonationForm extends LitElement {
     this.renderPayPalButtonIfNeeded();
     this.donationInfo &&
       this.paymentFlowHandlers?.paypalHandler?.updateDonationInfo(this.donationInfo);
-    console.debug(
-      'setupFlowHandlers, this.paymentFlowHandlers?.creditCardHandler',
-      this.paymentFlowHandlers?.creditCardHandler,
-    );
     this.paymentFlowHandlers?.creditCardHandler?.on('validityChanged', (isValid: boolean) => {
-      console.debug('setupFlowHandlers, validityChanged callback, isValid', isValid);
       this.hostedFieldsValid = isValid;
     });
   }

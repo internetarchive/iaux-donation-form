@@ -52,26 +52,21 @@ export interface PaymentFlowHandlersInterface {
  */
 export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
   async startup(): Promise<void> {
-    console.debug('paymentFlowHandler startup, venmoHandler, creditCardHandler', this.venmoHandler, this.creditCardHandler);
     this.venmoHandler?.startup();
     this.creditCardHandler?.startup();
   }
 
   get creditCardHandler(): CreditCardFlowHandlerInterface | undefined {
-    console.debug('get creditCardHandler');
     if (this.creditCardHandlerCache) {
-      console.debug('get creditCardHandler, cache found');
       return this.creditCardHandlerCache;
     }
 
-    console.debug('get creditCardHandler, cache not found, creating');
     this.creditCardHandlerCache = new CreditCardFlowHandler({
       braintreeManager: this.braintreeManager,
       donationFlowModalManager: this.donationFlowModalManager,
       recaptchaManager: this.recaptchaManager,
     });
 
-    console.debug('get creditCardHandler, returning handler cache', this.creditCardHandlerCache);
     return this.creditCardHandlerCache;
   }
 
@@ -142,8 +137,6 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
     this.modalManager = options.modalManager;
     this.recaptchaManager = options.recaptchaManager;
     this.identifier = Math.random();
-
-    console.debug('paymentFlowHandlers constructor', this.identifier);
 
     this.donationFlowModalManager = new DonationFlowModalManager({
       braintreeManager: this.braintreeManager,

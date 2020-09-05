@@ -128,7 +128,6 @@ export class DonationFormController extends LitElement {
       changedProperties.has('modalManager') ||
       changedProperties.has('recaptchaElement')
     ) {
-      console.debug('updated, changedProperties, calling setupPaymentFlowHandlers', changedProperties)
       this.setupPaymentFlowHandlers();
     }
 
@@ -204,11 +203,8 @@ export class DonationFormController extends LitElement {
   }
 
   private setupPaymentFlowHandlers(): void {
-    console.debug('setupPaymentFlowHandlers start');
-
     // only set up once
     if (this.paymentFlowHandlers) {
-      console.debug('setupPaymentFlowHandlers already setup');
       return;
     }
 
@@ -219,7 +215,6 @@ export class DonationFormController extends LitElement {
       !this.modalManager ||
       !this.recaptchaElement
     ) {
-      console.debug('setupPaymentFlowHandlers, dependencies missing', this.braintreeManager, this.recaptchaManager, this.modalManager, this.recaptchaElement);
       return;
     }
 
@@ -232,13 +227,8 @@ export class DonationFormController extends LitElement {
     this.donationForm.braintreeManager = this.braintreeManager;
     this.donationForm.paymentFlowHandlers = this.paymentFlowHandlers;
 
-    console.debug('setupPaymentFlowHandlers, dependencies found, starting up', this.paymentFlowHandlers, this.braintreeManager, this.recaptchaManager, this.modalManager, this.recaptchaElement);
-
-    console.debug('calling braintreeManager.startup()');
     this.braintreeManager.startup();
-    console.debug('calling paymentFlowHandlers.startup()');
     this.paymentFlowHandlers.startup();
-    console.debug('calling recaptchaManager.startup()');
     this.recaptchaManager.setup(this.recaptchaElement, 1, 'light', 'image');
   }
 
