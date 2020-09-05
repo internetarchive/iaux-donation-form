@@ -136,15 +136,12 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
     this.braintreeManager = options.braintreeManager;
     this.modalManager = options.modalManager;
     this.recaptchaManager = options.recaptchaManager;
-    this.identifier = Math.random();
 
     this.donationFlowModalManager = new DonationFlowModalManager({
       braintreeManager: this.braintreeManager,
       modalManager: this.modalManager,
     });
   }
-
-  identifier: number;
 
   private braintreeManager: BraintreeManagerInterface;
   private modalManager: ModalManagerInterface;
