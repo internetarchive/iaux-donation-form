@@ -16,6 +16,7 @@ export class RecaptchaManager implements RecaptchaManagerInterface {
   constructor(options: { grecaptchaLibrary: ReCaptchaV2.ReCaptcha; siteKey: string }) {
     this.grecaptchaLibrary = options.grecaptchaLibrary;
     this.siteKey = options.siteKey;
+    console.debug('RecaptchaManager', options.grecaptchaLibrary, options.grecaptchaLibrary.render);
   }
 
   private executionSuccessBlock?: (token: string) => void;
@@ -89,7 +90,7 @@ export class RecaptchaManager implements RecaptchaManagerInterface {
     theme: ReCaptchaV2.Theme,
     type: ReCaptchaV2.Type,
   ): void {
-    console.debug('recaptcha-manager setup', container, tabIndex, theme, type);
+    console.debug('recaptcha-manager setup', container, tabIndex, theme, type, this.grecaptchaLibrary.render);
     this.grecaptchaLibrary.render(container, {
       callback: this.responseHandler.bind(this),
       'expired-callback': this.expiredHandler.bind(this),

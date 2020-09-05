@@ -115,13 +115,11 @@ export class DonationFormController extends LitElement {
       changedProperties.has('environment')
     ) {
       this.setupBraintreeManager();
+      this.setupRecaptchaManager();
     }
 
-    if (changedProperties.has('recaptchaSiteKey') && this.recaptchaSiteKey) {
-      this.recaptchaManager = new RecaptchaManager({
-        grecaptchaLibrary: window.grecaptcha,
-        siteKey: this.recaptchaSiteKey,
-      });
+    if (changedProperties.has('recaptchaSiteKey')) {
+      this.setupRecaptchaManager();
     }
 
     if (
@@ -159,6 +157,16 @@ export class DonationFormController extends LitElement {
         loggedInUser: this.loggedInUser,
       });
     }
+  }
+
+  private async setupRecaptchaManager(): Promise<void> {
+    if (!this.recaptchaSiteKey || !this.paymentClients || this.recaptchaManager !== undefined) { return; }
+    const grecaptchaLibrary = await this.paymentClients.recaptchaLibrary.get();
+
+    this.recaptchaManager = new RecaptchaManager({
+      grecaptchaLibrary: grecaptchaLibrary,
+      siteKey: this.recaptchaSiteKey,
+    });
   }
 
   /** @inheritdoc */
@@ -226,11 +234,12 @@ export class DonationFormController extends LitElement {
 
     console.debug('setupPaymentFlowHandlers, dependencies found, starting up', this.paymentFlowHandlers, this.braintreeManager, this.recaptchaManager, this.modalManager, this.recaptchaElement);
 
-    this.recaptchaManager.setup(this.recaptchaElement, 1, 'light', 'image');
     console.debug('calling braintreeManager.startup()');
     this.braintreeManager.startup();
     console.debug('calling paymentFlowHandlers.startup()');
     this.paymentFlowHandlers.startup();
+    console.debug('calling recaptchaManager.startup()');
+    this.recaptchaManager.setup(this.recaptchaElement, 1, 'light', 'image');
   }
 
   private get hostedFieldConfig(): HostedFieldConfiguration {
