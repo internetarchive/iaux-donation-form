@@ -4,8 +4,7 @@ import {
   CreditCardFlowHandlerInterface,
   CreditCardFlowHandlerEvents,
 } from '../../../../src/payment-flow-handlers/handlers/creditcard-flow-handler';
-import { DonationPaymentInfo } from '../../../../src/models/donation-info/donation-payment-info';
-import { DonorContactInfo } from '../../../../src/models/common/donor-contact-info';
+import { DonationPaymentInfo, DonorContactInfo } from '@internetarchive/donation-form-data-models';
 
 export class MockCreditCardFlowHandler implements CreditCardFlowHandlerInterface {
   startupCalled = false;

@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/donation-form",
-  "version": "0.2.1",
+  "version": "0.3.0-alpha.8",
   "description": "The Internet Archive Donation Form",
   "license": "AGPL-3.0-only",
   "main": "dist/index.js",
@@ -28,6 +28,10 @@
     "test:watch": "concurrently --kill-others --names tsc,karma \"npm run tsc:watch\" \"karma start --auto-watch=true --single-run=false\""
   },
   "dependencies": {
+    "@internetarchive/donation-form-currency-validator": "0.0.1-alpha.2",
+    "@internetarchive/donation-form-data-models": "0.0.1-alpha.4",
+    "@internetarchive/donation-form-edit-donation": "0.0.1-alpha.8",
+    "@internetarchive/donation-form-section": "0.0.1-alpha.4",
     "@internetarchive/icon-applepay": "^0.4.0",
     "@internetarchive/icon-calendar": "^0.4.0",
     "@internetarchive/icon-credit-card": "^0.4.0",

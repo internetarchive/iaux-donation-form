@@ -8,9 +8,11 @@ import {
   query,
 } from 'lit-element';
 
-import { BillingInfo } from '../../models/common/billing-info';
-import { CustomerInfo } from '../../models/common/customer-info';
-import { DonorContactInfo } from '../../models/common/donor-contact-info';
+import {
+  BillingInfo,
+  CustomerInfo,
+  DonorContactInfo,
+} from '@internetarchive/donation-form-data-models';
 import { AutoCompleteFieldOptions } from './autocomplete-field-options';
 import { IconSpaceOption } from '../badged-input';
 import '../badged-input';

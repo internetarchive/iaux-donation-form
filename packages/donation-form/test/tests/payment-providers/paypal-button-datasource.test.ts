@@ -1,9 +1,8 @@
 import { expect } from '@open-wc/testing';
 import { MockPayPalClient } from '../../mocks/payment-clients/mock-paypal-client';
-import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
+import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-form-data-models';
 import { PayPalButtonDataSource } from '../../../src/braintree-manager/payment-providers/paypal/paypal-button-datasource';
 import { MockPayPalButtonDataSourceDelegate } from '../../mocks/payment-providers/individual-providers/mock-paypal-button-datasource';
-import { DonationType } from '../../../src/models/donation-info/donation-type';
 
 describe('PayPalButtonDataSource', () => {
   describe('Payment start', () => {

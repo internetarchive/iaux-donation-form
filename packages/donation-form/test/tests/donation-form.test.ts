@@ -2,13 +2,12 @@ import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
 
 import '../../src/donation-form';
 import { DonationForm } from '../../src/donation-form';
-import { DonationType } from '../../src/models/donation-info/donation-type';
+import { DonationType, DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
 import { PaymentSelector } from '../../src/form-elements/payment-selector';
 import { MockBraintreeManager } from '../mocks/mock-braintree-manager';
 import { ContactForm } from '../../src/form-elements/contact-form/contact-form';
 import { MockPaymentFlowHandlers } from '../mocks/flow-handlers/mock-payment-flow-handlers';
 import { promisedSleep } from '../helpers/promisedSleep';
-import { DonationPaymentInfo } from '../../src/models/donation-info/donation-payment-info';
 import { MockDonationInfo } from '../mocks/mock-donation-info';
 import { fillInContactForm } from '../helpers/fillInContactForm';
 
@@ -28,7 +27,7 @@ describe('Donation Form', () => {
         <donation-form .donationInfo=${new MockDonationInfo()}></donation-form>
       `)) as DonationForm;
       const donationHeader = el.shadowRoot?.querySelector('donation-form-header');
-      const editDonation = donationHeader?.shadowRoot?.querySelector('edit-donation');
+      const editDonation = donationHeader?.shadowRoot?.querySelector('donation-form-edit-donation');
       const monthlyOption = editDonation?.shadowRoot?.querySelector('#donationType-monthly-option');
       const clickEvent = new MouseEvent('click');
       monthlyOption?.dispatchEvent(clickEvent);

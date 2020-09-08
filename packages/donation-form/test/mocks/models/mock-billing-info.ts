@@ -1,4 +1,4 @@
-import { BillingInfo } from '../../../src/models/common/billing-info';
+import { BillingInfo } from '@internetarchive/donation-form-data-models';
 
 export const mockBillingInfo = new BillingInfo({
   streetAddress: '123 Fake St',

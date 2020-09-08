@@ -1,4 +1,4 @@
-import { DonationResponse } from '../../../models/response-models/donation-response';
+import { DonationResponse } from '@internetarchive/donation-form-data-models';
 
 export interface ApplePaySessionDataSourceDelegate {
   paymentComplete(response: DonationResponse): void;

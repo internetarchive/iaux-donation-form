@@ -1,5 +1,4 @@
-import { DonorContactInfo } from '../../models/common/donor-contact-info';
-import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
+import { DonorContactInfo, DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
 
 export interface VenmoRestorationStateHandlerInterface {
   /**

@@ -1,5 +1,4 @@
-import { DonationPaymentInfo } from '../../../models/donation-info/donation-payment-info';
-import { DonationType } from '../../../models/donation-info/donation-type';
+import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-form-data-models';
 
 import currency from 'currency.js';
 

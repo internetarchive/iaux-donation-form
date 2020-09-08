@@ -1,8 +1,7 @@
 import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
 import { DonationSummary } from '../../../src/form-elements/header/donation-summary';
 import '../../../src/form-elements/header/donation-summary';
-import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
-import { DonationType } from '../../../src/models/donation-info/donation-type';
+import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-form-data-models';
 
 describe('DonationSummary', () => {
   it('shows the proper title for one-time donations', async () => {

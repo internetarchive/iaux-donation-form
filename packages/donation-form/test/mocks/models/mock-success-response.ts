@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { SuccessResponse } from '../../../src/models/response-models/success-models/success-response';
-import { DonationType } from '../../../src/models/donation-info/donation-type';
-import { PaymentProvider } from '../../../src/models/common/payment-provider-name';
+import {
+  SuccessResponse,
+  DonationType,
+  PaymentProvider,
+} from '@internetarchive/donation-form-data-models';
 import { mockCustomerInfo } from './mock-customer-info';
 import { mockBillingInfo } from './mock-billing-info';
 

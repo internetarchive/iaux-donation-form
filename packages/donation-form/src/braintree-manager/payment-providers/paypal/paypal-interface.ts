@@ -1,5 +1,5 @@
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
-import { DonationPaymentInfo } from '../../../models/donation-info/donation-payment-info';
+import { DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
 import { PayPalButtonDataSourceInterface } from './paypal-button-datasource';
 
 export interface PayPalHandlerInterface {

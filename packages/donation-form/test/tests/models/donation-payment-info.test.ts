@@ -1,6 +1,5 @@
 import { expect } from '@open-wc/testing';
-import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
-import { DonationType } from '../../../src/models/donation-info/donation-type';
+import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-form-data-models';
 
 // this is a separate calculation from the one in DonationPaymentInfo
 // to have a second verification independent of it

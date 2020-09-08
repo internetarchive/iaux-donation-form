@@ -10,8 +10,7 @@ import {
 
 import currency from 'currency.js';
 
-import { DonationType } from '../../models/donation-info/donation-type';
-import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
+import { DonationType, DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
 
 @customElement('donation-summary')
 export class DonationSummary extends LitElement {

@@ -1,15 +1,17 @@
 import { html } from 'lit-html';
 import { ModalConfig, ModalManagerInterface } from '@internetarchive/modal-manager';
 import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
-import { SuccessResponse } from '../models/response-models/success-models/success-response';
-import { ErrorResponse } from '../models/response-models/error-models/error-response';
 import { BraintreeManagerInterface } from '../braintree-manager/braintree-interfaces';
-import { DonationPaymentInfo } from '../models/donation-info/donation-payment-info';
-import { DonationType } from '../models/donation-info/donation-type';
-import { PaymentProvider } from '../models/common/payment-provider-name';
-import { BillingInfo } from '../models/common/billing-info';
-import { CustomerInfo } from '../models/common/customer-info';
-import { DonationResponse } from '../models/response-models/donation-response';
+import {
+  SuccessResponse,
+  ErrorResponse,
+  DonationPaymentInfo,
+  DonationType,
+  PaymentProvider,
+  BillingInfo,
+  CustomerInfo,
+  DonationResponse,
+} from '@internetarchive/donation-form-data-models';
 import '../modals/error-modal-content';
 
 enum ModalHeaderColor {

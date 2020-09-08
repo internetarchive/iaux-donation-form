@@ -1,7 +1,9 @@
 import { BraintreeManagerInterface } from '../../braintree-manager/braintree-interfaces';
-import { DonorContactInfo } from '../../models/common/donor-contact-info';
-import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
-import { PaymentProvider } from '../../models/common/payment-provider-name';
+import {
+  DonorContactInfo,
+  DonationPaymentInfo,
+  PaymentProvider,
+} from '@internetarchive/donation-form-data-models';
 import {
   VenmoRestorationStateHandlerInterface,
   VenmoRestorationStateHandler,

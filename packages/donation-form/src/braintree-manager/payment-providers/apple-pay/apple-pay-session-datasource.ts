@@ -1,8 +1,10 @@
-import { DonationPaymentInfo } from '../../../models/donation-info/donation-payment-info';
+import {
+  DonationPaymentInfo,
+  BillingInfo,
+  CustomerInfo,
+  PaymentProvider,
+} from '@internetarchive/donation-form-data-models';
 import { BraintreeManagerInterface } from '../../braintree-interfaces';
-import { BillingInfo } from '../../../models/common/billing-info';
-import { CustomerInfo } from '../../../models/common/customer-info';
-import { PaymentProvider } from '../../../models/common/payment-provider-name';
 import { ApplePaySessionDataSourceInterface } from './apple-pay-session-datasource-interface';
 import { ApplePaySessionDataSourceDelegate } from './apple-pay-session-datasource-delegate';
 

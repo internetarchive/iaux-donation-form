@@ -1,4 +1,4 @@
-import { CustomerInfo } from '../../../src/models/common/customer-info';
+import { CustomerInfo } from '@internetarchive/donation-form-data-models';
 
 export const mockCustomerInfo = new CustomerInfo({
   email: 'foo@bar.com',
