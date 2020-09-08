@@ -16,5 +16,5 @@ script:
   - lerna bootstrap
   - lerna run test
 
-after_success:
+after_script:
   - codecov
