@@ -115,13 +115,11 @@ export class DonationFormController extends LitElement {
       changedProperties.has('environment')
     ) {
       this.setupBraintreeManager();
+      this.setupRecaptchaManager();
     }
 
-    if (changedProperties.has('recaptchaSiteKey') && this.recaptchaSiteKey) {
-      this.recaptchaManager = new RecaptchaManager({
-        grecaptchaLibrary: window.grecaptcha,
-        siteKey: this.recaptchaSiteKey,
-      });
+    if (changedProperties.has('recaptchaSiteKey')) {
+      this.setupRecaptchaManager();
     }
 
     if (
@@ -158,6 +156,20 @@ export class DonationFormController extends LitElement {
         loggedInUser: this.loggedInUser,
       });
     }
+  }
+
+  private recaptchaManagerSetup = false;
+
+  private async setupRecaptchaManager(): Promise<void> {
+    if (!this.recaptchaSiteKey || !this.paymentClients || this.recaptchaManagerSetup) {
+      return;
+    }
+    this.recaptchaManagerSetup = true;
+    const grecaptchaLibrary = await this.paymentClients.recaptchaLibrary.get();
+    this.recaptchaManager = new RecaptchaManager({
+      grecaptchaLibrary: grecaptchaLibrary,
+      siteKey: this.recaptchaSiteKey,
+    });
   }
 
   /** @inheritdoc */
@@ -219,9 +231,9 @@ export class DonationFormController extends LitElement {
     this.donationForm.braintreeManager = this.braintreeManager;
     this.donationForm.paymentFlowHandlers = this.paymentFlowHandlers;
 
-    this.recaptchaManager.setup(this.recaptchaElement, 1, 'light', 'image');
     this.braintreeManager.startup();
     this.paymentFlowHandlers.startup();
+    this.recaptchaManager.setup(this.recaptchaElement, 1, 'light', 'image');
   }
 
   private get hostedFieldConfig(): HostedFieldConfiguration {

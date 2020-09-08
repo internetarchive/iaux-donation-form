@@ -12,6 +12,7 @@ export interface PaymentClientsInterface {
   googlePayBraintreeClient: PromisedSingleton<braintree.GooglePayment>;
 
   googlePaymentsClient: PromisedSingleton<google.payments.api.PaymentsClient>;
+  recaptchaLibrary: PromisedSingleton<ReCaptchaV2.ReCaptcha>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   paypalLibrary: PromisedSingleton<any>;
 }
@@ -39,6 +40,7 @@ export class PaymentClients implements PaymentClientsInterface {
   googlePayBraintreeClient: PromisedSingleton<braintree.GooglePayment>;
 
   googlePaymentsClient: PromisedSingleton<google.payments.api.PaymentsClient>;
+  recaptchaLibrary: PromisedSingleton<ReCaptchaV2.ReCaptcha>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   paypalLibrary: PromisedSingleton<any>;
 
@@ -97,6 +99,28 @@ export class PaymentClients implements PaymentClientsInterface {
               this.environment === HostingEnvironment.Development ? 'TEST' : 'PRODUCTION',
           });
         }),
+    });
+
+    this.recaptchaLibrary = new PromisedSingleton<ReCaptchaV2.ReCaptcha>({
+      generator: new Promise(resolve => {
+        // The loader for the recaptcha library is relying on an onload callback from the recaptcha
+        // library because even when the library has loaded, it is still not ready
+        // As recommended by Recaptcha, we attach a callback to the window object before starting
+        // the load and remove it once the load is complete and resolve the promise.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (window as any).donationFormGrecaptchaLoadedCallback = (): void => {
+          setTimeout(() => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            delete (window as any).donationFormGrecaptchaLoadedCallback;
+          }, 10);
+          resolve(window.grecaptcha);
+        };
+
+        this.lazyLoader.loadScript({
+          src:
+            'https://www.google.com/recaptcha/api.js?onload=donationFormGrecaptchaLoadedCallback&render=explicit',
+        });
+      }),
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

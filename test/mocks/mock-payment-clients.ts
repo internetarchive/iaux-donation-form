@@ -10,6 +10,7 @@ import { MockPayPalClient } from './payment-clients/mock-paypal-client';
 import { MockApplePayClient } from './payment-clients/mock-applepay-client';
 import { MockGooglePaymentClient } from './payment-clients/mock-googlepay-client';
 import { MockGooglePayLibrary } from './payment-clients/mock-googlepay-library';
+import { MockGrecaptcha, MockGrecaptchaMode } from './payment-clients/mock-grecaptcha';
 
 export class MockPaymentClients implements PaymentClientsInterface {
   async emitValidityChangedEvent(valid: boolean): Promise<void> {
@@ -26,6 +27,7 @@ export class MockPaymentClients implements PaymentClientsInterface {
   googlePayBraintreeClient: PromisedSingleton<braintree.GooglePayment>;
   googlePaymentsClient: PromisedSingleton<google.payments.api.PaymentsClient>;
   paypalLibrary: PromisedSingleton<any>;
+  recaptchaLibrary: PromisedSingleton<ReCaptchaV2.ReCaptcha>;
 
   constructor(generators?: {
     client?: PromisedSingleton<braintree.Client>;
@@ -37,6 +39,7 @@ export class MockPaymentClients implements PaymentClientsInterface {
     googlePayBraintreeClient?: PromisedSingleton<braintree.GooglePayment>;
     googlePaymentsClient?: PromisedSingleton<google.payments.api.PaymentsClient>;
     paypalLibrary?: PromisedSingleton<any>;
+    recaptchaLibrary?: PromisedSingleton<ReCaptchaV2.ReCaptcha>;
   }) {
     this.braintreeClient =
       generators?.client ??
@@ -101,6 +104,13 @@ export class MockPaymentClients implements PaymentClientsInterface {
       new PromisedSingleton<any>({
         generator: new Promise((resolve, reject) => {
           reject('Not implemented');
+        }),
+      });
+    this.recaptchaLibrary =
+      generators?.recaptchaLibrary ??
+      new PromisedSingleton<ReCaptchaV2.ReCaptcha>({
+        generator: new Promise((resolve, reject) => {
+          resolve(new MockGrecaptcha(MockGrecaptchaMode.Success));
         }),
       });
   }
