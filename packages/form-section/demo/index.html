@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      html {
+        font-size: 10px;
+      }
+
+      body {
+        margin: 0;
+        padding: 1em;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #333;
+        background: white;
+      }
+
+      .section-content {
+        font-size: 1.4rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="demo"></div>
+
+    <script type="module">
+      import { html, render } from 'lit-html';
+      import '../dist/index.js';
+
+      let allModes = 'hidenumber';
+
+      function toggle() {
+        const section = document.querySelector(
+          'donation-form-section[number="4"]'
+        );
+        section.numberMode =
+          section.numberMode === 'hidenumber' ? 'shownumber' : 'hidenumber';
+      }
+
+      function toggleAll() {
+        const sections = document.querySelectorAll('donation-form-section');
+        sections.forEach(section => {
+          section.numberMode = allModes;
+        });
+        allModes = allModes === 'hidenumber' ? 'shownumber' : 'hidenumber';
+      }
+
+      render(
+        html`
+          <donation-form-section number="1" headline="A nice catchy headline">
+            <div class="section-content">Some nice content here</div>
+          </donation-form-section>
+
+          <donation-form-section number="2" headline="Another catchy headline">
+            <div class="section-content">
+              You can slot any content into the section and the headline will go up there and the body will go here.
+            </div>
+          </donation-form-section>
+
+          <donation-form-section
+            number="3"
+            headline="Cute Puppy Section!"
+            hideNumber="true"
+          >
+            <img src="./puppy.jpg" />
+          </donation-form-section>
+
+          <donation-form-section
+            number="4"
+            headline="Toggle number section"
+            hideNumber="true"
+          >
+            <button @click=${toggle}>Toggle</button>
+          </donation-form-section>
+
+          <button @click=${toggleAll}>Toggle All</button>
+        `,
+        document.querySelector('#demo')
+      );
+    </script>
+  </body>
+</html>
