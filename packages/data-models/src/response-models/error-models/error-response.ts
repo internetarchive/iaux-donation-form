@@ -6,7 +6,7 @@ export class ErrorResponse {
 
   /**
    * Creates an instance of ErrorResponse.
-   * @param {message: string, errors: BraintreeError[]} params
+   * @param {message: string, errors?: CodedError[]} params
    * @memberof ErrorResponse
    */
   constructor(params: { message: string; errors?: CodedError[] }) {
