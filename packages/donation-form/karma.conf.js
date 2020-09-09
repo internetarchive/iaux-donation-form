@@ -15,6 +15,7 @@ module.exports = config => {
 
       esm: {
         nodeResolve: true,
+        preserveSymlinks: true,
       },
 
       // Lowering the thresholds for now so the tests don't outright fail because of
