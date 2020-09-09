@@ -1,19 +1,38 @@
 # \<iaux-donation-form-edit-donation>
 
-This webcomponent follows the [open-wc](https://github.com/open-wc/open-wc) recommendation.
+The Internet Archive Donation Form Edit Donation Component
+
+![Donation Form Edit Donation](./assets/img/screenshot.png "Donation Form Edit Donation")
+
 
 ## Installation
 ```bash
-npm i iaux-donation-form-edit-donation
+npm i @internetarchive/donation-form-edit-donation
 ```
 
 ## Usage
 ```html
 <script type="module">
-  import 'iaux-donation-form-edit-donation/iaux-donation-form-edit-donation.js';
+  import '@internetarchive/donation-form-edit-donation';
+  import {
+    DonationPaymentInfo,
+    DonationType,
+  } from '@internetarchive/donation-form-data-models';
+
+  const donationInfo = new DonationPaymentInfo({
+    amount: 5,
+    donationType: DonationType.OneTime,
+    coverFees: false,
+  });
 </script>
 
-<iaux-donation-form-edit-donation></iaux-donation-form-edit-donation>
+<donation-form-edit-donation
+  .donationInfo=${donationInfo}
+  @donationInfoChanged=${donationInfoChanged}
+  @editDonationError=${editDonationError}
+  stepNumberMode="shownumbers"
+>
+</donation-form-edit-donation>
 ```
 
 ## Linting with ESLint, Prettier, and Types
