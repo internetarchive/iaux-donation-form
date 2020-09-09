@@ -1,0 +1,94 @@
+{
+  "name": "@internetarchive/donation-form",
+  "version": "0.2.1",
+  "description": "The Internet Archive Donation Form",
+  "license": "AGPL-3.0-only",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "src/**/*",
+    "index.d.ts",
+    "index.js"
+  ],
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "concurrently --kill-others --names tsc,es-dev-server \"npm run tsc:watch\" \"es-dev-server --app-index demo/index.html --node-resolve --open --watch --preserve-symlinks --hostname 192.168.1.160 --http2\"",
+    "tsc:watch": "tsc --watch",
+    "lint:eslint": "eslint --ext .ts,.html . --ignore-path .gitignore",
+    "format:eslint": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
+    "lint:prettier": "prettier \"**/*.js\" \"**/*.ts\" --check --ignore-path .gitignore",
+    "format:prettier": "prettier \"**/*.js\" \"**/*.ts\" --write --ignore-path .gitignore",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "format": "npm run format:eslint && npm run format:prettier",
+    "circular": "madge --circular --extensions ts .",
+    "test": "tsc && npm run lint && npm run circular && karma start --coverage",
+    "test:watch": "concurrently --kill-others --names tsc,karma \"npm run tsc:watch\" \"karma start --auto-watch=true --single-run=false\""
+  },
+  "dependencies": {
+    "@internetarchive/icon-applepay": "^0.4.0",
+    "@internetarchive/icon-calendar": "^0.4.0",
+    "@internetarchive/icon-credit-card": "^0.4.0",
+    "@internetarchive/icon-email": "^0.4.0",
+    "@internetarchive/icon-googlepay": "^0.4.0",
+    "@internetarchive/icon-locale-pin": "^0.4.0",
+    "@internetarchive/icon-lock": "^0.4.0",
+    "@internetarchive/icon-paypal": "^0.4.0",
+    "@internetarchive/icon-user": "^0.4.0",
+    "@internetarchive/icon-venmo": "^0.4.0",
+    "@internetarchive/lazy-loader-service": "^0.1.0",
+    "@internetarchive/modal-manager": "^0.1.0",
+    "@internetarchive/promised-singleton": "^0.1.0",
+    "currency.js": "^2.0.2",
+    "lit-element": "^2.2.1",
+    "lit-html": "^1.2.1",
+    "nanoevents": "^5.1.8"
+  },
+  "devDependencies": {
+    "@open-wc/eslint-config": "^1.0.0",
+    "@open-wc/prettier-config": "^0.1.10",
+    "@open-wc/testing": "^2.0.0",
+    "@open-wc/testing-karma": "^3.0.0",
+    "@open-wc/testing-karma-bs": "^1.0.0",
+    "@types/applepayjs": "^3.0.0",
+    "@types/form-data": "^2.5.0",
+    "@types/googlepay": "^0.4.1",
+    "@types/grecaptcha": "^2.0.36",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "concurrently": "^4.1.2",
+    "es-dev-server": "^1.56.0",
+    "eslint": "^6.8.0",
+    "gulp": "^4.0.2",
+    "husky": "^1.0.0",
+    "karma-coverage": "^2.0.1",
+    "lint-staged": "^8.0.0",
+    "madge": "^3.9.2",
+    "polymer-cli": "^1.9.11",
+    "typescript": "^3.9.5",
+    "webpack-merge": "^4.1.5"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@open-wc/eslint-config",
+      "eslint-config-prettier"
+    ]
+  },
+  "prettier": "@open-wc/prettier-config",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "git add"
+    ]
+  }
+}

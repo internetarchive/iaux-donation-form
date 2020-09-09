@@ -1,15 +1,17 @@
 [![Build Status](https://travis-ci.com/internetarchive/iaux-donation-form.svg?branch=master)](https://travis-ci.com/internetarchive/iaux-donation-form) [![codecov](https://codecov.io/gh/internetarchive/iaux-donation-form/branch/master/graph/badge.svg)](https://codecov.io/gh/internetarchive/iaux-donation-form)
 
-# The Internet Archive Donation Form Lerna Repository
+# \<donation-form>
 
-The donation form is made up of several different components. This repository aggregates them all to make working with the donation form easier while still maintaining modularity.
+The Internet Archive Donation Form
 
 ![Donation Form](./assets/img/screenshot.png "Donation Form")
 
+## Installation
+```bash
+npm add @internetarchive/donation-form
+```
+
 ## Usage
-
-General top-level usage. Take a look at the individual modules in the `packages/` directory for specific usage of each component.
-
 ```html
 <script type="module">
   import '@internetarchive/donation-form';
