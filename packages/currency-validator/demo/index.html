@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+  <div id="demo"></div>
+
+  <script type="module">
+    import { html, render } from 'lit-html';
+    import { CurrencyValidator } from '../dist/src/currency-validator.js';
+
+    const validator = new CurrencyValidator()
+    render(
+      html`
+        <h2>Type Something</h2>
+        <p>It will only allow currency values</p>
+        $ <input type="text" @keydown=${validator.keydown} />
+      `,
+      document.querySelector('#demo')
+    );
+  </script>
+</body>
+</html>
