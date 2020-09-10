@@ -8,6 +8,7 @@ import {
   customElement,
 } from 'lit-element';
 
+import currency from 'currency.js';
 import {
   LazyLoaderService,
   LazyLoaderServiceInterface,
@@ -194,8 +195,8 @@ export class DonationFormController extends LitElement {
 
     let amount = 5;
     if (amountParam) {
-      const parsedAmount = parseFloat(amountParam);
-      if (!isNaN(parsedAmount)) {
+      const parsedAmount = currency(amountParam).value;
+      if (parsedAmount > 0) {
         amount = parsedAmount;
       }
     }
