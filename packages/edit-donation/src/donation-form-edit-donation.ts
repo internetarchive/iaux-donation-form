@@ -141,6 +141,7 @@ export class DonationFormEditDonation extends LitElement {
       // since the user may be typing in it at the time
       if (this.shadowRoot?.activeElement !== this.customAmountInput) {
         this.customAmountInput.value = `${this.donationInfo.amount}`;
+        this.amountChanged(this.donationInfo.amount);
       }
     }
   }
