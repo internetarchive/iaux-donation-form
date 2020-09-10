@@ -31,7 +31,8 @@ export enum EditDonationSelectionGroup {
   Amount = 'amount',
 }
 
-export enum EditDonationInfoError {
+export enum EditDonationInfoStatus {
+  ValidDonationAmount = 'valid_donation_amount',
   InvalidDonationAmount = 'invalid_donation_amount',
   DonationTooHigh = 'donation_too_high',
   DonationTooLow = 'donation_too_low',
@@ -61,8 +62,6 @@ export class DonationFormEditDonation extends LitElement {
   ];
 
   @property({ type: Object }) private error?: TemplateResult;
-
-  @property({ type: Boolean }) private amountIsValid = true;
 
   @query('#custom-amount-button') private customAmountButton?: HTMLInputElement;
 
@@ -141,7 +140,10 @@ export class DonationFormEditDonation extends LitElement {
       // since the user may be typing in it at the time
       if (this.shadowRoot?.activeElement !== this.customAmountInput) {
         this.customAmountInput.value = `${this.donationInfo.amount}`;
-        this.amountChanged(this.donationInfo.amount);
+        const donationInfoStatus = this.getDonationInfoStatus(
+          this.donationInfo.amount
+        );
+        this.handleDonationInfoStatus(donationInfoStatus);
       }
     }
   }
@@ -282,39 +284,60 @@ export class DonationFormEditDonation extends LitElement {
   private handleCustomAmountInput(value: string): void {
     const amount = parseFloat(value);
     if (isNaN(amount)) {
-      this.amountIsValid = false;
       this.dispatchEditDonationError(
-        EditDonationInfoError.InvalidDonationAmount
+        EditDonationInfoStatus.InvalidDonationAmount
       );
     } else {
       this.amountChanged(amount);
     }
   }
 
+  private handleDonationInfoStatus(status: EditDonationInfoStatus): void {
+    switch (status) {
+      case EditDonationInfoStatus.ValidDonationAmount:
+        this.error = undefined;
+        break;
+      case EditDonationInfoStatus.DonationTooHigh:
+        this.error = html`
+          To make a donation of $10,000 or more, please contact our philanthropy
+          department at
+          <a href="mailto:donations@archive.org">donations@archive.org</a>
+        `;
+        this.dispatchEditDonationError(status);
+        break;
+      case EditDonationInfoStatus.DonationTooLow:
+        if (this.customAmountInput && this.customAmountInput.value.length > 0) {
+          this.error = html` Please select an amount (minimum $1) `;
+        }
+        this.dispatchEditDonationError(status);
+        break;
+      case EditDonationInfoStatus.InvalidDonationAmount:
+        this.error = html` Please enter a valid donation amount `;
+        this.dispatchEditDonationError(status);
+        break;
+    }
+  }
+
   private amountChanged(amount: number): void {
+    const donationInfoStatus = this.getDonationInfoStatus(amount);
+    this.handleDonationInfoStatus(donationInfoStatus);
+    this.updateDonationInfo({ amount: amount });
+  }
+
+  private getDonationInfoStatus(amount: number): EditDonationInfoStatus {
+    if (isNaN(amount)) {
+      return EditDonationInfoStatus.InvalidDonationAmount;
+    }
+
     if (amount >= 10000) {
-      this.amountIsValid = false;
-      this.error = html`
-        To make a donation of $10,000 or more, please contact our philanthropy
-        department at
-        <a href="mailto:donations@archive.org">donations@archive.org</a>
-      `;
-      this.dispatchEditDonationError(EditDonationInfoError.DonationTooHigh);
-      return;
+      return EditDonationInfoStatus.DonationTooHigh;
     }
 
     if (amount < 1) {
-      this.amountIsValid = false;
-      if (this.customAmountInput && this.customAmountInput.value.length > 0) {
-        this.error = html` Please select an amount (minimum $1) `;
-      }
-      this.dispatchEditDonationError(EditDonationInfoError.DonationTooLow);
-      return;
+      return EditDonationInfoStatus.DonationTooLow;
     }
 
-    this.amountIsValid = true;
-    this.error = undefined;
-    this.updateDonationInfo({ amount: amount });
+    return EditDonationInfoStatus.ValidDonationAmount;
   }
 
   private radioSelected(e: Event): void {
@@ -334,7 +357,7 @@ export class DonationFormEditDonation extends LitElement {
     }
   }
 
-  private dispatchEditDonationError(error: EditDonationInfoError): void {
+  private dispatchEditDonationError(error: EditDonationInfoStatus): void {
     const event = new CustomEvent('editDonationError', {
       detail: { error: error },
     });
@@ -342,7 +365,6 @@ export class DonationFormEditDonation extends LitElement {
   }
 
   private presetAmountChanged(amount: number): void {
-    this.amountIsValid = true;
     this.error = undefined;
     if (this.customAmountInput) this.customAmountInput.value = '';
     this.updateDonationInfo({ amount: amount });

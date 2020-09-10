@@ -8,7 +8,7 @@ import {
 import { MockDonationInfo } from './mocks/mock-donation-info';
 import {
   DonationFormEditDonation,
-  EditDonationInfoError,
+  EditDonationInfoStatus,
   DonationFormEditDonationStepNumberMode,
 } from '../src/donation-form-edit-donation';
 import {
@@ -166,7 +166,7 @@ describe('EditDonation', () => {
     });
     const response = await oneEvent(el, 'editDonationError');
     const error = response.detail.error;
-    expect(error).to.equal(EditDonationInfoError.DonationTooLow);
+    expect(error).to.equal(EditDonationInfoStatus.DonationTooLow);
   });
 
   it('emits a `editDonationError` event if the custom amount is too high', async () => {
@@ -185,7 +185,7 @@ describe('EditDonation', () => {
     });
     const response = await oneEvent(el, 'editDonationError');
     const error = response.detail.error;
-    expect(error).to.equal(EditDonationInfoError.DonationTooHigh);
+    expect(error).to.equal(EditDonationInfoStatus.DonationTooHigh);
   });
 
   it('emits a `editDonationError` event if the custom amount is empty', async () => {
@@ -204,7 +204,7 @@ describe('EditDonation', () => {
     });
     const response = await oneEvent(el, 'editDonationError');
     const error = response.detail.error;
-    expect(error).to.equal(EditDonationInfoError.InvalidDonationAmount);
+    expect(error).to.equal(EditDonationInfoStatus.InvalidDonationAmount);
   });
 
   it('displays an error message if there is one', async () => {

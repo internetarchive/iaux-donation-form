@@ -1,6 +1,6 @@
 export {
   DonationFormEditDonation,
   DonationFormEditDonationStepNumberMode,
-  EditDonationInfoError,
+  EditDonationInfoStatus,
   EditDonationSelectionGroup,
 } from './src/donation-form-edit-donation';
