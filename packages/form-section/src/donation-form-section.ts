@@ -26,8 +26,8 @@ export class DonationFormSection extends LitElement {
   render(): TemplateResult {
     return html`
       <div class="container">
-        <div class="number-container">
-          <div class="number">${this.sectionBadge}</div>
+        <div class="badge-container">
+          <div class="badge">${this.sectionBadge}</div>
         </div>
         <div class="content-container ${this.badgeMode}">
           ${this.headline
@@ -43,20 +43,20 @@ export class DonationFormSection extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const numberTransition = css`var(--formSectionNumberTransition, 0.25s ease-out)`;
-    const numberMargin = css`var(--formSectionNumberMargin, 1rem)`;
-    const numberBackgroundColor = css`var(--formSectionNumberBackgroundColor, #333)`;
-    const numberRadius = css`var(--formSectionNumberRadius, 1.2rem)`;
-    const numberWidth = css`calc(${numberRadius} * 2)`;
-    const numberFontSize = css`var(--formSectionNumberFontSize, 1.8rem)`;
-    const numberFontWeight = css`var(--formSectionNumberFontWeight, bold)`;
-    const numberFontColor = css`var(--formSectionNumberFontColor, #fff)`;
+    const badgeTransition = css`var(--formSectionBadgeTransition, 0.25s ease-out)`;
+    const badgeMargin = css`var(--formSectionBadgeMargin, 1rem)`;
+    const badgeBackgroundColor = css`var(--formSectionBadgeBackgroundColor, #333)`;
+    const badgeRadius = css`var(--formSectionBadgeRadius, 1.2rem)`;
+    const badgeWidth = css`calc(${badgeRadius} * 2)`;
+    const badgeFontSize = css`var(--formSectionBadgeFontSize, 1.8rem)`;
+    const badgeFontWeight = css`var(--formSectionBadgeFontWeight, bold)`;
+    const badgeFontColor = css`var(--formSectionBadgeFontColor, #fff)`;
     const titleFontSize = css`var(--formSectionTitleFontSize, 1.8rem)`;
     const titleFontWeight = css`var(--formSectionTitleFontWeight, bold)`;
 
     const sectionContentBackgroundColor = css`var(--formSectionContentBackgroundColor, white)`;
 
-    const lineHeightCss = css`calc(${numberRadius} * 2)`;
+    const lineHeightCss = css`calc(${badgeRadius} * 2)`;
 
     return css`
       .container {
@@ -66,9 +66,9 @@ export class DonationFormSection extends LitElement {
 
       .content-container {
         position: relative;
-        left: calc(${numberWidth} + ${numberMargin});
-        width: calc(100% - (${numberWidth} + ${numberMargin}));
-        transition: ${numberTransition};
+        left: calc(${badgeWidth} + ${badgeMargin});
+        width: calc(100% - (${badgeWidth} + ${badgeMargin}));
+        transition: ${badgeTransition};
         z-index: 1;
         background-color: ${sectionContentBackgroundColor};
       }
@@ -78,22 +78,22 @@ export class DonationFormSection extends LitElement {
         width: 100%;
       }
 
-      .number-container {
+      .badge-container {
         position: absolute;
-        width: ${numberWidth};
+        width: ${badgeWidth};
       }
 
-      .number {
-        background-color: ${numberBackgroundColor};
-        color: ${numberFontColor};
-        width: ${numberWidth};
-        height: ${numberWidth};
-        border-radius: ${numberRadius};
+      .badge {
+        background-color: ${badgeBackgroundColor};
+        color: ${badgeFontColor};
+        width: ${badgeWidth};
+        height: ${badgeWidth};
+        border-radius: ${badgeRadius};
         display: flex;
         justify-content: center;
         align-items: center;
-        font-weight: ${numberFontWeight};
-        font-size: ${numberFontSize};
+        font-weight: ${badgeFontWeight};
+        font-size: ${badgeFontSize};
       }
 
       .title {
