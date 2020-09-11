@@ -8,28 +8,28 @@ import {
   property,
 } from 'lit-element';
 
-export enum DonationFormSectionNumberMode {
-  HideNumber = 'hidenumber',
-  ShowNumber = 'shownumber',
+export enum DonationFormSectionBadgeMode {
+  HideBadge = 'hidebadge',
+  ShowBadge = 'showbadge',
 }
 
 @customElement('donation-form-section')
 export class DonationFormSection extends LitElement {
-  @property({ type: Number }) number = 0;
+  @property({ type: String }) sectionBadge = '0';
 
   @property({ type: String }) headline: string | undefined;
 
-  @property({ type: String }) numberMode: DonationFormSectionNumberMode =
-    DonationFormSectionNumberMode.ShowNumber;
+  @property({ type: String }) badgeMode: DonationFormSectionBadgeMode =
+    DonationFormSectionBadgeMode.ShowBadge;
 
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
       <div class="container">
         <div class="number-container">
-          <div class="number">${this.number}</div>
+          <div class="number">${this.sectionBadge}</div>
         </div>
-        <div class="content-container ${this.contentContainerStyle}">
+        <div class="content-container ${this.badgeMode}">
           ${this.headline
             ? html` <div class="title">${this.headline}</div> `
             : ''}
@@ -39,15 +39,6 @@ export class DonationFormSection extends LitElement {
         </div>
       </div>
     `;
-  }
-
-  private get contentContainerStyle(): string {
-    switch (this.numberMode) {
-      case DonationFormSectionNumberMode.HideNumber:
-        return 'cover-number';
-      case DonationFormSectionNumberMode.ShowNumber:
-        return '';
-    }
   }
 
   /** @inheritdoc */
@@ -82,7 +73,7 @@ export class DonationFormSection extends LitElement {
         background-color: ${sectionContentBackgroundColor};
       }
 
-      .content-container.cover-number {
+      .content-container.hidebadge {
         left: 0;
         width: 100%;
       }

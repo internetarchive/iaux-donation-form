@@ -1,9 +1,12 @@
 import { html, fixture, expect } from '@open-wc/testing';
-import { DonationFormSection } from '../src/donation-form-section';
+import {
+  DonationFormSection,
+  DonationFormSectionBadgeMode,
+} from '../src/donation-form-section';
 import '../src/donation-form-section';
 
 describe('DonationFormSection', () => {
-  it('has a default number 0, no headline, and shows the number', async () => {
+  it('has a default badge 0, no headline, and shows the badge', async () => {
     const el: DonationFormSection = await fixture(html`
       <donation-form-section></donation-form-section>
     `);
@@ -12,15 +15,15 @@ describe('DonationFormSection', () => {
       '.content-container'
     ) as HTMLElement;
 
-    expect(el.number).to.equal(0);
+    expect(el.sectionBadge).to.equal('0');
     expect(el.headline).to.equal(undefined);
-    expect(contentContainerDiv.classList.contains('cover-number')).to.be.false;
+    expect(contentContainerDiv.classList.contains('hidebadge')).to.be.false;
   });
 
-  it('can be configured with a headline and number', async () => {
+  it('can be configured with a headline and badge', async () => {
     const el: DonationFormSection = await fixture(html`
       <donation-form-section
-        number="3"
+        sectionBadge="3"
         headline="Foo Bar"
       ></donation-form-section>
     `);
@@ -35,9 +38,9 @@ describe('DonationFormSection', () => {
   it('can be configured to hide the number', async () => {
     const el: DonationFormSection = await fixture(html`
       <donation-form-section
-        number="3"
+        sectionBadge="3"
         headline="Foo Bar"
-        numberMode="hidenumber"
+        badgeMode=${DonationFormSectionBadgeMode.HideBadge}
       ></donation-form-section>
     `);
 
@@ -45,6 +48,6 @@ describe('DonationFormSection', () => {
       '.content-container'
     ) as HTMLElement;
 
-    expect(contentContainerDiv.classList.contains('cover-number')).to.be.true;
+    expect(contentContainerDiv.classList.contains('hidebadge')).to.be.true;
   });
 });

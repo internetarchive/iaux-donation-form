@@ -1,4 +1,4 @@
 export {
   DonationFormSection,
-  DonationFormSectionNumberMode,
+  DonationFormSectionBadgeMode,
 } from './src/donation-form-section';
