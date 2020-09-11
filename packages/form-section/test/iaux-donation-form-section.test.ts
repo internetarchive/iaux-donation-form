@@ -28,7 +28,7 @@ describe('DonationFormSection', () => {
       ></donation-form-section>
     `);
 
-    const numberDiv = el.shadowRoot?.querySelector('.number') as HTMLElement;
+    const numberDiv = el.shadowRoot?.querySelector('.badge') as HTMLElement;
     const headlineDiv = el.shadowRoot?.querySelector('.title') as HTMLElement;
 
     expect(numberDiv.innerText).to.equal('3');
