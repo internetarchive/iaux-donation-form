@@ -19,7 +19,7 @@ import {
 
 import { CurrencyValidator } from '@internetarchive/donation-form-currency-validator';
 
-import { DonationFormSectionNumberMode } from '@internetarchive/donation-form-section';
+import { DonationFormSectionBadgeMode } from '@internetarchive/donation-form-section';
 
 export enum DonationFormEditDonationStepNumberMode {
   HideNumbers = 'hidenumbers',
@@ -73,9 +73,9 @@ export class DonationFormEditDonation extends LitElement {
   render(): TemplateResult {
     return html`
       <donation-form-section
-        number="1"
+        sectionBadge="1"
         headline="Choose a frequency"
-        numberMode=${this.formSectionNumberMode}
+        badgeMode=${this.formSectionNumberMode}
       >
         <ul class="frequency-selector">
           ${this.frequencyTemplate}
@@ -83,9 +83,9 @@ export class DonationFormEditDonation extends LitElement {
       </donation-form-section>
 
       <donation-form-section
-        number="2"
+        sectionBadge="2"
         headline="Choose an amount (USD)"
-        numberMode=${this.formSectionNumberMode}
+        badgeMode=${this.formSectionNumberMode}
       >
         <ul class="amount-selector">
           ${this.presetAmountsTemplate}
@@ -114,12 +114,12 @@ export class DonationFormEditDonation extends LitElement {
     }
   }
 
-  private get formSectionNumberMode(): DonationFormSectionNumberMode {
+  private get formSectionNumberMode(): DonationFormSectionBadgeMode {
     switch (this.stepNumberMode) {
       case DonationFormEditDonationStepNumberMode.ShowNumbers:
-        return DonationFormSectionNumberMode.ShowNumber;
+        return DonationFormSectionBadgeMode.ShowBadge;
       case DonationFormEditDonationStepNumberMode.HideNumbers:
-        return DonationFormSectionNumberMode.HideNumber;
+        return DonationFormSectionBadgeMode.HideBadge;
     }
   }
 

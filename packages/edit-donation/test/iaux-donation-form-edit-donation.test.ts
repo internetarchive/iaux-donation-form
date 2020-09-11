@@ -16,7 +16,7 @@ import {
   DonationType,
 } from '@internetarchive/donation-form-data-models';
 import {
-  DonationFormSectionNumberMode,
+  DonationFormSectionBadgeMode,
   DonationFormSection,
 } from '@internetarchive/donation-form-section';
 
@@ -240,8 +240,8 @@ describe('EditDonation', () => {
     const sections = el.shadowRoot?.querySelectorAll('donation-form-section');
     expect(sections?.length).to.equal(2);
     sections?.forEach(section => {
-      expect((section as DonationFormSection).numberMode).to.equal(
-        DonationFormSectionNumberMode.HideNumber
+      expect((section as DonationFormSection).badgeMode).to.equal(
+        DonationFormSectionBadgeMode.HideBadge
       );
     });
   });
