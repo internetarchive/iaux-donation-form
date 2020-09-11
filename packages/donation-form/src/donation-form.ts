@@ -61,7 +61,7 @@ export class DonationForm extends LitElement {
 
   @query('contact-form') contactForm?: ContactForm;
 
-  @query('form-section[number="4"]') contactFormSection?: DonationFormSection;
+  @query('#contactFormSection') contactFormSection?: DonationFormSection;
 
   @query('donation-form-header') donationFormHeader!: DonationFormHeader;
 
@@ -78,7 +78,7 @@ export class DonationForm extends LitElement {
       >
       </donation-form-header>
 
-      <donation-form-section number="3" headline="Choose a payment method">
+      <donation-form-section sectionBadge="3" headline="Choose a payment method">
         <payment-selector
           .paymentProviders=${this.braintreeManager?.paymentProviders}
           @firstUpdated=${this.paymentSelectorFirstUpdated}
@@ -102,14 +102,18 @@ export class DonationForm extends LitElement {
 
   get contactFormSectionTemplate(): TemplateResult {
     return html`
-      <donation-form-section number="4" headline="Enter payment information">
+      <donation-form-section
+        sectionBadge="4"
+        headline="Enter payment information"
+        id="contactFormSection"
+      >
         <contact-form @form-validity-changed=${this.contactFormValidityChanged}></contact-form>
         <div class="credit-card-fields" class="${this.creditCardVisible ? '' : 'hidden'}">
           <slot name="braintree-hosted-fields"></slot>
         </div>
       </donation-form-section>
 
-      <donation-form-section number="5">
+      <donation-form-section sectionBadge="5">
         <slot name="recaptcha"></slot>
         <button
           id="donate-button"
