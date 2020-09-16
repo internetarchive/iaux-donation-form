@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/internetarchive/iaux-donation-form.svg?branch=master)](https://travis-ci.com/internetarchive/iaux-donation-form) [![codecov](https://codecov.io/gh/internetarchive/iaux-donation-form/branch/master/graph/badge.svg)](https://codecov.io/gh/internetarchive/iaux-donation-form)
 
-# The Internet Archive Donation Form Lerna Repository
+# The Internet Archive Donation Form Mono Repository
 
 The donation form is made up of several different components. This repository aggregates them all to make working with the donation form easier while still maintaining modularity.
 
@@ -90,26 +90,4 @@ General top-level usage. Take a look at the individual modules in the `packages/
     <div id="paypal-upsell-button"></div>
   </div>
 </modal-manager>
-```
-
-# Development
-
-## Prerequisite
-```bash
-npm install
-```
-
-## Start Development Server
-```bash
-npm run start
-```
-
-## Testing
-```bash
-npm run test
-```
-
-## Linting
-```bash
-npm lint
 ```
