@@ -1,0 +1,83 @@
+{
+  "version": 2,
+  "tags": [
+    {
+      "name": "donation-form-section",
+      "description": "The Donation Form Section Component",
+      "properties": [
+        {
+          "name": "sectionBadge",
+          "type": "String",
+          "description": "The badge shown on the left side of the section",
+          "default": 0
+        },
+        {
+          "name": "headline",
+          "type": "String",
+          "description": "The headline shown at the top of the section",
+          "default": "undefined"
+        },
+        {
+          "name": "badgeMode",
+          "type": "String",
+          "description": "Whether to show or hide the badge. Values are: `showbadge` and `hidebadge`",
+          "default": "showbadge"
+        }
+      ],
+      "events": [],
+      "slots": [],
+      "cssProperties": [
+        {
+          "name": "--formSectionBadgeTransition",
+          "description": "The badge show/hide transition",
+          "type": "String"
+        },
+        {
+          "name": "--formSectionBadgeMargin",
+          "description": "The margin between the badge and content section",
+          "type": "String"
+        },
+        {
+          "name": "--formSectionBadgeBackgroundColor",
+          "description": "The background color of the badge",
+          "type": "Color"
+        },
+        {
+          "name": "--formSectionBadgeRadius",
+          "description": "The radius of the badge circle",
+          "type": "String"
+        },
+        {
+          "name": "--formSectionBadgeFontSize",
+          "description": "The font size of the badge",
+          "type": "String"
+        },
+        {
+          "name": "--formSectionBadgeFontWeight",
+          "description": "The font weight of the badge",
+          "type": "String"
+        },
+        {
+          "name": "--formSectionBadgeFontColor",
+          "description": "The font color of the badge",
+          "type": "String"
+        },
+        {
+          "name": "--formSectionTitleFontSize",
+          "description": "The font size of the title",
+          "type": "String"
+        },
+        {
+          "name": "--formSectionTitleFontWeight",
+          "description": "The font weight of the title",
+          "type": "String"
+        },
+        {
+          "name": "--formSectionContentBackgroundColor",
+          "description": "The background color of the content section",
+          "type": "Color"
+        }
+      ]
+    }
+  ]
+}
