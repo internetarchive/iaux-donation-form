@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/donation-form-currency-validator",
-  "version": "0.0.1-alpha.2",
+  "version": "0.3.0",
   "description": "A currency input validator for the Internet Archive donation form",
   "license": "AGPL-3.0-only",
   "main": "dist/index.js",
@@ -23,7 +23,6 @@
     "test": "tsc && npm run lint && npm run circular && karma start --coverage",
     "test:watch": "concurrently --kill-others --names tsc,karma \"npm run tsc:watch\" \"karma start --auto-watch=true --single-run=false\""
   },
-  "dependencies": {},
   "devDependencies": {
     "@open-wc/eslint-config": "^2.0.0",
     "@open-wc/testing": "^2.0.0",
