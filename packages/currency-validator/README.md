@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.com/internetarchive/iaux-donation-form-currency-validator.svg?branch=master)](https://travis-ci.com/internetarchive/iaux-donation-form-currency-validator) [![codecov](https://codecov.io/gh/internetarchive/iaux-donation-form-currency-validator/branch/master/graph/badge.svg)](https://codecov.io/gh/internetarchive/iaux-donation-form-currency-validator)
-
 # Internet Archive Donation Form Currency Validator
 
 This is a small library used to validate currency as the user types into a text field.
