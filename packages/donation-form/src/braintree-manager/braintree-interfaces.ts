@@ -1,11 +1,13 @@
-import { DonationRequest } from '../models/request-models/donation-request';
-import { DonationResponse } from '../models/response-models/donation-response';
-import { SuccessResponse } from '../models/response-models/success-models/success-response';
+import {
+  DonationRequest,
+  DonationResponse,
+  SuccessResponse,
+  PaymentProvider,
+  DonationPaymentInfo,
+  CustomerInfo,
+  BillingInfo,
+} from '@internetarchive/donation-form-data-models';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
-import { BillingInfo } from '../models/common/billing-info';
-import { CustomerInfo } from '../models/common/customer-info';
-import { DonationPaymentInfo } from '../models/donation-info/donation-payment-info';
-import { PaymentProvider } from '../models/common/payment-provider-name';
 import { PaymentProvidersInterface } from './payment-providers-interface';
 
 /**

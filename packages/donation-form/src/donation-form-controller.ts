@@ -8,6 +8,7 @@ import {
   customElement,
 } from 'lit-element';
 
+import currency from 'currency.js';
 import {
   LazyLoaderService,
   LazyLoaderServiceInterface,
@@ -40,9 +41,12 @@ import creditCardImg from '@internetarchive/icon-credit-card';
 import calendarImg from '@internetarchive/icon-calendar';
 import lockImg from '@internetarchive/icon-lock';
 import { AnalyticsHandlerInterface } from './@types/analytics-handler';
-import { DonationPaymentInfo } from './models/donation-info/donation-payment-info';
-import { DonationType } from './models/donation-info/donation-type';
-import { PaymentProvider } from './models/common/payment-provider-name';
+
+import {
+  DonationPaymentInfo,
+  PaymentProvider,
+  DonationType,
+} from '@internetarchive/donation-form-data-models';
 
 /**
  * The DonationFormController orchestrates several of the interactions between
@@ -191,8 +195,8 @@ export class DonationFormController extends LitElement {
 
     let amount = 5;
     if (amountParam) {
-      const parsedAmount = parseFloat(amountParam);
-      if (!isNaN(parsedAmount)) {
+      const parsedAmount = currency(amountParam).value;
+      if (parsedAmount > 0) {
         amount = parsedAmount;
       }
     }

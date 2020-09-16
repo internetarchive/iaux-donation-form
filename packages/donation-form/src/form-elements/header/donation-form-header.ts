@@ -9,10 +9,10 @@ import {
   query,
 } from 'lit-element';
 
-import './donation-summary';
-import './edit-donation';
-import { DonationPaymentInfo } from '../../models/donation-info/donation-payment-info';
-import { EditDonation } from './edit-donation';
+import { DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
+
+import '@internetarchive/donation-form-edit-donation';
+import { DonationFormEditDonation } from '@internetarchive/donation-form-edit-donation';
 
 export enum DonationFormHeaderMode {
   Summary = 'summary',
@@ -25,9 +25,7 @@ export class DonationFormHeader extends LitElement {
 
   @property({ type: String }) mode: DonationFormHeaderMode = DonationFormHeaderMode.Edit;
 
-  @query('edit-donation') editDonation?: EditDonation;
-
-  @query('donation-summary') donationSummary?: EditDonation;
+  @query('edit-donation') editDonation?: DonationFormEditDonation;
 
   /** @inheritdoc */
   render(): TemplateResult {
@@ -47,13 +45,13 @@ export class DonationFormHeader extends LitElement {
 
   private get editDonationTemplate(): TemplateResult {
     return html`
-      <edit-donation
+      <donation-form-edit-donation
         .donationInfo=${this.donationInfo}
         @donationInfoChanged=${this.donationInfoChanged}
         @showSummaryClicked=${this.showSummaryClicked}
         @editDonationError=${this.editDonationError}
       >
-      </edit-donation>
+      </donation-form-edit-donation>
     `;
   }
 

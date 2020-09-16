@@ -1,6 +1,6 @@
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { BraintreeManagerInterface, HostingEnvironment } from '../../braintree-interfaces';
-import { DonationPaymentInfo } from '../../../models/donation-info/donation-payment-info';
+import { DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
 import {
   PayPalButtonDataSourceInterface,
   PayPalButtonDataSource,

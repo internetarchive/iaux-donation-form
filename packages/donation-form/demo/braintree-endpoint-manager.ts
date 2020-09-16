@@ -6,8 +6,9 @@ import {
   SuccessResponse,
   DonationRequest,
   DonationResponse,
-  BraintreeEndpointManagerInterface,
-} from '../index';
+} from '@internetarchive/donation-form-data-models';
+
+import { BraintreeEndpointManagerInterface } from '../index';
 
 export class BraintreeEndpointManager implements BraintreeEndpointManagerInterface {
   async submitData(request: DonationRequest): Promise<DonationResponse> {

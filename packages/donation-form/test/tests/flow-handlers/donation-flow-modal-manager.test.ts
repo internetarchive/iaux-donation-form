@@ -5,9 +5,11 @@ import { MockModalManager } from '../../mocks/mock-modal-manager';
 import '../../mocks/mock-modal-manager';
 import { MockBraintreeManager } from '../../mocks/mock-braintree-manager';
 import { mockSuccessResponse } from '../../mocks/models/mock-success-response';
-import { PaymentProvider } from '../../../src/models/common/payment-provider-name';
-import { DonationPaymentInfo } from '../../../src/models/donation-info/donation-payment-info';
-import { DonationType } from '../../../src/models/donation-info/donation-type';
+import {
+  PaymentProvider,
+  DonationPaymentInfo,
+  DonationType,
+} from '@internetarchive/donation-form-data-models';
 import { mockBillingInfo } from '../../mocks/models/mock-billing-info';
 import { mockCustomerInfo } from '../../mocks/models/mock-customer-info';
 

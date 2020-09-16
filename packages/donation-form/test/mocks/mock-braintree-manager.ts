@@ -3,16 +3,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BraintreeManagerInterface } from '../../src/braintree-manager/braintree-interfaces';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
-import { PaymentProvider } from '../../src/models/common/payment-provider-name';
-import { DonationPaymentInfo } from '../../src/models/donation-info/donation-payment-info';
-import { BillingInfo } from '../../src/models/common/billing-info';
-import { DonationResponse } from '../../src/models/response-models/donation-response';
-import { CustomerInfo } from '../../src/models/common/customer-info';
-import { SuccessResponse } from '../../src/models/response-models/success-models/success-response';
+import {
+  PaymentProvider,
+  DonationPaymentInfo,
+  BillingInfo,
+  DonationResponse,
+  CustomerInfo,
+  SuccessResponse,
+  ErrorResponse,
+} from '@internetarchive/donation-form-data-models';
 import { MockPaymentProviders } from './payment-providers/mock-payment-providers';
 import { mockSuccessResponse } from './models/mock-success-response';
 import { MockBraintreeClient } from './payment-clients/mock-braintree-client';
-import { ErrorResponse } from '../../src/models/response-models/error-models/error-response';
 import { PaymentProvidersInterface } from '../../src/braintree-manager/payment-providers-interface';
 
 export class MockBraintreeManager implements BraintreeManagerInterface {

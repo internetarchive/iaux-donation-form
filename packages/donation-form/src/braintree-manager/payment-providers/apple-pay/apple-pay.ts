@@ -1,9 +1,8 @@
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { BraintreeManagerInterface } from '../../braintree-interfaces';
 import { ApplePaySessionManagerInterface } from './apple-pay-session-manager';
-import { DonationType } from '../../../models/donation-info/donation-type';
+import { DonationType, DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
 import { ApplePaySessionDataSource } from './apple-pay-session-datasource';
-import { DonationPaymentInfo } from '../../../models/donation-info/donation-payment-info';
 import { ApplePayHandlerInterface } from './apple-pay-interface';
 
 export class ApplePayHandler implements ApplePayHandlerInterface {

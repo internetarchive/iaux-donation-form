@@ -7,7 +7,7 @@ import { MockBraintreeManager } from '../../mocks/mock-braintree-manager';
 import { MockApplePayClient } from '../../mocks/payment-clients/mock-applepay-client';
 import { MockApplePayValidateMerchantEvent } from '../../mocks/payment-clients/mock-applepay-validatemerchantevent';
 import { MockApplePayPaymentAuthorizedEvent } from '../../mocks/payment-clients/mock-applepay-paymentauthorizedevent';
-import { SuccessResponse } from '../../../src/models/response-models/success-models/success-response';
+import { SuccessResponse } from '@internetarchive/donation-form-data-models';
 import { MockDonationInfo } from '../../mocks/mock-donation-info';
 
 describe('ApplePaySessionDataSource', () => {

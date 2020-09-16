@@ -16,7 +16,6 @@ import lockImg from '@internetarchive/icon-lock';
 // because inside each of these files, we're registering the custom element inside
 // these files and by simply importing the class name, you lose that behavior
 // See https://github.com/microsoft/TypeScript/issues/9191 for more discussion
-import './form-elements/form-section';
 import './form-elements/contact-form/contact-form';
 import './form-elements/payment-selector';
 import './form-elements/header/donation-form-header';
@@ -27,13 +26,16 @@ import { PaymentSelector } from './form-elements/payment-selector';
 
 import { BraintreeManagerInterface } from './braintree-manager/braintree-interfaces';
 
-import { DonationRequest } from './models/request-models/donation-request';
-import { DonationPaymentInfo } from './models/donation-info/donation-payment-info';
+import {
+  DonationRequest,
+  DonationPaymentInfo,
+  PaymentProvider,
+} from '@internetarchive/donation-form-data-models';
 
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
-import { PaymentProvider } from './models/common/payment-provider-name';
 
-import { FormSection } from './form-elements/form-section';
+import '@internetarchive/donation-form-section';
+import { DonationFormSection } from '@internetarchive/donation-form-section';
 
 @customElement('donation-form')
 export class DonationForm extends LitElement {
@@ -59,7 +61,7 @@ export class DonationForm extends LitElement {
 
   @query('contact-form') contactForm?: ContactForm;
 
-  @query('form-section[number="4"]') contactFormSection?: FormSection;
+  @query('#contactFormSection') contactFormSection?: DonationFormSection;
 
   @query('donation-form-header') donationFormHeader!: DonationFormHeader;
 
@@ -76,7 +78,7 @@ export class DonationForm extends LitElement {
       >
       </donation-form-header>
 
-      <form-section number="3" headline="Choose a payment method">
+      <donation-form-section sectionBadge="3" headline="Choose a payment method">
         <payment-selector
           .paymentProviders=${this.braintreeManager?.paymentProviders}
           @firstUpdated=${this.paymentSelectorFirstUpdated}
@@ -89,7 +91,7 @@ export class DonationForm extends LitElement {
         >
           <slot name="paypal-button" slot="paypal-button"></slot>
         </payment-selector>
-      </form-section>
+      </donation-form-section>
 
       <div class="contact-form-section ${this.contactFormVisible ? '' : 'hidden'}">
         ${this.contactFormSectionTemplate}
@@ -100,14 +102,18 @@ export class DonationForm extends LitElement {
 
   get contactFormSectionTemplate(): TemplateResult {
     return html`
-      <form-section number="4" headline="Enter payment information">
+      <donation-form-section
+        sectionBadge="4"
+        headline="Enter payment information"
+        id="contactFormSection"
+      >
         <contact-form @form-validity-changed=${this.contactFormValidityChanged}></contact-form>
         <div class="credit-card-fields" class="${this.creditCardVisible ? '' : 'hidden'}">
           <slot name="braintree-hosted-fields"></slot>
         </div>
-      </form-section>
+      </donation-form-section>
 
-      <form-section number="5">
+      <donation-form-section sectionBadge="5">
         <slot name="recaptcha"></slot>
         <button
           id="donate-button"
@@ -120,7 +126,7 @@ export class DonationForm extends LitElement {
         <div class="secure-process-note">
           ${lockImg} Your payment will be securely processed
         </div>
-      </form-section>
+      </donation-form-section>
     `;
   }
 

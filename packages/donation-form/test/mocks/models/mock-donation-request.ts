@@ -1,6 +1,8 @@
-import { DonationRequest } from '../../../src/models/request-models/donation-request';
-import { DonationType } from '../../../src/models/donation-info/donation-type';
-import { PaymentProvider } from '../../../src/models/common/payment-provider-name';
+import {
+  DonationRequest,
+  DonationType,
+  PaymentProvider,
+} from '@internetarchive/donation-form-data-models';
 import { mockCustomerInfo } from './mock-customer-info';
 import { mockBillingInfo } from './mock-billing-info';
 import { mockCustomFields } from './mock-custom-fields';

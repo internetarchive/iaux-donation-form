@@ -1,7 +1,9 @@
 import { BraintreeEndpointManagerInterface } from '../../src/braintree-manager/braintree-interfaces';
-import { DonationResponse } from '../../src/models/response-models/donation-response';
-import { SuccessResponse } from '../../src/models/response-models/success-models/success-response';
-import { DonationRequest } from '../../src/models/request-models/donation-request';
+import {
+  DonationResponse,
+  SuccessResponse,
+  DonationRequest,
+} from '@internetarchive/donation-form-data-models';
 import { mockSuccessResponse } from './models/mock-success-response';
 
 export class MockEndpointManager implements BraintreeEndpointManagerInterface {
