@@ -1,0 +1,93 @@
+{
+  "version": 2,
+  "tags": [
+    {
+      "name": "donation-form-edit-donation",
+      "description": "The Donation Form Edit Donation component.",
+      "properties": [
+        {
+          "name": "donationInfo",
+          "type": "Object",
+          "description": "The DonationInfo to display in the component",
+          "default": { "donationType": "one-time", "amount": 5, "coverFees": false }
+        },
+        {
+          "name": "stepNumberMode",
+          "type": "String",
+          "description": "The number mode to show or hide the numbers",
+          "default": "shownumbers"
+        },
+        {
+          "name": "amountOptions",
+          "type": "Array",
+          "description": "The number values shown.",
+          "default": [ 5, 10, 25, 50, 100, 500, 1000 ]
+        }
+      ],
+      "events": ["donationInfoChanged"],
+      "slots": [],
+      "cssProperties": [
+        {
+          "name": "--paymentButtonBorderColor",
+          "description": "Payment Button Border Color",
+          "type": "Color"
+        },
+        {
+          "name": "--paymentButtonGridGap",
+          "description": "Payment Button Grip Gap",
+          "type": "String"
+        },
+        {
+          "name": "--paymentButtonFontSize",
+          "description": "Payment Button Font Size",
+          "type": "String"
+        },
+        {
+          "name": "--paymentButtonSelectedColor",
+          "description": "Payment Button Selected Color",
+          "type": "Color"
+        },
+        {
+          "name": "--paymentButtonFocusedOutlineColor",
+          "description": "Payment Button Focused Outline Color",
+          "type": "Color"
+        },
+        {
+          "name": "--paymentButtonBorderColor",
+          "description": "Payment Button Border Color",
+          "type": "Color"
+        },
+        {
+          "name": "--paymentButtonColor",
+          "description": "Payment Button Color",
+          "type": "Color"
+        },
+        {
+          "name": "--coverFeesFontSize",
+          "description": "Cover Fees font size",
+          "type": "String"
+        },
+        {
+          "name": "--coverFeesFontWeight",
+          "description": "Cover Fees font weight",
+          "type": "String"
+        },
+        {
+          "name": "--customAmountWidth",
+          "description": "Custom Amount Width",
+          "type": "String"
+        },
+        {
+          "name": "--inputFieldFontColor",
+          "description": "Input field font color",
+          "type": "Color"
+        },
+        {
+          "name": "--inputBorder",
+          "description": "Input border",
+          "type": "String"
+        }
+      ]
+    }
+  ]
+}
