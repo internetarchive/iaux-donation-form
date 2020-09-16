@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.com/internetarchive/iaux-donation-form-data-models.svg?branch=master)](https://travis-ci.com/internetarchive/iaux-donation-form-data-models) [![codecov](https://codecov.io/gh/internetarchive/iaux-donation-form-data-models/branch/master/graph/badge.svg)](https://codecov.io/gh/internetarchive/iaux-donation-form-data-models)
-
 # Donation Form Data Models
 
 The data models for the Internet Archive donation form

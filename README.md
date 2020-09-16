@@ -91,25 +91,3 @@ General top-level usage. Take a look at the individual modules in the `packages/
   </div>
 </modal-manager>
 ```
-
-# Development
-
-## Prerequisite
-```bash
-npm install
-```
-
-## Start Development Server
-```bash
-npm run start
-```
-
-## Testing
-```bash
-npm run test
-```
-
-## Linting
-```bash
-npm lint
-```

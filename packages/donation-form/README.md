@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.com/internetarchive/iaux-donation-form.svg?branch=master)](https://travis-ci.com/internetarchive/iaux-donation-form) [![codecov](https://codecov.io/gh/internetarchive/iaux-donation-form/branch/master/graph/badge.svg)](https://codecov.io/gh/internetarchive/iaux-donation-form)
-
 # \<donation-form>
 
 The Internet Archive Donation Form
