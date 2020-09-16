@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.com/internetarchive/iaux-donation-form-section.svg?branch=master)](https://travis-ci.com/internetarchive/iaux-donation-form-section) [![codecov](https://codecov.io/gh/internetarchive/iaux-donation-form-section/branch/master/graph/badge.svg)](https://codecov.io/gh/internetarchive/iaux-donation-form-section)
-
 # Donation Form Section
 
 This is the Donation Form Section WebComponent.
