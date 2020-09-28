@@ -74,6 +74,8 @@ export class DonationFormController extends LitElement {
 
   @property({ type: String }) loggedInUser?: string;
 
+  @property({ type: String }) origin?: string;
+
   @property({ type: Object }) endpointManager?: BraintreeEndpointManagerInterface;
 
   @property({ type: Object }) analyticsHandler?: AnalyticsHandlerInterface;
@@ -110,6 +112,10 @@ export class DonationFormController extends LitElement {
 
     if (changedProperties.has('loggedInUser') && this.loggedInUser) {
       this.braintreeManager?.setLoggedInUser(this.loggedInUser);
+    }
+
+    if (changedProperties.has('origin') && this.origin) {
+      this.braintreeManager?.setOrigin(this.origin);
     }
 
     if (
@@ -158,6 +164,7 @@ export class DonationFormController extends LitElement {
         hostingEnvironment: this.environment,
         referrer: this.referrer,
         loggedInUser: this.loggedInUser,
+        origin: this.origin,
       });
     }
   }

@@ -45,6 +45,8 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
 
   setLoggedInUser(loggedInUser: string): void {}
 
+  setOrigin(origin: string): void {}
+
   startup(): void {}
 
   async submitDonation(options: {

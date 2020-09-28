@@ -50,6 +50,14 @@ export interface BraintreeManagerInterface {
   setReferrer(referrer: string): void;
 
   /**
+   * Set the origin for later submission
+   *
+   * @param {string} origin
+   * @memberof BraintreeManagerInterface
+   */
+  setOrigin(origin: string): void;
+
+  /**
    * Set the logged-in user for later submission
    *
    * @param {string} loggedInUser

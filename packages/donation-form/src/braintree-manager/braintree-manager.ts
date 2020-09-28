@@ -25,6 +25,19 @@ import { PaymentProvidersInterface } from './payment-providers-interface';
 export class BraintreeManager implements BraintreeManagerInterface {
   private referrer?: string;
 
+  /**
+   * The origin is made up of campaign / abtest information that the user originated from.
+   *
+   * The field is a string, but generally has the format `{Source}-{Test Name}-{Variant Name}`, ie
+   * - `DonateBanner-Campaign Start 2020-IADefault`
+   * - `Email-MidJuly2020-VariantA`
+   *
+   * @private
+   * @type {string}
+   * @memberof BraintreeManager
+   */
+  private origin?: string;
+
   private loggedInUser?: string;
 
   /**
@@ -68,6 +81,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
     // eslint-disable-next-line @typescript-eslint/camelcase
     customFields.logged_in_user = this.loggedInUser;
     customFields.referrer = this.referrer;
+    customFields.origin = this.origin;
 
     // This is interesting and applies only to Venmo, but will work for other providers as well.
     // In Safari, `donationInfo` actually comes through as a DonationPaymentInfo object,
@@ -200,6 +214,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
     googlePayMerchantId?: string;
     referrer?: string;
     loggedInUser?: string;
+    origin?: string;
   }) {
     this.authorizationToken = options.authorizationToken;
     this.endpointManager = options.endpointManager;
@@ -208,6 +223,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
 
     this.referrer = options.referrer;
     this.loggedInUser = options.loggedInUser;
+    this.origin = options.origin;
 
     this.paymentProviders = new PaymentProviders({
       braintreeManager: this,
@@ -233,5 +249,10 @@ export class BraintreeManager implements BraintreeManagerInterface {
   /** @inheritdoc */
   setLoggedInUser(loggedInUser: string): void {
     this.loggedInUser = loggedInUser;
+  }
+
+  /** @inheritdoc */
+  setOrigin(origin: string): void {
+    this.origin = origin;
   }
 }
