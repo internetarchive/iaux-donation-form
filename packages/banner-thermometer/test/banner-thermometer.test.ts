@@ -1,15 +1,15 @@
 import { html, fixture, expect } from '@open-wc/testing';
 
 import {
-  BannerThermometer,
+  DonationBannerThermometer,
   GoalMessageMode,
-} from '../src/banner-thermometer.js';
-import '../banner-thermometer.js';
+} from '../src/banner-thermometer';
+import '../src/banner-thermometer';
 
-describe('BannerThermometer', () => {
+describe('DonationBannerThermometer', () => {
   it('has a background track and fill layer', async () => {
-    const el: BannerThermometer = await fixture(html`
-      <banner-thermometer></banner-thermometer>
+    const el: DonationBannerThermometer = await fixture(html`
+      <donation-banner-thermometer></donation-banner-thermometer>
     `);
 
     const background = el.shadowRoot?.querySelector('.thermometer-background');
@@ -20,8 +20,10 @@ describe('BannerThermometer', () => {
   });
 
   it('defaults to showing the goal value at the end of the thermometer', async () => {
-    const el: BannerThermometer = await fixture(html`
-      <banner-thermometer .goalAmount=${1_000_000}></banner-thermometer>
+    const el: DonationBannerThermometer = await fixture(html`
+      <donation-banner-thermometer
+        .goalAmount=${1_000_000}
+      ></donation-banner-thermometer>
     `);
 
     const goalMessage = el.shadowRoot?.querySelector(
@@ -31,12 +33,12 @@ describe('BannerThermometer', () => {
   });
 
   it('can display goal met message', async () => {
-    const el: BannerThermometer = await fixture(html`
-      <banner-thermometer
+    const el: DonationBannerThermometer = await fixture(html`
+      <donation-banner-thermometer
         .goalMetMessage=${'GOAL MET'}
         .goalMessageMode=${GoalMessageMode.GoalMet}
       >
-      </banner-thermometer>
+      </donation-banner-thermometer>
     `);
 
     const goalMessage = el.shadowRoot?.querySelector(

@@ -5,6 +5,7 @@ import {
   property,
   TemplateResult,
   CSSResult,
+  customElement,
 } from 'lit-element';
 import currency from 'currency.js';
 
@@ -13,7 +14,8 @@ export enum GoalMessageMode {
   GoalMet = 'goalmet',
 }
 
-export class BannerThermometer extends LitElement {
+@customElement('donation-banner-thermometer')
+export class DonationBannerThermometer extends LitElement {
   @property({ type: String }) goalMessageMode: GoalMessageMode =
     GoalMessageMode.ShowGoal;
 
