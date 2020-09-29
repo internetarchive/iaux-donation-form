@@ -10,47 +10,20 @@ import {
 import currency from 'currency.js';
 
 export enum GoalMessageMode {
-  ShowGoal = 'showgoal',
-  GoalMet = 'goalmet',
+  ShowGoalAmount = 'showgoalamount',
+  ShowGoalMessage = 'showgoalmessage',
 }
 
 @customElement('donation-banner-thermometer')
 export class DonationBannerThermometer extends LitElement {
   @property({ type: String }) goalMessageMode: GoalMessageMode =
-    GoalMessageMode.ShowGoal;
+    GoalMessageMode.ShowGoalAmount;
 
-  @property({ type: String }) goalMetMessage = "We've reached our goal!";
+  @property({ type: String }) goalMessage = "We've reached our goal!";
 
   @property({ type: Number }) goalAmount = 6_500_000;
 
   @property({ type: Number }) currentAmount = 2_350_000;
-
-  // this is not the same as the currentAmount / goal calculation because we show different values
-  @property({ type: Number }) percentComplete = 36;
-
-  private get currentAmountDisplayValue(): string {
-    return this.currencyFormatted(this.currentAmount);
-  }
-
-  private get goalAmountDisplayValue(): string {
-    return this.currencyFormatted(this.goalAmount);
-  }
-
-  private currencyFormatted(value: number): string {
-    return currency(value, {
-      symbol: '$',
-      precision: 0,
-    }).format();
-  }
-
-  private get goalMessage(): string {
-    switch (this.goalMessageMode) {
-      case GoalMessageMode.ShowGoal:
-        return this.goalAmountDisplayValue;
-      case GoalMessageMode.GoalMet:
-        return this.goalMetMessage;
-    }
-  }
 
   render(): TemplateResult {
     return html`
@@ -80,10 +53,38 @@ export class DonationBannerThermometer extends LitElement {
               </div>
             </div>
           </div>
-          <div class="donate-goal">${this.goalMessage}</div>
+          <div class="donate-goal">${this.currentGoalMessage}</div>
         </div>
       </div>
     `;
+  }
+
+  private get currentAmountDisplayValue(): string {
+    return this.currencyFormatted(this.currentAmount);
+  }
+
+  private get goalAmountDisplayValue(): string {
+    return this.currencyFormatted(this.goalAmount);
+  }
+
+  private currencyFormatted(value: number): string {
+    return currency(value, {
+      symbol: '$',
+      precision: 0,
+    }).format();
+  }
+
+  private get currentGoalMessage(): string {
+    switch (this.goalMessageMode) {
+      case GoalMessageMode.ShowGoalAmount:
+        return `${this.goalAmountDisplayValue} goal`;
+      case GoalMessageMode.ShowGoalMessage:
+        return this.goalMessage;
+    }
+  }
+
+  private get percentComplete(): number {
+    return Math.min((this.currentAmount / this.goalAmount) * 100, 100);
   }
 
   static get styles(): CSSResult {

@@ -29,13 +29,8 @@
     import { html, render } from 'lit-html';
     import '../dist/index.js';
 
-    function changeValue(e) {
-      const thermometer = document.querySelector('#thermometer');
-      thermometer.percentComplete = e.target.value;
-      const value = document.querySelector('#percentValue');
-      const numberValue = parseFloat(e.target.value);
-      value.innerHTML = `${Math.round(numberValue)}%`;
-    }
+    const defaultGoal = 6_500_000;
+    const defaultCurrentAmount = 2_350_000;
 
     function changeMarkerTop(e) {
       const thermometer = document.querySelector('#thermometer');
@@ -55,9 +50,23 @@
 
     function goalMet(e) {
       const thermometer = document.querySelector('#thermometer');
-      console.debug(e.target.checked);
-      const mode = e.target.checked ? 'goalmet' : 'showgoal';
+      const mode = e.target.checked ? 'showgoalmessage' : 'showgoalamount';
       thermometer.goalMessageMode = mode;
+    }
+
+    function setGoal(e) {
+      const thermometer = document.querySelector('#thermometer');
+      thermometer.goalAmount = e.target.value;
+    }
+
+    function setCurrentAmount(e) {
+      const thermometer = document.querySelector('#thermometer');
+      thermometer.currentAmount = e.target.value;
+    }
+
+    function goalMessage(e) {
+      const thermometer = document.querySelector('#thermometer');
+      thermometer.goalMessage = e.target.value;
     }
 
     function changeBorderColor(e) {
@@ -86,27 +95,20 @@
           <legend>Config</legend>
           <dl>
 
-            <dt><label for="percentPicker">Current Value</label></dt>
+            <dt><label for="setGoal">Set Goal</label></dt>
             <dd>
-              <input type="range" id="percentPicker" @input=${changeValue} min="0" max="100" value="25" />
-              <span id="percentValue">25%</span>
+              <input type="text" id="setGoal" @input=${setGoal} value=${defaultGoal} />
             </dd>
 
-            <dt><label for="markerTop">Marker Top</label></dt>
+            <dt><label for="setGoal">Set Current Amount</label></dt>
             <dd>
-              <input type="range" id="markerTop" @input=${changeMarkerTop} min="0" max="200" value="50" />
-              <span id="markerTopValue">50%</span>
+              <input type="text" id="setCurrentAmount" @input=${setCurrentAmount} value=${defaultCurrentAmount} />
             </dd>
 
-            <dt><label for="markerHeight">Marker Height</label></dt>
-            <dd>
-              <input type="range" id="markerHeight" @input=${changeMarkerHeight} min="50" max="200" value="100" />
-              <span id="markerHeightValue">100%</span>
-            </dd>
-
-            <dt><label for="goalMet">Goal Met</label></dt>
+            <dt><label for="goalMet">Goal Message</label></dt>
             <dd>
               <input type="checkbox" id="goalMet" @input=${goalMet} />
+              <input type="text" id="goalMessage" @input=${goalMessage} />
             </dd>
 
             <dt><label for="borderColor">Thermometer Border</label></dt>
@@ -129,11 +131,23 @@
               <input type="text" id="markerBorder" @input=${changeMarkerBorder} value="1px solid #31A481" />
             </dd>
 
+            <dt><label for="markerTop">Marker Top</label></dt>
+            <dd>
+              <input type="range" id="markerTop" @input=${changeMarkerTop} min="0" max="200" value="50" />
+              <span id="markerTopValue">50%</span>
+            </dd>
+
+            <dt><label for="markerHeight">Marker Height</label></dt>
+            <dd>
+              <input type="range" id="markerHeight" @input=${changeMarkerHeight} min="50" max="200" value="100" />
+              <span id="markerHeightValue">100%</span>
+            </dd>
+
           </dl>
         </fieldset>
 
         <div class="thermometer-container">
-          <donation-banner-thermometer id="thermometer">
+          <donation-banner-thermometer id="thermometer" currentAmount=${defaultCurrentAmount} goalAmount=${defaultGoal}>
           </donation-banner-thermometer>
         </div>
       `,

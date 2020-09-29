@@ -29,14 +29,14 @@ describe('DonationBannerThermometer', () => {
     const goalMessage = el.shadowRoot?.querySelector(
       '.donate-goal'
     ) as HTMLDivElement;
-    expect(goalMessage.innerText).to.equal('$1,000,000');
+    expect(goalMessage.innerText).to.equal('$1,000,000 GOAL');
   });
 
   it('can display goal met message', async () => {
     const el: DonationBannerThermometer = await fixture(html`
       <donation-banner-thermometer
-        .goalMetMessage=${'GOAL MET'}
-        .goalMessageMode=${GoalMessageMode.GoalMet}
+        .goalMessage=${'GOAL MET'}
+        .goalMessageMode=${GoalMessageMode.ShowGoalMessage}
       >
       </donation-banner-thermometer>
     `);
