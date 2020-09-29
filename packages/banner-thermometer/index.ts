@@ -1,1 +1,1 @@
-export { BannerThermometer } from './src/BannerThermometer.js';
+export { BannerThermometer } from './src/banner-thermometer.js';

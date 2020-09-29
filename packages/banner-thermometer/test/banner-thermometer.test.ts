@@ -1,40 +1,47 @@
 import { html, fixture, expect } from '@open-wc/testing';
 
-import { BannerThermometer } from '../src/BannerThermometer.js';
+import {
+  BannerThermometer,
+  GoalMessageMode,
+} from '../src/banner-thermometer.js';
 import '../banner-thermometer.js';
 
 describe('BannerThermometer', () => {
-  it('has a default title "Hey there" and counter 5', async () => {
+  it('has a background track and fill layer', async () => {
     const el: BannerThermometer = await fixture(html`
       <banner-thermometer></banner-thermometer>
     `);
 
-    expect(el.title).to.equal('Hey there');
-    expect(el.counter).to.equal(5);
+    const background = el.shadowRoot?.querySelector('.thermometer-background');
+    const fill = el.shadowRoot?.querySelector('.thermometer-fill');
+
+    expect(background).to.exist;
+    expect(fill).to.exist;
   });
 
-  it('increases the counter on button click', async () => {
+  it('defaults to showing the goal value at the end of the thermometer', async () => {
     const el: BannerThermometer = await fixture(html`
-      <banner-thermometer></banner-thermometer>
+      <banner-thermometer .goalAmount=${1_000_000}></banner-thermometer>
     `);
-    el.shadowRoot!.querySelector('button')!.click();
 
-    expect(el.counter).to.equal(6);
+    const goalMessage = el.shadowRoot?.querySelector(
+      '.donate-goal'
+    ) as HTMLDivElement;
+    expect(goalMessage.innerText).to.equal('$1,000,000');
   });
 
-  it('can override the title via attribute', async () => {
+  it('can display goal met message', async () => {
     const el: BannerThermometer = await fixture(html`
-      <banner-thermometer title="attribute title"></banner-thermometer>
+      <banner-thermometer
+        .goalMetMessage=${'GOAL MET'}
+        .goalMessageMode=${GoalMessageMode.GoalMet}
+      >
+      </banner-thermometer>
     `);
 
-    expect(el.title).to.equal('attribute title');
-  });
-
-  it('passes the a11y audit', async () => {
-    const el: BannerThermometer = await fixture(html`
-      <banner-thermometer></banner-thermometer>
-    `);
-
-    await expect(el).shadowDom.to.be.accessible();
+    const goalMessage = el.shadowRoot?.querySelector(
+      '.donate-goal'
+    ) as HTMLDivElement;
+    expect(goalMessage.innerText).to.equal('GOAL MET');
   });
 });

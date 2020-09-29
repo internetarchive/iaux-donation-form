@@ -3,8 +3,21 @@
 <head>
   <meta charset="utf-8">
   <style>
+    html {
+      font-size: 10px;
+      font-family: sans-serif;
+    }
+
     body {
       background: #fafafa;
+    }
+
+    fieldset {
+      margin-bottom: 20px;
+    }
+
+    banner-thermometer {
+      height: 30px;
     }
   </style>
 </head>
@@ -15,12 +28,57 @@
     import { html, render } from 'lit-html';
     import '../dist/banner-thermometer.js';
 
-    const title = 'Hello owc World!';
+    function changeValue(e) {
+      const thermometer = document.querySelector('banner-thermometer');
+      thermometer.percentComplete = e.target.value;
+      const value = document.querySelector('#percentValue');
+      const numberValue = parseFloat(e.target.value);
+      value.innerHTML = `${Math.round(numberValue)}%`;
+    }
+
+    function changeMarkerTop(e) {
+      const thermometer = document.querySelector('banner-thermometer');
+      thermometer.style.setProperty('--bannerThermometerMarkerTop', e.target.value + "%");
+      const value = document.querySelector('#markerTopValue');
+      const numberValue = parseFloat(e.target.value);
+      value.innerHTML = `${Math.round(numberValue)}%`;
+    }
+
+    function changeMarkerHeight(e) {
+      const thermometer = document.querySelector('banner-thermometer');
+      thermometer.style.setProperty('--bannerThermometerMarkerHeight', e.target.value + "%");
+      const value = document.querySelector('#markerHeightValue');
+      const numberValue = parseFloat(e.target.value);
+      value.innerHTML = `${Math.round(numberValue)}%`;
+    }
+
     render(
       html`
-        <banner-thermometer .title=${title}>
-          some more light-dom
-        </banner-thermometer>
+        <fieldset>
+          <legend>Config</legend>
+          <dl>
+            <dt><label for="percentPicker">Current Value</label></dt>
+            <dd>
+              <input type="range" id="percentPicker" @input=${changeValue} min="0" max="100" value="25" />
+              <span id="percentValue">25%</span>
+            </dd>
+            <dt><label for="markerTop">Marker Top</label></dt>
+            <dd>
+              <input type="range" id="markerTop" @input=${changeMarkerTop} min="0" max="200" value="50" />
+              <span id="markerTopValue">50%</span>
+            </dd>
+            <dt><label for="markerHeight">Marker Height</label></dt>
+            <dd>
+              <input type="range" id="markerHeight" @input=${changeMarkerHeight} min="50" max="200" value="100" />
+              <span id="markerHeightValue">100%</span>
+            </dd>
+          </dl>
+        </fieldset>
+
+        <div class="thermometer-container">
+          <banner-thermometer>
+          </banner-thermometer>
+        </div>
       `,
       document.querySelector('#demo')
     );
