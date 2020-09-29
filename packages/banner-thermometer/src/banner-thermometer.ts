@@ -62,50 +62,61 @@ export class DonationBannerThermometer extends LitElement {
         aria-valuenow="${this.currentAmount}"
         aria-valuetext="${this.currentAmountDisplayValue}"
       >
-        <div class="thermometer-container">
-          <div class="thermometer-background">
+        <div class="thermometer-message-container">
+          <div class="thermometer-container">
+            <div class="thermometer-background">
+              <div
+                class="thermometer-fill"
+                style="width: ${this.percentComplete}%"
+              ></div>
+            </div>
             <div
-              class="thermometer-fill"
+              class="theremometer-value-container"
               style="width: ${this.percentComplete}%"
-            ></div>
-          </div>
-          <div
-            class="theremometer-value-container"
-            style="width: ${this.percentComplete}%"
-          >
-            <div class="thermometer-value-indicator"></div>
-            <div class="thermometer-value">
-              ${this.currentAmountDisplayValue}
+            >
+              <div class="thermometer-value-indicator"></div>
+              <div class="thermometer-value">
+                ${this.currentAmountDisplayValue}
+              </div>
             </div>
           </div>
+          <div class="donate-goal">${this.goalMessage}</div>
         </div>
-        <div class="donate-goal">${this.goalMessage}</div>
       </div>
     `;
   }
 
   static get styles(): CSSResult {
+    const thermometerHeight = css`var(--bannerThermometerHeight, 30px)`;
     const borderStyle = css`var(--bannerThermometerBorder, 1px solid #31A481)`;
     const backgroundColor = css`var(--bannerThermometerBackgroundColor, #D1FAED)`;
     const progressColor = css`var(--bannerThermometerProgressColor, #31A481)`;
     const borderRadius = css`var(--bannerThermometerBorderRadius, 20px)`;
     const markerTop = css`var(--bannerThermometerMarkerTop, 50%)`;
-    const markerHeight = css`var(--bannerThermometerMarkerHeight, 100%)`;
+    const markerHeight = css`var(--bannerThermometerMarkerHeight, 75%)`;
+    const markerBorder = css`var(--bannerThermometerMarkerBorder, ${borderStyle})`;
+    const progressValueLineHeight = css`var(--bannerThermometerProgressValueLineHeight, 1)`;
+    const goalMessageLineHeight = css`var(--bannerThermometerGoalMessageLineHeight, 1)`;
+    const goalMessagePadding = css`var(--bannerThermometerGoalMessagePadding, 0 10px)`;
 
     return css`
       :host {
         display: block;
-        height: 100%;
+        /* height: 100%; */
       }
 
       .container {
         height: 100%;
+      }
+
+      .thermometer-message-container {
+        height: ${thermometerHeight};
         display: flex;
         align-items: center;
       }
 
       .thermometer-container {
-        height: 100%;
+        height: ${thermometerHeight};
         flex: 1;
         position: relative;
       }
@@ -134,18 +145,19 @@ export class DonationBannerThermometer extends LitElement {
 
       .thermometer-value-indicator {
         height: 100%;
-        border-right: ${borderStyle};
+        border-right: ${markerBorder};
       }
 
       .thermometer-value {
+        line-height: ${progressValueLineHeight};
         text-align: right;
       }
 
       .donate-goal {
         text-align: left;
-        padding: 0px 10px;
+        padding: ${goalMessagePadding};
         text-transform: uppercase;
-        line-height: 1.4rem;
+        line-height: ${goalMessageLineHeight};
       }
     `;
   }
