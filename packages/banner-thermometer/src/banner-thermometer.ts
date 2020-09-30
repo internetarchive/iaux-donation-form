@@ -19,7 +19,10 @@ export class DonationBannerThermometer extends LitElement {
   @property({ type: String }) goalMessageMode: GoalMessageMode =
     GoalMessageMode.ShowGoalAmount;
 
-  @property({ type: String }) goalMessage = "We've reached our goal!";
+  @property({ type: String }) goalNearMessage =
+    'We’ve almost reached our goal!';
+
+  @property({ type: String }) goalReachedMessage = "We've reached our goal!";
 
   @property({ type: Number }) goalAmount = 6_500_000;
 
@@ -57,6 +60,12 @@ export class DonationBannerThermometer extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  private get goalMessage(): string {
+    return this.currentAmount >= this.goalAmount
+      ? this.goalReachedMessage
+      : this.goalNearMessage;
   }
 
   private get currentAmountDisplayValue(): string {

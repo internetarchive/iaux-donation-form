@@ -64,9 +64,14 @@
       thermometer.currentAmount = e.target.value;
     }
 
-    function goalMessage(e) {
+    function goalMetMessage(e) {
       const thermometer = document.querySelector('#thermometer');
-      thermometer.goalMessage = e.target.value;
+      thermometer.goalReachedMessage = e.target.value;
+    }
+
+    function goalNearMessage(e) {
+      const thermometer = document.querySelector('#thermometer');
+      thermometer.goalNearMessage = e.target.value;
     }
 
     function changeBorderColor(e) {
@@ -107,8 +112,15 @@
 
             <dt><label for="goalMet">Goal Message</label></dt>
             <dd>
-              <input type="checkbox" id="goalMet" @input=${goalMet} />
-              <input type="text" id="goalMessage" @input=${goalMessage} />
+              <div><input type="checkbox" id="goalMet" @input=${goalMet} /></div>
+              <div>
+                <label>Goal Met Message:</label>
+                <input type="text" id="goalMetMessage" @input=${goalMetMessage} value="We've reached our goal!" />
+              </div>
+              <div>
+                <label>Goal Near Message:</label>
+                <input type="text" id="goalNearMessage" @input=${goalNearMessage} value="We’ve almost reached our goal!" />
+              </div>
             </dd>
 
             <dt><label for="borderColor">Thermometer Border</label></dt>
