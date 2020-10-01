@@ -1,19 +1,31 @@
-# \<banner-thermometer>
+# Donation Banner Thermometer
 
-This webcomponent follows the [open-wc](https://github.com/open-wc/open-wc) recommendation.
+The Internet Archive Donation Banner Thermometer
+
+![Donation Banner Thermometer](./assets/screenshot.jpg "Donatino Banner Thermometer")
 
 ## Installation
 ```bash
-npm i banner-thermometer
+npm i @internetarchive/donation-banner-thermometer
 ```
 
 ## Usage
 ```html
 <script type="module">
-  import 'banner-thermometer/banner-thermometer.js';
+  import '@internetarchive/donation-banner-thermometer';
 </script>
 
-<banner-thermometer></banner-thermometer>
+<donation-banner-thermometer
+  currentAmount="75000" goalAmount="150000">
+</donation-banner-thermometer>
+```
+
+## Demo
+Check out this repo and run:
+
+```bash
+> npm install
+> npm run start
 ```
 
 ## Linting with ESLint, Prettier, and Types

@@ -24,9 +24,9 @@ export class DonationBannerThermometer extends LitElement {
 
   @property({ type: String }) goalReachedMessage = "We've reached our goal!";
 
-  @property({ type: Number }) goalAmount = 6_500_000;
+  @property({ type: Number }) goalAmount = 7_500_000;
 
-  @property({ type: Number }) currentAmount = 2_350_000;
+  @property({ type: Number }) currentAmount = 0;
 
   render(): TemplateResult {
     return html`

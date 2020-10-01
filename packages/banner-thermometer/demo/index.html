@@ -56,12 +56,24 @@
 
     function setGoal(e) {
       const thermometer = document.querySelector('#thermometer');
+      const currentAmountSlider = document.querySelector('#setCurrentAmountSlider');
+      currentAmountSlider.max = e.target.value;
       thermometer.goalAmount = e.target.value;
     }
 
     function setCurrentAmount(e) {
       const thermometer = document.querySelector('#thermometer');
       thermometer.currentAmount = e.target.value;
+    }
+
+    function setCurrentAmountSlider(e) {
+      const goal = parseFloat(document.querySelector('#setGoal').value);
+      const amount = parseFloat(e.target.value);
+      const currentAmount = document.querySelector('#setCurrentAmount');
+      currentAmount.value = amount;
+      // console.log('goal', goal, amount)
+      const thermometer = document.querySelector('#thermometer');
+      thermometer.currentAmount = amount;
     }
 
     function goalMetMessage(e) {
@@ -96,6 +108,11 @@
 
     render(
       html`
+        <div class="thermometer-container">
+          <donation-banner-thermometer id="thermometer" currentAmount=${defaultCurrentAmount} goalAmount=${defaultGoal}>
+          </donation-banner-thermometer>
+        </div>
+
         <fieldset>
           <legend>Config</legend>
           <dl>
@@ -108,6 +125,7 @@
             <dt><label for="setGoal">Set Current Amount</label></dt>
             <dd>
               <input type="text" id="setCurrentAmount" @input=${setCurrentAmount} value=${defaultCurrentAmount} />
+              <input type="range" id="setCurrentAmountSlider" @input=${setCurrentAmountSlider} min="0" max="${defaultGoal}" />
             </dd>
 
             <dt><label for="goalMet">Goal Message</label></dt>
@@ -157,11 +175,6 @@
 
           </dl>
         </fieldset>
-
-        <div class="thermometer-container">
-          <donation-banner-thermometer id="thermometer" currentAmount=${defaultCurrentAmount} goalAmount=${defaultGoal}>
-          </donation-banner-thermometer>
-        </div>
       `,
       document.querySelector('#demo')
     );
