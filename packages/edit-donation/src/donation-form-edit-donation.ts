@@ -127,7 +127,10 @@ export class DonationFormEditDonation extends LitElement {
     if (!this.customAmountButton || !this.customAmountInput) {
       return;
     }
-    if (this.amountOptions.includes(this.donationInfo.amount)) {
+    if (
+      !this.customAmountButton.checked &&
+      this.amountOptions.includes(this.donationInfo.amount)
+    ) {
       const radioButton = this.shadowRoot?.querySelector(
         `input[type="radio"][name="${EditDonationSelectionGroup.Amount}"][value="${this.donationInfo.amount}"]`
       ) as HTMLInputElement;
