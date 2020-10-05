@@ -80,7 +80,7 @@ describe('Braintree Manager', () => {
     expect(endpointManager.requestSubmitted?.deviceData).to.equal(undefined);
   });
 
-  it('can properly set referrer and logged in user and submits them to the endpoint', async () => {
+  it('can properly set referrer, origin, and logged in user and submits them to the endpoint', async () => {
     const paymentClients = new MockPaymentClients();
     const endpointManager = new MockEndpointManager();
 
@@ -106,6 +106,7 @@ describe('Braintree Manager', () => {
 
     braintreeManager.setLoggedInUser('foo-user');
     braintreeManager.setReferrer('foo-referrer');
+    braintreeManager.setOrigin('foo-origin');
 
     await braintreeManager.submitDonation({
       nonce: 'boop',
@@ -117,6 +118,35 @@ describe('Braintree Manager', () => {
 
     expect(endpointManager.requestSubmitted?.customFields.referrer).to.equal('foo-referrer');
     expect(endpointManager.requestSubmitted?.customFields.logged_in_user).to.equal('foo-user');
+    expect(endpointManager.requestSubmitted?.customFields.origin).to.equal('foo-origin');
+  });
+
+  it('can be initialized with referrer, origin, and logged in user and submits them to the endpoint', async () => {
+    const paymentClients = new MockPaymentClients();
+    const endpointManager = new MockEndpointManager();
+
+    const braintreeManager = new BraintreeManager({
+      authorizationToken: 'foo',
+      paymentClients,
+      endpointManager,
+      hostedFieldConfig: mockHostedFieldConfig,
+      hostingEnvironment: HostingEnvironment.Development,
+      loggedInUser: 'foo-user',
+      referrer: 'foo-referrer',
+      origin: 'foo-origin',
+    });
+
+    await braintreeManager.submitDonation({
+      nonce: 'boop',
+      paymentProvider: PaymentProvider.CreditCard,
+      donationInfo: new MockDonationInfo(),
+      billingInfo: mockBillingInfo,
+      customerInfo: mockCustomerInfo,
+    });
+
+    expect(endpointManager.requestSubmitted?.customFields.referrer).to.equal('foo-referrer');
+    expect(endpointManager.requestSubmitted?.customFields.logged_in_user).to.equal('foo-user');
+    expect(endpointManager.requestSubmitted?.customFields.origin).to.equal('foo-origin');
   });
 
   it('properly submits an upsell donation', async () => {

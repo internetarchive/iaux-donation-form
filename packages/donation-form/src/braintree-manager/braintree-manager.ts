@@ -25,6 +25,26 @@ import { PaymentProvidersInterface } from './payment-providers-interface';
 export class BraintreeManager implements BraintreeManagerInterface {
   private referrer?: string;
 
+  /**
+   * The origin is made up of campaign / ABTest information that the user originated from.
+   *
+   * The field is a freeform string so it can be anything, but make sure it's something
+   * identifiable so it can be queried in CiviCRM.
+   *
+   * For instance, we use this format for the Donation Banner:
+   * - `{Source}-{Test Name}-{Variant Name}`, eg:
+   * - `DonateBanner-Campaign Start 2020-IADefault`
+   * - `DonateBanner-Mid Campaign-IAThermometer`
+   *
+   * For additional specificity, you could add additional info, ie.
+   * - `DonateBanner-MidJuly2020 Campaign-VariantA-Button1`
+   *
+   * @private
+   * @type {string}
+   * @memberof BraintreeManager
+   */
+  private origin?: string;
+
   private loggedInUser?: string;
 
   /**
@@ -68,6 +88,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
     // eslint-disable-next-line @typescript-eslint/camelcase
     customFields.logged_in_user = this.loggedInUser;
     customFields.referrer = this.referrer;
+    customFields.origin = this.origin;
 
     // This is interesting and applies only to Venmo, but will work for other providers as well.
     // In Safari, `donationInfo` actually comes through as a DonationPaymentInfo object,
@@ -200,6 +221,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
     googlePayMerchantId?: string;
     referrer?: string;
     loggedInUser?: string;
+    origin?: string;
   }) {
     this.authorizationToken = options.authorizationToken;
     this.endpointManager = options.endpointManager;
@@ -208,6 +230,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
 
     this.referrer = options.referrer;
     this.loggedInUser = options.loggedInUser;
+    this.origin = options.origin;
 
     this.paymentProviders = new PaymentProviders({
       braintreeManager: this,
@@ -233,5 +256,10 @@ export class BraintreeManager implements BraintreeManagerInterface {
   /** @inheritdoc */
   setLoggedInUser(loggedInUser: string): void {
     this.loggedInUser = loggedInUser;
+  }
+
+  /** @inheritdoc */
+  setOrigin(origin: string): void {
+    this.origin = origin;
   }
 }
