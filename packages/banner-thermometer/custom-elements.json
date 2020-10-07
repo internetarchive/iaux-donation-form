@@ -1,0 +1,100 @@
+{
+  "version": 2,
+  "tags": [
+    {
+      "name": "banner-thermometer",
+      "description": "The donation banner thermometer",
+      "properties": [
+        {
+          "name": "goalMessageMode",
+          "type": "String",
+          "description": "The goal message mode (showgoalamount / showgoalmessage)",
+          "default": "showgoalamount"
+        },
+        {
+          "name": "goalNearMessage",
+          "type": "String",
+          "description": "The goal message when the amount is near the end",
+          "default": "We’ve almost reached our goal!"
+        },
+        {
+          "name": "goalReachedMessage",
+          "type": "String",
+          "description": "The goal message when the goal has been met",
+          "default": "We've reached our goal!"
+        },
+        {
+          "name": "goalAmount",
+          "type": "Number",
+          "description": "The goal amount",
+          "default": 7500000
+        },
+        {
+          "name": "currentAmount",
+          "type": "Number",
+          "description": "The current amount raised",
+          "default": 0
+        }
+      ],
+      "events": [],
+      "slots": [],
+      "cssProperties": [
+        {
+          "name": "--bannerThermometerHeight",
+          "description": "Height of the thermometer",
+          "type": "String"
+        },
+        {
+          "name": "--bannerThermometerBorder",
+          "description": "Thermometer border",
+          "type": "String"
+        },
+        {
+          "name": "--bannerThermometerBackgroundColor",
+          "description": "Thermometer background color",
+          "type": "Color"
+        },
+        {
+          "name": "--bannerThermometerProgressColor",
+          "description": "Thermometer progress color",
+          "type": "Color"
+        },
+        {
+          "name": "--bannerThermometerBorderRadius",
+          "description": "Thermometer border radiux",
+          "type": "String"
+        },
+        {
+          "name": "--bannerThermometerMarkerTop",
+          "description": "The top position of the thermometer marker",
+          "type": "String"
+        },
+        {
+          "name": "--bannerThermometerMarkerHeight",
+          "description": "Height of the thermometer marker",
+          "type": "String"
+        },
+        {
+          "name": "--bannerThermometerMarkerBorder",
+          "description": "Theremometer marker border",
+          "type": "String"
+        },
+        {
+          "name": "--bannerThermometerProgressValueLineHeight",
+          "description": "Progress value line height",
+          "type": "String"
+        },
+        {
+          "name": "--bannerThermometerGoalMessageLineHeight",
+          "description": "Goal message line height",
+          "type": "String"
+        },
+        {
+          "name": "--bannerThermometerGoalMessagePadding",
+          "description": "Goal message padding",
+          "type": "String"
+        }
+      ]
+    }
+  ]
+}
