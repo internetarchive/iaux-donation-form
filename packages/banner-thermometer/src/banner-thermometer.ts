@@ -112,7 +112,6 @@ export class DonationBannerThermometer extends LitElement {
     return css`
       :host {
         display: block;
-        /* height: 100%; */
       }
 
       .container {
