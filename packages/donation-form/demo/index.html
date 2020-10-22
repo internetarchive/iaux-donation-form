@@ -1,50 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-  <title>Home</title>
+  <title>Donation Form Demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="assets/style.css" />
 
   <style>
-    html {
-      font-size: 10px;
+    body.modal-manager-open {
+      overflow: hidden;
     }
 
-    .banner {
-      border: 1px solid black;
-      background-color: lightskyblue;
-      padding: 10px;
-      margin-bottom: 10px;
+    modal-manager {
+      display: none;
+    }
+
+    modal-manager[mode='open'] {
+      display: block;
+    }
+
+    donation-form-controller {
+      display: block;
     }
   </style>
+
 </head>
-
 <body>
-  <div class="banner">
-    <h3>Banner</h3>
-    <form action="donate.html?amount=5&frequency=one-time">
-      <fieldset>
-        <legend>Frequency</legend>
-        <input type="radio" name="frequency" value="one-time" checked />One Time
-        <input type="radio" name="frequency" value="monthly" />Monthly
-      </fieldset>
-      <fieldset>
-        <legend>Amount</legend>
-        <input type="radio" name="amount" value="5" checked />$5
-        <input type="radio" name="amount" value="10" />$10
-        <input type="radio" name="amount" value="25" />$25
-        <input type="radio" name="amount" value="50" />$50
-        <input type="radio" name="amount" value="100" />$100
-        <input type="radio" name="amount" value="250" />$250
-        <input type="radio" name="amount" value="500" />$500
-      </fieldset>
-      <input type="submit" />
-    </form>
+  <header>
+    <a href="recaptcha.html">Recaptcha Demo</a>
+  </header>
 
-    <!-- <a href="donate.html?amount=5">$5</a>
-    <a href="donate.html?amount=10">$10</a>
-    <a href="donate.html?amount=25">$25</a> -->
-  </div>
+  <div id="demo"></div>
 
-  <a href="donate.html">Go to Donate Page without referrer</a>
+  <script type="module">
+    import { render, html } from 'lit-html';
+    import '../dist/index.js';
+    import { BraintreeEndpointManager } from '../dist/demo/braintree-endpoint-manager.js';
 
+    const braintreeEndpointManager = new BraintreeEndpointManager();
+
+    render(
+      html`
+        <modal-manager>
+          <!--
+            The PayPal buttons cannot exist in the shadowDOM so they have to be slotted
+            from the top.
+          -->
+          <div slot="paypal-upsell-button">
+            <div id="paypal-upsell-button"></div>
+          </div>
+        </modal-manager>
+
+        <donation-form-controller
+          environment='dev'
+          braintreeAuthToken='sandbox_x634jsj7_7zybks4ybp63pbmd'
+          recaptchaSiteKey='6LeTUvYUAAAAAPTvW98MaXyS8c6vxk4-9n8DI1ve'
+          venmoProfileId='1953896702662410263'
+          googlePayMerchantId=''
+          .endpointManager=${braintreeEndpointManager}
+          referrer='demo-app'
+          loggedInUser='demo-user'>
+        </donation-form-controller>
+
+        <div id="recaptcha"></div>
+      `,
+      document.querySelector('#demo')
+    );
+
+    const recaptchaElement = document.querySelector('#recaptcha');
+    const modalManager = document.querySelector('modal-manager');
+    const formController = document.querySelector('donation-form-controller');
+    formController.modalManager = modalManager;
+    formController.recaptchaElement = recaptchaElement;
+  </script>
 </body>
 </html>
