@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+  <title>Recaptcha Demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="assets/style.css" />
+
+  <style>
+    #demo {
+      text-align: center;
+    }
+
+    textarea {
+      width: 50%;
+      height: 20rem;
+    }
+  </style>
+
+</head>
+<body>
+  <header>
+    <a href="index.html">Donation Form Demo</a>
+  </header>
+
+  <div id="demo"></div>
+
+  <script type="module">
+    import { render, html } from 'lit-html';
+    import { LazyLoaderService } from '@internetarchive/lazy-loader-service';
+    import { RecaptchaManager } from '../dist/index.js';
+
+    const lazyLoader = new LazyLoaderService();
+    let recaptchaManager;
+
+    // The loader for the recaptcha library is relying on an onload callback from the recaptcha
+    // library because even when the library has loaded, it is still not ready
+    // As recommended by Recaptcha, we attach a callback to the window object before starting
+    // the load and remove it once the load is complete and resolve the promise.
+    window.grecaptchaLoadedCallback = () => {
+      setTimeout(() => {
+        delete window.grecaptchaLoadedCallback;
+      }, 10);
+
+      const recaptchaContainer = document.querySelector('#recaptcha');
+
+      // setup the recaptcha manager
+      recaptchaManager = new RecaptchaManager({
+        grecaptchaLibrary: window.grecaptcha,
+        siteKey: '6LeTUvYUAAAAAPTvW98MaXyS8c6vxk4-9n8DI1ve',
+      });
+
+      recaptchaManager.setup(recaptchaContainer, 1, 'light', 'image');
+    };
+
+    lazyLoader.loadScript({
+      src:
+        'https://www.google.com/recaptcha/api.js?onload=grecaptchaLoadedCallback&render=explicit',
+    });
+
+    async function startRecaptcha() {
+      const result = document.querySelector('#result');
+      try {
+        const token = await recaptchaManager.execute();
+        result.value = token;
+      } catch (error) {
+        result.value = `Error: ${error}`;
+      }
+    }
+
+    render(
+      html`
+        <h1>Recaptcha Manager</h1>
+        <button @click=${startRecaptcha}>Start Recaptcha</button>
+        <div id="recaptcha"></div>
+        <textarea id="result"></textarea>
+      `,
+      document.querySelector('#demo')
+    );
+  </script>
+</body>
+</html>

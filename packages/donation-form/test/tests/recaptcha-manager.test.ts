@@ -54,7 +54,7 @@ describe('ReCaptcha Manager', () => {
     }
   });
 
-  it('rejects if execute gets called more than once', async () => {
+  it('resets the captcha if execute() gets called more than once', async () => {
     const recaptchaElement = (await fixture(html`
       <div></div>
     `)) as HTMLElement;
@@ -65,11 +65,8 @@ describe('ReCaptcha Manager', () => {
     });
     recaptchaManager.setup(recaptchaElement, 1, 'dark', 'image');
     recaptchaManager.execute();
-    try {
-      await recaptchaManager.execute();
-      expect.fail('should not get here');
-    } catch (error) {
-      expect(error).to.equal('Execution already in progress.');
-    }
+    expect(mockGrecaptcha.resetCalled).to.be.false;
+    recaptchaManager.execute();
+    expect(mockGrecaptcha.resetCalled).to.be.true;
   });
 });
