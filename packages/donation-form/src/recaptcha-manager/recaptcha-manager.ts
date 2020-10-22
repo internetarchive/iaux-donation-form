@@ -53,9 +53,7 @@ export class RecaptchaManager implements RecaptchaManagerInterface {
    */
   execute(): Promise<string> {
     if (this.isExecuting) {
-      return new Promise((resolve, reject) => {
-        reject('Execution already in progress.');
-      });
+      this.finishExecution();
     }
     this.isExecuting = true;
     return new Promise((resolve, reject) => {
