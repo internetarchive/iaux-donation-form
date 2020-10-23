@@ -143,6 +143,8 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
   private async handleHostedFieldTokenizationError(error: braintree.BraintreeError): Promise<void> {
     const handler = await this.braintreeManager.paymentProviders.creditCardHandler.get();
 
+    handler.showErrorMessage();
+
     switch (error.code) {
       case 'HOSTED_FIELDS_FIELDS_EMPTY':
         // occurs when none of the fields are filled in

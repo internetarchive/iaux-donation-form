@@ -67,6 +67,7 @@ export class BadgedInput extends LitElement {
       }
 
       .input-wrapper.error {
+        box-shadow: inset 0px 0px 0px 1px ${errorColorCss};
         border-color: ${errorColorCss};
       }
 

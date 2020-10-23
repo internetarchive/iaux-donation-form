@@ -107,7 +107,7 @@ export class DonationForm extends LitElement {
         headline="Enter payment information"
         id="contactFormSection"
       >
-        <contact-form @form-validity-changed=${this.contactFormValidityChanged}></contact-form>
+        <contact-form></contact-form>
         <div class="credit-card-fields" class="${this.creditCardVisible ? '' : 'hidden'}">
           <slot name="braintree-hosted-fields"></slot>
         </div>
@@ -115,11 +115,7 @@ export class DonationForm extends LitElement {
 
       <donation-form-section sectionBadge="5">
         <slot name="recaptcha"></slot>
-        <button
-          id="donate-button"
-          @click=${this.donateClicked}
-          ?disabled=${this.donateButtonDisabled}
-        >
+        <button id="donate-button" @click=${this.donateClicked}>
           Donate
         </button>
 
@@ -231,7 +227,7 @@ export class DonationForm extends LitElement {
     const creditCardHandler = await this.braintreeManager?.paymentProviders.creditCardHandler.get();
     creditCardHandler?.hideErrorMessage();
 
-    const valid = this.contactForm.validate();
+    const valid = this.contactForm.reportValidity();
 
     if (!valid) {
       return;
@@ -380,7 +376,7 @@ export class DonationForm extends LitElement {
     const donateButtonFontSize = css`var(--donateButtonFontSize, 2.6rem)`;
     const donateButtonHeight = css`var(--donateButtonHeight, 4rem)`;
     const donateButtonColor = css`var(--donateButtonColor, rgba(49, 164, 129, 1))`;
-    const donateButtonDisabledColor = css`var(--donateButtonDisabledColor, rgba(49, 164, 129, 0.5))`;
+    const donateButtonHoverColor = css`var(--donateButtonColor, rgba(39, 131, 103, 1))`;
 
     return css`
       h1 {
@@ -421,9 +417,8 @@ export class DonationForm extends LitElement {
         height: ${donateButtonHeight};
       }
 
-      #donate-button:disabled {
-        background-color: ${donateButtonDisabledColor};
-        cursor: not-allowed;
+      #donate-button:hover {
+        background-color: ${donateButtonHoverColor};
       }
     `;
   }

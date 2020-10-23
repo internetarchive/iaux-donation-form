@@ -8,6 +8,8 @@ import {
   query,
 } from 'lit-element';
 
+import { ifDefined } from 'lit-html/directives/if-defined';
+
 import {
   BillingInfo,
   CustomerInfo,
@@ -15,6 +17,7 @@ import {
 } from '@internetarchive/donation-form-data-models';
 import { AutoCompleteFieldOptions } from './autocomplete-field-options';
 import { IconSpaceOption } from '../badged-input';
+import { BadgedInput } from '../badged-input';
 import '../badged-input';
 
 import emailImg from '@internetarchive/icon-email';
@@ -23,15 +26,55 @@ import userIcon from '@internetarchive/icon-user';
 
 @customElement('contact-form')
 export class ContactForm extends LitElement {
+  @query('badged-input.email') emailBadgedInput!: BadgedInput;
   @query('#email') emailField!: HTMLInputElement;
+  @query('badged-input.firstName') firstNameBadgedInput!: BadgedInput;
   @query('#firstName') firstNameField!: HTMLInputElement;
+  @query('badged-input.lastName') lastNameBadgedInput!: BadgedInput;
   @query('#lastName') lastNameField!: HTMLInputElement;
+  @query('badged-input.postalCode') postalBadgedInput!: BadgedInput;
   @query('#postalCode') postalCodeField!: HTMLInputElement;
+
+  @query('#error-message') errorMessage!: HTMLDivElement;
   @query('form') form!: HTMLFormElement;
 
-  validate(): boolean {
-    const valid = this.form.reportValidity();
+  reportValidity(): boolean {
+    const emailValid = this.emailField.checkValidity();
+    if (!emailValid) {
+      this.emailBadgedInput.error = true;
+    }
+
+    const firstNameValid = this.firstNameField.checkValidity();
+    if (!firstNameValid) {
+      this.firstNameBadgedInput.error = true;
+    }
+
+    const lastNameValid = this.lastNameField.checkValidity();
+    if (!lastNameValid) {
+      this.lastNameBadgedInput.error = true;
+    }
+
+    const postalValid = this.postalCodeField.checkValidity();
+    if (!postalValid) {
+      this.postalBadgedInput.error = true;
+    }
+
+    const valid = emailValid && firstNameValid && lastNameValid && postalValid;
+    if (!valid) {
+      this.errorMessage.innerText = 'Please enter any missing contact information below';
+    } else {
+      this.errorMessage.innerText = '';
+    }
+
     return valid;
+  }
+
+  checkValidity(): boolean {
+    const emailValid = this.emailField.checkValidity();
+    const firstNameValid = this.firstNameField.checkValidity();
+    const lastNameValid = this.lastNameField.checkValidity();
+    const postalValid = this.postalCodeField.checkValidity();
+    return emailValid && firstNameValid && lastNameValid && postalValid;
   }
 
   focus(): void {
@@ -41,6 +84,7 @@ export class ContactForm extends LitElement {
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
+      <div id="error-message"></div>
       <form>
         <fieldset>
           <div class="row has-icon">
@@ -76,6 +120,7 @@ export class ContactForm extends LitElement {
               autocomplete: 'postal-code',
               required: true,
               icon: localePinImg,
+              validationPattern: '[a-zA-Z\\-\\d\\s]*',
             })}
           </div>
         </fieldset>
@@ -83,17 +128,14 @@ export class ContactForm extends LitElement {
     `;
   }
 
-  private formValid = false;
-
-  private inputChanged(): void {
-    const isValid = this.form.checkValidity();
-    // only dispatch if there is a change
-    if (isValid === this.formValid) {
-      return;
-    }
-    this.formValid = isValid;
-    const event = new CustomEvent('form-validity-changed', { detail: { isValid } });
-    this.dispatchEvent(event);
+  // reset the error state when the user changes the input
+  private inputChanged(e: KeyboardEvent): void {
+    const input = e.target as HTMLInputElement;
+    const inputIdentifier = input.id;
+    const badgedInput = this.shadowRoot?.querySelector(
+      `badged-input.${inputIdentifier}`,
+    ) as BadgedInput;
+    badgedInput.error = false;
   }
 
   private generateInput(options: {
@@ -104,6 +146,7 @@ export class ContactForm extends LitElement {
     autocomplete?: AutoCompleteFieldOptions;
     icon?: TemplateResult;
     iconSpaceOption?: IconSpaceOption;
+    validationPattern?: string;
   }): TemplateResult {
     const required = options.required ?? true;
     const fieldType = options.fieldType ?? 'text';
@@ -123,6 +166,7 @@ export class ContactForm extends LitElement {
           aria-label=${options.placeholder}
           placeholder=${options.placeholder}
           autocomplete=${options.autocomplete ?? 'on'}
+          pattern=${ifDefined(options.validationPattern)}
           @input=${this.inputChanged}
           ?required=${required}
         />
@@ -190,6 +234,12 @@ export class ContactForm extends LitElement {
 
       badged-input.lastName {
         margin-left: -1px;
+      }
+
+      #error-message {
+        color: red;
+        font-size: 1.4rem;
+        margin-bottom: 0.6rem;
       }
 
       #lastName {
