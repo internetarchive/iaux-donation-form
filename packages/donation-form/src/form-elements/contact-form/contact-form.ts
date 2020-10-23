@@ -21,19 +21,12 @@ import emailImg from '@internetarchive/icon-email';
 import localePinImg from '@internetarchive/icon-locale-pin';
 import userIcon from '@internetarchive/icon-user';
 
-import countries from './countries';
-
 @customElement('contact-form')
 export class ContactForm extends LitElement {
   @query('#email') emailField!: HTMLInputElement;
   @query('#firstName') firstNameField!: HTMLInputElement;
   @query('#lastName') lastNameField!: HTMLInputElement;
-  @query('#streetAddress') streetAddressField!: HTMLInputElement;
-  @query('#extendedAddress') extendedAddressField!: HTMLInputElement;
-  @query('#locality') localityField!: HTMLInputElement;
-  @query('#region') regionField!: HTMLInputElement;
   @query('#postalCode') postalCodeField!: HTMLInputElement;
-  @query('#countryCodeAlpha2') countryCodeAlpha2Field!: HTMLSelectElement;
   @query('form') form!: HTMLFormElement;
 
   validate(): boolean {
@@ -60,9 +53,6 @@ export class ContactForm extends LitElement {
               icon: emailImg,
             })}
           </div>
-        </fieldset>
-
-        <fieldset>
           <div class="row has-icon">
             ${this.generateInput({
               id: 'firstName',
@@ -71,61 +61,22 @@ export class ContactForm extends LitElement {
               autocomplete: 'given-name',
               icon: userIcon,
             })}
-          </div>
-
-          <div class="row">
             ${this.generateInput({
               id: 'lastName',
               placeholder: 'Last name',
               autocomplete: 'family-name',
               required: true,
+              iconSpaceOption: IconSpaceOption.NoIconSpace,
             })}
           </div>
-        </fieldset>
-
-        <fieldset>
-          <div class="row">
-            ${this.generateInput({
-              id: 'streetAddress',
-              placeholder: 'Address Line 1',
-              required: true,
-              autocomplete: 'address-line1',
-              icon: localePinImg,
-            })}
-          </div>
-          <div class="row">
-            ${this.generateInput({
-              id: 'extendedAddress',
-              placeholder: 'Address Line 2 (optional)',
-              autocomplete: 'address-line2',
-              required: false,
-            })}
-          </div>
-          <div class="row">
-            ${this.generateInput({
-              id: 'locality',
-              placeholder: 'City',
-              autocomplete: 'address-level2',
-              required: true,
-            })}
-          </div>
-          <div class="row">
-            ${this.generateInput({
-              id: 'region',
-              placeholder: 'State / Province',
-              autocomplete: 'address-level1',
-              required: true,
-            })}
+          <div class="row has-icon">
             ${this.generateInput({
               id: 'postalCode',
               placeholder: 'Zip / Postal',
               autocomplete: 'postal-code',
               required: true,
-              iconSpaceOption: IconSpaceOption.NoIconSpace,
+              icon: localePinImg,
             })}
-          </div>
-          <div class="row">
-            ${this.countrySelector}
           </div>
         </fieldset>
       </form>
@@ -159,32 +110,22 @@ export class ContactForm extends LitElement {
     const iconOption = options.iconSpaceOption ?? IconSpaceOption.IconSpace;
 
     return html`
-      <badged-input class=${options.id} .icon=${options.icon} .iconSpaceOption=${iconOption}>
+      <badged-input
+        class=${options.id}
+        .icon=${options.icon}
+        .iconSpaceOption=${iconOption}
+        ?required=${options.required}
+      >
+        <label for=${options.id}>${options.placeholder}</label>
         <input
           type=${fieldType}
           id=${options.id}
+          aria-label=${options.placeholder}
           placeholder=${options.placeholder}
           autocomplete=${options.autocomplete ?? 'on'}
           @input=${this.inputChanged}
           ?required=${required}
         />
-      </badged-input>
-    `;
-  }
-
-  private get countrySelector(): TemplateResult {
-    const selectedCountry = 'US';
-
-    return html`
-      <badged-input>
-        <select id="countryCodeAlpha2">
-          ${Object.keys(countries).map(key => {
-            const name = countries[key];
-            return html`
-              <option value=${key} ?selected=${key === selectedCountry}>${name}</option>
-            `;
-          })}
-        </select>
       </badged-input>
     `;
   }
@@ -198,12 +139,7 @@ export class ContactForm extends LitElement {
 
   get billingInfo(): BillingInfo {
     const billingInfo = new BillingInfo({
-      streetAddress: this.streetAddressField.value,
-      extendedAddress: this.extendedAddressField.value,
-      locality: this.localityField.value,
-      region: this.regionField.value,
       postalCode: this.postalCodeField.value,
-      countryCodeAlpha2: this.countryCodeAlpha2Field.value,
     });
     return billingInfo;
   }
@@ -218,8 +154,8 @@ export class ContactForm extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 1rem)`;
-    const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 3rem)`;
+    const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 3rem)`;
+    const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 5rem)`;
 
     const fieldSetSpacing = css`var(--fieldSetSpacing, 1rem)`;
     const fieldFontFamily = css`var(--fontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
@@ -241,7 +177,7 @@ export class ContactForm extends LitElement {
       double outlines caused by the fields being right next to each other */
       .row {
         display: flex;
-        margin-top: 1px;
+        margin-top: -1px;
       }
 
       fieldset .row:first-child {
@@ -252,21 +188,16 @@ export class ContactForm extends LitElement {
         width: 100%;
       }
 
-      badged-input.region {
-        width: 60%;
+      badged-input.lastName {
+        margin-left: -1px;
       }
 
-      badged-input.postalCode {
-        margin-left: 1px;
-        width: 40%;
-      }
-
-      #region {
-        width: ${iconFieldWidth};
-      }
-
-      #postalCode {
+      #lastName {
         width: ${noIconFieldWidth};
+      }
+
+      label {
+        display: none;
       }
 
       input {
@@ -279,20 +210,6 @@ export class ContactForm extends LitElement {
         font-size: ${fieldFontSize};
         padding: 0;
         font-family: ${fieldFontFamily};
-      }
-
-      select {
-        width: ${iconFieldWidth};
-        height: 100%;
-        box-sizing: border-box;
-        font-weight: bold;
-        font-size: ${fieldFontSize};
-        font-family: ${fieldFontFamily};
-        border: 0;
-        background: #fff;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
       }
     `;
   }

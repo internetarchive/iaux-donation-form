@@ -19,6 +19,8 @@ export class BadgedInput extends LitElement {
 
   @property({ type: Object }) icon?: TemplateResult;
 
+  @property({ type: Boolean }) required = false;
+
   @property({ type: String }) iconSpaceOption: IconSpaceOption = IconSpaceOption.IconSpace;
 
   /** @inheritdoc */
@@ -26,6 +28,11 @@ export class BadgedInput extends LitElement {
     return html`
       <div class="input-wrapper ${this.errorClass} ${this.iconSpaceOptionClass}">
         <div class="icon-container">${this.icon}</div>
+        ${this.required
+          ? html`
+              <div class="required-indicator">*</div>
+            `
+          : ''}
         <slot></slot>
       </div>
     `;
@@ -41,23 +48,26 @@ export class BadgedInput extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const outlineCss = css`var(--inputBorder, 1px solid #d9d9d9)`;
-    const outlineErrorCss = css`var(--badgedInputBorderErrorColor, red)`;
+    const borderCss = css`var(--inputBorder, 1px solid #d9d9d9)`;
+    const errorColorCss = css`var(--badgedInputBorderErrorColor, red)`;
     const iconSize = css`var(--badgedInputIconSize, 1.4rem)`;
     const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 3rem)`;
     const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 1rem)`;
     const fieldHeight = css`var(--badgedInputHeight, 3rem)`;
+    const requiredIndicatorColor = css`var(--badgedInputRequiredIndicatorColor, red)`;
+    const requiredIndicatorMargin = css`var(--badgedInputRequiredIndicatorMargin, 0 0.25rem 0 0)`;
+    const requiredIndicatorFontSize = css`var(--badgedInputRequiredIndicatorFontSize, 2rem)`;
 
     return css`
       .input-wrapper {
-        width: 100%;
-        outline: ${outlineCss};
+        border: ${borderCss};
         height: ${fieldHeight};
         display: flex;
+        align-items: center;
       }
 
       .input-wrapper.error {
-        outline-color: ${outlineErrorCss};
+        border-color: ${errorColorCss};
       }
 
       .input-wrapper.no-icon-space .icon-container {
@@ -74,6 +84,12 @@ export class BadgedInput extends LitElement {
 
       .icon-container svg {
         height: ${iconSize};
+      }
+
+      .required-indicator {
+        color: ${requiredIndicatorColor};
+        font-size: ${requiredIndicatorFontSize};
+        margin: ${requiredIndicatorMargin};
       }
     `;
   }
