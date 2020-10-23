@@ -69,25 +69,6 @@ describe('Donation Form', () => {
     expect(contactFormSection?.classList.contains('hidden')).to.be.false;
   });
 
-  it('activates the donate button when contact info is valid', async () => {
-    const el = (await fixture(html`
-      <donation-form></donation-form>
-    `)) as DonationForm;
-    const braintreeManager = new MockBraintreeManager();
-    el.braintreeManager = braintreeManager;
-    const paymentSelector = el.shadowRoot?.querySelector('payment-selector') as PaymentSelector;
-    const venmoButton = paymentSelector.shadowRoot?.querySelector('.venmo') as HTMLButtonElement;
-    const clickEvent = new MouseEvent('click');
-    venmoButton.dispatchEvent(clickEvent);
-    await elementUpdated(el);
-    const donateButton = el.shadowRoot?.querySelector('#donate-button') as HTMLButtonElement;
-    expect(donateButton.disabled).to.be.true;
-    const contactForm = el.shadowRoot?.querySelector('contact-form') as ContactForm;
-    fillInContactForm(contactForm);
-    await elementUpdated(el);
-    expect(donateButton.disabled).to.be.false;
-  });
-
   it('properly configures the flow handlers when they are set', async () => {
     const donationInfo = new DonationPaymentInfo({
       donationType: DonationType.Monthly,
