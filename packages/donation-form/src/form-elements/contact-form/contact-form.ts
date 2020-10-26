@@ -28,12 +28,12 @@ import userIcon from '@internetarchive/icon-user';
 export class ContactForm extends LitElement {
   @query('badged-input.email') emailBadgedInput!: BadgedInput;
   @query('#email') emailField!: HTMLInputElement;
-  @query('badged-input.firstName') firstNameBadgedInput!: BadgedInput;
-  @query('#firstName') firstNameField!: HTMLInputElement;
-  @query('badged-input.lastName') lastNameBadgedInput!: BadgedInput;
-  @query('#lastName') lastNameField!: HTMLInputElement;
-  @query('badged-input.postalCode') postalBadgedInput!: BadgedInput;
-  @query('#postalCode') postalCodeField!: HTMLInputElement;
+  @query('badged-input.first-name') firstNameBadgedInput!: BadgedInput;
+  @query('#first-name') firstNameField!: HTMLInputElement;
+  @query('badged-input.last-name') lastNameBadgedInput!: BadgedInput;
+  @query('#last-name') lastNameField!: HTMLInputElement;
+  @query('badged-input.postal-code') postalBadgedInput!: BadgedInput;
+  @query('#postal-code') postalCodeField!: HTMLInputElement;
 
   @query('#error-message') errorMessage!: HTMLDivElement;
   @query('form') form!: HTMLFormElement;
@@ -93,21 +93,24 @@ export class ContactForm extends LitElement {
               placeholder: 'Email',
               required: true,
               fieldType: 'email',
+              name: 'email',
               autocomplete: 'email',
               icon: emailImg,
             })}
           </div>
           <div class="row has-icon">
             ${this.generateInput({
-              id: 'firstName',
+              id: 'first-name',
               placeholder: 'First name',
+              name: 'fname',
               required: true,
               autocomplete: 'given-name',
               icon: userIcon,
             })}
             ${this.generateInput({
-              id: 'lastName',
+              id: 'last-name',
               placeholder: 'Last name',
+              name: 'lname',
               autocomplete: 'family-name',
               required: true,
               iconSpaceOption: IconSpaceOption.NoIconSpace,
@@ -115,12 +118,14 @@ export class ContactForm extends LitElement {
           </div>
           <div class="row has-icon">
             ${this.generateInput({
-              id: 'postalCode',
+              id: 'postal-code',
               placeholder: 'Zip / Postal',
               autocomplete: 'postal-code',
               required: true,
+              name: 'postal',
               icon: localePinImg,
-              validationPattern: '[a-zA-Z\\-\\d\\s]*',
+              // must start with a character, then may contain spaces
+              validationPattern: '[a-zA-Z\\-\\d]+[a-zA-Z\\-\\d\\s]*',
             })}
           </div>
         </fieldset>
@@ -144,6 +149,7 @@ export class ContactForm extends LitElement {
     required?: boolean;
     fieldType?: 'text' | 'email';
     autocomplete?: AutoCompleteFieldOptions;
+    name: string;
     icon?: TemplateResult;
     iconSpaceOption?: IconSpaceOption;
     validationPattern?: string;
@@ -163,6 +169,7 @@ export class ContactForm extends LitElement {
         <input
           type=${fieldType}
           id=${options.id}
+          name=${options.name}
           aria-label=${options.placeholder}
           placeholder=${options.placeholder}
           autocomplete=${options.autocomplete ?? 'on'}
@@ -232,7 +239,7 @@ export class ContactForm extends LitElement {
         width: 100%;
       }
 
-      badged-input.lastName {
+      badged-input.last-name {
         margin-left: -1px;
       }
 
@@ -242,7 +249,7 @@ export class ContactForm extends LitElement {
         margin-bottom: 0.6rem;
       }
 
-      #lastName {
+      #last-name {
         width: ${noIconFieldWidth};
       }
 
