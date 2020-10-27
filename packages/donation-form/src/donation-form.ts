@@ -283,7 +283,7 @@ export class DonationForm extends LitElement {
   }
 
   private showInvalidDonationInfoAlert(): void {
-    alert('Please enter valid donation info.');
+    alert('Please enter a valid donation amount.');
   }
 
   private async renderPayPalButtonIfNeeded(): Promise<void> {
