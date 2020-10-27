@@ -13,13 +13,51 @@ import { HostedFieldName } from '../../braintree-manager/payment-providers/credi
 import { BadgedInput } from '../../form-elements/badged-input';
 
 export interface CreditCardFlowHandlerInterface {
+  /**
+   * Set up the hosted fields with event bindings
+   *
+   * @returns {Promise<void>}
+   * @memberof CreditCardFlowHandlerInterface
+   */
   startup(): Promise<void>;
+
+  /**
+   * Tokenize the hosted fields.
+   *
+   * This also performs validation so we can call this before initiating the payment to
+   * display any error messaging.
+   *
+   * @returns {(Promise<braintree.HostedFieldsTokenizePayload | undefined>)}
+   * @memberof CreditCardFlowHandlerInterface
+   */
   tokenizeFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined>;
+
+  /**
+   * Initiate the payment flow.
+   *
+   * You must get the response from `tokenizeFields()` first before this to validate the hosted fields.
+   *
+   * @param {braintree.HostedFieldsTokenizePayload} hostedFieldsResponse
+   * @param {DonationPaymentInfo} donationInfo
+   * @param {DonorContactInfo} donorContactInfo
+   * @returns {Promise<void>}
+   * @memberof CreditCardFlowHandlerInterface
+   */
   paymentInitiated(
     hostedFieldsResponse: braintree.HostedFieldsTokenizePayload,
     donationInfo: DonationPaymentInfo,
     donorContactInfo: DonorContactInfo,
   ): Promise<void>;
+
+  /**
+   * Bind to receive credit card flow handler events
+   *
+   * @template E
+   * @param {E} event
+   * @param {CreditCardFlowHandlerEvents[E]} callback
+   * @returns {Unsubscribe}
+   * @memberof CreditCardFlowHandlerInterface
+   */
   on<E extends keyof CreditCardFlowHandlerEvents>(
     event: E,
     callback: CreditCardFlowHandlerEvents[E],
@@ -50,6 +88,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     this.emitter = createNanoEvents<CreditCardFlowHandlerEvents>();
   }
 
+  /** @inheritdoc */
   on<E extends keyof CreditCardFlowHandlerEvents>(
     event: E,
     callback: CreditCardFlowHandlerEvents[E],
@@ -59,6 +98,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
 
   private started = false;
 
+  /** @inheritdoc */
   async startup(): Promise<void> {
     if (this.started) {
       return;
@@ -97,6 +137,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     });
   }
 
+  /** @inheritdoc */
   async tokenizeFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined> {
     let hostedFieldsResponse: braintree.HostedFieldsTokenizePayload | undefined;
 
@@ -112,7 +153,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     return hostedFieldsResponse;
   }
 
-  // PaymentFlowHandlerInterface conformance
+  /** @inheritdoc */
   async paymentInitiated(
     hostedFieldsResponse: braintree.HostedFieldsTokenizePayload,
     donationInfo: DonationPaymentInfo,
