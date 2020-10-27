@@ -95,6 +95,7 @@ export class ContactForm extends LitElement {
               fieldType: 'email',
               name: 'email',
               autocomplete: 'email',
+              maxlength: 255,
               icon: emailImg,
             })}
           </div>
@@ -104,6 +105,7 @@ export class ContactForm extends LitElement {
               placeholder: 'First name',
               name: 'fname',
               required: true,
+              maxlength: 255,
               autocomplete: 'given-name',
               icon: userIcon,
             })}
@@ -113,6 +115,7 @@ export class ContactForm extends LitElement {
               name: 'lname',
               autocomplete: 'family-name',
               required: true,
+              maxlength: 255,
               iconSpaceOption: IconSpaceOption.NoIconSpace,
             })}
           </div>
@@ -124,6 +127,7 @@ export class ContactForm extends LitElement {
               required: true,
               name: 'postal',
               icon: localePinImg,
+              maxlength: 9,
               // must start with a character, then may contain spaces
               validationPattern: '[a-zA-Z\\-\\d]+[a-zA-Z\\-\\d\\s]*',
             })}
@@ -149,6 +153,7 @@ export class ContactForm extends LitElement {
     required?: boolean;
     fieldType?: 'text' | 'email';
     autocomplete?: AutoCompleteFieldOptions;
+    maxlength?: number;
     name: string;
     icon?: TemplateResult;
     iconSpaceOption?: IconSpaceOption;
@@ -172,6 +177,7 @@ export class ContactForm extends LitElement {
           name=${options.name}
           aria-label=${options.placeholder}
           placeholder=${options.placeholder}
+          maxlength=${ifDefined(options.maxlength)}
           autocomplete=${options.autocomplete ?? 'on'}
           pattern=${ifDefined(options.validationPattern)}
           @input=${this.inputChanged}
