@@ -62,8 +62,8 @@
           "type": "Color"
         },
         {
-          "name": "--donateButtonDisabledColor",
-          "description": "Donate Button Disabled Color",
+          "name": "--donateButtonHoverColor",
+          "description": "Donate Button Hover Color",
           "type": "Color"
         },
         {
