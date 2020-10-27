@@ -127,19 +127,6 @@ export class DonationForm extends LitElement {
     `;
   }
 
-  private get donateButtonDisabled(): boolean {
-    return (
-      this.donationInfoValid === false ||
-      this.contactInfoValid === false ||
-      (this.selectedPaymentProvider === PaymentProvider.CreditCard &&
-        this.hostedFieldsValid === false)
-    );
-  }
-
-  private contactFormValidityChanged(e: CustomEvent): void {
-    this.contactInfoValid = e.detail.isValid;
-  }
-
   private editDonationError(): void {
     this.donationInfoValid = false;
   }
