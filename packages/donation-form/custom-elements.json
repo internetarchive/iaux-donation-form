@@ -96,7 +96,21 @@
           "description": "Badged Input Height",
           "type": "String"
         },
-
+        {
+          "name": "--badgedInputRequiredIndicatorFontSize",
+          "description": "The badged input required indicator font size",
+          "type": "String"
+        },
+        {
+          "name": "--badgedInputRequiredIndicatorMargin",
+          "description": "The badged input required indicator margin",
+          "type": "String"
+        },
+        {
+          "name": "--badgedInputRequiredIndicatorColor",
+          "description": "The badged input required indicator color",
+          "type": "Color"
+        }
       ]
     }
   ]
