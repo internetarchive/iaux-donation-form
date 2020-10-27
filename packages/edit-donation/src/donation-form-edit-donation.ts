@@ -325,6 +325,7 @@ export class DonationFormEditDonation extends LitElement {
     const donationInfoStatus = this.getDonationInfoStatus(amount);
     this.handleDonationInfoStatus(donationInfoStatus);
 
+    // only update the donation info if it's a valid amount
     if (donationInfoStatus === EditDonationInfoStatus.ValidDonationAmount) {
       this.updateDonationInfo({ amount: amount });
     }
