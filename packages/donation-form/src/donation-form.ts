@@ -30,6 +30,7 @@ import {
   DonationRequest,
   DonationPaymentInfo,
   PaymentProvider,
+  DonorContactInfo,
 } from '@internetarchive/donation-form-data-models';
 
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
@@ -224,31 +225,44 @@ export class DonationForm extends LitElement {
       return;
     }
 
-    const creditCardHandler = await this.braintreeManager?.paymentProviders.creditCardHandler.get();
-    creditCardHandler?.hideErrorMessage();
-
-    const valid = this.contactForm.reportValidity();
-
-    if (!valid) {
-      return;
-    }
-
     const contactInfo = this.contactForm.donorContactInfo;
-    this.emitPaymentFlowStartedEvent();
 
     switch (this.selectedPaymentProvider) {
       case PaymentProvider.CreditCard:
-        this.donationInfo &&
-          this.paymentFlowHandlers?.creditCardHandler?.paymentInitiated(
-            this.donationInfo,
-            contactInfo,
-          );
+        this.handleCreditCardDonationFlow(contactInfo);
         break;
       case PaymentProvider.Venmo:
-        this.donationInfo &&
-          this.paymentFlowHandlers?.venmoHandler?.paymentInitiated(contactInfo, this.donationInfo);
+        this.handleVenmoDonationFlow(contactInfo);
         break;
     }
+  }
+
+  private async handleCreditCardDonationFlow(contactInfo: DonorContactInfo): Promise<void> {
+    const creditCardHandler = await this.braintreeManager?.paymentProviders.creditCardHandler.get();
+    creditCardHandler?.hideErrorMessage();
+    const valid = this.contactForm?.reportValidity();
+    const hostedFieldsResponse = await this.paymentFlowHandlers?.creditCardHandler?.tokenizeFields();
+
+    if (!valid || hostedFieldsResponse === undefined) {
+      return;
+    }
+
+    this.emitPaymentFlowStartedEvent();
+    this.donationInfo &&
+      this.paymentFlowHandlers?.creditCardHandler?.paymentInitiated(
+        hostedFieldsResponse,
+        this.donationInfo,
+        contactInfo,
+      );
+  }
+
+  private async handleVenmoDonationFlow(contactInfo: DonorContactInfo): Promise<void> {
+    const valid = this.contactForm?.reportValidity();
+    if (!valid) {
+      return;
+    }
+    this.donationInfo &&
+      this.paymentFlowHandlers?.venmoHandler?.paymentInitiated(contactInfo, this.donationInfo);
   }
 
   private emitPaymentFlowStartedEvent(): void {

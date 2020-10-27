@@ -10,6 +10,7 @@ export class MockCreditCardFlowHandler implements CreditCardFlowHandlerInterface
   startupCalled = false;
   paymentInitiatedDonationInfo?: DonationPaymentInfo;
   paymentInitiatedDonorContactInfo?: DonorContactInfo;
+  hostedFieldsResponse?: braintree.HostedFieldsTokenizePayload;
 
   private emitter: Emitter<CreditCardFlowHandlerEvents> = createNanoEvents<
     CreditCardFlowHandlerEvents
@@ -23,10 +24,16 @@ export class MockCreditCardFlowHandler implements CreditCardFlowHandlerInterface
     this.startupCalled = true;
   }
 
+  async tokenizeFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined> {
+    return undefined;
+  }
+
   async paymentInitiated(
+    hostedFieldsResponse: braintree.HostedFieldsTokenizePayload,
     donationInfo: DonationPaymentInfo,
     donorContactInfo: DonorContactInfo,
   ): Promise<void> {
+    this.hostedFieldsResponse = hostedFieldsResponse;
     this.paymentInitiatedDonationInfo = donationInfo;
     this.paymentInitiatedDonorContactInfo = donorContactInfo;
   }

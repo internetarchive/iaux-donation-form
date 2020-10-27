@@ -14,7 +14,9 @@ import { BadgedInput } from '../../form-elements/badged-input';
 
 export interface CreditCardFlowHandlerInterface {
   startup(): Promise<void>;
+  tokenizeFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined>;
   paymentInitiated(
+    hostedFieldsResponse: braintree.HostedFieldsTokenizePayload,
     donationInfo: DonationPaymentInfo,
     donorContactInfo: DonorContactInfo,
   ): Promise<void>;
@@ -95,11 +97,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     });
   }
 
-  // PaymentFlowHandlerInterface conformance
-  async paymentInitiated(
-    donationInfo: DonationPaymentInfo,
-    donorContactInfo: DonorContactInfo,
-  ): Promise<void> {
+  async tokenizeFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined> {
     let hostedFieldsResponse: braintree.HostedFieldsTokenizePayload | undefined;
 
     const handler = await this.braintreeManager.paymentProviders.creditCardHandler.get();
@@ -111,13 +109,15 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       return;
     }
 
-    if (!hostedFieldsResponse) {
-      this.donationFlowModalManager.showErrorModal({
-        message: 'Error getting credit card response',
-      });
-      return;
-    }
+    return hostedFieldsResponse;
+  }
 
+  // PaymentFlowHandlerInterface conformance
+  async paymentInitiated(
+    hostedFieldsResponse: braintree.HostedFieldsTokenizePayload,
+    donationInfo: DonationPaymentInfo,
+    donorContactInfo: DonorContactInfo,
+  ): Promise<void> {
     let recaptchaToken: string | undefined;
 
     try {
