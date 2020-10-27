@@ -137,8 +137,9 @@ export class ContactForm extends LitElement {
     `;
   }
 
-  // reset the error state when the user changes the input
-  private inputChanged(e: KeyboardEvent): void {
+  // reset the error state when the user focuses the input
+  private inputFocused(e: KeyboardEvent): void {
+    this.errorMessage.innerText = '';
     const input = e.target as HTMLInputElement;
     const inputIdentifier = input.id;
     const badgedInput = this.shadowRoot?.querySelector(
@@ -180,7 +181,7 @@ export class ContactForm extends LitElement {
           maxlength=${ifDefined(options.maxlength)}
           autocomplete=${options.autocomplete ?? 'on'}
           pattern=${ifDefined(options.validationPattern)}
-          @input=${this.inputChanged}
+          @focus=${this.inputFocused}
           ?required=${required}
         />
       </badged-input>
