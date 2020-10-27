@@ -322,15 +322,15 @@ export class DonationFormController extends LitElement {
           <div slot="braintree-hosted-fields">
             <div id="braintree-error-message"></div>
             <div class="braintree-row">
-              <badged-input .icon=${creditCardImg} class="creditcard">
+              <badged-input .icon=${creditCardImg} ?required=${true} class="creditcard">
                 <div class="braintree-input" id="braintree-creditcard"></div>
               </badged-input>
             </div>
             <div class="braintree-row">
-              <badged-input .icon=${calendarImg} class="expiration">
+              <badged-input .icon=${calendarImg} ?required=${true} class="expiration">
                 <div class="braintree-input" id="braintree-expiration"></div>
               </badged-input>
-              <badged-input .icon=${lockImg} class="cvv">
+              <badged-input .icon=${lockImg} ?required=${true} class="cvv">
                 <div class="braintree-input" id="braintree-cvv"></div>
               </badged-input>
             </div>
@@ -434,14 +434,20 @@ export class DonationFormController extends LitElement {
 
         .donation-form-controller-container .braintree-row {
           display: flex;
+          margin-top: -1px;
         }
 
         .donation-form-controller-container badged-input {
           width: 100%;
         }
 
+        .donation-form-controller-container badged-input.cvv {
+          margin-left: -1px;
+        }
+
         .donation-form-controller-container .braintree-input {
           width: 100%;
+          height: 100%;
         }
 
         .donation-form-controller-container #braintree-error-message {

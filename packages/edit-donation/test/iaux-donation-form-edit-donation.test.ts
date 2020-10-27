@@ -169,6 +169,22 @@ describe('EditDonation', () => {
     expect(error).to.equal(EditDonationInfoStatus.DonationTooLow);
   });
 
+  it('does not update donationInfo if there is a donation info error', async () => {
+    const el = (await fixture(html`
+      <donation-form-edit-donation
+        .donationInfo=${new MockDonationInfo()}
+      ></donation-form-edit-donation>
+    `)) as DonationFormEditDonation;
+    const customInput = el.shadowRoot?.querySelector(
+      '#custom-amount-input'
+    ) as HTMLInputElement;
+    customInput.value = '0.50';
+    const inputEvent = new Event('input');
+    customInput?.dispatchEvent(inputEvent);
+    await el.updateComplete;
+    expect(el.donationInfo.amount).to.equal(5);
+  });
+
   it('emits a `editDonationError` event if the custom amount is too high', async () => {
     const el = (await fixture(html`
       <donation-form-edit-donation

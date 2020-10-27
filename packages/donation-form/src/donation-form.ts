@@ -30,6 +30,7 @@ import {
   DonationRequest,
   DonationPaymentInfo,
   PaymentProvider,
+  DonorContactInfo,
 } from '@internetarchive/donation-form-data-models';
 
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
@@ -107,7 +108,7 @@ export class DonationForm extends LitElement {
         headline="Enter payment information"
         id="contactFormSection"
       >
-        <contact-form @form-validity-changed=${this.contactFormValidityChanged}></contact-form>
+        <contact-form></contact-form>
         <div class="credit-card-fields" class="${this.creditCardVisible ? '' : 'hidden'}">
           <slot name="braintree-hosted-fields"></slot>
         </div>
@@ -115,11 +116,7 @@ export class DonationForm extends LitElement {
 
       <donation-form-section sectionBadge="5">
         <slot name="recaptcha"></slot>
-        <button
-          id="donate-button"
-          @click=${this.donateClicked}
-          ?disabled=${this.donateButtonDisabled}
-        >
+        <button id="donate-button" @click=${this.donateClicked}>
           Donate
         </button>
 
@@ -128,19 +125,6 @@ export class DonationForm extends LitElement {
         </div>
       </donation-form-section>
     `;
-  }
-
-  private get donateButtonDisabled(): boolean {
-    return (
-      this.donationInfoValid === false ||
-      this.contactInfoValid === false ||
-      (this.selectedPaymentProvider === PaymentProvider.CreditCard &&
-        this.hostedFieldsValid === false)
-    );
-  }
-
-  private contactFormValidityChanged(e: CustomEvent): void {
-    this.contactInfoValid = e.detail.isValid;
   }
 
   private editDonationError(): void {
@@ -223,36 +207,54 @@ export class DonationForm extends LitElement {
       alert('Please enter contact info.');
       return;
     }
-    if (!this.donationInfoValid) {
+    if (!this.donationInfoValid || !this.donationInfo) {
       this.showInvalidDonationInfoAlert();
       return;
     }
 
-    const creditCardHandler = await this.braintreeManager?.paymentProviders.creditCardHandler.get();
-    creditCardHandler?.hideErrorMessage();
-
-    const valid = this.contactForm.validate();
-
-    if (!valid) {
-      return;
-    }
-
     const contactInfo = this.contactForm.donorContactInfo;
-    this.emitPaymentFlowStartedEvent();
 
     switch (this.selectedPaymentProvider) {
       case PaymentProvider.CreditCard:
-        this.donationInfo &&
-          this.paymentFlowHandlers?.creditCardHandler?.paymentInitiated(
-            this.donationInfo,
-            contactInfo,
-          );
+        this.handleCreditCardDonationFlow(contactInfo, this.donationInfo);
         break;
       case PaymentProvider.Venmo:
-        this.donationInfo &&
-          this.paymentFlowHandlers?.venmoHandler?.paymentInitiated(contactInfo, this.donationInfo);
+        this.handleVenmoDonationFlow(contactInfo, this.donationInfo);
         break;
     }
+  }
+
+  private async handleCreditCardDonationFlow(
+    contactInfo: DonorContactInfo,
+    donationInfo: DonationPaymentInfo
+  ): Promise<void> {
+    const creditCardFlowHandler = this.paymentFlowHandlers?.creditCardHandler;
+    const creditCardHandler = await this.braintreeManager?.paymentProviders.creditCardHandler.get();
+    creditCardHandler?.hideErrorMessage();
+    const valid = this.contactForm?.reportValidity();
+    const hostedFieldsResponse = await creditCardFlowHandler?.tokenizeFields();
+
+    if (!valid || hostedFieldsResponse === undefined) {
+      return;
+    }
+
+    this.emitPaymentFlowStartedEvent();
+    creditCardFlowHandler?.paymentInitiated(
+      hostedFieldsResponse,
+      donationInfo,
+      contactInfo,
+    );
+  }
+
+  private async handleVenmoDonationFlow(
+    contactInfo: DonorContactInfo,
+    donationInfo: DonationPaymentInfo
+  ): Promise<void> {
+    const valid = this.contactForm?.reportValidity();
+    if (!valid) {
+      return;
+    }
+    this.paymentFlowHandlers?.venmoHandler?.paymentInitiated(contactInfo, donationInfo);
   }
 
   private emitPaymentFlowStartedEvent(): void {
@@ -286,7 +288,7 @@ export class DonationForm extends LitElement {
   }
 
   private showInvalidDonationInfoAlert(): void {
-    alert('Please enter valid donation info.');
+    alert('Please enter a valid donation amount.');
   }
 
   private async renderPayPalButtonIfNeeded(): Promise<void> {
@@ -380,7 +382,7 @@ export class DonationForm extends LitElement {
     const donateButtonFontSize = css`var(--donateButtonFontSize, 2.6rem)`;
     const donateButtonHeight = css`var(--donateButtonHeight, 4rem)`;
     const donateButtonColor = css`var(--donateButtonColor, rgba(49, 164, 129, 1))`;
-    const donateButtonDisabledColor = css`var(--donateButtonDisabledColor, rgba(49, 164, 129, 0.5))`;
+    const donateButtonHoverColor = css`var(--donateButtonHoverColor, rgba(39, 131, 103, 1))`;
 
     return css`
       h1 {
@@ -421,9 +423,8 @@ export class DonationForm extends LitElement {
         height: ${donateButtonHeight};
       }
 
-      #donate-button:disabled {
-        background-color: ${donateButtonDisabledColor};
-        cursor: not-allowed;
+      #donate-button:hover {
+        background-color: ${donateButtonHoverColor};
       }
     `;
   }

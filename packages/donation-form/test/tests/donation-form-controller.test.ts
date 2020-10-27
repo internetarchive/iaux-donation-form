@@ -77,7 +77,6 @@ describe('Donation Form Controller', () => {
     const donateButton = donationForm?.shadowRoot?.querySelector(
       '#donate-button',
     ) as HTMLButtonElement;
-    expect(donateButton.disabled).to.equal(true);
 
     // simulates after the user has input all of the credit card fields
     const hostedFields = (await paymentClients.hostedFields.get()) as MockHostedFieldsClient;

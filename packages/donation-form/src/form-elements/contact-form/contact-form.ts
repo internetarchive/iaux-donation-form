@@ -8,6 +8,8 @@ import {
   query,
 } from 'lit-element';
 
+import { ifDefined } from 'lit-html/directives/if-defined';
+
 import {
   BillingInfo,
   CustomerInfo,
@@ -15,30 +17,64 @@ import {
 } from '@internetarchive/donation-form-data-models';
 import { AutoCompleteFieldOptions } from './autocomplete-field-options';
 import { IconSpaceOption } from '../badged-input';
+import { BadgedInput } from '../badged-input';
 import '../badged-input';
 
 import emailImg from '@internetarchive/icon-email';
 import localePinImg from '@internetarchive/icon-locale-pin';
 import userIcon from '@internetarchive/icon-user';
 
-import countries from './countries';
-
 @customElement('contact-form')
 export class ContactForm extends LitElement {
+  @query('badged-input.email') emailBadgedInput!: BadgedInput;
   @query('#email') emailField!: HTMLInputElement;
-  @query('#firstName') firstNameField!: HTMLInputElement;
-  @query('#lastName') lastNameField!: HTMLInputElement;
-  @query('#streetAddress') streetAddressField!: HTMLInputElement;
-  @query('#extendedAddress') extendedAddressField!: HTMLInputElement;
-  @query('#locality') localityField!: HTMLInputElement;
-  @query('#region') regionField!: HTMLInputElement;
-  @query('#postalCode') postalCodeField!: HTMLInputElement;
-  @query('#countryCodeAlpha2') countryCodeAlpha2Field!: HTMLSelectElement;
+  @query('badged-input.first-name') firstNameBadgedInput!: BadgedInput;
+  @query('#first-name') firstNameField!: HTMLInputElement;
+  @query('badged-input.last-name') lastNameBadgedInput!: BadgedInput;
+  @query('#last-name') lastNameField!: HTMLInputElement;
+  @query('badged-input.postal-code') postalBadgedInput!: BadgedInput;
+  @query('#postal-code') postalCodeField!: HTMLInputElement;
+
+  @query('#error-message') errorMessage!: HTMLDivElement;
   @query('form') form!: HTMLFormElement;
 
-  validate(): boolean {
-    const valid = this.form.reportValidity();
+  reportValidity(): boolean {
+    const emailValid = this.emailField.checkValidity();
+    if (!emailValid) {
+      this.emailBadgedInput.error = true;
+    }
+
+    const firstNameValid = this.firstNameField.checkValidity();
+    if (!firstNameValid) {
+      this.firstNameBadgedInput.error = true;
+    }
+
+    const lastNameValid = this.lastNameField.checkValidity();
+    if (!lastNameValid) {
+      this.lastNameBadgedInput.error = true;
+    }
+
+    const postalValid = this.postalCodeField.checkValidity();
+    if (!postalValid) {
+      this.postalBadgedInput.error = true;
+    }
+
+    const valid = emailValid && firstNameValid && lastNameValid && postalValid;
+    if (!valid) {
+      this.errorMessage.innerText = 'Please enter any missing contact information below';
+    } else {
+      this.errorMessage.innerText = '';
+    }
+
     return valid;
+  }
+
+  checkValidity(): boolean {
+    const emailValid = this.emailField.checkValidity();
+    const firstNameValid = this.firstNameField.checkValidity();
+    const lastNameValid = this.lastNameField.checkValidity();
+    const postalValid = this.postalCodeField.checkValidity();
+    return emailValid && firstNameValid && lastNameValid && postalValid;
   }
 
   focus(): void {
@@ -48,6 +84,7 @@ export class ContactForm extends LitElement {
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
+      <div id="error-message"></div>
       <form>
         <fieldset>
           <div class="row has-icon">
@@ -56,93 +93,59 @@ export class ContactForm extends LitElement {
               placeholder: 'Email',
               required: true,
               fieldType: 'email',
+              name: 'email',
               autocomplete: 'email',
+              maxlength: 255,
               icon: emailImg,
             })}
           </div>
-        </fieldset>
-
-        <fieldset>
           <div class="row has-icon">
             ${this.generateInput({
-              id: 'firstName',
+              id: 'first-name',
               placeholder: 'First name',
+              name: 'fname',
               required: true,
+              maxlength: 255,
               autocomplete: 'given-name',
               icon: userIcon,
             })}
-          </div>
-
-          <div class="row">
             ${this.generateInput({
-              id: 'lastName',
+              id: 'last-name',
               placeholder: 'Last name',
+              name: 'lname',
               autocomplete: 'family-name',
               required: true,
-            })}
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <div class="row">
-            ${this.generateInput({
-              id: 'streetAddress',
-              placeholder: 'Address Line 1',
-              required: true,
-              autocomplete: 'address-line1',
-              icon: localePinImg,
-            })}
-          </div>
-          <div class="row">
-            ${this.generateInput({
-              id: 'extendedAddress',
-              placeholder: 'Address Line 2 (optional)',
-              autocomplete: 'address-line2',
-              required: false,
-            })}
-          </div>
-          <div class="row">
-            ${this.generateInput({
-              id: 'locality',
-              placeholder: 'City',
-              autocomplete: 'address-level2',
-              required: true,
-            })}
-          </div>
-          <div class="row">
-            ${this.generateInput({
-              id: 'region',
-              placeholder: 'State / Province',
-              autocomplete: 'address-level1',
-              required: true,
-            })}
-            ${this.generateInput({
-              id: 'postalCode',
-              placeholder: 'Zip / Postal',
-              autocomplete: 'postal-code',
-              required: true,
+              maxlength: 255,
               iconSpaceOption: IconSpaceOption.NoIconSpace,
             })}
           </div>
-          <div class="row">
-            ${this.countrySelector}
+          <div class="row has-icon">
+            ${this.generateInput({
+              id: 'postal-code',
+              placeholder: 'Zip / Postal',
+              autocomplete: 'postal-code',
+              required: true,
+              name: 'postal',
+              icon: localePinImg,
+              maxlength: 9,
+              // must start with a character, then may contain spaces
+              validationPattern: '[a-zA-Z\\-\\d]+[a-zA-Z\\-\\d\\s]*',
+            })}
           </div>
         </fieldset>
       </form>
     `;
   }
 
-  private formValid = false;
-
-  private inputChanged(): void {
-    const isValid = this.form.checkValidity();
-    // only dispatch if there is a change
-    if (isValid === this.formValid) {
-      return;
-    }
-    this.formValid = isValid;
-    const event = new CustomEvent('form-validity-changed', { detail: { isValid } });
-    this.dispatchEvent(event);
+  // reset the error state when the user focuses the input
+  private inputFocused(e: KeyboardEvent): void {
+    this.errorMessage.innerText = '';
+    const input = e.target as HTMLInputElement;
+    const inputIdentifier = input.id;
+    const badgedInput = this.shadowRoot?.querySelector(
+      `badged-input.${inputIdentifier}`,
+    ) as BadgedInput;
+    badgedInput.error = false;
   }
 
   private generateInput(options: {
@@ -151,40 +154,36 @@ export class ContactForm extends LitElement {
     required?: boolean;
     fieldType?: 'text' | 'email';
     autocomplete?: AutoCompleteFieldOptions;
+    maxlength?: number;
+    name: string;
     icon?: TemplateResult;
     iconSpaceOption?: IconSpaceOption;
+    validationPattern?: string;
   }): TemplateResult {
     const required = options.required ?? true;
     const fieldType = options.fieldType ?? 'text';
     const iconOption = options.iconSpaceOption ?? IconSpaceOption.IconSpace;
 
     return html`
-      <badged-input class=${options.id} .icon=${options.icon} .iconSpaceOption=${iconOption}>
+      <badged-input
+        class=${options.id}
+        .icon=${options.icon}
+        .iconSpaceOption=${iconOption}
+        ?required=${options.required}
+      >
+        <label for=${options.id}>${options.placeholder}</label>
         <input
           type=${fieldType}
           id=${options.id}
+          name=${options.name}
+          aria-label=${options.placeholder}
           placeholder=${options.placeholder}
+          maxlength=${ifDefined(options.maxlength)}
           autocomplete=${options.autocomplete ?? 'on'}
-          @input=${this.inputChanged}
+          pattern=${ifDefined(options.validationPattern)}
+          @focus=${this.inputFocused}
           ?required=${required}
         />
-      </badged-input>
-    `;
-  }
-
-  private get countrySelector(): TemplateResult {
-    const selectedCountry = 'US';
-
-    return html`
-      <badged-input>
-        <select id="countryCodeAlpha2">
-          ${Object.keys(countries).map(key => {
-            const name = countries[key];
-            return html`
-              <option value=${key} ?selected=${key === selectedCountry}>${name}</option>
-            `;
-          })}
-        </select>
       </badged-input>
     `;
   }
@@ -198,12 +197,7 @@ export class ContactForm extends LitElement {
 
   get billingInfo(): BillingInfo {
     const billingInfo = new BillingInfo({
-      streetAddress: this.streetAddressField.value,
-      extendedAddress: this.extendedAddressField.value,
-      locality: this.localityField.value,
-      region: this.regionField.value,
       postalCode: this.postalCodeField.value,
-      countryCodeAlpha2: this.countryCodeAlpha2Field.value,
     });
     return billingInfo;
   }
@@ -218,8 +212,8 @@ export class ContactForm extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 1rem)`;
-    const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 3rem)`;
+    const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 3rem)`;
+    const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 5rem)`;
 
     const fieldSetSpacing = css`var(--fieldSetSpacing, 1rem)`;
     const fieldFontFamily = css`var(--fontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
@@ -241,7 +235,7 @@ export class ContactForm extends LitElement {
       double outlines caused by the fields being right next to each other */
       .row {
         display: flex;
-        margin-top: 1px;
+        margin-top: -1px;
       }
 
       fieldset .row:first-child {
@@ -252,21 +246,22 @@ export class ContactForm extends LitElement {
         width: 100%;
       }
 
-      badged-input.region {
-        width: 60%;
+      badged-input.last-name {
+        margin-left: -1px;
       }
 
-      badged-input.postalCode {
-        margin-left: 1px;
-        width: 40%;
+      #error-message {
+        color: red;
+        font-size: 1.4rem;
+        margin-bottom: 0.6rem;
       }
 
-      #region {
-        width: ${iconFieldWidth};
-      }
-
-      #postalCode {
+      #last-name {
         width: ${noIconFieldWidth};
+      }
+
+      label {
+        display: none;
       }
 
       input {
@@ -279,20 +274,6 @@ export class ContactForm extends LitElement {
         font-size: ${fieldFontSize};
         padding: 0;
         font-family: ${fieldFontFamily};
-      }
-
-      select {
-        width: ${iconFieldWidth};
-        height: 100%;
-        box-sizing: border-box;
-        font-weight: bold;
-        font-size: ${fieldFontSize};
-        font-family: ${fieldFontFamily};
-        border: 0;
-        background: #fff;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
       }
     `;
   }
