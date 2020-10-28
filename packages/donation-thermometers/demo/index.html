@@ -10,15 +10,25 @@
 
     body {
       background: #fafafa;
+      color: #333;
     }
 
     fieldset {
       margin-bottom: 20px;
     }
 
-    #thermometer {
+    #banner-thermometer {
       height: 50px;
       --bannerThermometerHeight: 30px;
+    }
+
+    #page-thermometer {
+      width: 150px;
+      height: 300px;
+    }
+
+    .bottom-container {
+      display: flex;
     }
   </style>
 </head>
@@ -33,7 +43,7 @@
     const defaultCurrentAmount = 2_350_000;
 
     function changeMarkerTop(e) {
-      const thermometer = document.querySelector('#thermometer');
+      const thermometer = document.querySelector('#banner-thermometer');
       thermometer.style.setProperty('--bannerThermometerMarkerTop', e.target.value + "%");
       const value = document.querySelector('#markerTopValue');
       const numberValue = parseFloat(e.target.value);
@@ -41,7 +51,7 @@
     }
 
     function changeMarkerHeight(e) {
-      const thermometer = document.querySelector('#thermometer');
+      const thermometer = document.querySelector('#banner-thermometer');
       thermometer.style.setProperty('--bannerThermometerMarkerHeight', e.target.value + "%");
       const value = document.querySelector('#markerHeightValue');
       const numberValue = parseFloat(e.target.value);
@@ -49,21 +59,23 @@
     }
 
     function goalMet(e) {
-      const thermometer = document.querySelector('#thermometer');
+      const thermometer = document.querySelector('#banner-thermometer');
       const mode = e.target.checked ? 'showgoalmessage' : 'showgoalamount';
       thermometer.goalMessageMode = mode;
     }
 
     function setGoal(e) {
-      const thermometer = document.querySelector('#thermometer');
+      const thermometer = document.querySelector('#banner-thermometer');
       const currentAmountSlider = document.querySelector('#setCurrentAmountSlider');
       currentAmountSlider.max = e.target.value;
       thermometer.goalAmount = e.target.value;
     }
 
     function setCurrentAmount(e) {
-      const thermometer = document.querySelector('#thermometer');
+      const thermometer = document.querySelector('#banner-thermometer');
+      const pageThermometer = document.querySelector('#page-thermometer');
       thermometer.currentAmount = e.target.value;
+      pageThermometer.currentAmount = e.target.value;
     }
 
     function setCurrentAmountSlider(e) {
@@ -72,109 +84,116 @@
       const currentAmount = document.querySelector('#setCurrentAmount');
       currentAmount.value = amount;
       // console.log('goal', goal, amount)
-      const thermometer = document.querySelector('#thermometer');
+      const thermometer = document.querySelector('#banner-thermometer');
+      const pageThermometer = document.querySelector('#page-thermometer');
       thermometer.currentAmount = amount;
+      pageThermometer.currentAmount = amount;
     }
 
     function goalMetMessage(e) {
-      const thermometer = document.querySelector('#thermometer');
+      const thermometer = document.querySelector('#banner-thermometer');
       thermometer.goalReachedMessage = e.target.value;
     }
 
     function goalNearMessage(e) {
-      const thermometer = document.querySelector('#thermometer');
+      const thermometer = document.querySelector('#banner-thermometer');
       thermometer.goalNearMessage = e.target.value;
     }
 
     function changeBorderColor(e) {
-      const thermometer = document.querySelector('#thermometer');
+      const thermometer = document.querySelector('#banner-thermometer');
       thermometer.style.setProperty('--bannerThermometerBorder', e.target.value);
     }
 
     function changeFillColor(e) {
-      const thermometer = document.querySelector('#thermometer');
+      const thermometer = document.querySelector('#banner-thermometer');
       thermometer.style.setProperty('--bannerThermometerProgressColor', e.target.value);
     }
 
     function changeBackgroundColor(e) {
-      const thermometer = document.querySelector('#thermometer');
+      const thermometer = document.querySelector('#banner-thermometer');
       thermometer.style.setProperty('--bannerThermometerBackgroundColor', e.target.value);
     }
 
     function changeMarkerBorder(e) {
-      const thermometer = document.querySelector('#thermometer');
+      const thermometer = document.querySelector('#banner-thermometer');
       thermometer.style.setProperty('--bannerThermometerMarkerBorder', e.target.value);
     }
 
     render(
       html`
         <div class="thermometer-container">
-          <donation-banner-thermometer id="thermometer" currentAmount=${defaultCurrentAmount} goalAmount=${defaultGoal}>
+          <donation-banner-thermometer id="banner-thermometer" currentAmount=${defaultCurrentAmount} goalAmount=${defaultGoal}>
           </donation-banner-thermometer>
         </div>
 
-        <fieldset>
-          <legend>Config</legend>
-          <dl>
+        <div class="bottom-container">
+          <donation-page-thermometer id="page-thermometer" currentAmount=${defaultCurrentAmount} goalAmount=${defaultGoal}>
+          </donation-page-thermometer>
 
-            <dt><label for="setGoal">Set Goal</label></dt>
-            <dd>
-              <input type="text" id="setGoal" @input=${setGoal} value=${defaultGoal} />
-            </dd>
+          <fieldset>
+            <legend>Config</legend>
+            <dl>
 
-            <dt><label for="setGoal">Set Current Amount</label></dt>
-            <dd>
-              <input type="text" id="setCurrentAmount" @input=${setCurrentAmount} value=${defaultCurrentAmount} />
-              <input type="range" id="setCurrentAmountSlider" @input=${setCurrentAmountSlider} min="0" max="${defaultGoal}" />
-            </dd>
+              <dt><label for="setGoal">Set Goal</label></dt>
+              <dd>
+                <input type="text" id="setGoal" @input=${setGoal} value=${defaultGoal} />
+              </dd>
 
-            <dt><label for="goalMet">Goal Message</label></dt>
-            <dd>
-              <div><input type="checkbox" id="goalMet" @input=${goalMet} /></div>
-              <div>
-                <label>Goal Met Message:</label>
-                <input type="text" id="goalMetMessage" @input=${goalMetMessage} value="We've reached our goal!" />
-              </div>
-              <div>
-                <label>Goal Near Message:</label>
-                <input type="text" id="goalNearMessage" @input=${goalNearMessage} value="We’ve almost reached our goal!" />
-              </div>
-            </dd>
+              <dt><label for="setGoal">Set Current Amount</label></dt>
+              <dd>
+                <input type="text" id="setCurrentAmount" @input=${setCurrentAmount} value=${defaultCurrentAmount} />
+                <input type="range" id="setCurrentAmountSlider" @input=${setCurrentAmountSlider} min="0" max="${defaultGoal}" />
+              </dd>
 
-            <dt><label for="borderColor">Thermometer Border</label></dt>
-            <dd>
-              <input type="text" id="borderColor" @input=${changeBorderColor} value="1px solid #31A481" />
-            </dd>
+              <dt><label for="goalMet">Goal Message</label></dt>
+              <dd>
+                <div><input type="checkbox" id="goalMet" @input=${goalMet} /></div>
+                <div>
+                  <label>Goal Met Message:</label>
+                  <input type="text" id="goalMetMessage" @input=${goalMetMessage} value="We've reached our goal!" />
+                </div>
+                <div>
+                  <label>Goal Near Message:</label>
+                  <input type="text" id="goalNearMessage" @input=${goalNearMessage} value="We’ve almost reached our goal!" />
+                </div>
+              </dd>
 
-            <dt><label for="backgroundColor">Background Color</label></dt>
-            <dd>
-              <input type="text" id="backgroundColor" @input=${changeBackgroundColor} value="#D1FAED" />
-            </dd>
+              <dt><label for="borderColor">Thermometer Border</label></dt>
+              <dd>
+                <input type="text" id="borderColor" @input=${changeBorderColor} value="1px solid #31A481" />
+              </dd>
 
-            <dt><label for="fillColor">Fill Color</label></dt>
-            <dd>
-              <input type="text" id="fillColor" @input=${changeFillColor} value="#31A481" />
-            </dd>
+              <dt><label for="backgroundColor">Background Color</label></dt>
+              <dd>
+                <input type="text" id="backgroundColor" @input=${changeBackgroundColor} value="#D1FAED" />
+              </dd>
 
-            <dt><label for="markerBorder">Marker Border</label></dt>
-            <dd>
-              <input type="text" id="markerBorder" @input=${changeMarkerBorder} value="1px solid #31A481" />
-            </dd>
+              <dt><label for="fillColor">Fill Color</label></dt>
+              <dd>
+                <input type="text" id="fillColor" @input=${changeFillColor} value="#31A481" />
+              </dd>
 
-            <dt><label for="markerTop">Marker Top</label></dt>
-            <dd>
-              <input type="range" id="markerTop" @input=${changeMarkerTop} min="0" max="200" value="50" />
-              <span id="markerTopValue">50%</span>
-            </dd>
+              <dt><label for="markerBorder">Marker Border</label></dt>
+              <dd>
+                <input type="text" id="markerBorder" @input=${changeMarkerBorder} value="1px solid #31A481" />
+              </dd>
 
-            <dt><label for="markerHeight">Marker Height</label></dt>
-            <dd>
-              <input type="range" id="markerHeight" @input=${changeMarkerHeight} min="50" max="200" value="100" />
-              <span id="markerHeightValue">100%</span>
-            </dd>
+              <dt><label for="markerTop">Marker Top</label></dt>
+              <dd>
+                <input type="range" id="markerTop" @input=${changeMarkerTop} min="0" max="200" value="50" />
+                <span id="markerTopValue">50%</span>
+              </dd>
 
-          </dl>
-        </fieldset>
+              <dt><label for="markerHeight">Marker Height</label></dt>
+              <dd>
+                <input type="range" id="markerHeight" @input=${changeMarkerHeight} min="50" max="200" value="100" />
+                <span id="markerHeightValue">100%</span>
+              </dd>
+
+            </dl>
+          </fieldset>
+        </div>
       `,
       document.querySelector('#demo')
     );
