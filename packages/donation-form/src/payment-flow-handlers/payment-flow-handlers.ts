@@ -20,9 +20,11 @@ import {
   GooglePayFlowHandlerInterface,
   GooglePayFlowHandler,
 } from './handlers/googlepay-flow-handler';
+import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
 
 export interface PaymentFlowHandlersInterface {
   startup(): Promise<void>;
+  showUpsell(): Promise<void>;
 
   creditCardHandler: CreditCardFlowHandlerInterface | undefined;
   paypalHandler: PayPalFlowHandlerInterface | undefined;
@@ -54,6 +56,13 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
   async startup(): Promise<void> {
     this.venmoHandler?.startup();
     this.creditCardHandler?.startup();
+  }
+
+  async showUpsell(): Promise<void> {
+    this.donationFlowModalManager.showUpsellModal({
+      oneTimeAmount: 5,
+      ctaMode: UpsellModalCTAMode.YesButton
+    })
   }
 
   get creditCardHandler(): CreditCardFlowHandlerInterface | undefined {

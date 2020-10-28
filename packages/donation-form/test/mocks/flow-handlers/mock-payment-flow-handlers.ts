@@ -6,6 +6,9 @@ import { MockVenmoFlowHandler } from './individual-handlers/mock-venmo-flow-hand
 import { MockGooglePayFlowHandler } from './individual-handlers/mock-googlepay-flow-handler';
 
 export class MockPaymentFlowHandlers implements PaymentFlowHandlersInterface {
+  showUpsell(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
   startupCalled = false;
   async startup(): Promise<void> {
     this.startupCalled = true;

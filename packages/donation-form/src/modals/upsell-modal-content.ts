@@ -80,6 +80,7 @@ export class UpsellModalContent extends LitElement {
       case UpsellModalCTAMode.PayPalUpsellSlot:
         return html`
           <div class="paypal-upsell-slot-container">
+            <div class="paypal-cta">YES, I'll become a monthly donor</div>
             <div class="paypal-upsell-slot-blocker ${this.error ? '' : 'hidden'}"></div>
             <slot class="paypal-upsell-slot"></slot>
           </div>
@@ -144,10 +145,11 @@ export class UpsellModalContent extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const yesButtonColor = css`var(--upsellYesButtonColor, rgb(109,148,201))`;
+    const yesButtonColor = css`var(--upsellYesButtonColor, #194880)`;
     const yesButtonDisabledColor = css`var(--upsellYesButtonDisabledColor, rgba(109,148,201,0.5))`;
-    const noThanksFontSize = css`var(--upsellNoThanksFontSize, 1.4rem)`;
-    const noThanksFontColor = css`var(--upsellNoThanksFontColor, #c23e3e)`;
+    const noThanksFontSize = css`var(--upsellNoThanksFontSize, 2.4rem)`;
+    const noThanksFontColor = css`var(--upsellNoThanksFontColor, white)`;
+    const noThanksButtonColor = css`var(--upsellNoThanksFontColor, #720D11)`;
     const amountInputOffset = css`var(--upsellAmountInputOffset, -1rem)`;
 
     return css`
@@ -215,7 +217,11 @@ export class UpsellModalContent extends LitElement {
         color: ${noThanksFontColor};
         border: 0;
         background: none;
+        background-color: ${noThanksButtonColor};
         font-size: ${noThanksFontSize};
+        font-weight: bold;
+        padding: 1rem;
+        border-radius: 0.5rem;
         cursor: pointer;
       }
 
@@ -238,6 +244,13 @@ export class UpsellModalContent extends LitElement {
 
       .paypal-upsell-slot-container {
         position: relative;
+      }
+
+      .paypal-upsell-slot-container .paypal-cta {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0 1rem 1rem 1rem;
+        text-align: center;
       }
 
       .error {

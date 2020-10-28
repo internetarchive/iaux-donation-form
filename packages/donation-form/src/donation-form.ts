@@ -101,6 +101,10 @@ export class DonationForm extends LitElement {
     `;
   }
 
+  firstUpdated(): void {
+    // this.paymentFlowHandlers?.showUpsell();
+  }
+
   get contactFormSectionTemplate(): TemplateResult {
     return html`
       <donation-form-section
@@ -315,11 +319,40 @@ export class DonationForm extends LitElement {
       this.paymentFlowHandlers
     ) {
       this.setupFlowHandlers();
+      this.paymentFlowHandlers.showUpsell();
+      this.renderPaypalUpsell();
     }
 
     if (changedProperties.has('donationInfoValid')) {
       this.paymentSelector.donationInfoValid = this.donationInfoValid;
     }
+  }
+
+  private async renderPaypalUpsell(): Promise<void> {
+    const handler = await this.braintreeManager?.paymentProviders.paypalHandler.get();
+
+    const upsellButtonDataSource = await handler?.renderPayPalButton({
+      selector: '#paypal-upsell-button',
+      style: {
+        color: 'blue' as paypal.ButtonColorOption, // I'm not sure why I can't access the enum directly here.. I get a UMD error
+        label: 'paypal' as paypal.ButtonLabelOption,
+        shape: 'rect' as paypal.ButtonShapeOption,
+        size: 'responsive' as paypal.ButtonSizeOption,
+        tagline: false,
+      },
+      donationInfo: this.donationInfo!,
+    });
+
+    // if (upsellButtonDataSource) {
+    //   upsellButtonDataSource.delegate = this;
+    //   this.upsellButtonDataSourceContainer = new UpsellDataSourceContainer({
+    //     upsellButtonDataSource: upsellButtonDataSource,
+    //     oneTimePayload: options.oneTimePayload,
+    //     oneTimeSuccessResponse: options.oneTimeSuccessResponse,
+    //   });
+    // } else {
+    //   console.error('error rendering paypal upsell button');
+    // }
   }
 
   private flowHandlersConfigured = false;
