@@ -66,9 +66,11 @@
 
     function setGoal(e) {
       const thermometer = document.querySelector('#banner-thermometer');
+      const pageThermometer = document.querySelector('#page-thermometer');
       const currentAmountSlider = document.querySelector('#setCurrentAmountSlider');
       currentAmountSlider.max = e.target.value;
       thermometer.goalAmount = e.target.value;
+      pageThermometer.goalAmount = e.target.value;
     }
 
     function setCurrentAmount(e) {

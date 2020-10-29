@@ -32,7 +32,7 @@ export class DonationPageThermometer extends LitElement {
       >
         <div class="thermometer-message-container">
           <div class="donate-goal">
-            Thank you for helping us reach our $6M goal!
+            Thank you for helping us reach our ${this.goalAmountDisplayValue} goal!
           </div>
           <div class="thermometer-container">
             <div class="thermometer-background">
@@ -62,7 +62,9 @@ export class DonationPageThermometer extends LitElement {
   }
 
   private get goalAmountDisplayValue(): string {
-    return this.currencyFormatted(this.goalAmount);
+    const goalInMillions = this.goalAmount / 1_000_000;
+    const amount = Math.round((goalInMillions + Number.EPSILON) * 10) / 10
+    return `$${amount}M`;
   }
 
   private currencyFormatted(value: number): string {
