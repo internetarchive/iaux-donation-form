@@ -28,23 +28,23 @@ export interface PaymentFlowHandlersInterface {
    * Show the upsell modal
    *
    * @param {{
-    *     ctaMode?: UpsellModalCTAMode;
-    *     yesSelected?: (amount: number) => void;
-    *     noSelected?: () => void;
-    *     amountChanged?: (amount: number) => void;
-    *     userClosedModalCallback?: () => void;
-    *   }} [options]
-    * @returns {Promise<void>}
-    * @memberof DonationFlowModalManagerInterface
-    */
-   showUpsellModal(options: {
-     oneTimeAmount: number;
-     ctaMode?: UpsellModalCTAMode;
-     yesSelected?: (amount: number) => void;
-     noSelected?: () => void;
-     amountChanged?: (amount: number) => void;
-     userClosedModalCallback?: () => void;
-   }): Promise<void>;
+   *     ctaMode?: UpsellModalCTAMode;
+   *     yesSelected?: (amount: number) => void;
+   *     noSelected?: () => void;
+   *     amountChanged?: (amount: number) => void;
+   *     userClosedModalCallback?: () => void;
+   *   }} [options]
+   * @returns {Promise<void>}
+   * @memberof DonationFlowModalManagerInterface
+   */
+  showUpsellModal(options: {
+    oneTimeAmount: number;
+    ctaMode?: UpsellModalCTAMode;
+    yesSelected?: (amount: number) => void;
+    noSelected?: () => void;
+    amountChanged?: (amount: number) => void;
+    userClosedModalCallback?: () => void;
+  }): Promise<void>;
 
   creditCardHandler: CreditCardFlowHandlerInterface | undefined;
   paypalHandler: PayPalFlowHandlerInterface | undefined;

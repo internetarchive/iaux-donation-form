@@ -135,7 +135,7 @@ export class DonationForm extends LitElement {
       const donationInfo = new DonationPaymentInfo({
         amount: options.oneTimeAmount,
         donationType: DonationType.OneTime,
-        coverFees: false
+        coverFees: false,
       });
       handler?.renderPayPalButton({
         selector: '#paypal-upsell-button',
@@ -276,7 +276,7 @@ export class DonationForm extends LitElement {
 
   private async handleCreditCardDonationFlow(
     contactInfo: DonorContactInfo,
-    donationInfo: DonationPaymentInfo
+    donationInfo: DonationPaymentInfo,
   ): Promise<void> {
     const creditCardFlowHandler = this.paymentFlowHandlers?.creditCardHandler;
     const creditCardHandler = await this.braintreeManager?.paymentProviders.creditCardHandler.get();
@@ -289,16 +289,12 @@ export class DonationForm extends LitElement {
     }
 
     this.emitPaymentFlowStartedEvent();
-    creditCardFlowHandler?.paymentInitiated(
-      hostedFieldsResponse,
-      donationInfo,
-      contactInfo,
-    );
+    creditCardFlowHandler?.paymentInitiated(hostedFieldsResponse, donationInfo, contactInfo);
   }
 
   private async handleVenmoDonationFlow(
     contactInfo: DonorContactInfo,
-    donationInfo: DonationPaymentInfo
+    donationInfo: DonationPaymentInfo,
   ): Promise<void> {
     const valid = this.contactForm?.reportValidity();
     if (!valid) {
