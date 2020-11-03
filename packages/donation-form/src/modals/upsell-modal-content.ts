@@ -234,7 +234,8 @@ export class UpsellModalContent extends LitElement {
       .paypal-upsell-slot-blocker {
         position: absolute;
         width: 100%;
-        height: 100%;
+        height: 35px;
+        bottom: 0;
         z-index: 250;
         cursor: not-allowed;
         background-color: rgba(255, 255, 255, 0.5);
