@@ -41,7 +41,9 @@ export class UpsellModalContent extends LitElement {
   render(): TemplateResult {
     return html`
       <h3>Thank you for donating!</h3>
-      <button @click=${this.noThanksSelected} class="cta-button">Continue</button>
+      <button @click=${this.noThanksSelected} class="cta-button" id="no-button">
+        Continue
+      </button>
       <p class="or_separator"><span>or</span></p>
       <h3>Have you considered becoming a monthly donor?</h3>
       <p class="appeal">
@@ -77,6 +79,7 @@ export class UpsellModalContent extends LitElement {
           <button
             class="cta-button"
             tabindex="0"
+            id="yes-button"
             @click=${this.yesSelected}
             .disabled=${this.error !== undefined}
           >
