@@ -197,13 +197,6 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       title: html`
         Donation received
       `,
-      headline: html`
-        Thanks for donating. Would you consider becoming a monthly donor starting next month?
-      `,
-      message: html`
-        Monthly support helps ensure that anyone curious enough to seek knowledge will be able to
-        find it here. For free. Together we are building the public libraries of the future.
-      `,
       processingImageMode: 'complete',
       showProcessingIndicator: true,
     });
