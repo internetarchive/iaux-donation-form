@@ -140,7 +140,7 @@ export class DonationForm extends LitElement {
       handler?.renderPayPalButton({
         selector: '#paypal-upsell-button',
         style: {
-          color: 'blue' as paypal.ButtonColorOption, // I'm not sure why I can't access the enum directly here.. I get a UMD error
+          color: 'blue' as paypal.ButtonColorOption,
           label: 'paypal' as paypal.ButtonLabelOption,
           shape: 'rect' as paypal.ButtonShapeOption,
           size: 'responsive' as paypal.ButtonSizeOption,
