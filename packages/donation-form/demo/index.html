@@ -24,30 +24,10 @@
       display: block;
     }
 
-    /* div[slot="paypal-upsell-button"] .yes-button {
-      font-size: 2rem;
-      display: block;
-      width: 90%;
-      margin: auto;
-      padding: 0.625rem;
-      margin-top: 1rem;
-      background-color: rgb(109,148,201);
-      color: #fff;
-      border-radius: 5px;
-      border: 0;
-      font-weight: bold;
-      line-height: normal;
-      outline: none;
-      cursor: pointer;
+    .dev-tools {
+      background-color: lightblue;
+      padding: 1rem 1rem;
     }
-
-    div[slot="paypal-upsell-button"] #paypal-upsell-button {
-      position: absolute;
-      top: 12px;
-      opacity: 1;
-      left: 0;
-      width: 100%;
-    } */
   </style>
 
 </head>
@@ -55,6 +35,10 @@
   <header>
     <a href="recaptcha.html">Recaptcha Demo</a>
   </header>
+
+  <div class="dev-tools">
+    <button id="show-regular-upsell-button">Show Regular Upsell</button> | <button id="show-paypal-upsell-button">Show PayPal Upsell</button>
+  </div>
 
   <div id="demo"></div>
 
@@ -64,6 +48,22 @@
     import { BraintreeEndpointManager } from '../dist/demo/braintree-endpoint-manager.js';
 
     const braintreeEndpointManager = new BraintreeEndpointManager();
+
+    document.querySelector('#show-regular-upsell-button').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.showUpsellModalDev({
+        oneTimeAmount: 5,
+        ctaMode: 'YesButton'
+      });
+    });
+
+    document.querySelector('#show-paypal-upsell-button').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.showUpsellModalDev({
+        oneTimeAmount: 5,
+        ctaMode: 'PayPalUpsellSlot'
+      });
+    });
 
     render(
       html`

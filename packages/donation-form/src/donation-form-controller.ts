@@ -47,6 +47,7 @@ import {
   PaymentProvider,
   DonationType,
 } from '@internetarchive/donation-form-data-models';
+import { UpsellModalCTAMode } from './modals/upsell-modal-content';
 
 /**
  * The DonationFormController orchestrates several of the interactions between
@@ -144,6 +145,17 @@ export class DonationFormController extends LitElement {
     if (changedProperties.has('environment') && this.environment && !this.paymentClients) {
       this.paymentClients = new PaymentClients(this.lazyLoaderService, this.environment);
     }
+  }
+
+  async showUpsellModalDev(options: {
+    oneTimeAmount: number;
+    ctaMode?: UpsellModalCTAMode;
+    yesSelected?: (amount: number) => void;
+    noSelected?: () => void;
+    amountChanged?: (amount: number) => void;
+    userClosedModalCallback?: () => void;
+  }): Promise<void> {
+    this.donationForm.showUpsellModalDev(options);
   }
 
   private setupBraintreeManager(): void {

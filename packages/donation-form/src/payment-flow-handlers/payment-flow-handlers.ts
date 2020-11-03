@@ -24,7 +24,27 @@ import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
 
 export interface PaymentFlowHandlersInterface {
   startup(): Promise<void>;
-  showUpsell(): Promise<void>;
+  /**
+   * Show the upsell modal
+   *
+   * @param {{
+    *     ctaMode?: UpsellModalCTAMode;
+    *     yesSelected?: (amount: number) => void;
+    *     noSelected?: () => void;
+    *     amountChanged?: (amount: number) => void;
+    *     userClosedModalCallback?: () => void;
+    *   }} [options]
+    * @returns {Promise<void>}
+    * @memberof DonationFlowModalManagerInterface
+    */
+   showUpsellModal(options: {
+     oneTimeAmount: number;
+     ctaMode?: UpsellModalCTAMode;
+     yesSelected?: (amount: number) => void;
+     noSelected?: () => void;
+     amountChanged?: (amount: number) => void;
+     userClosedModalCallback?: () => void;
+   }): Promise<void>;
 
   creditCardHandler: CreditCardFlowHandlerInterface | undefined;
   paypalHandler: PayPalFlowHandlerInterface | undefined;
@@ -58,11 +78,16 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
     this.creditCardHandler?.startup();
   }
 
-  async showUpsell(): Promise<void> {
-    this.donationFlowModalManager.showUpsellModal({
-      oneTimeAmount: 5,
-      ctaMode: UpsellModalCTAMode.YesButton
-    })
+  /** @inheritdoc */
+  async showUpsellModal(options: {
+    oneTimeAmount: number;
+    ctaMode?: UpsellModalCTAMode;
+    yesSelected?: (amount: number) => void;
+    noSelected?: () => void;
+    amountChanged?: (amount: number) => void;
+    userClosedModalCallback?: () => void;
+  }): Promise<void> {
+    return this.donationFlowModalManager.showUpsellModal(options);
   }
 
   get creditCardHandler(): CreditCardFlowHandlerInterface | undefined {
