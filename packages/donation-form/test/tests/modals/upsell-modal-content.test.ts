@@ -1,4 +1,4 @@
-import { html, fixture, expect, elementUpdated, oneEvent } from '@open-wc/testing';
+import { html, fixture, expect, oneEvent } from '@open-wc/testing';
 import { UpsellModalContent, UpsellModalCTAMode } from '../../../src/modals/upsell-modal-content';
 import '../../../src/modals/upsell-modal-content';
 
