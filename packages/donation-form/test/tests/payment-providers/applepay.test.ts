@@ -6,6 +6,8 @@ import { MockApplePayClient } from '../../mocks/payment-clients/mock-applepay-cl
 import { MockApplePaySessionManager } from '../../mocks/payment-clients/mock-applepay-sessionmanager';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { MockDonationInfo } from '../../mocks/mock-donation-info';
+import { MockApplePaySessionDataSourceDelegate } from '../../mocks/payment-providers/individual-providers/mock-applepay-datasource-delegate';
+import { MockApplePayPaymentAuthorizedEvent } from '../../mocks/payment-clients/mock-applepay-paymentauthorizedevent';
 
 describe('ApplePayHandler', () => {
   describe('isAvailable', () => {
@@ -75,7 +77,13 @@ describe('ApplePayHandler', () => {
       });
       const event = new Event('boop');
       const datasource = await handler.createPaymentRequest(event, new MockDonationInfo());
-      expect(datasource.donationInfo.amount).to.equal(new MockDonationInfo().amount);
+      const delegate = new MockApplePaySessionDataSourceDelegate();
+      datasource.delegate = delegate;
+
+      const paymentAuthorizedEvent = new MockApplePayPaymentAuthorizedEvent();
+      expect(braintreeManager.submitDonationOptions).to.be.undefined;
+      await datasource.onpaymentauthorized(paymentAuthorizedEvent);
+      expect(braintreeManager.submitDonationOptions).to.not.be.undefined;
     });
   });
 });

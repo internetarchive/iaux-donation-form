@@ -10,8 +10,8 @@ import { ApplePaySessionDataSourceDelegate } from './apple-pay-session-datasourc
 
 export class ApplePaySessionDataSource implements ApplePaySessionDataSourceInterface {
   delegate?: ApplePaySessionDataSourceDelegate;
-  donationInfo: DonationPaymentInfo;
 
+  private donationInfo: DonationPaymentInfo;
   private session: ApplePaySession;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private applePayInstance: any;

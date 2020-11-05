@@ -11,6 +11,7 @@ import { ApplePayHandlerInterface } from '../../../src/braintree-manager/payment
 import { PayPalHandlerInterface } from '../../../src/braintree-manager/payment-providers/paypal/paypal-interface';
 import { GooglePayHandlerInterface } from '../../../src/braintree-manager/payment-providers/google-pay-interface';
 import { VenmoHandlerInterface } from '../../../src/braintree-manager/payment-providers/venmo-interface';
+import { BraintreeManagerInterface } from '../../../src/braintree-manager/braintree-interfaces';
 
 export class MockPaymentProviders implements PaymentProvidersInterface {
   creditCardHandler: PromisedSingleton<CreditCardHandlerInterface> = new PromisedSingleton<
@@ -29,7 +30,7 @@ export class MockPaymentProviders implements PaymentProvidersInterface {
     ApplePayHandlerInterface
   >({
     generator: new Promise<ApplePayHandlerInterface>(resolve => {
-      resolve(new MockApplePayHandler());
+      resolve(new MockApplePayHandler(this.braintreeManager));
     }),
   });
 
@@ -57,12 +58,15 @@ export class MockPaymentProviders implements PaymentProvidersInterface {
     }),
   });
 
-  constructor(options?: {
+  constructor(options: {
+    braintreeManager: BraintreeManagerInterface;
     mockHostedFieldTokenizePayload?: braintree.HostedFieldsTokenizePayload;
   }) {
+    this.braintreeManager = options.braintreeManager;
     this.mockHostedFieldTokenizePayload =
-      options?.mockHostedFieldTokenizePayload ?? mockHostedFieldTokenizePayload;
+      options.mockHostedFieldTokenizePayload ?? mockHostedFieldTokenizePayload;
   }
 
   mockHostedFieldTokenizePayload: braintree.HostedFieldsTokenizePayload;
+  braintreeManager: BraintreeManagerInterface;
 }

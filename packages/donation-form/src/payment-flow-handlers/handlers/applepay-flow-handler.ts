@@ -68,7 +68,7 @@ export class ApplePayFlowHandler
   paymentComplete(response: DonationResponse): void {
     if (response.success) {
       const successResponse = response.value as SuccessResponse;
-      if (this.applePayDataSource?.donationInfo.donationType == DonationType.OneTime) {
+      if (successResponse.donationType == DonationType.OneTime) {
         this.donationFlowModalManager.showUpsellModal({
           oneTimeAmount: successResponse.amount,
           yesSelected: this.modalYesSelected.bind(this, successResponse),
