@@ -45,12 +45,9 @@ export class UpsellModalContent extends LitElement {
         Continue
       </button>
       <p class="or_separator"><span>or</span></p>
-      <h3>Have you considered becoming a monthly donor?</h3>
+      <h3>Consider donating monthly</h3>
       <p class="appeal">
-        Monthly support helps us reliably plan for the future and ensure anyone seeking knowledge
-        will be able to find it here.
-        <br />
-        For free.
+        Monthly support helps us reliably plan for the future.
       </p>
       <div class="monthly-amount">
         <h1>Enter your monthly amount</h1>
@@ -65,7 +62,7 @@ export class UpsellModalContent extends LitElement {
             @keydown=${this.currencyValidator.keydown}
           />
         </div>
-        <div class="error">${this.error}</div>
+        <div class="error ${this.error ? '' : 'hidden'}">${this.error}</div>
       </div>
 
       ${this.yesButton}
@@ -83,14 +80,19 @@ export class UpsellModalContent extends LitElement {
             @click=${this.yesSelected}
             .disabled=${this.error !== undefined}
           >
-            YES, I'll become a monthly donor
+            YES, I'll donate monthly
           </button>
         `;
       case UpsellModalCTAMode.PayPalUpsellSlot:
         return html`
           <div class="paypal-upsell-slot-container">
-            <div class="paypal-cta">YES, I'll become a monthly donor</div>
             <div class="paypal-upsell-slot-blocker ${this.error ? '' : 'hidden'}"></div>
+            <button
+              class="cta-button"
+              id="paypal-fake-button"
+            >
+              YES, I'll donate monthly
+            </button>
             <slot class="paypal-upsell-slot"></slot>
           </div>
         `;
@@ -177,17 +179,20 @@ export class UpsellModalContent extends LitElement {
         padding: 0.5rem 0 0 0;
       }
 
+      .hidden {
+        display: none;
+      }
+
       h3 {
         text-align: center;
         font-size: 1.8rem;
-        margin: 0 1rem 1rem 1rem;
+        margin: 0 1rem 0.5rem 1rem;
       }
 
       .appeal {
         text-align: center;
         font-size: 1.6rem;
-        margin-left: 1rem;
-        margin-right: 1rem;
+        margin: 0.5rem 1rem;
       }
 
       .amount-input {
@@ -209,12 +214,11 @@ export class UpsellModalContent extends LitElement {
       }
 
       .cta-button {
-        font-size: 2.4rem;
+        font-size: 2rem;
         display: block;
         width: 100%;
-        padding: 0.625rem;
-        margin-top: 1rem;
-        padding: 1.25rem 2rem;
+        margin-top: 0.5rem;
+        padding: 1rem 2rem;
         background-color: ${ctaButtonColor};
         color: #fff;
         border-radius: 5px;
@@ -237,7 +241,7 @@ export class UpsellModalContent extends LitElement {
       .paypal-upsell-slot-blocker {
         position: absolute;
         width: 100%;
-        height: 35px;
+        height: 4.5rem;
         bottom: 0;
         z-index: 250;
         cursor: not-allowed;
@@ -246,6 +250,12 @@ export class UpsellModalContent extends LitElement {
 
       .paypal-upsell-slot-blocker.hidden {
         display: none;
+      }
+
+      #paypal-fake-button {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
       }
 
       .paypal-upsell-slot-container {
@@ -287,7 +297,7 @@ export class UpsellModalContent extends LitElement {
       .or_separator span {
         display: inline-block;
         position: relative;
-        padding: 1rem;
+        padding: 0.5rem 1rem;
         background: #f5f5f7;
       }
     `;
