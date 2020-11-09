@@ -166,8 +166,8 @@ export class UpsellModalContent extends LitElement {
         padding: 0.5rem 0.625rem;
         border-radius: 5px;
         text-align: center;
-        margin-bottom: 1em;
-        margin-top: 1em;
+        margin-bottom: 0.5rem;
+        margin-top: 0;
       }
 
       .monthly-amount h1 {
@@ -297,7 +297,7 @@ export class UpsellModalContent extends LitElement {
       .or_separator span {
         display: inline-block;
         position: relative;
-        padding: 0.5rem 1rem;
+        padding: 0 1rem;
         background: #f5f5f7;
       }
     `;
