@@ -105,7 +105,7 @@ export class DonationForm extends LitElement {
 
   /**
    * This is a developer convenience method that allows us to show the upsell modal without going
-   * through the purchasing flow. If it's showing the PayPal button, it will even trigger
+   * through the purchasing flow. If it's showing the PayPal button, it will trigger
    * the PayPal button render
    *
    * @param {{
@@ -130,7 +130,6 @@ export class DonationForm extends LitElement {
     this.paymentFlowHandlers?.showUpsellModal(options);
 
     if (options.ctaMode === UpsellModalCTAMode.PayPalUpsellSlot) {
-      console.log('rendering paypal');
       const handler = await this.braintreeManager?.paymentProviders.paypalHandler.get();
       const donationInfo = new DonationPaymentInfo({
         amount: options.oneTimeAmount,

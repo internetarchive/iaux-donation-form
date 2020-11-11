@@ -89,7 +89,7 @@ export class UpsellModalContent extends LitElement {
             <div class="paypal-upsell-slot-blocker ${this.error ? '' : 'hidden'}"></div>
             <button
               class="cta-button"
-              id="paypal-fake-button"
+              id="paypal-cover-button"
             >
               YES, I'll donate monthly
             </button>
@@ -252,7 +252,7 @@ export class UpsellModalContent extends LitElement {
         display: none;
       }
 
-      #paypal-fake-button {
+      #paypal-cover-button {
         position: absolute;
         width: 100%;
         bottom: 0;

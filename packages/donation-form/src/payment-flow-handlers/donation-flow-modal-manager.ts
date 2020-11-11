@@ -90,7 +90,7 @@ export interface DonationFlowModalManagerInterface {
 
   /**
    * Start the donation submission flow. This kicks off the "main" modal flow once the
-   * user receives authorizes the donation through their payment provider, which provides
+   * user authorizes the donation through their payment provider, which provides
    * us the with the nonce used to complete the donation.
    *
    * @param {{
