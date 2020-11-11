@@ -3,6 +3,7 @@ import { PaymentSelector } from '../../../src/form-elements/payment-selector';
 import '../../../src/form-elements/payment-selector';
 import { MockPaymentProviders } from '../../mocks/payment-providers/mock-payment-providers';
 import { promisedSleep } from '../../helpers/promisedSleep';
+import { MockBraintreeManager } from '../../mocks/mock-braintree-manager';
 
 describe('Payment Selector', () => {
   it('shows Venmo if it is available', async () => {
@@ -10,7 +11,8 @@ describe('Payment Selector', () => {
       <payment-selector></payment-selector>
     `)) as PaymentSelector;
 
-    const paymentProviders = new MockPaymentProviders();
+    const mockBraintreeManager = new MockBraintreeManager();
+    const paymentProviders = new MockPaymentProviders({ braintreeManager: mockBraintreeManager });
     el.paymentProviders = paymentProviders;
     await elementUpdated(el);
     await promisedSleep(250);

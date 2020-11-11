@@ -18,6 +18,19 @@ import { MockBraintreeClient } from './payment-clients/mock-braintree-client';
 import { PaymentProvidersInterface } from '../../src/braintree-manager/payment-providers-interface';
 
 export class MockBraintreeManager implements BraintreeManagerInterface {
+  submitDonationOptions?: {
+    nonce: string;
+    paymentProvider: PaymentProvider;
+    donationInfo: DonationPaymentInfo;
+    billingInfo: BillingInfo;
+    customerInfo: CustomerInfo;
+    upsellOnetimeTransactionId?: string | undefined;
+    customerId?: string | undefined;
+    recaptchaToken?: string | undefined;
+    bin?: string | undefined;
+    binName?: string | undefined;
+  };
+
   donationSuccessfulOptions?: {
     successResponse: SuccessResponse;
     upsellSuccessResponse?: SuccessResponse | undefined;
@@ -34,7 +47,9 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
     this.submitDonationResponse = options?.submitDonationResponse ?? 'success';
   }
 
-  paymentProviders: PaymentProvidersInterface = new MockPaymentProviders();
+  paymentProviders: PaymentProvidersInterface = new MockPaymentProviders({
+    braintreeManager: this,
+  });
   instance: PromisedSingleton<braintree.Client> = new PromisedSingleton<braintree.Client>({
     generator: new Promise(resolve => {
       resolve(new MockBraintreeClient());
@@ -64,6 +79,8 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
     if (this.submitDonationError) {
       throw 'oh no';
     }
+
+    this.submitDonationOptions = options;
 
     if (this.submitDonationResponse === 'success') {
       const response = new SuccessResponse({
