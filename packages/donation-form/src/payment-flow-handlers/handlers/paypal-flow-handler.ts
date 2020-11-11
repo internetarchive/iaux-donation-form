@@ -284,10 +284,10 @@ export class PayPalFlowHandler
     const upsellButtonDataSource = await handler?.renderPayPalButton({
       selector: '#paypal-upsell-button',
       style: {
-        color: 'gold' as paypal.ButtonColorOption, // I'm not sure why I can't access the enum directly here.. I get a UMD error
+        color: 'blue' as paypal.ButtonColorOption,
         label: 'paypal' as paypal.ButtonLabelOption,
         shape: 'rect' as paypal.ButtonShapeOption,
-        size: 'medium' as paypal.ButtonSizeOption,
+        size: 'responsive' as paypal.ButtonSizeOption,
         tagline: false,
       },
       donationInfo: options.donationInfo,

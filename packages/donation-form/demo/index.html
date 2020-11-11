@@ -14,6 +14,8 @@
 
     modal-manager {
       display: none;
+      --modalTopMargin: 4rem;
+      --modalBottomMargin: 0.25rem;
     }
 
     modal-manager[mode='open'] {
@@ -23,6 +25,16 @@
     donation-form-controller {
       display: block;
     }
+
+    .dev-tools {
+      background-color: lightblue;
+      padding: 1rem 1rem;
+    }
+
+    #paypal-upsell-button {
+      opacity: 0.01;
+      padding-bottom: 0.6rem;
+    }
   </style>
 
 </head>
@@ -31,7 +43,13 @@
     <a href="recaptcha.html">Recaptcha Demo</a>
   </header>
 
-  <div id="demo"></div>
+  <div class="dev-tools">
+    <button id="show-regular-upsell-button">Show Regular Upsell</button> |
+    <button id="show-paypal-upsell-button">Show PayPal Upsell</button>
+  </div>
+
+  <div id="demo">
+  </div>
 
   <script type="module">
     import { render, html } from 'lit-html';
@@ -39,6 +57,22 @@
     import { BraintreeEndpointManager } from '../dist/demo/braintree-endpoint-manager.js';
 
     const braintreeEndpointManager = new BraintreeEndpointManager();
+
+    document.querySelector('#show-regular-upsell-button').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.showUpsellModalDev({
+        oneTimeAmount: 5,
+        ctaMode: 'YesButton'
+      });
+    });
+
+    document.querySelector('#show-paypal-upsell-button').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.showUpsellModalDev({
+        oneTimeAmount: 5,
+        ctaMode: 'PayPalUpsellSlot'
+      });
+    });
 
     render(
       html`

@@ -31,12 +31,14 @@ import {
   DonationPaymentInfo,
   PaymentProvider,
   DonorContactInfo,
+  DonationType,
 } from '@internetarchive/donation-form-data-models';
 
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
 
 import '@internetarchive/donation-form-section';
 import { DonationFormSection } from '@internetarchive/donation-form-section';
+import { UpsellModalCTAMode } from './modals/upsell-modal-content';
 
 @customElement('donation-form')
 export class DonationForm extends LitElement {
@@ -99,6 +101,53 @@ export class DonationForm extends LitElement {
       </div>
       <slot name="recaptcha"></slot>
     `;
+  }
+
+  /**
+   * This is a developer convenience method that allows us to show the upsell modal without going
+   * through the purchasing flow. If it's showing the PayPal button, it will trigger
+   * the PayPal button render
+   *
+   * @param {{
+   *     oneTimeAmount: number;
+   *     ctaMode?: UpsellModalCTAMode;
+   *     yesSelected?: (amount: number) => void;
+   *     noSelected?: () => void;
+   *     amountChanged?: (amount: number) => void;
+   *     userClosedModalCallback?: () => void;
+   *   }} options
+   * @returns {Promise<void>}
+   * @memberof DonationForm
+   */
+  async showUpsellModalDev(options: {
+    oneTimeAmount: number;
+    ctaMode?: UpsellModalCTAMode;
+    yesSelected?: (amount: number) => void;
+    noSelected?: () => void;
+    amountChanged?: (amount: number) => void;
+    userClosedModalCallback?: () => void;
+  }): Promise<void> {
+    this.paymentFlowHandlers?.showUpsellModal(options);
+
+    if (options.ctaMode === UpsellModalCTAMode.PayPalUpsellSlot) {
+      const handler = await this.braintreeManager?.paymentProviders.paypalHandler.get();
+      const donationInfo = new DonationPaymentInfo({
+        amount: options.oneTimeAmount,
+        donationType: DonationType.OneTime,
+        coverFees: false,
+      });
+      handler?.renderPayPalButton({
+        selector: '#paypal-upsell-button',
+        style: {
+          color: 'blue' as paypal.ButtonColorOption,
+          label: 'paypal' as paypal.ButtonLabelOption,
+          shape: 'rect' as paypal.ButtonShapeOption,
+          size: 'responsive' as paypal.ButtonSizeOption,
+          tagline: false,
+        },
+        donationInfo: donationInfo,
+      });
+    }
   }
 
   get contactFormSectionTemplate(): TemplateResult {
@@ -226,7 +275,7 @@ export class DonationForm extends LitElement {
 
   private async handleCreditCardDonationFlow(
     contactInfo: DonorContactInfo,
-    donationInfo: DonationPaymentInfo
+    donationInfo: DonationPaymentInfo,
   ): Promise<void> {
     const creditCardFlowHandler = this.paymentFlowHandlers?.creditCardHandler;
     const creditCardHandler = await this.braintreeManager?.paymentProviders.creditCardHandler.get();
@@ -239,16 +288,12 @@ export class DonationForm extends LitElement {
     }
 
     this.emitPaymentFlowStartedEvent();
-    creditCardFlowHandler?.paymentInitiated(
-      hostedFieldsResponse,
-      donationInfo,
-      contactInfo,
-    );
+    creditCardFlowHandler?.paymentInitiated(hostedFieldsResponse, donationInfo, contactInfo);
   }
 
   private async handleVenmoDonationFlow(
     contactInfo: DonorContactInfo,
-    donationInfo: DonationPaymentInfo
+    donationInfo: DonationPaymentInfo,
   ): Promise<void> {
     const valid = this.contactForm?.reportValidity();
     if (!valid) {

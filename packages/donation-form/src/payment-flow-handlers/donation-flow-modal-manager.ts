@@ -88,6 +88,26 @@ export interface DonationFlowModalManagerInterface {
     userClosedModalCallback?: () => void;
   }): Promise<void>;
 
+  /**
+   * Start the donation submission flow. This kicks off the "main" modal flow once the
+   * user authorizes the donation through their payment provider, which provides
+   * us the with the nonce used to complete the donation.
+   *
+   * @param {{
+   *     nonce: string;
+   *     paymentProvider: PaymentProvider;
+   *     donationInfo: DonationPaymentInfo;
+   *     billingInfo: BillingInfo;
+   *     customerInfo: CustomerInfo;
+   *     upsellOnetimeTransactionId?: string;
+   *     customerId?: string;
+   *     recaptchaToken?: string;
+   *     bin?: string; // first 6 digits of CC
+   *     binName?: string; // credit card bank name
+   *   }} options
+   * @returns {(Promise<DonationResponse | undefined>)}
+   * @memberof DonationFlowModalManagerInterface
+   */
   startDonationSubmissionFlow(options: {
     nonce: string;
     paymentProvider: PaymentProvider;
@@ -101,6 +121,15 @@ export interface DonationFlowModalManagerInterface {
     binName?: string; // credit card bank name
   }): Promise<DonationResponse | undefined>;
 
+  /**
+   * Handle a successful donation response. This encapsulates the logic for the type of
+   * donation that was made.
+   * ie. If it was a one-time donation, show the upsell, if it was monthly do not.
+   *
+   * @param {DonationPaymentInfo} donationInfo
+   * @param {SuccessResponse} response
+   * @memberof DonationFlowModalManagerInterface
+   */
   handleSuccessfulDonationResponse(
     donationInfo: DonationPaymentInfo,
     response: SuccessResponse,
@@ -197,13 +226,6 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       title: html`
         Donation received
       `,
-      headline: html`
-        Thanks for donating. Would you consider becoming a monthly donor starting next month?
-      `,
-      message: html`
-        Monthly support helps ensure that anyone curious enough to seek knowledge will be able to
-        find it here. For free. Together we are building the public libraries of the future.
-      `,
       processingImageMode: 'complete',
       showProcessingIndicator: true,
     });
@@ -233,6 +255,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     });
   }
 
+  /** @inheritdoc */
   async startDonationSubmissionFlow(options: {
     nonce: string;
     paymentProvider: PaymentProvider;
@@ -325,6 +348,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     return amount;
   }
 
+  /** @inheritdoc */
   handleSuccessfulDonationResponse(
     donationInfo: DonationPaymentInfo,
     response: SuccessResponse,

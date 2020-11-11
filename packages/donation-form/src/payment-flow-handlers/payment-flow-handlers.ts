@@ -20,9 +20,31 @@ import {
   GooglePayFlowHandlerInterface,
   GooglePayFlowHandler,
 } from './handlers/googlepay-flow-handler';
+import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
 
 export interface PaymentFlowHandlersInterface {
   startup(): Promise<void>;
+  /**
+   * Show the upsell modal
+   *
+   * @param {{
+   *     ctaMode?: UpsellModalCTAMode;
+   *     yesSelected?: (amount: number) => void;
+   *     noSelected?: () => void;
+   *     amountChanged?: (amount: number) => void;
+   *     userClosedModalCallback?: () => void;
+   *   }} [options]
+   * @returns {Promise<void>}
+   * @memberof DonationFlowModalManagerInterface
+   */
+  showUpsellModal(options: {
+    oneTimeAmount: number;
+    ctaMode?: UpsellModalCTAMode;
+    yesSelected?: (amount: number) => void;
+    noSelected?: () => void;
+    amountChanged?: (amount: number) => void;
+    userClosedModalCallback?: () => void;
+  }): Promise<void>;
 
   creditCardHandler: CreditCardFlowHandlerInterface | undefined;
   paypalHandler: PayPalFlowHandlerInterface | undefined;
@@ -54,6 +76,18 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
   async startup(): Promise<void> {
     this.venmoHandler?.startup();
     this.creditCardHandler?.startup();
+  }
+
+  /** @inheritdoc */
+  async showUpsellModal(options: {
+    oneTimeAmount: number;
+    ctaMode?: UpsellModalCTAMode;
+    yesSelected?: (amount: number) => void;
+    noSelected?: () => void;
+    amountChanged?: (amount: number) => void;
+    userClosedModalCallback?: () => void;
+  }): Promise<void> {
+    return this.donationFlowModalManager.showUpsellModal(options);
   }
 
   get creditCardHandler(): CreditCardFlowHandlerInterface | undefined {

@@ -22,23 +22,13 @@
       "slots": [],
       "cssProperties": [
         {
-          "name": "--upsellYesButtonColor",
-          "description": "Upsell Yes Button Color",
+          "name": "--upsellCTAButtonColor",
+          "description": "Upsell CTA Button Color",
           "type": "Color"
         },
         {
-          "name": "--upsellYesButtonDisabledColor",
-          "description": "Upsell Yes Button Disabled Color",
-          "type": "Color"
-        },
-        {
-          "name": "--upsellNoThanksFontSize",
-          "description": "Upsell No Thanks Font Size",
-          "type": "String"
-        },
-        {
-          "name": "--upsellNoThanksFontColor",
-          "description": "Upsell No Thanks Font Color",
+          "name": "--upsellCTAButtonDisabledColor",
+          "description": "Upsell CTA Button Disabled Color",
           "type": "Color"
         },
         {

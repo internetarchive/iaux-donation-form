@@ -40,6 +40,15 @@ export class UpsellModalContent extends LitElement {
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
+      <h3>Thank you for donating!</h3>
+      <button @click=${this.noThanksSelected} class="cta-button" id="no-button">
+        Continue
+      </button>
+      <p class="or_separator"><span>or</span></p>
+      <h3>Consider donating monthly</h3>
+      <p class="appeal">
+        Monthly support helps us reliably plan for the future.
+      </p>
       <div class="monthly-amount">
         <h1>Enter your monthly amount</h1>
         <div class="amount-input">
@@ -53,14 +62,10 @@ export class UpsellModalContent extends LitElement {
             @keydown=${this.currencyValidator.keydown}
           />
         </div>
-        <div class="error">${this.error}</div>
+        <div class="error ${this.error ? '' : 'hidden'}">${this.error}</div>
       </div>
 
       ${this.yesButton}
-
-      <button class="no-thanks-button" @click=${this.noThanksSelected} tabindex="0">
-        No, thanks. Maybe next time.
-      </button>
     `;
   }
 
@@ -69,18 +74,25 @@ export class UpsellModalContent extends LitElement {
       case UpsellModalCTAMode.YesButton:
         return html`
           <button
-            class="yes-button"
+            class="cta-button"
             tabindex="0"
+            id="yes-button"
             @click=${this.yesSelected}
             .disabled=${this.error !== undefined}
           >
-            YES, I'll become a monthly donor
+            YES, I'll donate monthly
           </button>
         `;
       case UpsellModalCTAMode.PayPalUpsellSlot:
         return html`
           <div class="paypal-upsell-slot-container">
             <div class="paypal-upsell-slot-blocker ${this.error ? '' : 'hidden'}"></div>
+            <button
+              class="cta-button"
+              id="paypal-cover-button"
+            >
+              YES, I'll donate monthly
+            </button>
             <slot class="paypal-upsell-slot"></slot>
           </div>
         `;
@@ -144,10 +156,8 @@ export class UpsellModalContent extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const yesButtonColor = css`var(--upsellYesButtonColor, rgb(109,148,201))`;
-    const yesButtonDisabledColor = css`var(--upsellYesButtonDisabledColor, rgba(109,148,201,0.5))`;
-    const noThanksFontSize = css`var(--upsellNoThanksFontSize, 1.4rem)`;
-    const noThanksFontColor = css`var(--upsellNoThanksFontColor, #c23e3e)`;
+    const ctaButtonColor = css`var(--upsellCTAButtonColor, #194880)`;
+    const ctaButtonDisabledColor = css`var(--upsellCTAButtonDisabledColor, rgba(109,148,201,0.5))`;
     const amountInputOffset = css`var(--upsellAmountInputOffset, -1rem)`;
 
     return css`
@@ -156,8 +166,8 @@ export class UpsellModalContent extends LitElement {
         padding: 0.5rem 0.625rem;
         border-radius: 5px;
         text-align: center;
-        margin-bottom: 1em;
-        margin-top: 1em;
+        margin-bottom: 0.5rem;
+        margin-top: 0;
       }
 
       .monthly-amount h1 {
@@ -167,6 +177,22 @@ export class UpsellModalContent extends LitElement {
         line-height: 1.2em;
         margin: 0;
         padding: 0.5rem 0 0 0;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      h3 {
+        text-align: center;
+        font-size: 1.8rem;
+        margin: 0 1rem 0.5rem 1rem;
+      }
+
+      .appeal {
+        text-align: center;
+        font-size: 1.6rem;
+        margin: 0.5rem 1rem;
       }
 
       .amount-input {
@@ -187,13 +213,13 @@ export class UpsellModalContent extends LitElement {
         font-size: 3.4rem;
       }
 
-      .yes-button {
-        font-size: 2.4rem;
+      .cta-button {
+        font-size: 2rem;
         display: block;
         width: 100%;
-        padding: 0.625rem;
-        margin-top: 1rem;
-        background-color: ${yesButtonColor};
+        margin-top: 0.5rem;
+        padding: 1rem 2rem;
+        background-color: ${ctaButtonColor};
         color: #fff;
         border-radius: 5px;
         border: 0;
@@ -203,20 +229,9 @@ export class UpsellModalContent extends LitElement {
         cursor: pointer;
       }
 
-      .yes-button:disabled {
-        background-color: ${yesButtonDisabledColor};
+      .cta-button:disabled {
+        background-color: ${ctaButtonDisabledColor};
         cursor: not-allowed;
-      }
-
-      .no-thanks-button {
-        margin-top: 1rem;
-        width: 100%;
-        text-align: center;
-        color: ${noThanksFontColor};
-        border: 0;
-        background: none;
-        font-size: ${noThanksFontSize};
-        cursor: pointer;
       }
 
       .paypal-upsell-slot {
@@ -226,7 +241,8 @@ export class UpsellModalContent extends LitElement {
       .paypal-upsell-slot-blocker {
         position: absolute;
         width: 100%;
-        height: 100%;
+        height: 4.5rem;
+        bottom: 0;
         z-index: 250;
         cursor: not-allowed;
         background-color: rgba(255, 255, 255, 0.5);
@@ -236,14 +252,53 @@ export class UpsellModalContent extends LitElement {
         display: none;
       }
 
+      #paypal-cover-button {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+      }
+
       .paypal-upsell-slot-container {
         position: relative;
+      }
+
+      .paypal-upsell-slot-container .paypal-cta {
+        font-size: 2.4rem;
+        font-weight: bold;
+        margin: 0 1rem 1rem 1rem;
+        text-align: center;
       }
 
       .error {
         font-size: 1.4rem;
         margin: 0.5rem 0;
         color: red;
+      }
+
+      .or_separator {
+        position: relative;
+        margin: 0 2rem;
+        font-size: 2.6rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-align: center;
+      }
+
+      .or_separator:before {
+        position: absolute;
+        top: calc(50% - 1px);
+        right: 0;
+        left: 0;
+        height: 2px;
+        content: '';
+        background: #333;
+      }
+
+      .or_separator span {
+        display: inline-block;
+        position: relative;
+        padding: 0 1rem;
+        background: #f5f5f7;
       }
     `;
   }

@@ -5,11 +5,9 @@ import { DonationForm } from '../../src/donation-form';
 import { DonationType, DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
 import { PaymentSelector } from '../../src/form-elements/payment-selector';
 import { MockBraintreeManager } from '../mocks/mock-braintree-manager';
-import { ContactForm } from '../../src/form-elements/contact-form/contact-form';
 import { MockPaymentFlowHandlers } from '../mocks/flow-handlers/mock-payment-flow-handlers';
 import { promisedSleep } from '../helpers/promisedSleep';
 import { MockDonationInfo } from '../mocks/mock-donation-info';
-import { fillInContactForm } from '../helpers/fillInContactForm';
 
 describe('Donation Form', () => {
   describe('Configuration', () => {
