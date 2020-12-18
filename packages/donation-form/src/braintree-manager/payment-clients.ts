@@ -11,8 +11,8 @@ export interface PaymentClientsInterface {
   applePay: PromisedSingleton<braintree.ApplePay>;
   googlePayBraintreeClient: PromisedSingleton<braintree.GooglePayment>;
 
-  googlePaymentsClient: PromisedSingleton<google.payments.api.PaymentsClient>;
-  recaptchaLibrary: PromisedSingleton<ReCaptchaV2.ReCaptcha>;
+  googlePaymentsClient: PromisedSingleton<google.payments.api.PaymentsClient | undefined>;
+  recaptchaLibrary: PromisedSingleton<ReCaptchaV2.ReCaptcha | undefined>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   paypalLibrary: PromisedSingleton<any>;
 }
@@ -39,8 +39,8 @@ export class PaymentClients implements PaymentClientsInterface {
   applePay: PromisedSingleton<braintree.ApplePay>;
   googlePayBraintreeClient: PromisedSingleton<braintree.GooglePayment>;
 
-  googlePaymentsClient: PromisedSingleton<google.payments.api.PaymentsClient>;
-  recaptchaLibrary: PromisedSingleton<ReCaptchaV2.ReCaptcha>;
+  googlePaymentsClient: PromisedSingleton<google.payments.api.PaymentsClient | undefined>;
+  recaptchaLibrary: PromisedSingleton<ReCaptchaV2.ReCaptcha | undefined>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   paypalLibrary: PromisedSingleton<any>;
 
@@ -102,7 +102,7 @@ export class PaymentClients implements PaymentClientsInterface {
     });
 
     this.recaptchaLibrary = new PromisedSingleton<ReCaptchaV2.ReCaptcha>({
-      generator: new Promise(resolve => {
+      generator: new Promise((resolve, reject) => {
         // The loader for the recaptcha library is relying on an onload callback from the recaptcha
         // library because even when the library has loaded, it is still not ready
         // As recommended by Recaptcha, we attach a callback to the window object before starting
@@ -119,6 +119,9 @@ export class PaymentClients implements PaymentClientsInterface {
         this.lazyLoader.loadScript({
           src:
             'https://www.google.com/recaptcha/api.js?onload=donationFormGrecaptchaLoadedCallback&render=explicit',
+        }).catch(reason => {
+          console.error('error loading recaptcha');
+          reject(reason);
         });
       }),
     });

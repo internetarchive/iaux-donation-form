@@ -27,6 +27,8 @@ export class PaymentSelector extends LitElement {
 
   @property({ type: Object }) paymentProviders?: PaymentProvidersInterface;
 
+  @property({ type: String }) private creditCardMode: PaymentButtonMode = PaymentButtonMode.Loading;
+
   @property({ type: String }) private applePayMode: PaymentButtonMode = PaymentButtonMode.Loading;
 
   @property({ type: String }) private googlePayMode: PaymentButtonMode = PaymentButtonMode.Loading;
@@ -78,7 +80,7 @@ export class PaymentSelector extends LitElement {
 
         <button
           @click=${this.creditCardSelected}
-          class="button-style credit-card-button"
+          class="button-style provider-button credit-card-button ${this.creditCardMode}"
           tabindex="0"
         >
           <div class="cc-background">
@@ -259,9 +261,7 @@ export class PaymentSelector extends LitElement {
       .credit-card-button {
         grid-column-start: 1;
         grid-column-end: 5;
-
         background-color: white;
-        border: 1px solid #333;
         border-radius: 4px;
         height: ${paymentButtonHeightCss};
         cursor: pointer;
@@ -269,9 +269,10 @@ export class PaymentSelector extends LitElement {
         padding: 0.2rem 0.3rem;
       }
 
-      .credit-card-button .cc-background {
+      .credit-card-button.available .cc-background {
         width: 100%;
         height: 100%;
+        border: 1px solid #333;
         background-repeat: no-repeat;
         background-image: url(https://archive.org/images/cc_logos.png);
         background-position: 50% 50%;

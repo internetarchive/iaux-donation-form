@@ -189,10 +189,12 @@ export class DonationFormController extends LitElement {
     }
     this.recaptchaManagerSetup = true;
     const grecaptchaLibrary = await this.paymentClients.recaptchaLibrary.get();
-    this.recaptchaManager = new RecaptchaManager({
-      grecaptchaLibrary: grecaptchaLibrary,
-      siteKey: this.recaptchaSiteKey,
-    });
+    if (grecaptchaLibrary) {
+      this.recaptchaManager = new RecaptchaManager({
+        grecaptchaLibrary: grecaptchaLibrary,
+        siteKey: this.recaptchaSiteKey,
+      });
+    }
   }
 
   /** @inheritdoc */
@@ -238,9 +240,7 @@ export class DonationFormController extends LitElement {
     // verify we have all of the dependencies
     if (
       !this.braintreeManager ||
-      !this.recaptchaManager ||
-      !this.modalManager ||
-      !this.recaptchaElement
+      !this.modalManager
     ) {
       return;
     }
@@ -256,7 +256,10 @@ export class DonationFormController extends LitElement {
 
     this.braintreeManager.startup();
     this.paymentFlowHandlers.startup();
-    this.recaptchaManager.setup(this.recaptchaElement, 1, 'light', 'image');
+
+    if (this.recaptchaManager && this.recaptchaElement) {
+      this.recaptchaManager.setup(this.recaptchaElement, 1, 'light', 'image');
+    }
   }
 
   private get hostedFieldConfig(): HostedFieldConfiguration {
