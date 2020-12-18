@@ -39,6 +39,7 @@ import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-fl
 import '@internetarchive/donation-form-section';
 import { DonationFormSection } from '@internetarchive/donation-form-section';
 import { UpsellModalCTAMode } from './modals/upsell-modal-content';
+import { DonationFormConfig } from './models/donation-form-config';
 
 @customElement('donation-form')
 export class DonationForm extends LitElement {
@@ -49,6 +50,8 @@ export class DonationForm extends LitElement {
   @property({ type: Object }) donationRequest: DonationRequest | undefined;
 
   @property({ type: Object }) donationInfo?: DonationPaymentInfo;
+
+  @property({ type: Object }) config?: DonationFormConfig;
 
   @property({ type: Boolean }) private creditCardVisible = false;
 
@@ -84,6 +87,7 @@ export class DonationForm extends LitElement {
       <donation-form-section sectionBadge="3" headline="Choose a payment method">
         <payment-selector
           .paymentProviders=${this.braintreeManager?.paymentProviders}
+          ?showCreditCardButtonText=${this.config?.showCreditCardButtonText}
           @firstUpdated=${this.paymentSelectorFirstUpdated}
           @creditCardSelected=${this.creditCardSelected}
           @venmoSelected=${this.venmoSelected}
@@ -364,6 +368,16 @@ export class DonationForm extends LitElement {
 
     if (changedProperties.has('donationInfoValid')) {
       this.paymentSelector.donationInfoValid = this.donationInfoValid;
+    }
+
+    if (changedProperties.has('selectedPaymentProvider')) {
+      const event = new CustomEvent('paymentProviderSelected', {
+        detail: {
+          paymentProvider: this.selectedPaymentProvider,
+          previousPaymentProvider: changedProperties.get('selectedPaymentProvider'),
+        },
+      });
+      this.dispatchEvent(event);
     }
   }
 

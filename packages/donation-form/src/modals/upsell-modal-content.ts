@@ -87,10 +87,7 @@ export class UpsellModalContent extends LitElement {
         return html`
           <div class="paypal-upsell-slot-container">
             <div class="paypal-upsell-slot-blocker ${this.error ? '' : 'hidden'}"></div>
-            <button
-              class="cta-button"
-              id="paypal-cover-button"
-            >
+            <button class="cta-button" id="paypal-cover-button">
               YES, I'll donate monthly
             </button>
             <slot class="paypal-upsell-slot"></slot>

@@ -48,6 +48,7 @@ import {
   DonationType,
 } from '@internetarchive/donation-form-data-models';
 import { UpsellModalCTAMode } from './modals/upsell-modal-content';
+import { DonationFormConfig } from './models/donation-form-config';
 
 /**
  * The DonationFormController orchestrates several of the interactions between
@@ -92,6 +93,8 @@ export class DonationFormController extends LitElement {
   @property({ type: Object }) paymentFlowHandlers?: PaymentFlowHandlersInterface;
 
   @property({ type: Object }) paymentClients?: PaymentClientsInterface;
+
+  @property({ type: Object }) config?: DonationFormConfig;
 
   @query('donation-form') private donationForm!: DonationForm;
 
@@ -315,6 +318,7 @@ export class DonationFormController extends LitElement {
           .environment=${this.environment}
           .braintreeManager=${this.braintreeManager}
           @donationInfoChanged=${this.donationInfoChanged}
+          @paymentProviderSelected=${this.paymentProviderSelected}
           @paymentFlowStarted=${this.paymentFlowStarted}
           @paymentFlowCancelled=${this.paymentFlowCancelled}
           @paymentFlowError=${this.paymentFlowError}
@@ -369,52 +373,54 @@ export class DonationFormController extends LitElement {
     return this;
   }
 
-  private donationInfoChanged(e: CustomEvent): void {
-    const donationInfo = e.detail.donationInfo as DonationPaymentInfo;
+  private donationInfoChanged(): void {
+    this.logEvent('donationInfoChanged');
+  }
 
-    this.logEvent('donationInfoChanged', {
-      amount: donationInfo.amount,
-      donationType: donationInfo.donationType,
-      coverFees: donationInfo.coverFees,
-    });
+  private paymentProviderSelected(e: CustomEvent): void {
+    const paymentProvider = e.detail.paymentProvider as PaymentProvider;
+    const previousPaymentProvider = e.detail.previousPaymentProvider;
+    const providerNoSpaces = this.removeSpaces(paymentProvider);
+    let eventName = `ProviderFirstSelected-${providerNoSpaces}`;
+    if (previousPaymentProvider !== undefined) {
+      eventName = `ProviderChangedTo-${providerNoSpaces}`;
+    }
+    const label = `CreditCardTextVisible:${this.config?.showCreditCardButtonText ? 'Yes' : 'No'}`;
+    this.logEvent(eventName, label);
   }
 
   private paymentFlowStarted(e: CustomEvent): void {
     const selectedProvider = e.detail.paymentProvider as PaymentProvider;
-    this.logEvent('paymentFlowStarted', {
-      paymentProvider: selectedProvider,
-    });
+    const providerNoSpaces = this.removeSpaces(selectedProvider);
+    this.logEvent('paymentFlowStarted', providerNoSpaces);
   }
 
   private paymentFlowCancelled(e: CustomEvent): void {
     const selectedProvider = e.detail.paymentProvider as PaymentProvider;
-    this.logEvent('paymentFlowCancelled', {
-      paymentProvider: selectedProvider,
-    });
+    const providerNoSpaces = this.removeSpaces(selectedProvider);
+    this.logEvent('paymentFlowCancelled', providerNoSpaces);
   }
 
   private paymentFlowError(e: CustomEvent): void {
     const selectedProvider = e.detail.paymentProvider as PaymentProvider;
-    const error = e.detail.error as PaymentProvider;
-    this.logEvent('paymentFlowError', {
-      paymentProvider: selectedProvider,
-      error: error,
-    });
+    const providerNoSpaces = this.removeSpaces(selectedProvider);
+    const error = e.detail.error;
+    const detail = `${providerNoSpaces}-${error}`;
+    this.logEvent('paymentFlowError', detail);
+  }
+
+  private removeSpaces(original: string): string {
+    return original.replace(/\s+/g, '');
   }
 
   /**
    * Log an event
    *
    * @param {string} name Name of event
-   * @param {object} params Additional tracking parameters
+   * @param {string} label Event label, optional
    */
-  private logEvent(name: string, params: object): void {
-    this.analyticsHandler?.send_event(
-      this.analyticsCategory,
-      name,
-      window.location.pathname,
-      params,
-    );
+  private logEvent(name: string, label?: string): void {
+    this.analyticsHandler?.send_event(this.analyticsCategory, name, label);
   }
 
   /**

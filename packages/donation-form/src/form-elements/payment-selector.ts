@@ -27,6 +27,8 @@ export class PaymentSelector extends LitElement {
 
   @property({ type: Object }) paymentProviders?: PaymentProvidersInterface;
 
+  @property({ type: Boolean }) showCreditCardButtonText = false;
+
   @property({ type: String }) private applePayMode: PaymentButtonMode = PaymentButtonMode.Loading;
 
   @property({ type: String }) private googlePayMode: PaymentButtonMode = PaymentButtonMode.Loading;
@@ -78,12 +80,13 @@ export class PaymentSelector extends LitElement {
 
         <button
           @click=${this.creditCardSelected}
-          class="button-style credit-card-button"
+          class="button-style credit-card-button ${this.showCreditCardButtonText
+            ? ''
+            : 'hide-cc-text'}"
           tabindex="0"
         >
-          <div class="cc-background">
-            <span class="cc-title">Credit Card</span>
-          </div>
+          <span class="cc-title">Credit Card</span>
+          <div class="cc-background"></div>
         </button>
       </div>
     `;
@@ -259,14 +262,21 @@ export class PaymentSelector extends LitElement {
       .credit-card-button {
         grid-column-start: 1;
         grid-column-end: 5;
-
         background-color: white;
         border: 1px solid #333;
         border-radius: 4px;
-        height: ${paymentButtonHeightCss};
         cursor: pointer;
         margin: 0;
-        padding: 0.2rem 0.3rem;
+        padding: 0.3rem 0.7rem;
+      }
+
+      .credit-card-button .cc-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+      }
+
+      .credit-card-button.hide-cc-text .cc-title {
+        display: none;
       }
 
       .credit-card-button .cc-background {
@@ -276,10 +286,7 @@ export class PaymentSelector extends LitElement {
         background-image: url(https://archive.org/images/cc_logos.png);
         background-position: 50% 50%;
         background-size: contain;
-      }
-
-      .credit-card-button .cc-title {
-        display: none;
+        height: 2.4rem;
       }
     `;
   }
