@@ -116,18 +116,25 @@ export class PaymentProviders implements PaymentProvidersInterface {
     });
 
     this.googlePayHandler = new PromisedSingleton<GooglePayHandlerInterface>({
-      generator: new Promise(async resolve => {
+      generator: new Promise(async (resolve, reject) => {
         const googlePaymentsClient = this.paymentClients.googlePaymentsClient.get();
         const braintreeClient = this.paymentClients.googlePayBraintreeClient.get();
 
         return Promise.all([braintreeClient, googlePaymentsClient]).then(values => {
-          const handler = new GooglePayHandler({
-            braintreeManager: this.braintreeManager,
-            googlePayMerchantId: this.googlePayMerchantId,
-            googlePayBraintreeClient: values[0],
-            googlePaymentsClient: values[1],
-          });
-          resolve(handler);
+          const gPayBraintreeClient = values[0];
+          const gPayClient = values[1];
+
+          if (gPayClient) {
+            const handler = new GooglePayHandler({
+              braintreeManager: this.braintreeManager,
+              googlePayMerchantId: this.googlePayMerchantId,
+              googlePayBraintreeClient: gPayBraintreeClient,
+              googlePaymentsClient: gPayClient,
+            });
+            resolve(handler);
+          } else {
+            reject('Google Payments Client not loaded');
+          }
         });
       }),
     });
