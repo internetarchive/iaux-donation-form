@@ -317,6 +317,7 @@ export class DonationFormController extends LitElement {
         <donation-form
           .environment=${this.environment}
           .braintreeManager=${this.braintreeManager}
+          .config=${this.config}
           @donationInfoChanged=${this.donationInfoChanged}
           @paymentProviderSelected=${this.paymentProviderSelected}
           @paymentFlowStarted=${this.paymentFlowStarted}
