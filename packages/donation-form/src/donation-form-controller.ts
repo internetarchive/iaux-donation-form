@@ -201,6 +201,7 @@ export class DonationFormController extends LitElement {
   /** @inheritdoc */
   firstUpdated(): void {
     this.setInitialDonationAmount();
+    this.trackViewedEvent();
   }
 
   private setInitialDonationAmount(): void {
@@ -378,6 +379,10 @@ export class DonationFormController extends LitElement {
     this.logEvent('donationInfoChanged');
   }
 
+  private trackViewedEvent(): void {
+    this.logEvent('Viewed', this.creditCardVisibilityTrackingLabel);
+  }
+
   private paymentProviderSelected(e: CustomEvent): void {
     const paymentProvider = e.detail.paymentProvider as PaymentProvider;
     const previousPaymentProvider = e.detail.previousPaymentProvider;
@@ -386,8 +391,11 @@ export class DonationFormController extends LitElement {
     if (previousPaymentProvider !== undefined) {
       eventName = `ProviderChangedTo-${providerNoSpaces}`;
     }
-    const label = `CreditCardTextVisible:${this.config?.showCreditCardButtonText ? 'Yes' : 'No'}`;
-    this.logEvent(eventName, label);
+    this.logEvent(eventName, this.creditCardVisibilityTrackingLabel);
+  }
+
+  private get creditCardVisibilityTrackingLabel(): string {
+    return `CreditCardTextVisible:${this.config?.showCreditCardButtonText ? 'Yes' : 'No'}`;
   }
 
   private paymentFlowStarted(e: CustomEvent): void {
