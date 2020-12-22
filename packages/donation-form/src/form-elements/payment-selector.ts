@@ -217,6 +217,7 @@ export class PaymentSelector extends LitElement {
   static get styles(): CSSResult {
     const paymentButtonWidthCss = css`var(--paymentButtonWidth, 5rem)`;
     const paymentButtonHeightCss = css`var(--paymentButtonHeight, 3.2rem)`;
+    const creditCardFontSizeCss = css`var(--creditCardFontSize, 1.8rem)`;
 
     return css`
       .payment-container {
@@ -224,7 +225,9 @@ export class PaymentSelector extends LitElement {
       }
 
       .payment-provider-container {
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-gap: 1rem;
         margin-bottom: 1rem;
         max-width: 23rem;
       }
@@ -232,7 +235,6 @@ export class PaymentSelector extends LitElement {
       .provider-button {
         border: 0;
         padding: 0;
-        margin-right: 1rem;
         background: none;
         cursor: pointer;
         width: ${paymentButtonWidthCss};
@@ -297,7 +299,7 @@ export class PaymentSelector extends LitElement {
       }
 
       .credit-card-button .cc-title {
-        font-size: 1.4rem;
+        font-size: ${creditCardFontSizeCss};
         font-weight: 700;
         margin-bottom: 0.5rem;
       }
