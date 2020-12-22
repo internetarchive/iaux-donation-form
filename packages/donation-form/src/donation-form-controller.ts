@@ -48,7 +48,6 @@ import {
   DonationType,
 } from '@internetarchive/donation-form-data-models';
 import { UpsellModalCTAMode } from './modals/upsell-modal-content';
-import { DonationFormConfig } from './models/donation-form-config';
 
 /**
  * The DonationFormController orchestrates several of the interactions between
@@ -94,7 +93,7 @@ export class DonationFormController extends LitElement {
 
   @property({ type: Object }) paymentClients?: PaymentClientsInterface;
 
-  @property({ type: Object }) config?: DonationFormConfig;
+  @property({ type: Boolean }) showCreditCardButtonText = false;
 
   @query('donation-form') private donationForm!: DonationForm;
 
@@ -318,7 +317,7 @@ export class DonationFormController extends LitElement {
         <donation-form
           .environment=${this.environment}
           .braintreeManager=${this.braintreeManager}
-          .config=${this.config}
+          ?showCreditCardButtonText=${this.showCreditCardButtonText}
           @donationInfoChanged=${this.donationInfoChanged}
           @paymentProviderSelected=${this.paymentProviderSelected}
           @paymentFlowStarted=${this.paymentFlowStarted}
@@ -395,7 +394,7 @@ export class DonationFormController extends LitElement {
   }
 
   private get creditCardVisibilityTrackingLabel(): string {
-    return `CreditCardTextVisible:${this.config?.showCreditCardButtonText ? 'Yes' : 'No'}`;
+    return `CreditCardTextVisible:${this.showCreditCardButtonText ? 'Yes' : 'No'}`;
   }
 
   private paymentFlowStarted(e: CustomEvent): void {

@@ -86,12 +86,12 @@
 
     document.querySelector('#show-credit-card-text-button').addEventListener('click', () => {
       const formController = document.querySelector('donation-form-controller');
-      formController.config = { "showCreditCardButtonText": true };
+      formController.showCreditCardButtonText = true;
     });
 
     document.querySelector('#hide-credit-card-text-button').addEventListener('click', () => {
       const formController = document.querySelector('donation-form-controller');
-      formController.config = { "showCreditCardButtonText": false };
+      formController.showCreditCardButtonText = false;
     });
 
     render(
