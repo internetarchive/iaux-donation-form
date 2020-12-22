@@ -220,6 +220,11 @@ export class PaymentSelector extends LitElement {
     const creditCardFontSizeCss = css`var(--creditCardFontSize, 1.8rem)`;
 
     return css`
+      button {
+        color: inherit;
+        font-family: inherit;
+      }
+
       .payment-container {
         width: 100%;
       }
