@@ -43,51 +43,56 @@ export class PaymentSelector extends LitElement {
       <div
         class="payment-container ${this.donationInfoValid
           ? 'donation-info-valid'
-          : 'donation-info-invalid'}"
+          : 'donation-info-invalid'}
+
+          ${this.showCreditCardButtonText ? 'show-cc-text' : 'hide-cc-text'}
+          "
       >
-        <button
-          class="applepay provider-button ${this.applePayMode}"
-          @click=${this.applePaySelected}
-          tabindex="0"
-        >
-          <div class="payment-image">${applePayButtonImage}</div>
-        </button>
+        <div class="payment-provider-container">
+          <button
+            class="applepay provider-button ${this.applePayMode}"
+            @click=${this.applePaySelected}
+            tabindex="0"
+          >
+            <div class="payment-image">${applePayButtonImage}</div>
+          </button>
 
-        <button
-          class="googlepay provider-button ${this.googlePayMode}"
-          @click=${this.googlePaySelected}
-          tabindex="0"
-        >
-          <div class="payment-image">${googlePayButtonImage}</div>
-        </button>
+          <button
+            class="googlepay provider-button ${this.googlePayMode}"
+            @click=${this.googlePaySelected}
+            tabindex="0"
+          >
+            <div class="payment-image">${googlePayButtonImage}</div>
+          </button>
 
-        <button
-          class="venmo provider-button ${this.venmoMode}"
-          @click=${this.venmoSelected}
-          tabindex="0"
-        >
-          <div class="payment-image">${venmoButtonImage}</div>
-        </button>
+          <button
+            class="venmo provider-button ${this.venmoMode}"
+            @click=${this.venmoSelected}
+            tabindex="0"
+          >
+            <div class="payment-image">${venmoButtonImage}</div>
+          </button>
 
-        <div class="paypal-container provider-button ${this.payPalMode}" tabindex="0">
-          <div class="payment-image">
-            <div class="paypal-local-button" @click=${this.localPaypalButtonClicked}>
-              ${paypalButtonImage}
+          <div class="paypal-container provider-button ${this.payPalMode}" tabindex="0">
+            <div class="payment-image">
+              <div class="paypal-local-button" @click=${this.localPaypalButtonClicked}>
+                ${paypalButtonImage}
+              </div>
+              <slot name="paypal-button"></slot>
             </div>
-            <slot name="paypal-button"></slot>
           </div>
         </div>
 
-        <button
-          @click=${this.creditCardSelected}
-          class="button-style credit-card-button ${this.showCreditCardButtonText
-            ? ''
-            : 'hide-cc-text'}"
-          tabindex="0"
-        >
-          <span class="cc-title">Credit Card</span>
-          <div class="cc-background"></div>
-        </button>
+        <div class="credit-card-container">
+          <button
+            @click=${this.creditCardSelected}
+            class="button-style credit-card-button"
+            tabindex="0"
+          >
+            <div class="cc-title">Credit Card</div>
+            <div class="cc-background"></div>
+          </button>
+        </div>
       </div>
     `;
   }
@@ -215,15 +220,19 @@ export class PaymentSelector extends LitElement {
 
     return css`
       .payment-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        grid-gap: 1rem;
+        width: 100%;
+      }
+
+      .payment-provider-container {
+        display: flex;
+        margin-bottom: 1rem;
         max-width: 23rem;
       }
 
       .provider-button {
         border: 0;
         padding: 0;
+        margin-right: 1rem;
         background: none;
         cursor: pointer;
         width: ${paymentButtonWidthCss};
@@ -236,8 +245,8 @@ export class PaymentSelector extends LitElement {
 
       .provider-button.loading {
         border: 1px solid #ddd;
+        border-radius: 2px;
         /* account for the borders that don't exist once the provider loads, otherwise the layout shifts */
-        margin-right: -2px;
         margin-bottom: -2px;
       }
 
@@ -260,33 +269,37 @@ export class PaymentSelector extends LitElement {
       }
 
       .credit-card-button {
-        grid-column-start: 1;
-        grid-column-end: 5;
         background-color: white;
         border: 1px solid #333;
         border-radius: 4px;
         cursor: pointer;
         margin: 0;
-        padding: 0.3rem 0.7rem;
+        padding: 0.7rem 1rem;
+        width: 100%;
+      }
+
+      .credit-card-button .cc-background {
+        height: 2.4rem;
+        width: 100%;
+        background-repeat: no-repeat;
+        background-image: url(https://archive.org/images/cc_logos.png);
+        background-position: 50% 50%;
+        background-size: contain;
+      }
+
+      .payment-container.hide-cc-text .credit-card-button {
+        max-width: 23rem;
+        padding: 0.5rem 0.7rem;
+      }
+
+      .payment-container.hide-cc-text .credit-card-button .cc-title {
+        display: none;
       }
 
       .credit-card-button .cc-title {
         font-size: 1.4rem;
         font-weight: 700;
-      }
-
-      .credit-card-button.hide-cc-text .cc-title {
-        display: none;
-      }
-
-      .credit-card-button .cc-background {
-        width: 100%;
-        height: 100%;
-        background-repeat: no-repeat;
-        background-image: url(https://archive.org/images/cc_logos.png);
-        background-position: 50% 50%;
-        background-size: contain;
-        height: 2.4rem;
+        margin-bottom: 0.5rem;
       }
     `;
   }
