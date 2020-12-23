@@ -375,7 +375,7 @@ export class DonationFormController extends LitElement {
   }
 
   private donationInfoChanged(): void {
-    this.logEvent('donationInfoChanged');
+    this.logEvent('DonationInfoChanged');
   }
 
   private trackViewedEvent(): void {
@@ -400,13 +400,13 @@ export class DonationFormController extends LitElement {
   private paymentFlowStarted(e: CustomEvent): void {
     const selectedProvider = e.detail.paymentProvider as PaymentProvider;
     const providerNoSpaces = this.removeSpaces(selectedProvider);
-    this.logEvent('paymentFlowStarted', providerNoSpaces);
+    this.logEvent('PaymentFlowStarted', providerNoSpaces);
   }
 
   private paymentFlowCancelled(e: CustomEvent): void {
     const selectedProvider = e.detail.paymentProvider as PaymentProvider;
     const providerNoSpaces = this.removeSpaces(selectedProvider);
-    this.logEvent('paymentFlowCancelled', providerNoSpaces);
+    this.logEvent('PaymentFlowCancelled', providerNoSpaces);
   }
 
   private paymentFlowError(e: CustomEvent): void {
@@ -414,7 +414,7 @@ export class DonationFormController extends LitElement {
     const providerNoSpaces = this.removeSpaces(selectedProvider);
     const error = e.detail.error;
     const detail = `${providerNoSpaces}-${error}`;
-    this.logEvent('paymentFlowError', detail);
+    this.logEvent('PaymentFlowError', detail);
   }
 
   private removeSpaces(original: string): string {

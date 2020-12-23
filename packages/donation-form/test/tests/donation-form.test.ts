@@ -1,8 +1,12 @@
-import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
+import { html, fixture, expect, elementUpdated, oneEvent } from '@open-wc/testing';
 
 import '../../src/donation-form';
 import { DonationForm } from '../../src/donation-form';
-import { DonationType, DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
+import {
+  DonationType,
+  DonationPaymentInfo,
+  PaymentProvider,
+} from '@internetarchive/donation-form-data-models';
 import { PaymentSelector } from '../../src/form-elements/payment-selector';
 import { MockBraintreeManager } from '../mocks/mock-braintree-manager';
 import { MockPaymentFlowHandlers } from '../mocks/flow-handlers/mock-payment-flow-handlers';
@@ -81,5 +85,39 @@ describe('Donation Form', () => {
     await elementUpdated(el);
     await promisedSleep(250);
     expect(flowHandlers.paypalHandler.donationInfo).to.equal(donationInfo);
+  });
+
+  it('emits paymentProviderSelected when the selected provider changes', async () => {
+    const el = (await fixture(html`
+      <donation-form></donation-form>
+    `)) as DonationForm;
+    const braintreeManager = new MockBraintreeManager();
+    el.braintreeManager = braintreeManager;
+    await elementUpdated(el);
+    const paymentSelector = el.shadowRoot?.querySelector('payment-selector') as PaymentSelector;
+    const creditCardButton = paymentSelector.shadowRoot?.querySelector(
+      '.credit-card-button',
+    ) as HTMLButtonElement;
+
+    // on the first payment provider chosen, the previousPaymentProvider is undefined
+    setTimeout(() => {
+      const ccClickEvent = new MouseEvent('click');
+      creditCardButton.dispatchEvent(ccClickEvent);
+    });
+    const ccResponse = await oneEvent(el, 'paymentProviderSelected');
+    expect(ccResponse).to.exist;
+    expect(ccResponse.detail.paymentProvider).to.equal(PaymentProvider.CreditCard);
+    expect(ccResponse.detail.previousPaymentProvider).to.equal(undefined);
+
+    // on subsequent payment provider choices, the previousPaymentProvider is populated
+    setTimeout(() => {
+      const venmoButton = paymentSelector.shadowRoot?.querySelector('.venmo') as HTMLButtonElement;
+      const venmoClickEvent = new MouseEvent('click');
+      venmoButton.dispatchEvent(venmoClickEvent);
+    });
+    const venmoResponse = await oneEvent(el, 'paymentProviderSelected');
+    expect(venmoResponse).to.exist;
+    expect(venmoResponse.detail.paymentProvider).to.equal(PaymentProvider.Venmo);
+    expect(venmoResponse.detail.previousPaymentProvider).to.equal(PaymentProvider.CreditCard);
   });
 });
