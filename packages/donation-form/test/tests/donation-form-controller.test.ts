@@ -17,6 +17,7 @@ import { PaymentSelector } from '../../src/form-elements/payment-selector';
 import { MockAnalyticHandler } from '../mocks/mock-analytics-handler';
 import { DonationFormHeader } from '../../src/form-elements/header/donation-form-header';
 import { DonationFormEditDonation } from '@internetarchive/donation-form-edit-donation';
+import { MockPaymentFlowHandlers } from '../mocks/flow-handlers/mock-payment-flow-handlers';
 
 describe('Donation Form Controller', () => {
   beforeEach(() => {
@@ -183,5 +184,49 @@ describe('Donation Form Controller', () => {
     });
     await oneEvent(donationForm, 'paymentProviderSelected');
     expect(mockAnalytics.callAction).to.equal('ProviderChangedTo-Venmo');
+  });
+
+  it('sends PaymentFlowCancelled analytics', async () => {
+    const mockAnalytics = new MockAnalyticHandler();
+    const analyticsCategory = 'FooCategory';
+    const controller = (await fixture(html`
+      <donation-form-controller
+        ?showCreditCardButtonText=${true}
+        .analyticsCategory=${analyticsCategory}
+        .analyticsHandler=${mockAnalytics}
+      >
+      </donation-form-controller>
+    `)) as DonationFormController;
+
+    const donationForm: DonationForm = controller.querySelector('donation-form') as DonationForm;
+    const flowHandlers = new MockPaymentFlowHandlers();
+    donationForm.paymentFlowHandlers = flowHandlers;
+    await elementUpdated(donationForm);
+    await promisedSleep(250);
+    flowHandlers.paypalHandler.emitPaymentCancelledEvent();
+    expect(mockAnalytics.callAction).to.equal('PaymentFlowCancelled');
+    expect(mockAnalytics.callLabel).to.equal('PayPal');
+  });
+
+  it('sends PaymentFlowError analytics', async () => {
+    const mockAnalytics = new MockAnalyticHandler();
+    const analyticsCategory = 'FooCategory';
+    const controller = (await fixture(html`
+      <donation-form-controller
+        ?showCreditCardButtonText=${true}
+        .analyticsCategory=${analyticsCategory}
+        .analyticsHandler=${mockAnalytics}
+      >
+      </donation-form-controller>
+    `)) as DonationFormController;
+
+    const donationForm: DonationForm = controller.querySelector('donation-form') as DonationForm;
+    const flowHandlers = new MockPaymentFlowHandlers();
+    donationForm.paymentFlowHandlers = flowHandlers;
+    await elementUpdated(donationForm);
+    await promisedSleep(250);
+    flowHandlers.paypalHandler.emitPaymentErrorEvent();
+    expect(mockAnalytics.callAction).to.equal('PaymentFlowError');
+    expect(mockAnalytics.callLabel).to.equal('PayPal-foo-error');
   });
 });

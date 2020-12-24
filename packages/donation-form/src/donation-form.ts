@@ -412,9 +412,9 @@ export class DonationForm extends LitElement {
       this.selectedPaymentProvider = PaymentProvider.PayPal;
       this.emitPaymentFlowCancelledEvent();
     });
-    this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentError', () => {
+    this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentError', (datasource, error) => {
       this.selectedPaymentProvider = PaymentProvider.PayPal;
-      this.emitPaymentFlowErrorEvent();
+      this.emitPaymentFlowErrorEvent(error);
     });
 
     this.paymentFlowHandlers?.googlePayHandler?.on('paymentCancelled', () => {
