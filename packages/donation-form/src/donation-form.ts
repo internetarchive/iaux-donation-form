@@ -50,6 +50,8 @@ export class DonationForm extends LitElement {
 
   @property({ type: Object }) donationInfo?: DonationPaymentInfo;
 
+  @property({ type: Boolean }) showCreditCardButtonText = false;
+
   @property({ type: Boolean }) private creditCardVisible = false;
 
   @property({ type: Boolean }) private contactFormVisible = false;
@@ -84,6 +86,7 @@ export class DonationForm extends LitElement {
       <donation-form-section sectionBadge="3" headline="Choose a payment method">
         <payment-selector
           .paymentProviders=${this.braintreeManager?.paymentProviders}
+          ?showCreditCardButtonText=${this.showCreditCardButtonText}
           @firstUpdated=${this.paymentSelectorFirstUpdated}
           @creditCardSelected=${this.creditCardSelected}
           @venmoSelected=${this.venmoSelected}
@@ -365,6 +368,16 @@ export class DonationForm extends LitElement {
     if (changedProperties.has('donationInfoValid')) {
       this.paymentSelector.donationInfoValid = this.donationInfoValid;
     }
+
+    if (changedProperties.has('selectedPaymentProvider')) {
+      const event = new CustomEvent('paymentProviderSelected', {
+        detail: {
+          paymentProvider: this.selectedPaymentProvider,
+          previousPaymentProvider: changedProperties.get('selectedPaymentProvider'),
+        },
+      });
+      this.dispatchEvent(event);
+    }
   }
 
   private flowHandlersConfigured = false;
@@ -399,9 +412,9 @@ export class DonationForm extends LitElement {
       this.selectedPaymentProvider = PaymentProvider.PayPal;
       this.emitPaymentFlowCancelledEvent();
     });
-    this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentError', () => {
+    this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentError', (datasource, error) => {
       this.selectedPaymentProvider = PaymentProvider.PayPal;
-      this.emitPaymentFlowErrorEvent();
+      this.emitPaymentFlowErrorEvent(error);
     });
 
     this.paymentFlowHandlers?.googlePayHandler?.on('paymentCancelled', () => {

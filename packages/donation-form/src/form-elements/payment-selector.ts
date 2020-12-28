@@ -27,6 +27,8 @@ export class PaymentSelector extends LitElement {
 
   @property({ type: Object }) paymentProviders?: PaymentProvidersInterface;
 
+  @property({ type: Boolean }) showCreditCardButtonText = false;
+
   @property({ type: String }) private applePayMode: PaymentButtonMode = PaymentButtonMode.Loading;
 
   @property({ type: String }) private googlePayMode: PaymentButtonMode = PaymentButtonMode.Loading;
@@ -41,50 +43,56 @@ export class PaymentSelector extends LitElement {
       <div
         class="payment-container ${this.donationInfoValid
           ? 'donation-info-valid'
-          : 'donation-info-invalid'}"
+          : 'donation-info-invalid'}
+
+          ${this.showCreditCardButtonText ? 'show-cc-text' : 'hide-cc-text'}
+          "
       >
-        <button
-          class="applepay provider-button ${this.applePayMode}"
-          @click=${this.applePaySelected}
-          tabindex="0"
-        >
-          <div class="payment-image">${applePayButtonImage}</div>
-        </button>
+        <div class="payment-provider-container">
+          <button
+            class="applepay provider-button ${this.applePayMode}"
+            @click=${this.applePaySelected}
+            tabindex="0"
+          >
+            <div class="payment-image">${applePayButtonImage}</div>
+          </button>
 
-        <button
-          class="googlepay provider-button ${this.googlePayMode}"
-          @click=${this.googlePaySelected}
-          tabindex="0"
-        >
-          <div class="payment-image">${googlePayButtonImage}</div>
-        </button>
+          <button
+            class="googlepay provider-button ${this.googlePayMode}"
+            @click=${this.googlePaySelected}
+            tabindex="0"
+          >
+            <div class="payment-image">${googlePayButtonImage}</div>
+          </button>
 
-        <button
-          class="venmo provider-button ${this.venmoMode}"
-          @click=${this.venmoSelected}
-          tabindex="0"
-        >
-          <div class="payment-image">${venmoButtonImage}</div>
-        </button>
+          <button
+            class="venmo provider-button ${this.venmoMode}"
+            @click=${this.venmoSelected}
+            tabindex="0"
+          >
+            <div class="payment-image">${venmoButtonImage}</div>
+          </button>
 
-        <div class="paypal-container provider-button ${this.payPalMode}" tabindex="0">
-          <div class="payment-image">
-            <div class="paypal-local-button" @click=${this.localPaypalButtonClicked}>
-              ${paypalButtonImage}
+          <div class="paypal-container provider-button ${this.payPalMode}" tabindex="0">
+            <div class="payment-image">
+              <div class="paypal-local-button" @click=${this.localPaypalButtonClicked}>
+                ${paypalButtonImage}
+              </div>
+              <slot name="paypal-button"></slot>
             </div>
-            <slot name="paypal-button"></slot>
           </div>
         </div>
 
-        <button
-          @click=${this.creditCardSelected}
-          class="button-style credit-card-button"
-          tabindex="0"
-        >
-          <div class="cc-background">
-            <span class="cc-title">Credit Card</span>
-          </div>
-        </button>
+        <div class="credit-card-container">
+          <button
+            @click=${this.creditCardSelected}
+            class="button-style credit-card-button"
+            tabindex="0"
+          >
+            <div class="cc-title">Credit Card</div>
+            <div class="cc-background"></div>
+          </button>
+        </div>
       </div>
     `;
   }
@@ -209,12 +217,23 @@ export class PaymentSelector extends LitElement {
   static get styles(): CSSResult {
     const paymentButtonWidthCss = css`var(--paymentButtonWidth, 5rem)`;
     const paymentButtonHeightCss = css`var(--paymentButtonHeight, 3.2rem)`;
+    const creditCardFontSizeCss = css`var(--creditCardFontSize, 1.8rem)`;
 
     return css`
+      button {
+        color: inherit;
+        font-family: inherit;
+      }
+
       .payment-container {
+        width: 100%;
+      }
+
+      .payment-provider-container {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-gap: 1rem;
+        margin-bottom: 1rem;
         max-width: 23rem;
       }
 
@@ -233,8 +252,8 @@ export class PaymentSelector extends LitElement {
 
       .provider-button.loading {
         border: 1px solid #ddd;
+        border-radius: 2px;
         /* account for the borders that don't exist once the provider loads, otherwise the layout shifts */
-        margin-right: -2px;
         margin-bottom: -2px;
       }
 
@@ -257,29 +276,37 @@ export class PaymentSelector extends LitElement {
       }
 
       .credit-card-button {
-        grid-column-start: 1;
-        grid-column-end: 5;
-
         background-color: white;
         border: 1px solid #333;
         border-radius: 4px;
-        height: ${paymentButtonHeightCss};
         cursor: pointer;
         margin: 0;
-        padding: 0.2rem 0.3rem;
+        padding: 0.7rem 1rem;
+        width: 100%;
       }
 
       .credit-card-button .cc-background {
+        height: 2.4rem;
         width: 100%;
-        height: 100%;
         background-repeat: no-repeat;
         background-image: url(https://archive.org/images/cc_logos.png);
         background-position: 50% 50%;
         background-size: contain;
       }
 
-      .credit-card-button .cc-title {
+      .payment-container.hide-cc-text .credit-card-button {
+        max-width: 23rem;
+        padding: 0.5rem 0.7rem;
+      }
+
+      .payment-container.hide-cc-text .credit-card-button .cc-title {
         display: none;
+      }
+
+      .credit-card-button .cc-title {
+        font-size: ${creditCardFontSizeCss};
+        font-weight: 700;
+        margin-bottom: 0.5rem;
       }
     `;
   }

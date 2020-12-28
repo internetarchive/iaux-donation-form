@@ -8,6 +8,10 @@
   <link rel="stylesheet" href="assets/style.css" />
 
   <style>
+    body {
+      color: #333;
+    }
+
     body.modal-manager-open {
       overflow: hidden;
     }
@@ -24,6 +28,7 @@
 
     donation-form-controller {
       display: block;
+      width: 32rem;
     }
 
     .dev-tools {
@@ -44,8 +49,14 @@
   </header>
 
   <div class="dev-tools">
-    <button id="show-regular-upsell-button">Show Regular Upsell</button> |
-    <button id="show-paypal-upsell-button">Show PayPal Upsell</button>
+    <div>
+      <button id="show-regular-upsell-button">Show Regular Upsell</button> |
+      <button id="show-paypal-upsell-button">Show PayPal Upsell</button>
+    </div>
+    <div>
+      <button id="show-credit-card-text-button">Show Credit Card Text</button> |
+      <button id="hide-credit-card-text-button">Hide Credit Card Text</button>
+    </div>
   </div>
 
   <div id="demo">
@@ -74,6 +85,16 @@
       });
     });
 
+    document.querySelector('#show-credit-card-text-button').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.showCreditCardButtonText = true;
+    });
+
+    document.querySelector('#hide-credit-card-text-button').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.showCreditCardButtonText = false;
+    });
+
     render(
       html`
         <modal-manager>
@@ -94,6 +115,7 @@
           googlePayMerchantId=''
           .endpointManager=${braintreeEndpointManager}
           referrer='demo-app'
+          ?showCreditCardButtonText=${true}
           loggedInUser='demo-user'>
         </donation-form-controller>
 
