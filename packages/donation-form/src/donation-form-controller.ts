@@ -107,7 +107,7 @@ export class DonationFormController extends LitElement {
 
   @query('#braintree-error-message') private braintreeErrorMessage!: HTMLDivElement;
 
-  @query('contact-form') private contactForm!: ContactForm;
+  @query('contact-form') private contactForm?: ContactForm;
 
   private lazyLoaderService: LazyLoaderServiceInterface = new LazyLoaderService();
 
