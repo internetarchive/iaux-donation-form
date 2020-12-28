@@ -36,6 +36,8 @@ import {
 } from './braintree-manager/payment-providers/credit-card/hosted-field-container';
 
 import './form-elements/badged-input';
+import { ContactForm } from './form-elements/contact-form/contact-form';
+import './form-elements/contact-form/contact-form';
 
 import creditCardImg from '@internetarchive/icon-credit-card';
 import calendarImg from '@internetarchive/icon-calendar';
@@ -104,6 +106,8 @@ export class DonationFormController extends LitElement {
   @query('#braintree-expiration') private braintreeExpirationDateInput!: HTMLInputElement;
 
   @query('#braintree-error-message') private braintreeErrorMessage!: HTMLDivElement;
+
+  @query('contact-form') private contactForm!: ContactForm;
 
   private lazyLoaderService: LazyLoaderServiceInterface = new LazyLoaderService();
 
@@ -317,6 +321,7 @@ export class DonationFormController extends LitElement {
         <donation-form
           .environment=${this.environment}
           .braintreeManager=${this.braintreeManager}
+          .contactForm=${this.contactForm}
           ?showCreditCardButtonText=${this.showCreditCardButtonText}
           @donationInfoChanged=${this.donationInfoChanged}
           @paymentProviderSelected=${this.paymentProviderSelected}
@@ -351,6 +356,15 @@ export class DonationFormController extends LitElement {
                 <div class="braintree-input" id="braintree-cvv"></div>
               </badged-input>
             </div>
+          </div>
+
+          <!--
+            Form autocompletion does not work in the shadowDOM so
+            we slot the contact form in from the lightDOM and pass
+            in a reference to it in the <donation-form> tag above
+          -->
+          <div slot="contact-form">
+            <contact-form></contact-form>
           </div>
 
           <div slot="paypal-button">

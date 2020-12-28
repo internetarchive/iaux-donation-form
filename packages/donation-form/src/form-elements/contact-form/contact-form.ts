@@ -152,7 +152,7 @@ export class ContactForm extends LitElement {
     this.errorMessage.innerText = '';
     const input = e.target as HTMLInputElement;
     const inputIdentifier = input.id;
-    const badgedInput = this.shadowRoot?.querySelector(
+    const badgedInput = this.querySelector(
       `badged-input.${inputIdentifier}`,
     ) as BadgedInput;
     badgedInput.error = false;

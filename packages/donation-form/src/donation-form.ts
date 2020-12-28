@@ -16,12 +16,10 @@ import lockImg from '@internetarchive/icon-lock';
 // because inside each of these files, we're registering the custom element inside
 // these files and by simply importing the class name, you lose that behavior
 // See https://github.com/microsoft/TypeScript/issues/9191 for more discussion
-import './form-elements/contact-form/contact-form';
 import './form-elements/payment-selector';
 import './form-elements/header/donation-form-header';
 
 import { DonationFormHeader } from './form-elements/header/donation-form-header';
-import { ContactForm } from './form-elements/contact-form/contact-form';
 import { PaymentSelector } from './form-elements/payment-selector';
 
 import { BraintreeManagerInterface } from './braintree-manager/braintree-interfaces';
@@ -39,6 +37,7 @@ import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-fl
 import '@internetarchive/donation-form-section';
 import { DonationFormSection } from '@internetarchive/donation-form-section';
 import { UpsellModalCTAMode } from './modals/upsell-modal-content';
+import { ContactForm } from './form-elements/contact-form/contact-form';
 
 @customElement('donation-form')
 export class DonationForm extends LitElement {
@@ -49,6 +48,8 @@ export class DonationForm extends LitElement {
   @property({ type: Object }) donationRequest: DonationRequest | undefined;
 
   @property({ type: Object }) donationInfo?: DonationPaymentInfo;
+
+  @property({ type: Object }) contactForm?: ContactForm;
 
   @property({ type: Boolean }) showCreditCardButtonText = false;
 
@@ -63,8 +64,6 @@ export class DonationForm extends LitElement {
   @property({ type: Boolean }) private hostedFieldsValid = false;
 
   @property({ type: String }) private selectedPaymentProvider?: PaymentProvider;
-
-  @query('contact-form') contactForm?: ContactForm;
 
   @query('#contactFormSection') contactFormSection?: DonationFormSection;
 
@@ -160,7 +159,7 @@ export class DonationForm extends LitElement {
         headline="Enter payment information"
         id="contactFormSection"
       >
-        <contact-form></contact-form>
+        <slot name="contact-form"></slot>
         <div class="credit-card-fields" class="${this.creditCardVisible ? '' : 'hidden'}">
           <slot name="braintree-hosted-fields"></slot>
         </div>
