@@ -241,6 +241,8 @@ export class ContactForm extends LitElement {
     const fieldFontFamily = css`var(--fontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
     const fieldFontSize = css`var(--contactFieldFontSize, 1.6rem)`;
     const fieldFontColor = css`var(--inputFieldFontColor, #333)`;
+    // matches browser default
+    const fieldPlaceholderColor = css`var(--inputFieldPlaceholderColor, darkgray)`;
 
     const iconFieldWidth = css`calc(100% - ${iconSpacerWidth})`;
     const noIconFieldWidth = css`calc(100% - ${noIconSpacerWidth})`;
@@ -258,7 +260,7 @@ export class ContactForm extends LitElement {
         double outlines caused by the fields being right next to each other */
         contact-form .row {
           display: flex;
-          margin-top: -1px;
+          margin: -1px 0 0 0;
         }
 
         contact-form fieldset .row:first-child {
@@ -297,6 +299,10 @@ export class ContactForm extends LitElement {
           font-size: ${fieldFontSize};
           padding: 0;
           font-family: ${fieldFontFamily};
+        }
+
+        contact-form input::placeholder {
+          color: ${fieldPlaceholderColor};
         }
       </style>
     `;
