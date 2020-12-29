@@ -30,7 +30,7 @@
   "dependencies": {
     "@internetarchive/donation-form-currency-validator": "^0.3.0",
     "@internetarchive/donation-form-data-models": "^0.3.1",
-    "@internetarchive/donation-form-edit-donation": "^0.3.3-alpha.1",
+    "@internetarchive/donation-form-edit-donation": "^0.3.3",
     "@internetarchive/donation-form-section": "^0.3.0",
     "@internetarchive/icon-applepay": "^0.4.0",
     "@internetarchive/icon-calendar": "^0.4.0",
