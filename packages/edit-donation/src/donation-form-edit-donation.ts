@@ -164,6 +164,7 @@ export class DonationFormEditDonation extends LitElement {
   }
 
   private get shortenedContributionAmount(): string {
+    // if the amount is a whole number, show it without the decimals
     const precision = this.donationInfo.amount % 1 === 0 ? 0 : 2;
     return currency(this.donationInfo.amount, {
       symbol: '$',
