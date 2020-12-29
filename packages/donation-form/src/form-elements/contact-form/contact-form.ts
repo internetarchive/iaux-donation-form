@@ -3,7 +3,6 @@ import {
   html,
   css,
   customElement,
-  CSSResult,
   TemplateResult,
   query,
 } from 'lit-element';
@@ -134,7 +133,17 @@ export class ContactForm extends LitElement {
           </div>
         </fieldset>
       </form>
+      ${this.getStyles}
     `;
+  }
+
+  /** @inheritdoc */
+  createRenderRoot(): this {
+    // Render template without shadow DOM. Note that shadow DOM features like
+    // encapsulated CSS and slots are unavailable.
+    // Form autofill does not work properly in the shadow DOM
+    // so we need our form fields in the light DOM
+    return this;
   }
 
   // reset the error state when the user focuses the input
@@ -142,7 +151,7 @@ export class ContactForm extends LitElement {
     this.errorMessage.innerText = '';
     const input = e.target as HTMLInputElement;
     const inputIdentifier = input.id;
-    const badgedInput = this.shadowRoot?.querySelector(
+    const badgedInput = this.querySelector(
       `badged-input.${inputIdentifier}`,
     ) as BadgedInput;
     badgedInput.error = false;
@@ -175,6 +184,7 @@ export class ContactForm extends LitElement {
         <input
           type=${fieldType}
           id=${options.id}
+          class="contact-form-input"
           name=${options.name}
           aria-label=${options.placeholder}
           placeholder=${options.placeholder}
@@ -210,8 +220,20 @@ export class ContactForm extends LitElement {
     });
   }
 
-  /** @inheritdoc */
-  static get styles(): CSSResult {
+  /**
+   * This is not the normal LitElement styles block.
+   *
+   * This element uses the clear DOM instead of the shadow DOM so it can't use
+   * the shadowRoot's isolated styling. This is a bit of a workaround to keep all of
+   * the styling local by writing out our own <style> tag and just be careful about
+   * the selectors since they will leak outside of this component.
+   *
+   * @readonly
+   * @private
+   * @type {TemplateResult}
+   * @memberof IADonationFormController
+   */
+  private get getStyles(): TemplateResult {
     const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 3rem)`;
     const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 5rem)`;
 
@@ -223,58 +245,64 @@ export class ContactForm extends LitElement {
     const iconFieldWidth = css`calc(100% - ${iconSpacerWidth})`;
     const noIconFieldWidth = css`calc(100% - ${noIconSpacerWidth})`;
 
-    return css`
-      fieldset {
-        border: 0;
-        padding: 0;
-        margin: 0;
-        margin-bottom: ${fieldSetSpacing};
-      }
+    return html`
+      <style>
+        contact-form fieldset {
+          border: 0;
+          padding: 0;
+          margin: 0;
+          margin-bottom: ${fieldSetSpacing};
+        }
 
-      /* These 1px and 0 margins in the next few selectors are to account for the
-      double outlines caused by the fields being right next to each other */
-      .row {
-        display: flex;
-        margin-top: -1px;
-      }
+        /* These 1px and 0 margins in the next few selectors are to account for the
+        double outlines caused by the fields being right next to each other */
+        contact-form .row {
+          display: flex;
+          margin: -1px 0 0 0;
+        }
 
-      fieldset .row:first-child {
-        margin-top: 0;
-      }
+        contact-form fieldset .row:first-child {
+          margin-top: 0;
+        }
 
-      badged-input {
-        width: 100%;
-      }
+        contact-form badged-input {
+          width: 100%;
+        }
 
-      badged-input.last-name {
-        margin-left: -1px;
-      }
+        contact-form badged-input.last-name {
+          margin-left: -1px;
+        }
 
-      #error-message {
-        color: red;
-        font-size: 1.4rem;
-        margin-bottom: 0.6rem;
-      }
+        contact-form #error-message {
+          color: red;
+          font-size: 1.4rem;
+          margin-bottom: 0.6rem;
+        }
 
-      #last-name {
-        width: ${noIconFieldWidth};
-      }
+        contact-form #last-name {
+          width: ${noIconFieldWidth};
+        }
 
-      label {
-        display: none;
-      }
+        contact-form label {
+          display: none;
+        }
 
-      input {
-        width: ${iconFieldWidth};
-        border: 0;
-        outline: 0;
-        background: transparent;
-        font-weight: bold;
-        color: ${fieldFontColor};
-        font-size: ${fieldFontSize};
-        padding: 0;
-        font-family: ${fieldFontFamily};
-      }
+        contact-form .contact-form-input {
+          width: ${iconFieldWidth};
+          border: 0;
+          outline: 0;
+          background: transparent;
+          font-weight: bold;
+          color: ${fieldFontColor};
+          font-size: ${fieldFontSize};
+          padding: 0;
+          font-family: ${fieldFontFamily};
+        }
+
+        contact-form .contact-form-input::placeholder {
+          color: revert;
+        }
+      </style>
     `;
   }
 }
