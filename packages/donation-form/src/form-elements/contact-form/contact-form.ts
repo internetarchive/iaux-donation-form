@@ -3,7 +3,6 @@ import {
   html,
   css,
   customElement,
-  CSSResult,
   TemplateResult,
   query,
 } from 'lit-element';
@@ -185,6 +184,7 @@ export class ContactForm extends LitElement {
         <input
           type=${fieldType}
           id=${options.id}
+          class="contact-form-input"
           name=${options.name}
           aria-label=${options.placeholder}
           placeholder=${options.placeholder}
@@ -241,8 +241,6 @@ export class ContactForm extends LitElement {
     const fieldFontFamily = css`var(--fontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
     const fieldFontSize = css`var(--contactFieldFontSize, 1.6rem)`;
     const fieldFontColor = css`var(--inputFieldFontColor, #333)`;
-    // matches browser default
-    const fieldPlaceholderColor = css`var(--inputFieldPlaceholderColor, darkgray)`;
 
     const iconFieldWidth = css`calc(100% - ${iconSpacerWidth})`;
     const noIconFieldWidth = css`calc(100% - ${noIconSpacerWidth})`;
@@ -289,7 +287,7 @@ export class ContactForm extends LitElement {
           display: none;
         }
 
-        contact-form input {
+        contact-form .contact-form-input {
           width: ${iconFieldWidth};
           border: 0;
           outline: 0;
@@ -301,8 +299,8 @@ export class ContactForm extends LitElement {
           font-family: ${fieldFontFamily};
         }
 
-        contact-form input::placeholder {
-          color: ${fieldPlaceholderColor};
+        contact-form .contact-form-input::placeholder {
+          color: revert;
         }
       </style>
     `;
