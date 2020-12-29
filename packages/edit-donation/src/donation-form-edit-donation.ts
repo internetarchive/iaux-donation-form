@@ -153,10 +153,23 @@ export class DonationFormEditDonation extends LitElement {
 
   private get coverFeesTextTemplate(): TemplateResult {
     return html`
-      I'll generously add
-      ${currency(this.donationInfo.fee, { symbol: '$' }).format()} to cover the
-      transaction fees so you can keep 100% of my donation.
+      I'll generously add ${this.feeAmountString} to cover the transaction fees
+      for my ${this.shortenedContributionAmount} contribution so you can keep
+      100% of my donation.
     `;
+  }
+
+  private get feeAmountString(): string {
+    return currency(this.donationInfo.fee, { symbol: '$' }).format();
+  }
+
+  private get shortenedContributionAmount(): string {
+    // if the amount is a whole number, show it without the decimals
+    const precision = this.donationInfo.amount % 1 === 0 ? 0 : 2;
+    return currency(this.donationInfo.amount, {
+      symbol: '$',
+      precision: precision,
+    }).format();
   }
 
   private get frequencyTemplate(): TemplateResult {
