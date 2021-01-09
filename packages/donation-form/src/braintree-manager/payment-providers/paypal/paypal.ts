@@ -22,11 +22,12 @@ export class PayPalHandler implements PayPalHandlerInterface {
     this.hostingEnvironment = options.hostingEnvironment;
 
     this.instance = new PromisedSingleton<braintree.PayPalCheckout | undefined>({
-      generator: this.braintreeManager.instance.get().then(braintreeClient => {
-        return this.paypalClient.create({
-          client: braintreeClient,
-        });
-      }),
+      generator: (): Promise<braintree.PayPalCheckout> =>
+        this.braintreeManager.instance.get().then(braintreeClient => {
+          return this.paypalClient.create({
+            client: braintreeClient,
+          });
+        }),
     });
   }
 

@@ -8,9 +8,10 @@ import { ApplePayHandlerInterface } from '../../../../src/braintree-manager/paym
 
 export class MockApplePayHandler implements ApplePayHandlerInterface {
   instance: PromisedSingleton<any> = new PromisedSingleton<braintree.ApplePay>({
-    generator: new Promise<any>(resolve => {
-      resolve(new MockApplePayClient());
-    }),
+    generator: (): Promise<braintree.ApplePay> =>
+      new Promise<any>(resolve => {
+        resolve(new MockApplePayClient());
+      }),
   });
 
   isAvailable(): Promise<boolean> {

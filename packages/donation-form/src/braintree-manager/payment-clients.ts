@@ -31,78 +31,79 @@ export interface PaymentClientsInterface {
  * @implements {PaymentClientsInterface}
  */
 export class PaymentClients implements PaymentClientsInterface {
-  braintreeClient: PromisedSingleton<braintree.Client>;
-  dataCollector: PromisedSingleton<braintree.DataCollector>;
-  hostedFields: PromisedSingleton<braintree.HostedFields>;
-  venmo: PromisedSingleton<braintree.Venmo>;
-  payPal: PromisedSingleton<braintree.PayPalCheckout>;
-  applePay: PromisedSingleton<braintree.ApplePay>;
-  googlePayBraintreeClient: PromisedSingleton<braintree.GooglePayment>;
+  braintreeClient: PromisedSingleton<braintree.Client> = new PromisedSingleton<braintree.Client>({
+    generator: async (): Promise<braintree.Client> => {
+      await this.loadBraintreeScript('client');
+      return window.braintree.client;
+    },
+  });
 
-  googlePaymentsClient: PromisedSingleton<google.payments.api.PaymentsClient>;
-  recaptchaLibrary: PromisedSingleton<ReCaptchaV2.ReCaptcha>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  paypalLibrary: PromisedSingleton<any>;
+  dataCollector: PromisedSingleton<braintree.DataCollector> = new PromisedSingleton<
+    braintree.DataCollector
+  >({
+    generator: async (): Promise<braintree.DataCollector> => {
+      await this.loadBraintreeScript('data-collector');
+      return window.braintree.dataCollector;
+    },
+  });
 
-  constructor(lazyLoader: LazyLoaderServiceInterface, environment: HostingEnvironment) {
-    this.lazyLoader = lazyLoader;
-    this.environment = environment;
+  hostedFields: PromisedSingleton<braintree.HostedFields> = new PromisedSingleton<
+    braintree.HostedFields
+  >({
+    generator: async (): Promise<braintree.HostedFields> => {
+      await this.loadBraintreeScript('hosted-fields');
+      return window.braintree.hostedFields;
+    },
+  });
 
-    this.braintreeClient = new PromisedSingleton<braintree.Client>({
-      generator: this.loadBraintreeScript('client').then(() => {
-        return window.braintree.client;
-      }),
-    });
+  venmo: PromisedSingleton<braintree.Venmo> = new PromisedSingleton<braintree.Venmo>({
+    generator: async (): Promise<braintree.Venmo> => {
+      await this.loadBraintreeScript('venmo');
+      return window.braintree.venmo;
+    },
+  });
 
-    this.dataCollector = new PromisedSingleton<braintree.DataCollector>({
-      generator: this.loadBraintreeScript('data-collector').then(() => {
-        return window.braintree.dataCollector;
-      }),
-    });
+  payPal: PromisedSingleton<braintree.PayPalCheckout> = new PromisedSingleton<
+    braintree.PayPalCheckout
+  >({
+    generator: async (): Promise<braintree.PayPalCheckout> => {
+      await this.loadBraintreeScript('paypal-checkout');
+      return window.braintree.paypalCheckout;
+    },
+  });
 
-    this.hostedFields = new PromisedSingleton<braintree.HostedFields>({
-      generator: this.loadBraintreeScript('hosted-fields').then(() => {
-        return window.braintree.hostedFields;
-      }),
-    });
+  applePay: PromisedSingleton<braintree.ApplePay> = new PromisedSingleton<braintree.ApplePay>({
+    generator: async (): Promise<braintree.ApplePay> => {
+      await this.loadBraintreeScript('apple-pay');
+      return window.braintree.applePay;
+    },
+  });
 
-    this.venmo = new PromisedSingleton<braintree.Venmo>({
-      generator: this.loadBraintreeScript('venmo').then(() => {
-        return window.braintree.venmo;
-      }),
-    });
+  googlePayBraintreeClient: PromisedSingleton<braintree.GooglePayment> = new PromisedSingleton<
+    braintree.GooglePayment
+  >({
+    generator: async (): Promise<braintree.GooglePayment> => {
+      await this.loadBraintreeScript('google-payment');
+      return window.braintree.googlePayment;
+    },
+  });
 
-    this.payPal = new PromisedSingleton<braintree.PayPalCheckout>({
-      generator: this.loadBraintreeScript('paypal-checkout').then(() => {
-        return window.braintree.paypalCheckout;
-      }),
-    });
+  googlePaymentsClient: PromisedSingleton<
+    google.payments.api.PaymentsClient
+  > = new PromisedSingleton<google.payments.api.PaymentsClient>({
+    generator: async (): Promise<google.payments.api.PaymentsClient> => {
+      await this.lazyLoader.loadScript({ src: 'https://pay.google.com/gp/p/js/pay.js' });
+      return new google.payments.api.PaymentsClient({
+        environment: this.environment === HostingEnvironment.Development ? 'TEST' : 'PRODUCTION',
+      });
+    },
+  });
 
-    this.applePay = new PromisedSingleton<braintree.ApplePay>({
-      generator: this.loadBraintreeScript('apple-pay').then(() => {
-        return window.braintree.applePay;
-      }),
-    });
-
-    this.googlePayBraintreeClient = new PromisedSingleton<braintree.GooglePayment>({
-      generator: this.loadBraintreeScript('google-payment').then(() => {
-        return window.braintree.googlePayment;
-      }),
-    });
-
-    this.googlePaymentsClient = new PromisedSingleton<google.payments.api.PaymentsClient>({
-      generator: this.lazyLoader
-        .loadScript({ src: 'https://pay.google.com/gp/p/js/pay.js' })
-        .then(() => {
-          return new google.payments.api.PaymentsClient({
-            environment:
-              this.environment === HostingEnvironment.Development ? 'TEST' : 'PRODUCTION',
-          });
-        }),
-    });
-
-    this.recaptchaLibrary = new PromisedSingleton<ReCaptchaV2.ReCaptcha>({
-      generator: new Promise(resolve => {
+  recaptchaLibrary: PromisedSingleton<ReCaptchaV2.ReCaptcha> = new PromisedSingleton<
+    ReCaptchaV2.ReCaptcha
+  >({
+    generator: (): Promise<ReCaptchaV2.ReCaptcha> =>
+      new Promise(resolve => {
         // The loader for the recaptcha library is relying on an onload callback from the recaptcha
         // library because even when the library has loaded, it is still not ready
         // As recommended by Recaptcha, we attach a callback to the window object before starting
@@ -121,22 +122,25 @@ export class PaymentClients implements PaymentClientsInterface {
             'https://www.google.com/recaptcha/api.js?onload=donationFormGrecaptchaLoadedCallback&render=explicit',
         });
       }),
-    });
+  });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.paypalLibrary = new PromisedSingleton<any>({
-      generator: this.lazyLoader
-        .loadScript({
-          src: 'https://www.paypalobjects.com/api/checkout.js',
-          attributes: [
-            { key: 'data-version-4', value: '' },
-            { key: 'log-level', value: 'warn' },
-          ],
-        })
-        .then(() => {
-          return window.paypal;
-        }),
-    });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  paypalLibrary: PromisedSingleton<any> = new PromisedSingleton<any>({
+    generator: async (): Promise<any> => {
+      await this.lazyLoader.loadScript({
+        src: 'https://www.paypalobjects.com/api/checkout.js',
+        attributes: [
+          { key: 'data-version-4', value: '' },
+          { key: 'log-level', value: 'warn' },
+        ],
+      });
+      return window.paypal;
+    },
+  });
+
+  constructor(lazyLoader: LazyLoaderServiceInterface, environment: HostingEnvironment) {
+    this.lazyLoader = lazyLoader;
+    this.environment = environment;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

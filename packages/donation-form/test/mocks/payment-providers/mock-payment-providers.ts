@@ -16,45 +16,50 @@ export class MockPaymentProviders implements PaymentProvidersInterface {
   creditCardHandler: PromisedSingleton<CreditCardHandlerInterface> = new PromisedSingleton<
     CreditCardHandlerInterface
   >({
-    generator: new Promise<CreditCardHandlerInterface>(resolve => {
-      resolve(
-        new MockCreditCardHandler({
-          mockPayload: this.mockHostedFieldTokenizePayload,
-        }),
-      );
-    }),
+    generator: (): Promise<CreditCardHandlerInterface> =>
+      new Promise<CreditCardHandlerInterface>(resolve => {
+        resolve(
+          new MockCreditCardHandler({
+            mockPayload: this.mockHostedFieldTokenizePayload,
+          }),
+        );
+      }),
   });
 
   applePayHandler: PromisedSingleton<ApplePayHandlerInterface> = new PromisedSingleton<
     ApplePayHandlerInterface
   >({
-    generator: new Promise<ApplePayHandlerInterface>(resolve => {
-      resolve(new MockApplePayHandler());
-    }),
+    generator: (): Promise<ApplePayHandlerInterface> =>
+      new Promise<ApplePayHandlerInterface>(resolve => {
+        resolve(new MockApplePayHandler());
+      }),
   });
 
   paypalHandler: PromisedSingleton<PayPalHandlerInterface> = new PromisedSingleton<
     PayPalHandlerInterface
   >({
-    generator: new Promise<PayPalHandlerInterface>(resolve => {
-      resolve(new MockPayPalHandler());
-    }),
+    generator: (): Promise<PayPalHandlerInterface> =>
+      new Promise<PayPalHandlerInterface>(resolve => {
+        resolve(new MockPayPalHandler());
+      }),
   });
 
   googlePayHandler: PromisedSingleton<GooglePayHandlerInterface> = new PromisedSingleton<
     GooglePayHandlerInterface
   >({
-    generator: new Promise<GooglePayHandlerInterface>(resolve => {
-      resolve(new MockGooglePayHandler());
-    }),
+    generator: (): Promise<GooglePayHandlerInterface> =>
+      new Promise<GooglePayHandlerInterface>(resolve => {
+        resolve(new MockGooglePayHandler());
+      }),
   });
 
   venmoHandler: PromisedSingleton<VenmoHandlerInterface> = new PromisedSingleton<
     VenmoHandlerInterface
   >({
-    generator: new Promise<VenmoHandlerInterface>(resolve => {
-      resolve(new MockVenmoHandler());
-    }),
+    generator: (): Promise<VenmoHandlerInterface> =>
+      new Promise<VenmoHandlerInterface>(resolve => {
+        resolve(new MockVenmoHandler());
+      }),
   });
 
   constructor(options?: {

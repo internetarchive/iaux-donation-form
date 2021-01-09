@@ -46,9 +46,10 @@ describe('ApplePayHandler', () => {
         canMakePayments: true, // should be true, but will be short circuited by the rejection
       });
       const instancePromisedSingleton = new PromisedSingleton<any>({
-        generator: new Promise((resolve, reject) => {
-          reject();
-        }),
+        generator: (): Promise<any> =>
+          new Promise((resolve, reject) => {
+            reject();
+          }),
       });
       const handler = new ApplePayHandler({
         braintreeManager: braintreeManager,

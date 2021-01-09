@@ -11,9 +11,10 @@ export class MockGooglePayHandler implements GooglePayHandlerInterface {
   instance: PromisedSingleton<braintree.GooglePayment> = new PromisedSingleton<
     braintree.GooglePayment
   >({
-    generator: new Promise<braintree.GooglePayment>(resolve => {
-      resolve(new MockGooglePaymentClient());
-    }),
+    generator: (): Promise<braintree.GooglePayment> =>
+      new Promise<braintree.GooglePayment>(resolve => {
+        resolve(new MockGooglePaymentClient());
+      }),
   });
 
   isBrowserSupported(): Promise<boolean> {

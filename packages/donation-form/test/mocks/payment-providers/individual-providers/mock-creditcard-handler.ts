@@ -9,12 +9,13 @@ export class MockCreditCardHandler implements CreditCardHandlerInterface {
   instance: PromisedSingleton<braintree.HostedFields> = new PromisedSingleton<
     braintree.HostedFields
   >({
-    generator: new Promise<braintree.HostedFields>(resolve => {
-      const client = new MockHostedFieldsClient({
-        mockHostedFieldTokenizePayload: this.mockPayload,
-      });
-      resolve(client);
-    }),
+    generator: (): Promise<braintree.HostedFields> =>
+      new Promise<braintree.HostedFields>(resolve => {
+        const client = new MockHostedFieldsClient({
+          mockHostedFieldTokenizePayload: this.mockPayload,
+        });
+        resolve(client);
+      }),
   });
 
   async tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined> {

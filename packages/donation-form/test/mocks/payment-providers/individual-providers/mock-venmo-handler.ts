@@ -4,13 +4,14 @@ import { VenmoHandlerInterface } from '../../../../src/braintree-manager/payment
 
 export class MockVenmoHandler implements VenmoHandlerInterface {
   instance: PromisedSingleton<braintree.Venmo> = new PromisedSingleton<braintree.Venmo>({
-    generator: new Promise<braintree.Venmo>(resolve => {
-      resolve(
-        new MockVenmoClient({
-          isBrowserSupported: true,
-        }),
-      );
-    }),
+    generator: (): Promise<braintree.Venmo> =>
+      new Promise<braintree.Venmo>(resolve => {
+        resolve(
+          new MockVenmoClient({
+            isBrowserSupported: true,
+          }),
+        );
+      }),
   });
   async isBrowserSupported(): Promise<boolean> {
     return true;

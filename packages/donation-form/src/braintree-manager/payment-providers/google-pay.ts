@@ -40,9 +40,8 @@ export class GooglePayHandler implements GooglePayHandlerInterface {
     this.paymentsClient = options.googlePaymentsClient;
 
     this.instance = new PromisedSingleton<braintree.GooglePayment>({
-      generator: this.braintreeManager.instance
-        .get()
-        .then((braintreeInstance: braintree.Client) => {
+      generator: (): Promise<braintree.GooglePayment> =>
+        this.braintreeManager.instance.get().then((braintreeInstance: braintree.Client) => {
           return this.googlePayBraintreeClient.create({
             client: braintreeInstance,
             googlePayVersion: 2,
