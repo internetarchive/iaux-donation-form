@@ -6,9 +6,7 @@ import { PayPalButtonDataSourceInterface } from '../../../../src/braintree-manag
 import { PayPalHandlerInterface } from '../../../../src/braintree-manager/payment-providers/paypal/paypal-interface';
 
 export class MockPayPalHandler implements PayPalHandlerInterface {
-  instance: PromisedSingleton<braintree.PayPalCheckout | undefined> = new PromisedSingleton<
-    braintree.PayPalCheckout
-  >({
+  instance = new PromisedSingleton<braintree.PayPalCheckout>({
     generator: (): Promise<braintree.PayPalCheckout> =>
       new Promise<braintree.PayPalCheckout>(resolve => {
         resolve(new MockPayPalClient());

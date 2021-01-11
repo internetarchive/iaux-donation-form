@@ -13,9 +13,7 @@ import { GooglePayHandlerInterface } from '../../../src/braintree-manager/paymen
 import { VenmoHandlerInterface } from '../../../src/braintree-manager/payment-providers/venmo-interface';
 
 export class MockPaymentProviders implements PaymentProvidersInterface {
-  creditCardHandler: PromisedSingleton<CreditCardHandlerInterface> = new PromisedSingleton<
-    CreditCardHandlerInterface
-  >({
+  creditCardHandler = new PromisedSingleton<CreditCardHandlerInterface>({
     generator: (): Promise<CreditCardHandlerInterface> =>
       new Promise<CreditCardHandlerInterface>(resolve => {
         resolve(
@@ -26,36 +24,28 @@ export class MockPaymentProviders implements PaymentProvidersInterface {
       }),
   });
 
-  applePayHandler: PromisedSingleton<ApplePayHandlerInterface> = new PromisedSingleton<
-    ApplePayHandlerInterface
-  >({
+  applePayHandler = new PromisedSingleton<ApplePayHandlerInterface>({
     generator: (): Promise<ApplePayHandlerInterface> =>
       new Promise<ApplePayHandlerInterface>(resolve => {
         resolve(new MockApplePayHandler());
       }),
   });
 
-  paypalHandler: PromisedSingleton<PayPalHandlerInterface> = new PromisedSingleton<
-    PayPalHandlerInterface
-  >({
+  paypalHandler = new PromisedSingleton<PayPalHandlerInterface>({
     generator: (): Promise<PayPalHandlerInterface> =>
       new Promise<PayPalHandlerInterface>(resolve => {
         resolve(new MockPayPalHandler());
       }),
   });
 
-  googlePayHandler: PromisedSingleton<GooglePayHandlerInterface> = new PromisedSingleton<
-    GooglePayHandlerInterface
-  >({
+  googlePayHandler = new PromisedSingleton<GooglePayHandlerInterface>({
     generator: (): Promise<GooglePayHandlerInterface> =>
       new Promise<GooglePayHandlerInterface>(resolve => {
         resolve(new MockGooglePayHandler());
       }),
   });
 
-  venmoHandler: PromisedSingleton<VenmoHandlerInterface> = new PromisedSingleton<
-    VenmoHandlerInterface
-  >({
+  venmoHandler = new PromisedSingleton<VenmoHandlerInterface>({
     generator: (): Promise<VenmoHandlerInterface> =>
       new Promise<VenmoHandlerInterface>(resolve => {
         resolve(new MockVenmoHandler());

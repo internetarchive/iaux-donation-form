@@ -67,7 +67,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
   }
 
   /** @inheritdoc */
-  instance: PromisedSingleton<braintree.Client> = new PromisedSingleton<braintree.Client>({
+  instance = new PromisedSingleton<braintree.Client>({
     generator: async (): Promise<braintree.Client> => {
       const client = await this.paymentClients.braintreeClient.get();
       return client?.create({ authorization: this.authorizationToken });

@@ -6,9 +6,7 @@ import { mockHostedFieldTokenizePayload } from '../../payment-clients/mock-hoste
 import { CreditCardHandlerInterface } from '../../../../src/braintree-manager/payment-providers/credit-card/credit-card-interface';
 
 export class MockCreditCardHandler implements CreditCardHandlerInterface {
-  instance: PromisedSingleton<braintree.HostedFields> = new PromisedSingleton<
-    braintree.HostedFields
-  >({
+  instance = new PromisedSingleton<braintree.HostedFields>({
     generator: (): Promise<braintree.HostedFields> =>
       new Promise<braintree.HostedFields>(resolve => {
         const client = new MockHostedFieldsClient({
