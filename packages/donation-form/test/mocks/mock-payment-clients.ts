@@ -11,6 +11,7 @@ import { MockApplePayClient } from './payment-clients/mock-applepay-client';
 import { MockGooglePaymentClient } from './payment-clients/mock-googlepay-client';
 import { MockGooglePayLibrary } from './payment-clients/mock-googlepay-library';
 import { MockGrecaptcha, MockGrecaptchaMode } from './payment-clients/mock-grecaptcha';
+import { MockPaypalLibrary } from './payment-clients/mock-paypal-library';
 
 export class MockPaymentClients implements PaymentClientsInterface {
   async emitValidityChangedEvent(valid: boolean): Promise<void> {
@@ -114,7 +115,8 @@ export class MockPaymentClients implements PaymentClientsInterface {
       new PromisedSingleton<any>({
         generator: (): Promise<any> =>
           new Promise((resolve, reject) => {
-            reject('Not implemented');
+            const mockPayPalLibrary = new MockPaypalLibrary();
+            resolve(mockPayPalLibrary);
           }),
       });
     this.recaptchaLibrary =
