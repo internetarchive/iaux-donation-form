@@ -31,66 +31,56 @@ export interface PaymentClientsInterface {
  * @implements {PaymentClientsInterface}
  */
 export class PaymentClients implements PaymentClientsInterface {
-  braintreeClient: PromisedSingleton<braintree.Client> = new PromisedSingleton<braintree.Client>({
+  braintreeClient = new PromisedSingleton<braintree.Client>({
     generator: async (): Promise<braintree.Client> => {
       await this.loadBraintreeScript('client');
       return window.braintree.client;
     },
   });
 
-  dataCollector: PromisedSingleton<braintree.DataCollector> = new PromisedSingleton<
-    braintree.DataCollector
-  >({
+  dataCollector = new PromisedSingleton<braintree.DataCollector>({
     generator: async (): Promise<braintree.DataCollector> => {
       await this.loadBraintreeScript('data-collector');
       return window.braintree.dataCollector;
     },
   });
 
-  hostedFields: PromisedSingleton<braintree.HostedFields> = new PromisedSingleton<
-    braintree.HostedFields
-  >({
+  hostedFields = new PromisedSingleton<braintree.HostedFields>({
     generator: async (): Promise<braintree.HostedFields> => {
       await this.loadBraintreeScript('hosted-fields');
       return window.braintree.hostedFields;
     },
   });
 
-  venmo: PromisedSingleton<braintree.Venmo> = new PromisedSingleton<braintree.Venmo>({
+  venmo = new PromisedSingleton<braintree.Venmo>({
     generator: async (): Promise<braintree.Venmo> => {
       await this.loadBraintreeScript('venmo');
       return window.braintree.venmo;
     },
   });
 
-  payPal: PromisedSingleton<braintree.PayPalCheckout> = new PromisedSingleton<
-    braintree.PayPalCheckout
-  >({
+  payPal = new PromisedSingleton<braintree.PayPalCheckout>({
     generator: async (): Promise<braintree.PayPalCheckout> => {
       await this.loadBraintreeScript('paypal-checkout');
       return window.braintree.paypalCheckout;
     },
   });
 
-  applePay: PromisedSingleton<braintree.ApplePay> = new PromisedSingleton<braintree.ApplePay>({
+  applePay = new PromisedSingleton<braintree.ApplePay>({
     generator: async (): Promise<braintree.ApplePay> => {
       await this.loadBraintreeScript('apple-pay');
       return window.braintree.applePay;
     },
   });
 
-  googlePayBraintreeClient: PromisedSingleton<braintree.GooglePayment> = new PromisedSingleton<
-    braintree.GooglePayment
-  >({
+  googlePayBraintreeClient = new PromisedSingleton<braintree.GooglePayment>({
     generator: async (): Promise<braintree.GooglePayment> => {
       await this.loadBraintreeScript('google-payment');
       return window.braintree.googlePayment;
     },
   });
 
-  googlePaymentsClient: PromisedSingleton<
-    google.payments.api.PaymentsClient
-  > = new PromisedSingleton<google.payments.api.PaymentsClient>({
+  googlePaymentsClient = new PromisedSingleton<google.payments.api.PaymentsClient>({
     generator: async (): Promise<google.payments.api.PaymentsClient> => {
       await this.lazyLoader.loadScript({ src: 'https://pay.google.com/gp/p/js/pay.js' });
       return new google.payments.api.PaymentsClient({
@@ -99,9 +89,7 @@ export class PaymentClients implements PaymentClientsInterface {
     },
   });
 
-  recaptchaLibrary: PromisedSingleton<ReCaptchaV2.ReCaptcha> = new PromisedSingleton<
-    ReCaptchaV2.ReCaptcha
-  >({
+  recaptchaLibrary = new PromisedSingleton<ReCaptchaV2.ReCaptcha>({
     generator: (): Promise<ReCaptchaV2.ReCaptcha> =>
       new Promise(resolve => {
         // The loader for the recaptcha library is relying on an onload callback from the recaptcha
@@ -125,7 +113,8 @@ export class PaymentClients implements PaymentClientsInterface {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  paypalLibrary: PromisedSingleton<any> = new PromisedSingleton<any>({
+  paypalLibrary = new PromisedSingleton<any>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     generator: async (): Promise<any> => {
       await this.lazyLoader.loadScript({
         src: 'https://www.paypalobjects.com/api/checkout.js',
