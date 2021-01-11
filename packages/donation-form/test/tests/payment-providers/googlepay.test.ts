@@ -5,6 +5,21 @@ import { MockGooglePayLibrary } from '../../mocks/payment-clients/mock-googlepay
 import { GooglePayHandler } from '../../../src/braintree-manager/payment-providers/google-pay';
 
 describe('GooglePayHandler', () => {
+  it('returns the GooglePayment instance', async () => {
+    const braintreeManager = new MockBraintreeManager();
+    const googlePayBraintreeClient = new MockGooglePaymentClient();
+    const googlePayLibrary = new MockGooglePayLibrary();
+    const handler = new GooglePayHandler({
+      braintreeManager: braintreeManager,
+      googlePayBraintreeClient: googlePayBraintreeClient,
+      googlePaymentsClient: googlePayLibrary,
+    });
+
+    const instance = await handler.instance.get();
+
+    expect(instance instanceof MockGooglePaymentClient).to.be.true;
+  });
+
   describe('isBrowserSupported', () => {
     it('returns true if the browser is supported', async () => {
       const braintreeManager = new MockBraintreeManager();
