@@ -103,7 +103,9 @@ export class MockPaymentClients implements PaymentClientsInterface {
       new PromisedSingleton<google.payments.api.PaymentsClient>({
         generator: (): Promise<google.payments.api.PaymentsClient> =>
           new Promise((resolve, reject) => {
-            resolve(new MockGooglePayLibrary({ isReadyToPay: true }));
+            const mockGooglePayLibrary = new MockGooglePayLibrary();
+            mockGooglePayLibrary.readyToPay = true;
+            resolve(mockGooglePayLibrary);
           }),
       });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

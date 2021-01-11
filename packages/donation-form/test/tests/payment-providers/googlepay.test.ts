@@ -9,9 +9,9 @@ describe('GooglePayHandler', () => {
     it('returns true if the browser is supported', async () => {
       const braintreeManager = new MockBraintreeManager();
       const googlePayBraintreeClient = new MockGooglePaymentClient();
-      const googlePayLibrary = new MockGooglePayLibrary({
-        isReadyToPay: true,
-      });
+      const googlePayLibrary = new MockGooglePayLibrary();
+
+      googlePayLibrary.readyToPay = true;
 
       const handler = new GooglePayHandler({
         braintreeManager: braintreeManager,
@@ -27,9 +27,8 @@ describe('GooglePayHandler', () => {
     it('returns false if the browser is not supported', async () => {
       const braintreeManager = new MockBraintreeManager();
       const googlePayBraintreeClient = new MockGooglePaymentClient();
-      const googlePayLibrary = new MockGooglePayLibrary({
-        isReadyToPay: false,
-      });
+      const googlePayLibrary = new MockGooglePayLibrary();
+      googlePayLibrary.readyToPay = false;
 
       const handler = new GooglePayHandler({
         braintreeManager: braintreeManager,

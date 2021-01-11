@@ -69,8 +69,6 @@ describe('Donation Form Controller', () => {
     ) as PaymentSelector;
     const creditCardButton = paymentSelector?.shadowRoot?.querySelector('.credit-card-button');
 
-    console.debug('CC BUTTON', creditCardButton);
-
     // click on the credit card button
     const ccClickEvent = new MouseEvent('click');
     creditCardButton?.dispatchEvent(ccClickEvent);
@@ -79,7 +77,6 @@ describe('Donation Form Controller', () => {
     await elementUpdated(donationForm);
     await promisedSleep(100);
     const contactForm = donationForm?.shadowRoot?.querySelector('contact-form') as ContactForm;
-    console.debug('CONTACT FORM', contactForm);
     await fillInContactForm(contactForm);
 
     // verify the Donate button is still disabled
