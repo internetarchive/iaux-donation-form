@@ -75,6 +75,7 @@ describe('Donation Form Controller', () => {
 
     // clicking on the credit card button will show the contact form so wait for it to be updated
     await elementUpdated(donationForm);
+    await promisedSleep(100);
     const contactForm = donationForm?.shadowRoot?.querySelector('contact-form') as ContactForm;
     await fillInContactForm(contactForm);
 

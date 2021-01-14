@@ -1,11 +1,4 @@
-import {
-  LitElement,
-  html,
-  css,
-  customElement,
-  TemplateResult,
-  query,
-} from 'lit-element';
+import { LitElement, html, css, customElement, TemplateResult, query } from 'lit-element';
 
 import { ifDefined } from 'lit-html/directives/if-defined';
 
@@ -151,9 +144,7 @@ export class ContactForm extends LitElement {
     this.errorMessage.innerText = '';
     const input = e.target as HTMLInputElement;
     const inputIdentifier = input.id;
-    const badgedInput = this.querySelector(
-      `badged-input.${inputIdentifier}`,
-    ) as BadgedInput;
+    const badgedInput = this.querySelector(`badged-input.${inputIdentifier}`) as BadgedInput;
     badgedInput.error = false;
   }
 

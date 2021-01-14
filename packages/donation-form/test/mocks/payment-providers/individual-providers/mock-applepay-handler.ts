@@ -7,10 +7,11 @@ import { ApplePaySessionDataSource } from '../../../../src/braintree-manager/pay
 import { ApplePayHandlerInterface } from '../../../../src/braintree-manager/payment-providers/apple-pay/apple-pay-interface';
 
 export class MockApplePayHandler implements ApplePayHandlerInterface {
-  instance: PromisedSingleton<any> = new PromisedSingleton<braintree.ApplePay>({
-    generator: new Promise<any>(resolve => {
-      resolve(new MockApplePayClient());
-    }),
+  instance = new PromisedSingleton<braintree.ApplePay>({
+    generator: (): Promise<braintree.ApplePay> =>
+      new Promise<any>(resolve => {
+        resolve(new MockApplePayClient());
+      }),
   });
 
   isAvailable(): Promise<boolean> {

@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export class MockGooglePayLibrary implements google.payments.api.PaymentsClient {
+  readyToPay = false;
+
   async isReadyToPay(
     request: google.payments.api.IsReadyToPayRequest,
   ): Promise<google.payments.api.IsReadyToPayResponse> {
@@ -18,9 +20,9 @@ export class MockGooglePayLibrary implements google.payments.api.PaymentsClient 
     throw new Error('Method not implemented.');
   }
 
-  constructor(options: { isReadyToPay: boolean }) {
-    this.readyToPay = options.isReadyToPay;
+  constructor(paymentOptions?: google.payments.api.PaymentOptions) {
+    this.paymentOptions = paymentOptions;
   }
 
-  private readyToPay: boolean;
+  private paymentOptions?: google.payments.api.PaymentOptions;
 }

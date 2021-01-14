@@ -35,10 +35,11 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
   }
 
   paymentProviders: PaymentProvidersInterface = new MockPaymentProviders();
-  instance: PromisedSingleton<braintree.Client> = new PromisedSingleton<braintree.Client>({
-    generator: new Promise(resolve => {
-      resolve(new MockBraintreeClient());
-    }),
+  instance = new PromisedSingleton<braintree.Client>({
+    generator: (): Promise<braintree.Client> =>
+      new Promise(resolve => {
+        resolve(new MockBraintreeClient());
+      }),
   });
 
   setReferrer(referrer: string): void {}

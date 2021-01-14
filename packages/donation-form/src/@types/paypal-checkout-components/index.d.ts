@@ -6,7 +6,7 @@
 
 import { ButtonRenderer, ButtonRenderOptions, FUNDING } from './modules/button';
 
-interface PayPal {
+export interface PayPal {
   button: ButtonRenderer;
 }
 

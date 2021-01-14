@@ -17,13 +17,14 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
     this.hostedFieldConfig = options.hostedFieldConfig;
 
     this.instance = new PromisedSingleton<braintree.HostedFields | undefined>({
-      generator: this.braintreeManager.instance.get().then(braintreeClient => {
+      generator: async (): Promise<braintree.HostedFields | undefined> => {
+        const braintreeClient = await this.braintreeManager.instance.get();
         return this.hostedFieldClient.create({
           client: braintreeClient,
           styles: this.hostedFieldConfig.hostedFieldStyle,
           fields: this.hostedFieldConfig.hostedFieldFieldOptions,
         });
-      }),
+      },
     });
   }
 

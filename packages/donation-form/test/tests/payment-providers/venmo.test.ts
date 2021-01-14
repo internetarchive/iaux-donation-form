@@ -12,9 +12,10 @@ describe('VenmoHandler', () => {
     });
 
     const instancePromisedSingleton = new PromisedSingleton<braintree.Venmo>({
-      generator: new Promise(resolve => {
-        resolve(venmoClient);
-      }),
+      generator: (): Promise<braintree.Venmo> =>
+        new Promise(resolve => {
+          resolve(venmoClient);
+        }),
     });
 
     const handler = new VenmoHandler({

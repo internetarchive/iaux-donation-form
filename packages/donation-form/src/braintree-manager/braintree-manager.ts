@@ -67,7 +67,12 @@ export class BraintreeManager implements BraintreeManagerInterface {
   }
 
   /** @inheritdoc */
-  instance: PromisedSingleton<braintree.Client>;
+  instance = new PromisedSingleton<braintree.Client>({
+    generator: async (): Promise<braintree.Client> => {
+      const client = await this.paymentClients.braintreeClient.get();
+      return client?.create({ authorization: this.authorizationToken });
+    },
+  });
 
   /** @inheritdoc */
   async submitDonation(options: {
@@ -239,12 +244,6 @@ export class BraintreeManager implements BraintreeManagerInterface {
       googlePayMerchantId: options.googlePayMerchantId,
       hostingEnvironment: options.hostingEnvironment,
       hostedFieldConfig: options.hostedFieldConfig,
-    });
-
-    this.instance = new PromisedSingleton<braintree.Client>({
-      generator: this.paymentClients.braintreeClient.get().then((client: braintree.Client) => {
-        return client?.create({ authorization: this.authorizationToken });
-      }),
     });
   }
 

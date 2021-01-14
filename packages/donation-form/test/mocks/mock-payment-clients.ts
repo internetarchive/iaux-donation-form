@@ -11,6 +11,7 @@ import { MockApplePayClient } from './payment-clients/mock-applepay-client';
 import { MockGooglePaymentClient } from './payment-clients/mock-googlepay-client';
 import { MockGooglePayLibrary } from './payment-clients/mock-googlepay-library';
 import { MockGrecaptcha, MockGrecaptchaMode } from './payment-clients/mock-grecaptcha';
+import { MockPaypalLibrary } from './payment-clients/mock-paypal-library';
 
 export class MockPaymentClients implements PaymentClientsInterface {
   async emitValidityChangedEvent(valid: boolean): Promise<void> {
@@ -44,74 +45,87 @@ export class MockPaymentClients implements PaymentClientsInterface {
     this.braintreeClient =
       generators?.client ??
       new PromisedSingleton<braintree.Client>({
-        generator: new Promise((resolve, reject) => {
-          resolve(new MockBraintreeClient());
-        }),
+        generator: (): Promise<braintree.Client> =>
+          new Promise((resolve, reject) => {
+            resolve(new MockBraintreeClient());
+          }),
       });
     this.dataCollector =
       generators?.dataCollector ??
       new PromisedSingleton<braintree.DataCollector>({
-        generator: new Promise((resolve, reject) => {
-          resolve(new MockDeviceDataCollector());
-        }),
+        generator: (): Promise<braintree.DataCollector> =>
+          new Promise((resolve, reject) => {
+            resolve(new MockDeviceDataCollector());
+          }),
       });
     this.hostedFields =
       generators?.hostedFields ??
       new PromisedSingleton<braintree.HostedFields>({
-        generator: new Promise((resolve, reject) => {
-          const client = new MockHostedFieldsClient();
-          resolve(client);
-        }),
+        generator: (): Promise<braintree.HostedFields> =>
+          new Promise((resolve, reject) => {
+            const client = new MockHostedFieldsClient();
+            resolve(client);
+          }),
       });
     this.venmo =
       generators?.venmo ??
       new PromisedSingleton<braintree.Venmo>({
-        generator: new Promise((resolve, reject) => {
-          resolve(new MockVenmoClient({ isBrowserSupported: true }));
-        }),
+        generator: (): Promise<braintree.Venmo> =>
+          new Promise((resolve, reject) => {
+            resolve(new MockVenmoClient({ isBrowserSupported: true }));
+          }),
       });
     this.payPal =
       generators?.payPal ??
       new PromisedSingleton<braintree.PayPalCheckout>({
-        generator: new Promise((resolve, reject) => {
-          resolve(new MockPayPalClient());
-        }),
+        generator: (): Promise<braintree.PayPalCheckout> =>
+          new Promise((resolve, reject) => {
+            resolve(new MockPayPalClient());
+          }),
       });
     this.applePay =
       generators?.applePay ??
       new PromisedSingleton<braintree.ApplePay>({
-        generator: new Promise((resolve, reject) => {
-          resolve(new MockApplePayClient());
-        }),
+        generator: (): Promise<braintree.ApplePay> =>
+          new Promise((resolve, reject) => {
+            resolve(new MockApplePayClient());
+          }),
       });
     this.googlePayBraintreeClient =
       generators?.googlePayBraintreeClient ??
       new PromisedSingleton<braintree.GooglePayment>({
-        generator: new Promise((resolve, reject) => {
-          resolve(new MockGooglePaymentClient());
-        }),
+        generator: (): Promise<braintree.GooglePayment> =>
+          new Promise((resolve, reject) => {
+            resolve(new MockGooglePaymentClient());
+          }),
       });
     this.googlePaymentsClient =
       generators?.googlePaymentsClient ??
       new PromisedSingleton<google.payments.api.PaymentsClient>({
-        generator: new Promise((resolve, reject) => {
-          resolve(new MockGooglePayLibrary({ isReadyToPay: true }));
-        }),
+        generator: (): Promise<google.payments.api.PaymentsClient> =>
+          new Promise((resolve, reject) => {
+            const mockGooglePayLibrary = new MockGooglePayLibrary();
+            mockGooglePayLibrary.readyToPay = true;
+            resolve(mockGooglePayLibrary);
+          }),
       });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.paypalLibrary =
       generators?.paypalLibrary ??
       new PromisedSingleton<any>({
-        generator: new Promise((resolve, reject) => {
-          reject('Not implemented');
-        }),
+        generator: (): Promise<any> =>
+          new Promise((resolve, reject) => {
+            const mockPayPalLibrary = new MockPaypalLibrary();
+            resolve(mockPayPalLibrary);
+          }),
       });
     this.recaptchaLibrary =
       generators?.recaptchaLibrary ??
       new PromisedSingleton<ReCaptchaV2.ReCaptcha>({
-        generator: new Promise((resolve, reject) => {
-          resolve(new MockGrecaptcha(MockGrecaptchaMode.Success));
-        }),
+        generator: (): Promise<ReCaptchaV2.ReCaptcha> =>
+          new Promise((resolve, reject) => {
+            resolve(new MockGrecaptcha(MockGrecaptchaMode.Success));
+          }),
       });
   }
 }

@@ -13,48 +13,43 @@ import { GooglePayHandlerInterface } from '../../../src/braintree-manager/paymen
 import { VenmoHandlerInterface } from '../../../src/braintree-manager/payment-providers/venmo-interface';
 
 export class MockPaymentProviders implements PaymentProvidersInterface {
-  creditCardHandler: PromisedSingleton<CreditCardHandlerInterface> = new PromisedSingleton<
-    CreditCardHandlerInterface
-  >({
-    generator: new Promise<CreditCardHandlerInterface>(resolve => {
-      resolve(
-        new MockCreditCardHandler({
-          mockPayload: this.mockHostedFieldTokenizePayload,
-        }),
-      );
-    }),
+  creditCardHandler = new PromisedSingleton<CreditCardHandlerInterface>({
+    generator: (): Promise<CreditCardHandlerInterface> =>
+      new Promise<CreditCardHandlerInterface>(resolve => {
+        resolve(
+          new MockCreditCardHandler({
+            mockPayload: this.mockHostedFieldTokenizePayload,
+          }),
+        );
+      }),
   });
 
-  applePayHandler: PromisedSingleton<ApplePayHandlerInterface> = new PromisedSingleton<
-    ApplePayHandlerInterface
-  >({
-    generator: new Promise<ApplePayHandlerInterface>(resolve => {
-      resolve(new MockApplePayHandler());
-    }),
+  applePayHandler = new PromisedSingleton<ApplePayHandlerInterface>({
+    generator: (): Promise<ApplePayHandlerInterface> =>
+      new Promise<ApplePayHandlerInterface>(resolve => {
+        resolve(new MockApplePayHandler());
+      }),
   });
 
-  paypalHandler: PromisedSingleton<PayPalHandlerInterface> = new PromisedSingleton<
-    PayPalHandlerInterface
-  >({
-    generator: new Promise<PayPalHandlerInterface>(resolve => {
-      resolve(new MockPayPalHandler());
-    }),
+  paypalHandler = new PromisedSingleton<PayPalHandlerInterface>({
+    generator: (): Promise<PayPalHandlerInterface> =>
+      new Promise<PayPalHandlerInterface>(resolve => {
+        resolve(new MockPayPalHandler());
+      }),
   });
 
-  googlePayHandler: PromisedSingleton<GooglePayHandlerInterface> = new PromisedSingleton<
-    GooglePayHandlerInterface
-  >({
-    generator: new Promise<GooglePayHandlerInterface>(resolve => {
-      resolve(new MockGooglePayHandler());
-    }),
+  googlePayHandler = new PromisedSingleton<GooglePayHandlerInterface>({
+    generator: (): Promise<GooglePayHandlerInterface> =>
+      new Promise<GooglePayHandlerInterface>(resolve => {
+        resolve(new MockGooglePayHandler());
+      }),
   });
 
-  venmoHandler: PromisedSingleton<VenmoHandlerInterface> = new PromisedSingleton<
-    VenmoHandlerInterface
-  >({
-    generator: new Promise<VenmoHandlerInterface>(resolve => {
-      resolve(new MockVenmoHandler());
-    }),
+  venmoHandler = new PromisedSingleton<VenmoHandlerInterface>({
+    generator: (): Promise<VenmoHandlerInterface> =>
+      new Promise<VenmoHandlerInterface>(resolve => {
+        resolve(new MockVenmoHandler());
+      }),
   });
 
   constructor(options?: {
