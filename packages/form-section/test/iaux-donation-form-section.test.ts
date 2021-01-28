@@ -45,7 +45,7 @@ describe('DonationFormSection', () => {
     `);
 
     const contentContainerDiv = el.shadowRoot?.querySelector(
-      '.content-container'
+      '.container'
     ) as HTMLElement;
 
     expect(contentContainerDiv.classList.contains('hidebadge')).to.be.true;

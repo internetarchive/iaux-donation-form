@@ -5,7 +5,7 @@ The data models for the Internet Archive donation form
 ## Installation
 
 ```bash
-npm install @internetarchive/donation-form-data-models
+yarn add @internetarchive/donation-form-data-models
 ```
 
 ## Usage
@@ -39,29 +39,29 @@ const donationInfo = new DonationPaymentInfo({
 ## Prerequisite
 
 ```bash
-npm install
+yarn install
 ```
 
 ## Start Development Server
 
 ```bash
-npm start
+yarn start
 ```
 
 ## Testing
 
 ```bash
-npm test
+yarn test
 ```
 
 ## Testing via browserstack
 
 ```bash
-npm test:bs
+yarn test:bs
 ```
 
 ## Linting
 
 ```bash
-npm lint
+yarn lint
 ```

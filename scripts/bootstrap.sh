@@ -1,3 +1,3 @@
 #!/bin/bash
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-for dir in $SCRIPT_DIR/../packages/*; do (cd "$dir" && npm install); done
+for dir in $SCRIPT_DIR/../packages/*; do (cd "$dir" && yarn install); done

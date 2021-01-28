@@ -16,10 +16,10 @@
     "format:eslint": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
     "lint:prettier": "prettier \"**/*.js\" \"**/*.ts\" --check --ignore-path .gitignore",
     "format:prettier": "prettier \"**/*.js\" \"**/*.ts\" --write --ignore-path .gitignore",
-    "lint": "npm run lint:eslint && npm run lint:prettier",
-    "format": "npm run format:eslint && npm run format:prettier",
+    "lint": "yarn run lint:eslint && yarn run lint:prettier",
+    "format": "yarn run format:eslint && yarn run format:prettier",
     "test": "tsc && karma start --coverage",
-    "test:watch": "concurrently --kill-others --names tsc,karma \"npm run tsc:watch\" \"karma start --auto-watch=true --single-run=false\""
+    "test:watch": "concurrently --kill-others --names tsc,karma \"yarn run tsc:watch\" \"karma start --auto-watch=true --single-run=false\""
   },
   "devDependencies": {
     "@open-wc/eslint-config": "^2.0.0",

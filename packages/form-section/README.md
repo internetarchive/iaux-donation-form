@@ -4,7 +4,7 @@ This is the Donation Form Section WebComponent.
 
 ## Installation
 ```bash
-npm i @internetarchive/donation-form-section
+yarn add @internetarchive/donation-form-section
 ```
 
 ![Demo](assets/donation-form-section.gif)
@@ -23,40 +23,40 @@ npm i @internetarchive/donation-form-section
 ## Linting with ESLint, Prettier, and Types
 To scan the project for linting errors, run
 ```bash
-npm run lint
+yarn run lint
 ```
 
 You can lint with ESLint and Prettier individually as well
 ```bash
-npm run lint:eslint
+yarn run lint:eslint
 ```
 ```bash
-npm run lint:prettier
+yarn run lint:prettier
 ```
 
 To automatically fix many linting errors, run
 ```bash
-npm run format
+yarn run format
 ```
 
 You can format using ESLint and Prettier individually as well
 ```bash
-npm run format:eslint
+yarn run format:eslint
 ```
 ```bash
-npm run format:prettier
+yarn run format:prettier
 ```
 
 ## Testing with Karma
 To run the suite of karma tests, run
 ```bash
-npm run test
+yarn run test
 ```
 
 To run the tests in watch mode (for <abbr title="test driven development">TDD</abbr>, for example), run
 
 ```bash
-npm run test:watch
+yarn run test:watch
 ```
 
 
@@ -68,6 +68,6 @@ If you customize the configuration a lot, you can consider moving them to indivi
 
 ## Local Demo with `es-dev-server`
 ```bash
-npm start
+yarn start
 ```
 To run a local development server that serves the basic demo located in `demo/index.html`
