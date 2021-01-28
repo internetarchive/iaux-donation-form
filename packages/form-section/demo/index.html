@@ -38,7 +38,7 @@
       }
 
       function toggleAll() {
-        const sections = document.querySelectorAll('donation-form-section');
+        const sections = document.querySelectorAll('donation-form-section:not(.leavespacing)');
         sections.forEach(section => {
           section.badgeMode = allModes;
         });
@@ -76,6 +76,14 @@
             headline="Snowman Badge"
           >
             <h1>☃️</h1>
+          </donation-form-section>
+
+          <donation-form-section
+            class="leavespacing"
+            headline="Hidden Badge With Spacing"
+            badgeMode="hidebadgeleavespacing"
+          >
+            <p>This hides the badge, but leaves the spacing for the badge.</p>
           </donation-form-section>
 
           <button @click=${toggleAll}>Toggle All</button>

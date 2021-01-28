@@ -11,6 +11,7 @@ import {
 export enum DonationFormSectionBadgeMode {
   HideBadge = 'hidebadge',
   ShowBadge = 'showbadge',
+  HideBadgeLeaveSpacing = 'hidebadgeleavespacing',
 }
 
 @customElement('donation-form-section')
@@ -25,11 +26,11 @@ export class DonationFormSection extends LitElement {
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
-      <div class="container">
+      <div class="container ${this.badgeMode}">
         <div class="badge-container">
           <div class="badge">${this.sectionBadge}</div>
         </div>
-        <div class="content-container ${this.badgeMode}">
+        <div class="content-container">
           ${this.headline
             ? html` <div class="title">${this.headline}</div> `
             : ''}
@@ -73,9 +74,13 @@ export class DonationFormSection extends LitElement {
         background-color: ${sectionContentBackgroundColor};
       }
 
-      .content-container.hidebadge {
+      .hidebadge .content-container {
         left: 0;
         width: 100%;
+      }
+
+      .hidebadgeleavespacing .badge {
+        display: none;
       }
 
       .badge-container {
