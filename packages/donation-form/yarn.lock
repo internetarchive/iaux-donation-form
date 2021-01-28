@@ -854,7 +854,7 @@
   resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-data-models/-/donation-form-data-models-0.3.1.tgz#efb6434a76d05b06b2d0bffc26c8132a9e875fb2"
   integrity sha512-j0bhVH1GnOjwFlLRsY0jkvMVgfNw1IQW51eYkZNqoxR+jwvSNMy7qAonCTNYlAYlaw1qPNhq660cecohHUU5Hg==
 
-"@internetarchive/donation-form-edit-donation@^0.3.3":
+"@internetarchive/donation-form-edit-donation@^0.3.4":
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-edit-donation/-/donation-form-edit-donation-0.3.4.tgz#cf59f51856eeac29e0204aaa922d4d28a3888484"
   integrity sha512-oIAP2GMgd94XRfnLewY/mcrti6Jc3VKxYkiMIldklMoeviPZiaye+cLvhOoRWX/JQgwWEZ8WNSk9mdQHqiAwIA==
@@ -866,7 +866,7 @@
     lit-element "^2.2.1"
     lit-html "^1.1.2"
 
-"@internetarchive/donation-form-section@^0.3.0", "@internetarchive/donation-form-section@^0.3.1":
+"@internetarchive/donation-form-section@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-section/-/donation-form-section-0.3.1.tgz#218503e17f9b1329a7b1b919200e813f73996652"
   integrity sha512-nImTeoUVGAuIyygWj8tlMOwIb1K8PPQoABuqGesgK8LL8X+OEhQnQQcEcmDfnRhb6h1wZfRZ157+hpHH4HsQBA==
