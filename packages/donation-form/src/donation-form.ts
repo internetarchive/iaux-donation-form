@@ -35,9 +35,13 @@ import {
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
 
 import '@internetarchive/donation-form-section';
-import { DonationFormSection } from '@internetarchive/donation-form-section';
+import {
+  DonationFormSection,
+  DonationFormSectionBadgeMode,
+} from '@internetarchive/donation-form-section';
 import { UpsellModalCTAMode } from './modals/upsell-modal-content';
 import { ContactForm } from './form-elements/contact-form/contact-form';
+import './form-elements/total-amount';
 
 @customElement('donation-form')
 export class DonationForm extends LitElement {
@@ -81,6 +85,14 @@ export class DonationForm extends LitElement {
         @editDonationError=${this.editDonationError}
       >
       </donation-form-header>
+
+      <donation-form-section
+        .badgeMode=${DonationFormSectionBadgeMode.HideBadgeLeaveSpacing}
+        id="total-amount-section"
+      >
+        <donation-form-total-amount .donationInfo=${this.donationInfo}>
+        </donation-form-total-amount>
+      </donation-form-section>
 
       <donation-form-section sectionBadge="3" headline="Choose a payment method">
         <payment-selector
@@ -482,6 +494,12 @@ export class DonationForm extends LitElement {
 
       #donate-button:hover {
         background-color: ${donateButtonHoverColor};
+      }
+
+      #total-amount-section {
+        display: block;
+        margin-top: 1.5rem;
+        margin-bottom: 1.2rem;
       }
     `;
   }
