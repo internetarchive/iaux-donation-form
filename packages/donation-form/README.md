@@ -6,7 +6,7 @@ The Internet Archive Donation Form
 
 ## Installation
 ```bash
-npm add @internetarchive/donation-form
+yarn add @internetarchive/donation-form
 ```
 
 ## Usage
@@ -96,20 +96,20 @@ npm add @internetarchive/donation-form
 
 ## Prerequisite
 ```bash
-npm install
+yarn install
 ```
 
 ## Start Development Server
 ```bash
-npm run start
+yarn run start
 ```
 
 ## Testing
 ```bash
-npm run test
+yarn run test
 ```
 
 ## Linting
 ```bash
-npm lint
+yarn lint
 ```
