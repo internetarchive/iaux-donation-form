@@ -247,7 +247,7 @@ export class ContactForm extends LitElement {
         <input
           type=${fieldType}
           id=${options.id}
-          class="contact-form-input"
+          class="donation-contact-form-input"
           name=${options.name}
           aria-label=${options.placeholder}
           placeholder=${options.placeholder}
@@ -374,7 +374,7 @@ export class ContactForm extends LitElement {
           overflow: hidden;
         }
 
-        contact-form .contact-form-input {
+        contact-form .donation-contact-form-input {
           width: ${iconFieldWidth};
           border: 0;
           outline: 0;
@@ -386,11 +386,11 @@ export class ContactForm extends LitElement {
           font-family: ${fieldFontFamily};
         }
 
-        contact-form .contact-form-input::placeholder {
+        contact-form .donation-contact-form-input::placeholder {
           color: revert;
         }
 
-        contact-form select {
+        contact-form #donation-contact-form-countryCodeAlpha2 {
           width: ${iconFieldWidth};
           height: 100%;
           box-sizing: border-box;
