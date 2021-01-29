@@ -31,19 +31,22 @@ export class TotalAmount extends LitElement {
 
   static get styles(): CSSResult {
     const lineColor = css`var(--totalAmountLineColor, #333)`;
+    const lineThickness = css`var(--totalAmountLineThickness, 2px)`;
+    const totalAmountVerticalSpacing = css`var(--totalAmountVerticalSpacing, 0.5rem)`;
+    const totalAmountFontSize = css`var(--totalAmountFontSize, 2.6rem)`;
 
     return css`
       .top-line {
         width: 100%;
-        height: 2px;
+        height: ${lineThickness};
         background-color: ${lineColor};
       }
 
       .total-line {
-        font-size: 2.6rem;
+        font-size: ${totalAmountFontSize};
         font-weight: bold;
         text-align: center;
-        margin-top: 0.8rem;
+        margin-top: ${totalAmountVerticalSpacing};
       }
     `;
   }
