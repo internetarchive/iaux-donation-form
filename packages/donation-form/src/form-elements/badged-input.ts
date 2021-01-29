@@ -7,10 +7,11 @@ import {
   TemplateResult,
   property,
 } from 'lit-element';
+import { nothing } from 'lit-html';
 
-export enum IconSpaceOption {
-  IconSpace = 'icon-space',
-  NoIconSpace = 'no-icon-space',
+export enum SpacerOption {
+  LeaveSpace = 'leave-space',
+  CompressSpace = 'compress-space',
 }
 
 @customElement('badged-input')
@@ -21,18 +22,37 @@ export class BadgedInput extends LitElement {
 
   @property({ type: Boolean }) required = false;
 
-  @property({ type: String }) iconSpaceOption: IconSpaceOption = IconSpaceOption.IconSpace;
+  /**
+   * If the icon is hidden, should the space remain or be compressed
+   *
+   * @type {SpacerOption}
+   * @memberof BadgedInput
+   */
+  @property({ type: String }) iconSpaceOption: SpacerOption = SpacerOption.LeaveSpace;
+
+  /**
+   * When the required indicator is hidden, should the spacing remain
+   *
+   * This is useful for aligning many fields where some may not be required
+   *
+   * @type {SpacerOption}
+   * @memberof BadgedInput
+   */
+  @property({ type: String }) requiredIndicatorSpaceOption: SpacerOption = SpacerOption.LeaveSpace;
 
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
       <div class="input-wrapper ${this.errorClass} ${this.iconSpaceOptionClass}">
         <div class="icon-container">${this.icon}</div>
-        ${this.required
-          ? html`
-              <div class="required-indicator">*</div>
-            `
-          : ''}
+        <div class="required-indicator ${this.requiredIndicatorSpaceOption}">
+          ${this.required
+            ? html`
+                *
+              `
+            : nothing}
+        </div>
+
         <slot></slot>
       </div>
     `;
@@ -43,7 +63,7 @@ export class BadgedInput extends LitElement {
   }
 
   private get iconSpaceOptionClass(): string {
-    return this.iconSpaceOption === IconSpaceOption.NoIconSpace ? 'no-icon-space' : '';
+    return this.iconSpaceOption === SpacerOption.CompressSpace ? 'compress-space' : '';
   }
 
   /** @inheritdoc */
@@ -71,7 +91,7 @@ export class BadgedInput extends LitElement {
         border-color: ${errorColorCss};
       }
 
-      .input-wrapper.no-icon-space .icon-container {
+      .input-wrapper.compress-space .icon-container {
         width: ${noIconSpacerWidth};
       }
 
@@ -91,6 +111,10 @@ export class BadgedInput extends LitElement {
         color: ${requiredIndicatorColor};
         font-size: ${requiredIndicatorFontSize};
         margin: ${requiredIndicatorMargin};
+      }
+
+      .required-indicator.leave-space {
+        width: 0.5em;
       }
     `;
   }
