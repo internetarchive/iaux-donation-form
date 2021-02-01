@@ -453,7 +453,7 @@ export class DonationForm extends LitElement {
     const donateButtonColor = css`var(--donateButtonColor, rgba(49, 164, 129, 1))`;
     const donateButtonHoverColor = css`var(--donateButtonHoverColor, rgba(39, 131, 103, 1))`;
     const totalAmountTopMargin = css`var(--donateTotalAmountTopMargin, 1.5rem)`;
-    const totalAmountBottomMargin = css`var(--donateTotalAmountTopMargin, 1.2rem)`;
+    const totalAmountBottomMargin = css`var(--donateTotalAmountBottomMargin, 1.2rem)`;
 
     return css`
       h1 {
