@@ -76,7 +76,7 @@ describe('Donation Form Controller', () => {
     // clicking on the credit card button will show the contact form so wait for it to be updated
     await elementUpdated(donationForm);
     await promisedSleep(100);
-    const contactForm = donationForm?.shadowRoot?.querySelector('contact-form') as ContactForm;
+    const contactForm = document.querySelector('contact-form') as ContactForm;
     await fillInContactForm(contactForm);
 
     // verify the Donate button is still disabled
@@ -116,10 +116,8 @@ describe('Donation Form Controller', () => {
       </donation-form-controller>
     `)) as DonationFormController;
 
-    const analyticsLabel = 'CreditCardTextVisible:Yes';
     expect(mockAnalytics.callCategory).to.equal(analyticsCategory);
     expect(mockAnalytics.callAction).to.equal('Viewed');
-    expect(mockAnalytics.callLabel).to.equal(analyticsLabel);
   });
 
   it('sends DonationInfoChanged analytics when donation info changes', async () => {

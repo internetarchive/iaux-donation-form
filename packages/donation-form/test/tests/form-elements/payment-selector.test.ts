@@ -68,22 +68,4 @@ describe('Payment Selector', () => {
     const response = await oneEvent(el, 'googlePaySelected');
     expect(response).to.exist;
   });
-
-  it('shows the credit card text if requested', async () => {
-    const el = (await fixture(html`
-      <payment-selector ?showCreditCardButtonText=${true}></payment-selector>
-    `)) as PaymentSelector;
-    const paymentContainer = el.shadowRoot?.querySelector('.payment-container');
-    const hasShowTextClass = paymentContainer?.classList.contains('show-cc-text');
-    expect(hasShowTextClass).to.be.true;
-  });
-
-  it('hides the credit card text if requested', async () => {
-    const el = (await fixture(html`
-      <payment-selector ?showCreditCardButtonText=${false}></payment-selector>
-    `)) as PaymentSelector;
-    const paymentContainer = el.shadowRoot?.querySelector('.payment-container');
-    const hasHideTextClass = paymentContainer?.classList.contains('hide-cc-text');
-    expect(hasHideTextClass).to.be.true;
-  });
 });
