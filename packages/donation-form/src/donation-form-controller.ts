@@ -95,8 +95,6 @@ export class DonationFormController extends LitElement {
 
   @property({ type: Object }) paymentClients?: PaymentClientsInterface;
 
-  @property({ type: Boolean }) showCreditCardButtonText = false;
-
   @query('donation-form') private donationForm!: DonationForm;
 
   @query('#braintree-creditcard') private braintreeNumberInput!: HTMLInputElement;
@@ -322,7 +320,6 @@ export class DonationFormController extends LitElement {
           .environment=${this.environment}
           .braintreeManager=${this.braintreeManager}
           .contactForm=${this.contactForm}
-          ?showCreditCardButtonText=${this.showCreditCardButtonText}
           @donationInfoChanged=${this.donationInfoChanged}
           @paymentProviderSelected=${this.paymentProviderSelected}
           @paymentFlowStarted=${this.paymentFlowStarted}
@@ -393,7 +390,7 @@ export class DonationFormController extends LitElement {
   }
 
   private trackViewedEvent(): void {
-    this.logEvent('Viewed', this.creditCardVisibilityTrackingLabel);
+    this.logEvent('Viewed');
   }
 
   private paymentProviderSelected(e: CustomEvent): void {
@@ -401,14 +398,12 @@ export class DonationFormController extends LitElement {
     const previousPaymentProvider = e.detail.previousPaymentProvider;
     const providerNoSpaces = this.removeSpaces(paymentProvider);
     let eventName = `ProviderFirstSelected-${providerNoSpaces}`;
+    let previousProviderInfo;
     if (previousPaymentProvider !== undefined) {
       eventName = `ProviderChangedTo-${providerNoSpaces}`;
+      previousProviderInfo = `ProviderChangedFrom-${this.removeSpaces(previousPaymentProvider)}`;
     }
-    this.logEvent(eventName, this.creditCardVisibilityTrackingLabel);
-  }
-
-  private get creditCardVisibilityTrackingLabel(): string {
-    return `CreditCardTextVisible:${this.showCreditCardButtonText ? 'Yes' : 'No'}`;
+    this.logEvent(eventName, previousProviderInfo);
   }
 
   private paymentFlowStarted(e: CustomEvent): void {

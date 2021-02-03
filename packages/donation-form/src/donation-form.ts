@@ -55,8 +55,6 @@ export class DonationForm extends LitElement {
 
   @property({ type: Object }) contactForm?: ContactForm;
 
-  @property({ type: Boolean }) showCreditCardButtonText = false;
-
   @property({ type: Boolean }) private creditCardVisible = false;
 
   @property({ type: Boolean }) private contactFormVisible = false;
@@ -97,7 +95,6 @@ export class DonationForm extends LitElement {
       <donation-form-section sectionBadge="3" headline="Choose a payment method">
         <payment-selector
           .paymentProviders=${this.braintreeManager?.paymentProviders}
-          ?showCreditCardButtonText=${this.showCreditCardButtonText}
           @firstUpdated=${this.paymentSelectorFirstUpdated}
           @creditCardSelected=${this.creditCardSelected}
           @venmoSelected=${this.venmoSelected}

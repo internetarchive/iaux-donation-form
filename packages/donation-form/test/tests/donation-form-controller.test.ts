@@ -116,10 +116,8 @@ describe('Donation Form Controller', () => {
       </donation-form-controller>
     `)) as DonationFormController;
 
-    const analyticsLabel = 'CreditCardTextVisible:Yes';
     expect(mockAnalytics.callCategory).to.equal(analyticsCategory);
     expect(mockAnalytics.callAction).to.equal('Viewed');
-    expect(mockAnalytics.callLabel).to.equal(analyticsLabel);
   });
 
   it('sends DonationInfoChanged analytics when donation info changes', async () => {

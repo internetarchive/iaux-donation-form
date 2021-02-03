@@ -27,8 +27,6 @@ export class PaymentSelector extends LitElement {
 
   @property({ type: Object }) paymentProviders?: PaymentProvidersInterface;
 
-  @property({ type: Boolean }) showCreditCardButtonText = false;
-
   @property({ type: String }) private applePayMode: PaymentButtonMode = PaymentButtonMode.Loading;
 
   @property({ type: String }) private googlePayMode: PaymentButtonMode = PaymentButtonMode.Loading;
@@ -44,8 +42,6 @@ export class PaymentSelector extends LitElement {
         class="payment-container ${this.donationInfoValid
           ? 'donation-info-valid'
           : 'donation-info-invalid'}
-
-          ${this.showCreditCardButtonText ? 'show-cc-text' : 'hide-cc-text'}
           "
       >
         <div class="payment-provider-container">
@@ -292,15 +288,6 @@ export class PaymentSelector extends LitElement {
         background-image: url(https://archive.org/images/cc_logos.png);
         background-position: 50% 50%;
         background-size: contain;
-      }
-
-      .payment-container.hide-cc-text .credit-card-button {
-        max-width: 23rem;
-        padding: 0.5rem 0.7rem;
-      }
-
-      .payment-container.hide-cc-text .credit-card-button .cc-title {
-        display: none;
       }
 
       .credit-card-button .cc-title {
