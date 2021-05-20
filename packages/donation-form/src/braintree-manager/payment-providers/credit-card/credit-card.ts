@@ -37,6 +37,11 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
     return hostedFields?.tokenize();
   }
 
+  async shutdown(): Promise<void> {
+    const hostedFields = await this.instance.get();
+    hostedFields?.teardown();
+  }
+
   markFieldErrors(fields: HostedFieldName[]): void {
     this.hostedFieldConfig.hostedFieldContainer.markFieldErrors(fields);
   }

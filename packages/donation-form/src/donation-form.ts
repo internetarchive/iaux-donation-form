@@ -187,6 +187,11 @@ export class DonationForm extends LitElement {
     `;
   }
 
+  async shutdown(): Promise<void> {
+    const handler = await this.braintreeManager?.paymentProviders.creditCardHandler.get();
+    await handler?.shutdown();
+  }
+
   private editDonationError(): void {
     this.donationInfoValid = false;
   }

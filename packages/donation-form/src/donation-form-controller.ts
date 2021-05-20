@@ -151,6 +151,10 @@ export class DonationFormController extends LitElement {
     }
   }
 
+  async shutdown(): Promise<void> {
+    this.donationForm.shutdown();
+  }
+
   async showUpsellModalDev(options: {
     oneTimeAmount: number;
     ctaMode?: UpsellModalCTAMode;

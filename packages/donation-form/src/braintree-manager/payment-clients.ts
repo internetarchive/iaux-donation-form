@@ -3,6 +3,8 @@ import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { HostingEnvironment } from './braintree-interfaces';
 
 export interface PaymentClientsInterface {
+  // shutdown(): Promise<void>;
+
   braintreeClient: PromisedSingleton<braintree.Client>;
   dataCollector: PromisedSingleton<braintree.DataCollector>;
   hostedFields: PromisedSingleton<braintree.HostedFields>;
@@ -31,6 +33,15 @@ export interface PaymentClientsInterface {
  * @implements {PaymentClientsInterface}
  */
 export class PaymentClients implements PaymentClientsInterface {
+  // async shutdown(): Promise<void> {
+  //   (await this.dataCollector.get()).teardown();
+  //   (await this.hostedFields.get()).teardown();
+  //   (await this.venmo.get()).teardown();
+  //   (await this.payPal.get()).teardown();
+  //   // (await this.applePay.get()).teardown();
+  //   // (await this.googlePayBraintreeClient.get()).teardown();
+  // }
+
   braintreeClient = new PromisedSingleton<braintree.Client>({
     generator: async (): Promise<braintree.Client> => {
       await this.loadBraintreeScript('client');

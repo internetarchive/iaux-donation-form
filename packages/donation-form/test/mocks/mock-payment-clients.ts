@@ -19,6 +19,10 @@ export class MockPaymentClients implements PaymentClientsInterface {
     hostedFields.emitValidityChangedEvent(valid);
   }
 
+  shutdown(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
   braintreeClient: PromisedSingleton<braintree.Client>;
   dataCollector: PromisedSingleton<braintree.DataCollector>;
   hostedFields: PromisedSingleton<braintree.HostedFields>;

@@ -52,6 +52,7 @@
     <div>
       <button id="show-regular-upsell-button">Show Regular Upsell</button> |
       <button id="show-paypal-upsell-button">Show PayPal Upsell</button>
+      <button id="shutdown-form">Shutdown Form</button>
     </div>
   </div>
 
@@ -82,6 +83,11 @@
         ctaMode: 'PayPalUpsellSlot'
       });
     });
+
+      document.querySelector('#shutdown-form').addEventListener('click', () => {
+        const formController = document.querySelector('donation-form-controller');
+        formController.shutdown();
+      });
 
     render(
       html`

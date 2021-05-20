@@ -16,6 +16,10 @@ export class MockCreditCardHandler implements CreditCardHandlerInterface {
       }),
   });
 
+  shutdown(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
   async tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined> {
     return this.mockPayload;
   }

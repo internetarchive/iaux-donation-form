@@ -3,6 +3,7 @@ import { HostedFieldName } from './hosted-field-container';
 
 export interface CreditCardHandlerInterface {
   instance: PromisedSingleton<braintree.HostedFields | undefined>;
+  shutdown(): Promise<void>;
   tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined>;
   markFieldErrors(fields: HostedFieldName[]): void;
   removeFieldErrors(fields: HostedFieldName[]): void;
