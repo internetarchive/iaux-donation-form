@@ -41,7 +41,7 @@
     "eslint-config-prettier": "^6.11.0",
     "husky": "^1.0.0",
     "lint-staged": "^10.0.0",
-    "madge": "^3.9.2",
+    "madge": "^4.0.1",
     "prettier": "^2.0.4",
     "tslib": "^1.11.0",
     "typescript": "~3.9.0"
