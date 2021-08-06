@@ -15,6 +15,7 @@ import currency from 'currency.js';
 import {
   DonationType,
   DonationPaymentInfo,
+  defaultDonationAmounts,
 } from '@internetarchive/donation-form-data-models';
 
 import { CurrencyValidator } from '@internetarchive/donation-form-currency-validator';
@@ -51,15 +52,7 @@ export class DonationFormEditDonation extends LitElement {
   stepNumberMode: DonationFormEditDonationStepNumberMode =
     DonationFormEditDonationStepNumberMode.ShowNumbers;
 
-  @property({ type: Array }) amountOptions: number[] = [
-    5,
-    10,
-    25,
-    50,
-    100,
-    500,
-    1000,
-  ];
+  @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
 
   @property({ type: Object }) private error?: TemplateResult;
 
