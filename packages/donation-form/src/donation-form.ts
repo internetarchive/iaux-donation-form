@@ -30,6 +30,7 @@ import {
   PaymentProvider,
   DonorContactInfo,
   DonationType,
+  defaultDonationAmounts,
 } from '@internetarchive/donation-form-data-models';
 
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
@@ -55,6 +56,8 @@ export class DonationForm extends LitElement {
 
   @property({ type: Object }) contactForm?: ContactForm;
 
+  @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
+
   @property({ type: Boolean }) private creditCardVisible = false;
 
   @property({ type: Boolean }) private contactFormVisible = false;
@@ -79,6 +82,7 @@ export class DonationForm extends LitElement {
   render(): TemplateResult {
     return html`
       <donation-form-header
+        .amountOptions=${this.amountOptions}
         @donationInfoChanged=${this.donationInfoChanged}
         @editDonationError=${this.editDonationError}
       >

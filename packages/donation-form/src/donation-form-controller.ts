@@ -48,6 +48,7 @@ import {
   DonationPaymentInfo,
   PaymentProvider,
   DonationType,
+  defaultDonationAmounts,
 } from '@internetarchive/donation-form-data-models';
 import { UpsellModalCTAMode } from './modals/upsell-modal-content';
 
@@ -72,6 +73,8 @@ export class DonationFormController extends LitElement {
   @property({ type: String }) googlePayMerchantId?: string;
 
   @property({ type: String }) analyticsCategory = 'DonationForm';
+
+  @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
 
   @property({ type: String }) referrer?: string;
 
@@ -320,6 +323,7 @@ export class DonationFormController extends LitElement {
           .environment=${this.environment}
           .braintreeManager=${this.braintreeManager}
           .contactForm=${this.contactForm}
+          .amountOptions=${this.amountOptions}
           @donationInfoChanged=${this.donationInfoChanged}
           @paymentProviderSelected=${this.paymentProviderSelected}
           @paymentFlowStarted=${this.paymentFlowStarted}
