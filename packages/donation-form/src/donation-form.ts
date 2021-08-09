@@ -64,10 +64,6 @@ export class DonationForm extends LitElement {
 
   @property({ type: Boolean }) private donationInfoValid = true;
 
-  @property({ type: Boolean }) private contactInfoValid = false;
-
-  @property({ type: Boolean }) private hostedFieldsValid = false;
-
   @property({ type: String }) private selectedPaymentProvider?: PaymentProvider;
 
   @query('#contactFormSection') contactFormSection?: DonationFormSection;
@@ -403,9 +399,6 @@ export class DonationForm extends LitElement {
     this.renderPayPalButtonIfNeeded();
     this.donationInfo &&
       this.paymentFlowHandlers?.paypalHandler?.updateDonationInfo(this.donationInfo);
-    this.paymentFlowHandlers?.creditCardHandler?.on('validityChanged', (isValid: boolean) => {
-      this.hostedFieldsValid = isValid;
-    });
   }
 
   private flowHandlerListenersBound = false;
