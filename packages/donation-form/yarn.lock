@@ -854,10 +854,10 @@
   resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-data-models/-/donation-form-data-models-0.3.2-alpha.4.tgz#ea00d60ecc9190a45c396144b77468cc41b6b92f"
   integrity sha512-95/bK4Pes0JWUJuxS//tpB9uNlQ7PXHtgcC0huYRIeDc5y0fGse/haY7ptF/UrpOls38jYk36OmUHNEJTDa9Vw==
 
-"@internetarchive/donation-form-edit-donation@0.3.5-alpha.2":
-  version "0.3.5-alpha.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-edit-donation/-/donation-form-edit-donation-0.3.5-alpha.2.tgz#9cd2a09fbba33c40a0eb0fd459618c46688fa80d"
-  integrity sha512-p16AkJ8bA4kcaPPgN3Ek4ofP1HQswg0UHGUfcWGEK42x1/PBzhJo/d2GfIVzbWA/FsrjrquzXkxCvcDMgveqrQ==
+"@internetarchive/donation-form-edit-donation@0.3.5-alpha.3":
+  version "0.3.5-alpha.3"
+  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-edit-donation/-/donation-form-edit-donation-0.3.5-alpha.3.tgz#a17709681fd092b95fd364b18b83ea330211e190"
+  integrity sha512-EO9OeCstemtAP6uUQKHVRZNkURmj892xSjwqzds8zw0LwFxojiN74dN2j2qYnQzXVF7ewCKupZ5QkV7SwBYRLw==
   dependencies:
     "@internetarchive/donation-form-currency-validator" "^0.3.0"
     "@internetarchive/donation-form-data-models" "0.3.2-alpha.4"
