@@ -121,7 +121,7 @@ export class AppRoot extends LitElement {
   private updateAmounts(): void {
     const values = this.dollarAmounts.value;
     const splitValues = values.split(',');
-    const numberArray = splitValues.map(value => parseFloat(value));
+    const numberArray = splitValues.map(value => parseFloat(value)).filter(value => !isNaN(value));
     this.editDonation.amountOptions = numberArray;
   }
 
