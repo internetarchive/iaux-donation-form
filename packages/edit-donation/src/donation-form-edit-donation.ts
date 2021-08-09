@@ -79,7 +79,7 @@ export class DonationFormEditDonation extends LitElement {
         headline="Choose an amount (USD)"
         badgeMode=${this.formSectionNumberMode}
       >
-        <ul class="amount-selector count-${this.amountOptions.length}">
+        <ul class="amount-selector">
           ${this.presetAmountsTemplate}
           <li class="custom-amount">${this.customAmountTemplate}</li>
         </ul>
