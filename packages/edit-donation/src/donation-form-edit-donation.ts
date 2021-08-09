@@ -79,7 +79,7 @@ export class DonationFormEditDonation extends LitElement {
         headline="Choose an amount (USD)"
         badgeMode=${this.formSectionNumberMode}
       >
-        <ul class="amount-selector">
+        <ul class="amount-selector count-${this.amountOptions.length}">
           ${this.presetAmountsTemplate}
           <li class="custom-amount">${this.customAmountTemplate}</li>
         </ul>
@@ -452,6 +452,55 @@ export class DonationFormEditDonation extends LitElement {
         display: inline-block;
       }
 
+      .frequency-selector {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .amount-selector.count-3 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .amount-selector.count-3 .custom-amount {
+        grid-column-start: 2;
+        grid-column-end: 3;
+      }
+
+      .amount-selector.count-4 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .amount-selector.count-4 .custom-amount {
+        grid-column-start: 2;
+        grid-column-end: 4;
+      }
+
+      .amount-selector.count-5 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .amount-selector.count-5 .custom-amount {
+        grid-column-start: 2;
+        grid-column-end: 5;
+      }
+
+      .amount-selector.count-6 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .amount-selector.count-6 .custom-amount {
+        grid-column-start: 3;
+        grid-column-end: 5;
+      }
+
+      .amount-selector.count-7 {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .amount-selector.count-7 .custom-amount {
+        grid-column-start: 3;
+        grid-column-end: 6;
+      }
+
       .selection-button {
         height: 3rem;
       }
@@ -517,19 +566,6 @@ export class DonationFormEditDonation extends LitElement {
         font-size: ${coverFeesFontSizeCss};
         font-weight: ${coverFeesFontWeightCss};
         flex: 1;
-      }
-
-      .amount-selector {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-      }
-
-      .frequency-selector {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .custom-amount {
-        grid-column-start: 3;
-        grid-column-end: 6;
       }
 
       #custom-amount-input {
