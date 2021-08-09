@@ -49,6 +49,7 @@ import {
   PaymentProvider,
   DonationType,
   defaultDonationAmounts,
+  defaultSelectedDonationInfo,
 } from '@internetarchive/donation-form-data-models';
 import { UpsellModalCTAMode } from './modals/upsell-modal-content';
 
@@ -76,6 +77,8 @@ export class DonationFormController extends LitElement {
 
   @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
 
+  @property({ type: Object }) donationInfo: DonationPaymentInfo = defaultSelectedDonationInfo;
+
   @property({ type: String }) referrer?: string;
 
   @property({ type: String }) loggedInUser?: string;
@@ -98,6 +101,8 @@ export class DonationFormController extends LitElement {
 
   @property({ type: Object }) paymentClients?: PaymentClientsInterface;
 
+  @property({ type: Object }) lazyLoaderService: LazyLoaderServiceInterface = new LazyLoaderService();
+
   @query('donation-form') private donationForm!: DonationForm;
 
   @query('#braintree-creditcard') private braintreeNumberInput!: HTMLInputElement;
@@ -109,8 +114,6 @@ export class DonationFormController extends LitElement {
   @query('#braintree-error-message') private braintreeErrorMessage!: HTMLDivElement;
 
   @query('contact-form') private contactForm?: ContactForm;
-
-  private lazyLoaderService: LazyLoaderServiceInterface = new LazyLoaderService();
 
   /** @inheritdoc */
   updated(changedProperties: PropertyValues): void {
@@ -210,17 +213,21 @@ export class DonationFormController extends LitElement {
 
   private setInitialDonationAmount(): void {
     const urlParams = new URLSearchParams(window.location.search);
-    const frequencyParam = urlParams.get('contrib_type');
-    const amountParam = urlParams.get('amt');
-    const coverFeesParam = urlParams.get('coverFees');
-    const coverFees = coverFeesParam === 'true';
 
-    let frequency = DonationType.OneTime;
+    let coverFees = this.donationInfo.coverFees;
+    const coverFeesParam = urlParams.get('coverFees');
+    if (coverFeesParam) {
+      coverFees = coverFeesParam === 'true';
+    }
+
+    let frequency = this.donationInfo.donationType;
+    const frequencyParam = urlParams.get('contrib_type');
     if (frequencyParam === 'monthly') {
       frequency = DonationType.Monthly;
     }
 
-    let amount = 5;
+    let amount = this.donationInfo.amount;
+    const amountParam = urlParams.get('amt');
     if (amountParam) {
       const parsedAmount = currency(amountParam).value;
       if (parsedAmount > 0) {
@@ -234,7 +241,7 @@ export class DonationFormController extends LitElement {
       coverFees: coverFees,
     });
 
-    this.donationForm.donationInfo = donationInfo;
+    this.donationInfo = donationInfo;
   }
 
   private setupPaymentFlowHandlers(): void {
@@ -324,6 +331,7 @@ export class DonationFormController extends LitElement {
           .braintreeManager=${this.braintreeManager}
           .contactForm=${this.contactForm}
           .amountOptions=${this.amountOptions}
+          .donationInfo=${this.donationInfo}
           @donationInfoChanged=${this.donationInfoChanged}
           @paymentProviderSelected=${this.paymentProviderSelected}
           @paymentFlowStarted=${this.paymentFlowStarted}
