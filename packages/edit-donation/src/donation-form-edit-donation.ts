@@ -49,6 +49,16 @@ export class DonationFormEditDonation extends LitElement {
   stepNumberMode: DonationFormEditDonationStepNumberMode =
     DonationFormEditDonationStepNumberMode.ShowNumbers;
 
+  /**
+   * This is a convenience helper to more easily set the default selected
+   * amount from raw HTML strings. If this is present, it will be used,
+   * otherwise `donationInfo` above will take precendence.
+   *
+   * @type {number}
+   * @memberof DonationFormEditDonation
+   */
+  @property({ type: Number }) defaultSelectedAmount?: number;
+
   @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
 
   @property({ type: Object }) private error?: TemplateResult;
@@ -101,6 +111,7 @@ export class DonationFormEditDonation extends LitElement {
   }
 
   updated(changedProperties: PropertyValues): void {
+    console.debug(this.donationInfo);
     if (changedProperties.has('customAmountSelected')) {
       this.customAmountButton.checked = this.customAmountSelected;
     }
@@ -111,6 +122,13 @@ export class DonationFormEditDonation extends LitElement {
     }
     if (changedProperties.has('donationInfo')) {
       this.updateSelectedDonationInfo();
+    }
+    if (changedProperties.has('defaultSelectedAmount') && this.defaultSelectedAmount) {
+      this.donationInfo = new DonationPaymentInfo({
+        donationType: this.donationInfo.donationType,
+        amount: this.defaultSelectedAmount,
+        coverFees: this.donationInfo.coverFees
+      })
     }
   }
 
