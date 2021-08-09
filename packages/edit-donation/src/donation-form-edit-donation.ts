@@ -107,6 +107,7 @@ export class DonationFormEditDonation extends LitElement {
     if (changedProperties.has('amountOptions')) {
       this.customAmountSelected = false;
       this.updateSelectedDonationInfo();
+      this.setupAmountColumnsLayoutConfig();
     }
     if (changedProperties.has('donationInfo')) {
       this.updateSelectedDonationInfo();
@@ -120,6 +121,43 @@ export class DonationFormEditDonation extends LitElement {
       case DonationFormEditDonationStepNumberMode.HideNumbers:
         return DonationFormSectionBadgeMode.HideBadge;
     }
+  }
+
+  /**
+   * Change the layout of the amount options grid depending on the number of options
+   *
+   * @private
+   * @memberof DonationFormEditDonation
+   */
+  private setupAmountColumnsLayoutConfig(): void {
+    const amountCount = this.amountOptions.length;
+    let columnCount = 5;
+    let customAmountSpan = 3;
+    switch (amountCount) {
+      case 7:
+        columnCount = 5;
+        customAmountSpan = 3;
+        break;
+      case 6:
+        columnCount = 4;
+        customAmountSpan = 2;
+        break;
+      case 5:
+        columnCount = 4;
+        customAmountSpan = 3;
+        break;
+      case 4:
+        columnCount = 3;
+        customAmountSpan = 2;
+        break;
+      case 3:
+        columnCount = 2;
+        customAmountSpan = 1;
+        break;
+    }
+
+    this.style.setProperty('--paymentSelectorAmountColumnCount', `${columnCount}`);
+    this.style.setProperty('--paymentSelectorCustomAmountColSpan', `${customAmountSpan}`);
   }
 
   private updateSelectedDonationInfo(): void {
@@ -430,6 +468,8 @@ export class DonationFormEditDonation extends LitElement {
     const customAmountWidth = css`var(--customAmountWidth, 4rem)`;
     const fieldFontColor = css`var(--inputFieldFontColor, #333)`;
     const customAmountBorderCss = css`var(--inputBorder, 1px solid #d9d9d9)`;
+    const amountButtonColCount = css`var(--paymentSelectorAmountColumnCount, 5)`;
+    const customAmountColSpan = css`var(--paymentSelectorCustomAmountColSpan, 3)`;
 
     return css`
       .errors {
@@ -453,52 +493,15 @@ export class DonationFormEditDonation extends LitElement {
       }
 
       .frequency-selector {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .amount-selector.count-3 {
         grid-template-columns: repeat(2, 1fr);
       }
 
-      .amount-selector.count-3 .custom-amount {
-        grid-column-start: 2;
-        grid-column-end: 3;
+      .amount-selector {
+        grid-template-columns: repeat(${amountButtonColCount}, 1fr);
       }
 
-      .amount-selector.count-4 {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .amount-selector.count-4 .custom-amount {
-        grid-column-start: 2;
-        grid-column-end: 4;
-      }
-
-      .amount-selector.count-5 {
-        grid-template-columns: repeat(4, 1fr);
-      }
-
-      .amount-selector.count-5 .custom-amount {
-        grid-column-start: 2;
-        grid-column-end: 5;
-      }
-
-      .amount-selector.count-6 {
-        grid-template-columns: repeat(4, 1fr);
-      }
-
-      .amount-selector.count-6 .custom-amount {
-        grid-column-start: 3;
-        grid-column-end: 5;
-      }
-
-      .amount-selector.count-7 {
-        grid-template-columns: repeat(5, 1fr);
-      }
-
-      .amount-selector.count-7 .custom-amount {
-        grid-column-start: 3;
-        grid-column-end: 6;
+      .custom-amount {
+        grid-column: span ${customAmountColSpan};
       }
 
       .selection-button {
