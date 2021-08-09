@@ -18,116 +18,13 @@
       .amount {
         font-size: 1.4rem;
       }
-
-      donation-form-edit-donation {
-        width: 32rem;
-        display: block;
-      }
     </style>
   </head>
   <body>
-    <div id="demo"></div>
+    <app-root></app-root>
 
     <script type="module">
-      import { html, render } from 'lit-html';
-      import '../dist/index.js';
-      import {
-        DonationPaymentInfo,
-        DonationType,
-      } from '@internetarchive/donation-form-data-models';
-
-      const donationInfo = new DonationPaymentInfo({
-        amount: 5,
-        donationType: DonationType.OneTime,
-        coverFees: false,
-      });
-
-      function toggleNumbers() {
-        const editDonation = document.querySelector(
-          'donation-form-edit-donation'
-        );
-        editDonation.stepNumberMode =
-          editDonation.stepNumberMode === 'shownumbers'
-            ? 'hidenumbers'
-            : 'shownumbers';
-      }
-
-      function donationInfoChanged(e) {
-        const totalDiv = document.querySelector('#total');
-        const errorDiv = document.querySelector('.error');
-        const amountInput = document.querySelector('#amount-input');
-        const coverFeesCheckbox = document.querySelector('#coverfees-checkbox');
-        totalDiv.innerText = `$${e.detail.donationInfo.total}`;
-        errorDiv.innerText = '';
-        amountInput.value = e.detail.donationInfo.amount;
-        coverFeesCheckbox.checked = e.detail.donationInfo.coverFees;
-      }
-
-      function editDonationError(e) {
-        const errorDiv = document.querySelector('.error');
-        const totalDiv = document.querySelector('#total');
-        errorDiv.innerText = e.detail.error;
-        totalDiv.innerText = 'Invalid'
-      }
-
-      function updateForm() {
-        const amountInput = document.querySelector('#amount-input');
-        const donationType = document.querySelector('input[name=donationType]:checked').value
-        const coverFeesCheckbox = document.querySelector('#coverfees-checkbox');
-        const editDonation = document.querySelector(
-          'donation-form-edit-donation'
-        );
-
-        const donationInfo = new DonationPaymentInfo({
-          amount: parseFloat(amountInput.value),
-          donationType: donationType,
-          coverFees: coverFeesCheckbox.checked,
-        });
-
-        editDonation.donationInfo = donationInfo;
-      }
-
-      render(
-        html`
-          <donation-form-edit-donation
-            .donationInfo=${donationInfo}
-            @donationInfoChanged=${donationInfoChanged}
-            @editDonationError=${editDonationError}
-            stepNumberMode="shownumbers"
-          >
-          </donation-form-edit-donation>
-
-          <hr>
-
-          <h2>Development:</h2>
-
-          <button @click=${toggleNumbers}>Toggle Number Visibility</button>
-
-          <div class="amount">
-            Total: <span id="total">$5.00</span>
-          </div>
-          <fieldset>
-            <ul>
-              <li>
-                <input type="radio" name="donationType" value="one-time" checked /> One Time
-                <input type="radio" name="donationType" value="monthly" /> Monthly
-              </li>
-              <li>
-                $ <input type="text" id="amount-input" value="5.00" />
-              </li>
-              <li>
-                <input type="checkbox" id="coverfees-checkbox" /> Cover fees
-              </li>
-              <li>
-                <button @click=${updateForm}>Update</button>
-              </li>
-            </ul>
-          </fieldset>
-          <div class="error">
-          </div>
-        `,
-        document.querySelector('#demo')
-      );
+      import '../dist/demo/app-root.js';
     </script>
   </body>
 </html>
