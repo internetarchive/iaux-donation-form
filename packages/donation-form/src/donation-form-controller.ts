@@ -268,7 +268,7 @@ export class DonationFormController extends LitElement {
   }
 
   private get hostedFieldConfig(): HostedFieldConfiguration {
-    const hostedFieldStyle: object = {
+    const hostedFieldStyle: Record<string, Record<string, string>> = {
       input: {
         'font-size': '16px',
         'font-family': '"Helvetica Neue", Helvetica, Arial, sans-serif',

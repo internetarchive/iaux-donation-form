@@ -1,7 +1,7 @@
 import { HostedFieldConfiguration } from '../../src/braintree-manager/payment-providers/credit-card/hosted-field-configuration';
 import { MockHostedFieldContainer } from './mock-hosted-fields-container';
 
-export const mockHostedFieldStyle: object = {
+export const mockHostedFieldStyle: Record<string, Record<string, string>> = {
   input: {
     'font-size': '16px',
     'font-family': '"Helvetica Neue", Helvetica, Arial, sans-serif',
