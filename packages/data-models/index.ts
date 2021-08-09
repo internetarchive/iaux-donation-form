@@ -15,4 +15,7 @@ export { ErrorResponse } from './src/response-models/error-models/error-response
 export { SubscriptionResponse } from './src/response-models/success-models/subscription-response';
 export { SuccessResponse } from './src/response-models/success-models/success-response';
 
-export { defaultDonationAmounts } from './src/defaults/default-donation-amounts';
+export {
+  defaultDonationAmounts,
+  defaultSelectedDonationInfo
+} from './src/defaults/default-donation-amounts';
