@@ -207,12 +207,21 @@ export class DonationFormController extends LitElement {
 
   /** @inheritdoc */
   firstUpdated(): void {
-    this.setInitialDonationAmount();
+    this.configureFromQueryParams();
     this.trackViewedEvent();
   }
 
-  private setInitialDonationAmount(): void {
+  private configureFromQueryParams(): void {
     const urlParams = new URLSearchParams(window.location.search);
+
+    let amountOptions = this.amountOptions;
+    const amountOptionsParam = urlParams.get('dollarAmounts');
+    if (amountOptionsParam) {
+      const stripBrackets = amountOptionsParam.slice(1,-1);
+      const splitValues = stripBrackets.split(',');
+      const numberArray = splitValues.map(value => parseFloat(value)).filter(value => !isNaN(value));
+      amountOptions = numberArray;
+    }
 
     let coverFees = this.donationInfo.coverFees;
     const coverFeesParam = urlParams.get('coverFees');
@@ -241,6 +250,7 @@ export class DonationFormController extends LitElement {
       coverFees: coverFees,
     });
 
+    this.amountOptions = amountOptions;
     this.donationInfo = donationInfo;
   }
 
