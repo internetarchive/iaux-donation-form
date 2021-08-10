@@ -1,10 +1,26 @@
-import { defaultSelectedDonationInfo, DonationPaymentInfo, DonationType } from "@internetarchive/donation-form-data-models";
-import { css, CSSResult, customElement, html, LitElement, query, TemplateResult } from "lit-element";
-import { DonationFormEditDonation, DonationFormEditDonationStepNumberMode } from "../src/donation-form-edit-donation";
+import {
+  defaultSelectedDonationInfo,
+  DonationPaymentInfo,
+  DonationType,
+} from '@internetarchive/donation-form-data-models';
+import {
+  css,
+  CSSResult,
+  customElement,
+  html,
+  LitElement,
+  query,
+  TemplateResult,
+} from 'lit-element';
+import {
+  DonationFormEditDonation,
+  DonationFormEditDonationStepNumberMode,
+} from '../src/donation-form-edit-donation';
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
-  @query('donation-form-edit-donation') private editDonation!: DonationFormEditDonation;
+  @query('donation-form-edit-donation')
+  private editDonation!: DonationFormEditDonation;
 
   @query('#total') private totalDiv!: HTMLSpanElement;
 
@@ -12,11 +28,14 @@ export class AppRoot extends LitElement {
 
   @query('#coverfees-checkbox') private coverFeesCheckbox!: HTMLInputElement;
 
-  @query('input[name=donationType][value=one-time]') private oneTimeRadio!: HTMLInputElement;
+  @query('input[name=donationType][value=one-time]')
+  private oneTimeRadio!: HTMLInputElement;
 
-  @query('input[name=donationType][value=monthly]') private monthlyRadio!: HTMLInputElement;
+  @query('input[name=donationType][value=monthly]')
+  private monthlyRadio!: HTMLInputElement;
 
-  @query('input[name=donationType]:checked') private selectedDonationType!: HTMLInputElement;
+  @query('input[name=donationType]:checked')
+  private selectedDonationType!: HTMLInputElement;
 
   @query('#amount-input') private amountInput!: HTMLInputElement;
 
@@ -32,7 +51,7 @@ export class AppRoot extends LitElement {
       >
       </donation-form-edit-donation>
 
-      <hr>
+      <hr />
 
       ${this.devToolsTemplate}
     `;
@@ -46,18 +65,23 @@ export class AppRoot extends LitElement {
         <button @click=${this.toggleNumbers}>Toggle Number Visibility</button>
 
         <div class="amount">
-          Total: <div id="total">$5.00</div>
+          Total:
+          <div id="total">$5.00</div>
         </div>
         <fieldset>
           <legend>Donation Info</legend>
           <ul>
             <li>
-              <input type="radio" name="donationType" value="one-time" checked /> One Time
+              <input
+                type="radio"
+                name="donationType"
+                value="one-time"
+                checked
+              />
+              One Time
               <input type="radio" name="donationType" value="monthly" /> Monthly
             </li>
-            <li>
-              $ <input type="text" id="amount-input" value="5.00" />
-            </li>
+            <li>$ <input type="text" id="amount-input" value="5.00" /></li>
             <li>
               <input type="checkbox" id="coverfees-checkbox" /> Cover fees
             </li>
@@ -70,7 +94,12 @@ export class AppRoot extends LitElement {
           <legend>Dollar Amounts</legend>
           <ul>
             <li>
-              Amounts: <input type="text" id="dollar-amounts" value="5, 10, 25, 50, 100, 500, 1000" />
+              Amounts:
+              <input
+                type="text"
+                id="dollar-amounts"
+                value="5, 10, 25, 50, 100, 500, 1000"
+              />
             </li>
             <li>
               <button @click=${this.updateAmounts}>Update</button>
@@ -78,8 +107,7 @@ export class AppRoot extends LitElement {
           </ul>
         </fieldset>
 
-        <div id="error">
-        </div>
+        <div id="error"></div>
       </div>
     `;
   }
@@ -106,7 +134,7 @@ export class AppRoot extends LitElement {
 
   private editDonationError(e: CustomEvent): void {
     this.errorDiv.innerText = e.detail.error;
-    this.totalDiv.innerText = 'Invalid'
+    this.totalDiv.innerText = 'Invalid';
   }
 
   private updateForm(): void {
@@ -121,7 +149,9 @@ export class AppRoot extends LitElement {
   private updateAmounts(): void {
     const values = this.dollarAmounts.value;
     const splitValues = values.split(',');
-    const numberArray = splitValues.map(value => parseFloat(value)).filter(value => !isNaN(value));
+    const numberArray = splitValues
+      .map(value => parseFloat(value))
+      .filter(value => !isNaN(value));
     this.editDonation.amountOptions = numberArray;
   }
 
