@@ -111,7 +111,6 @@ export class DonationFormEditDonation extends LitElement {
   }
 
   updated(changedProperties: PropertyValues): void {
-    console.debug(this.donationInfo);
     if (changedProperties.has('customAmountSelected')) {
       this.customAmountButton.checked = this.customAmountSelected;
     }
@@ -123,12 +122,15 @@ export class DonationFormEditDonation extends LitElement {
     if (changedProperties.has('donationInfo')) {
       this.updateSelectedDonationInfo();
     }
-    if (changedProperties.has('defaultSelectedAmount') && this.defaultSelectedAmount) {
+    if (
+      changedProperties.has('defaultSelectedAmount') &&
+      this.defaultSelectedAmount
+    ) {
       this.donationInfo = new DonationPaymentInfo({
         donationType: this.donationInfo.donationType,
         amount: this.defaultSelectedAmount,
-        coverFees: this.donationInfo.coverFees
-      })
+        coverFees: this.donationInfo.coverFees,
+      });
     }
   }
 
@@ -174,8 +176,14 @@ export class DonationFormEditDonation extends LitElement {
         break;
     }
 
-    this.style.setProperty('--paymentSelectorAmountColumnCount', `${columnCount}`);
-    this.style.setProperty('--paymentSelectorCustomAmountColSpan', `${customAmountSpan}`);
+    this.style.setProperty(
+      '--paymentSelectorAmountColumnCount',
+      `${columnCount}`
+    );
+    this.style.setProperty(
+      '--paymentSelectorCustomAmountColSpan',
+      `${customAmountSpan}`
+    );
   }
 
   private updateSelectedDonationInfo(): void {
