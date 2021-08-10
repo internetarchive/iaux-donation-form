@@ -9,7 +9,10 @@ import {
   query,
 } from 'lit-element';
 
-import { defaultDonationAmounts, DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
+import {
+  defaultDonationAmounts,
+  DonationPaymentInfo,
+} from '@internetarchive/donation-form-data-models';
 
 import '@internetarchive/donation-form-edit-donation';
 import { DonationFormEditDonation } from '@internetarchive/donation-form-edit-donation';

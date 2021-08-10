@@ -101,7 +101,8 @@ export class DonationFormController extends LitElement {
 
   @property({ type: Object }) paymentClients?: PaymentClientsInterface;
 
-  @property({ type: Object }) lazyLoaderService: LazyLoaderServiceInterface = new LazyLoaderService();
+  @property({ type: Object })
+  lazyLoaderService: LazyLoaderServiceInterface = new LazyLoaderService();
 
   @query('donation-form') private donationForm!: DonationForm;
 
@@ -217,9 +218,11 @@ export class DonationFormController extends LitElement {
     let amountOptions = this.amountOptions;
     const amountOptionsParam = urlParams.get('dollarAmounts');
     if (amountOptionsParam) {
-      const stripBrackets = amountOptionsParam.slice(1,-1);
+      const stripBrackets = amountOptionsParam.slice(1, -1);
       const splitValues = stripBrackets.split(',');
-      const numberArray = splitValues.map(value => parseFloat(value)).filter(value => !isNaN(value));
+      const numberArray = splitValues
+        .map(value => parseFloat(value))
+        .filter(value => !isNaN(value));
       amountOptions = numberArray;
     }
 
