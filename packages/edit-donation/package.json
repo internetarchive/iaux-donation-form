@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@internetarchive/donation-form-currency-validator": "^0.3.0",
-    "@internetarchive/donation-form-data-models": "0.3.2-alpha.4",
+    "@internetarchive/donation-form-data-models": "0.3.2",
     "@internetarchive/donation-form-section": "^0.3.1",
     "currency.js": "^2.0.3",
     "lit-element": "^2.2.1",
