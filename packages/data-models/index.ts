@@ -14,3 +14,8 @@ export { CodedError } from './src/response-models/error-models/coded-error';
 export { ErrorResponse } from './src/response-models/error-models/error-response';
 export { SubscriptionResponse } from './src/response-models/success-models/subscription-response';
 export { SuccessResponse } from './src/response-models/success-models/success-response';
+
+export {
+  defaultDonationAmounts,
+  defaultSelectedDonationInfo
+} from './src/defaults/default-donation-amounts';

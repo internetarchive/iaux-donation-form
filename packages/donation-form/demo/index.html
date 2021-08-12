@@ -52,6 +52,7 @@
     <div>
       <button id="show-regular-upsell-button">Show Regular Upsell</button> |
       <button id="show-paypal-upsell-button">Show PayPal Upsell</button>
+      <button id="change-donation-amounts">Change Donation Amounts</button>
     </div>
   </div>
 
@@ -61,6 +62,7 @@
   <script type="module">
     import { render, html } from 'lit-html';
     import '../dist/index.js';
+    import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-form-data-models';
     import { BraintreeEndpointManager } from '../dist/demo/braintree-endpoint-manager.js';
     import { DemoAnalyticsHandler } from '../dist/demo/demo-analytics-handler.js';
 
@@ -81,6 +83,17 @@
         oneTimeAmount: 5,
         ctaMode: 'PayPalUpsellSlot'
       });
+    });
+
+    document.querySelector('#change-donation-amounts').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      const amounts = [2.75, 10, 15, 20];
+      formController.amountOptions = amounts;
+      formController.donationInfo = new DonationPaymentInfo({
+        donationType: DonationType.OneTime,
+        amount: 2.75,
+        coverFees: false,
+      })
     });
 
     render(

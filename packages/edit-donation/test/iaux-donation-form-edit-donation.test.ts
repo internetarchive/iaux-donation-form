@@ -261,4 +261,72 @@ describe('EditDonation', () => {
       );
     });
   });
+
+  it('uses defaultSelectedAmount if provided', async () => {
+    const el = await fixture<DonationFormEditDonation>(html`
+      <donation-form-edit-donation
+        .donationInfo=${new MockDonationInfo()}
+        defaultSelectedAmount="8.34"
+      ></donation-form-edit-donation>
+    `);
+
+    expect(el.donationInfo.amount).to.equal(8.34);
+  });
+
+  describe('configurable dollar amounts', () => {
+    it('supports configurable dollar amounts', async () => {
+      const el = await fixture<DonationFormEditDonation>(html`
+        <donation-form-edit-donation
+          .donationInfo=${new MockDonationInfo()}
+          .amountOptions=${[2.5, 3.7, 5.45, 20]}
+        ></donation-form-edit-donation>
+      `);
+
+      const amountList = el.shadowRoot?.querySelectorAll('.amount-selector li');
+      expect(amountList?.length).to.equal(5); // 4 amounts + 1 custom
+      expect((amountList?.item(0) as HTMLLIElement).innerText).to.equal(
+        '$2.50'
+      );
+      expect((amountList?.item(1) as HTMLLIElement).innerText).to.equal(
+        '$3.70'
+      );
+      expect((amountList?.item(2) as HTMLLIElement).innerText).to.equal(
+        '$5.45'
+      );
+      expect((amountList?.item(3) as HTMLLIElement).innerText).to.equal('$20');
+    });
+
+    it('handles proper layout for different amounts', async () => {
+      const el = await fixture<DonationFormEditDonation>(html`
+        <donation-form-edit-donation
+          .donationInfo=${new MockDonationInfo()}
+        ></donation-form-edit-donation>
+      `);
+
+      const layouts: {
+        count: number;
+        columns: number;
+        customColSpan: number;
+      }[] = [
+        { count: 3, columns: 2, customColSpan: 1 },
+        { count: 4, columns: 3, customColSpan: 2 },
+        { count: 5, columns: 4, customColSpan: 3 },
+        { count: 6, columns: 4, customColSpan: 2 },
+        { count: 7, columns: 5, customColSpan: 3 },
+      ];
+
+      for (const layout of layouts) {
+        el.amountOptions = Array.from(Array(layout.count).keys());
+        await el.updateComplete;
+        const colCount = el.style.getPropertyValue(
+          '--paymentSelectorAmountColumnCount'
+        );
+        const customColSpan = el.style.getPropertyValue(
+          '--paymentSelectorCustomAmountColSpan'
+        );
+        expect(colCount).to.equal(`${layout.columns}`);
+        expect(customColSpan).to.equal(`${layout.customColSpan}`);
+      }
+    });
+  });
 });

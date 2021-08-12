@@ -15,6 +15,8 @@ import currency from 'currency.js';
 import {
   DonationType,
   DonationPaymentInfo,
+  defaultDonationAmounts,
+  defaultSelectedDonationInfo,
 } from '@internetarchive/donation-form-data-models';
 
 import { CurrencyValidator } from '@internetarchive/donation-form-currency-validator';
@@ -41,31 +43,31 @@ export enum EditDonationInfoStatus {
 @customElement('donation-form-edit-donation')
 export class DonationFormEditDonation extends LitElement {
   @property({ type: Object })
-  donationInfo: DonationPaymentInfo = new DonationPaymentInfo({
-    donationType: DonationType.OneTime,
-    amount: 5,
-    coverFees: false,
-  });
+  donationInfo: DonationPaymentInfo = defaultSelectedDonationInfo;
 
   @property({ type: String })
   stepNumberMode: DonationFormEditDonationStepNumberMode =
     DonationFormEditDonationStepNumberMode.ShowNumbers;
 
-  @property({ type: Array }) amountOptions: number[] = [
-    5,
-    10,
-    25,
-    50,
-    100,
-    500,
-    1000,
-  ];
+  /**
+   * This is a convenience helper to more easily set the default selected
+   * amount from raw HTML strings. If this is present, it will be used,
+   * otherwise `donationInfo` above will take precendence.
+   *
+   * @type {number}
+   * @memberof DonationFormEditDonation
+   */
+  @property({ type: Number }) defaultSelectedAmount?: number;
+
+  @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
 
   @property({ type: Object }) private error?: TemplateResult;
 
-  @query('#custom-amount-button') private customAmountButton?: HTMLInputElement;
+  @property({ type: Boolean }) private customAmountSelected = false;
 
-  @query('#custom-amount-input') private customAmountInput?: HTMLInputElement;
+  @query('#custom-amount-button') private customAmountButton!: HTMLInputElement;
+
+  @query('#custom-amount-input') private customAmountInput!: HTMLInputElement;
 
   private currencyValidator: CurrencyValidator = new CurrencyValidator();
 
@@ -109,8 +111,26 @@ export class DonationFormEditDonation extends LitElement {
   }
 
   updated(changedProperties: PropertyValues): void {
+    if (changedProperties.has('customAmountSelected')) {
+      this.customAmountButton.checked = this.customAmountSelected;
+    }
+    if (changedProperties.has('amountOptions')) {
+      this.customAmountSelected = false;
+      this.updateSelectedDonationInfo();
+      this.setupAmountColumnsLayoutConfig();
+    }
     if (changedProperties.has('donationInfo')) {
       this.updateSelectedDonationInfo();
+    }
+    if (
+      changedProperties.has('defaultSelectedAmount') &&
+      this.defaultSelectedAmount !== undefined
+    ) {
+      this.donationInfo = new DonationPaymentInfo({
+        donationType: this.donationInfo.donationType,
+        amount: this.defaultSelectedAmount,
+        coverFees: this.donationInfo.coverFees,
+      });
     }
   }
 
@@ -123,22 +143,62 @@ export class DonationFormEditDonation extends LitElement {
     }
   }
 
-  private updateSelectedDonationInfo(): void {
-    if (!this.customAmountButton || !this.customAmountInput) {
-      return;
+  /**
+   * Change the layout of the amount options grid depending on the number of options
+   *
+   * @private
+   * @memberof DonationFormEditDonation
+   */
+  private setupAmountColumnsLayoutConfig(): void {
+    const amountCount = this.amountOptions.length;
+    let columnCount = 5;
+    let customAmountSpan = 3;
+    switch (amountCount) {
+      case 7:
+        columnCount = 5;
+        customAmountSpan = 3;
+        break;
+      case 6:
+        columnCount = 4;
+        customAmountSpan = 2;
+        break;
+      case 5:
+        columnCount = 4;
+        customAmountSpan = 3;
+        break;
+      case 4:
+        columnCount = 3;
+        customAmountSpan = 2;
+        break;
+      case 3:
+        columnCount = 2;
+        customAmountSpan = 1;
+        break;
     }
+
+    this.style.setProperty(
+      '--paymentSelectorAmountColumnCount',
+      `${columnCount}`
+    );
+    this.style.setProperty(
+      '--paymentSelectorCustomAmountColSpan',
+      `${customAmountSpan}`
+    );
+  }
+
+  private updateSelectedDonationInfo(): void {
     if (
-      !this.customAmountButton.checked &&
+      !this.customAmountSelected &&
       this.amountOptions.includes(this.donationInfo.amount)
     ) {
       const radioButton = this.shadowRoot?.querySelector(
         `input[type="radio"][name="${EditDonationSelectionGroup.Amount}"][value="${this.donationInfo.amount}"]`
       ) as HTMLInputElement;
       radioButton.checked = true;
-      this.customAmountButton.checked = false;
+      this.customAmountSelected = false;
       this.customAmountInput.value = '';
     } else {
-      this.customAmountButton.checked = true;
+      this.customAmountSelected = true;
       // don't update the value if it currently has focus
       // since the user may be typing in it at the time
       if (this.shadowRoot?.activeElement !== this.customAmountInput) {
@@ -152,21 +212,35 @@ export class DonationFormEditDonation extends LitElement {
   }
 
   private get coverFeesTextTemplate(): TemplateResult {
+    const shortenedDonationAmount = this.formatShortenedAmount(
+      this.donationInfo.amount
+    );
+    const feeAmountString = currency(this.donationInfo.fee, {
+      symbol: '$',
+    }).format();
+
     return html`
-      I'll generously add ${this.feeAmountString} to cover the transaction fees
-      for my ${this.shortenedContributionAmount} contribution so you can keep
-      100% of my donation.
+      I'll generously add ${feeAmountString} to cover the transaction fees for
+      my ${shortenedDonationAmount} contribution so you can keep 100% of my
+      donation.
     `;
   }
 
-  private get feeAmountString(): string {
-    return currency(this.donationInfo.fee, { symbol: '$' }).format();
-  }
-
-  private get shortenedContributionAmount(): string {
+  /**
+   * Format the amount in a shortened format if it's a whole number or
+   * with decimals if it's not.
+   *
+   * ie. if the amount is 5, just show "$5", but if it's 5.5, show "$5.50"
+   *
+   * @private
+   * @param {number} dollars
+   * @returns {string}
+   * @memberof DonationFormEditDonation
+   */
+  private formatShortenedAmount(dollars: number): string {
     // if the amount is a whole number, show it without the decimals
-    const precision = this.donationInfo.amount % 1 === 0 ? 0 : 2;
-    return currency(this.donationInfo.amount, {
+    const precision = dollars % 1 === 0 ? 0 : 2;
+    return currency(dollars, {
       symbol: '$',
       precision: precision,
     }).format();
@@ -198,14 +272,15 @@ export class DonationFormEditDonation extends LitElement {
     return html`
       ${this.amountOptions.map(amount => {
         const checked =
-          !this.customAmountButton?.checked &&
-          amount === this.donationInfo.amount;
+          !this.customAmountSelected && amount === this.donationInfo.amount;
+
+        const displayAmount = this.formatShortenedAmount(amount);
         return html`
           <li>
             ${this.getRadioButton({
               group: EditDonationSelectionGroup.Amount,
               value: `${amount}`,
-              displayText: `$${amount}`,
+              displayText: `${displayAmount}`,
               checked: checked,
             })}
           </li>
@@ -271,14 +346,12 @@ export class DonationFormEditDonation extends LitElement {
   }
 
   private customRadioSelected(): void {
-    this.customAmountInput?.focus();
+    this.customAmountInput.focus();
   }
 
   private customAmountFocused(e: Event): void {
     const target = e.target as HTMLInputElement;
-    if (this.customAmountButton) {
-      this.customAmountButton.checked = true;
-    }
+    this.customAmountSelected = true;
     this.handleCustomAmountInput(target.value);
   }
 
@@ -291,9 +364,7 @@ export class DonationFormEditDonation extends LitElement {
   private customAmountChanged(e: Event): void {
     const target = e.target as HTMLInputElement;
     const amount = target.value;
-    if (this.customAmountButton) {
-      this.customAmountButton.checked = true;
-    }
+    this.customAmountSelected = true;
     this.handleCustomAmountInput(amount);
   }
 
@@ -322,7 +393,7 @@ export class DonationFormEditDonation extends LitElement {
         this.dispatchEditDonationError(status);
         break;
       case EditDonationInfoStatus.DonationTooLow:
-        if (this.customAmountInput && this.customAmountInput.value.length > 0) {
+        if (this.customAmountInput.value.length > 0) {
           this.error = html` Please select an amount (minimum $1) `;
         }
         this.dispatchEditDonationError(status);
@@ -386,7 +457,8 @@ export class DonationFormEditDonation extends LitElement {
 
   private presetAmountChanged(amount: number): void {
     this.error = undefined;
-    if (this.customAmountInput) this.customAmountInput.value = '';
+    this.customAmountSelected = false;
+    this.customAmountInput.value = '';
     this.updateDonationInfo({ amount: amount });
   }
 
@@ -422,6 +494,8 @@ export class DonationFormEditDonation extends LitElement {
     const customAmountWidth = css`var(--customAmountWidth, 4rem)`;
     const fieldFontColor = css`var(--inputFieldFontColor, #333)`;
     const customAmountBorderCss = css`var(--inputBorder, 1px solid #d9d9d9)`;
+    const amountButtonColCount = css`var(--paymentSelectorAmountColumnCount, 5)`;
+    const customAmountColSpan = css`var(--paymentSelectorCustomAmountColSpan, 3)`;
 
     return css`
       .errors {
@@ -442,6 +516,18 @@ export class DonationFormEditDonation extends LitElement {
         margin: 0;
         padding: 0;
         display: inline-block;
+      }
+
+      .frequency-selector {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .amount-selector {
+        grid-template-columns: repeat(${amountButtonColCount}, 1fr);
+      }
+
+      .custom-amount {
+        grid-column: span ${customAmountColSpan};
       }
 
       .selection-button {
@@ -509,19 +595,6 @@ export class DonationFormEditDonation extends LitElement {
         font-size: ${coverFeesFontSizeCss};
         font-weight: ${coverFeesFontWeightCss};
         flex: 1;
-      }
-
-      .amount-selector {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-      }
-
-      .frequency-selector {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .custom-amount {
-        grid-column-start: 3;
-        grid-column-end: 6;
       }
 
       #custom-amount-input {

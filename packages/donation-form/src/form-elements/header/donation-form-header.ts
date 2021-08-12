@@ -9,7 +9,10 @@ import {
   query,
 } from 'lit-element';
 
-import { DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
+import {
+  defaultDonationAmounts,
+  DonationPaymentInfo,
+} from '@internetarchive/donation-form-data-models';
 
 import '@internetarchive/donation-form-edit-donation';
 import { DonationFormEditDonation } from '@internetarchive/donation-form-edit-donation';
@@ -24,6 +27,8 @@ export class DonationFormHeader extends LitElement {
   @property({ type: Object }) donationInfo?: DonationPaymentInfo;
 
   @property({ type: String }) mode: DonationFormHeaderMode = DonationFormHeaderMode.Edit;
+
+  @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
 
   @query('edit-donation') editDonation?: DonationFormEditDonation;
 
@@ -47,6 +52,7 @@ export class DonationFormHeader extends LitElement {
     return html`
       <donation-form-edit-donation
         .donationInfo=${this.donationInfo}
+        .amountOptions=${this.amountOptions}
         @donationInfoChanged=${this.donationInfoChanged}
         @showSummaryClicked=${this.showSummaryClicked}
         @editDonationError=${this.editDonationError}

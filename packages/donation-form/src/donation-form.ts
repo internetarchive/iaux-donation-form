@@ -30,6 +30,7 @@ import {
   PaymentProvider,
   DonorContactInfo,
   DonationType,
+  defaultDonationAmounts,
 } from '@internetarchive/donation-form-data-models';
 
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
@@ -55,15 +56,13 @@ export class DonationForm extends LitElement {
 
   @property({ type: Object }) contactForm?: ContactForm;
 
+  @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
+
   @property({ type: Boolean }) private creditCardVisible = false;
 
   @property({ type: Boolean }) private contactFormVisible = false;
 
   @property({ type: Boolean }) private donationInfoValid = true;
-
-  @property({ type: Boolean }) private contactInfoValid = false;
-
-  @property({ type: Boolean }) private hostedFieldsValid = false;
 
   @property({ type: String }) private selectedPaymentProvider?: PaymentProvider;
 
@@ -79,6 +78,7 @@ export class DonationForm extends LitElement {
   render(): TemplateResult {
     return html`
       <donation-form-header
+        .amountOptions=${this.amountOptions}
         @donationInfoChanged=${this.donationInfoChanged}
         @editDonationError=${this.editDonationError}
       >
@@ -399,9 +399,6 @@ export class DonationForm extends LitElement {
     this.renderPayPalButtonIfNeeded();
     this.donationInfo &&
       this.paymentFlowHandlers?.paypalHandler?.updateDonationInfo(this.donationInfo);
-    this.paymentFlowHandlers?.creditCardHandler?.on('validityChanged', (isValid: boolean) => {
-      this.hostedFieldsValid = isValid;
-    });
   }
 
   private flowHandlerListenersBound = false;

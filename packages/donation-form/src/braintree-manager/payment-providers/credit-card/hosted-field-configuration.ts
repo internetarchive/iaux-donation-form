@@ -1,14 +1,14 @@
 import { HostedFieldContainerInterface } from './hosted-field-container';
 
 export class HostedFieldConfiguration {
-  hostedFieldStyle: object;
+  hostedFieldStyle: Record<string, Record<string, string>>;
 
   hostedFieldFieldOptions: braintree.HostedFieldFieldOptions;
 
   hostedFieldContainer: HostedFieldContainerInterface;
 
   constructor(options: {
-    hostedFieldStyle: object;
+    hostedFieldStyle: Record<string, Record<string, string>>;
     hostedFieldFieldOptions: braintree.HostedFieldFieldOptions;
     hostedFieldContainer: HostedFieldContainerInterface;
   }) {
