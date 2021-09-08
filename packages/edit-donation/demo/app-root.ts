@@ -15,6 +15,8 @@ import {
 import {
   DonationFormEditDonation,
   DonationFormEditDonationStepNumberMode,
+  EditDonationFrequencySelectionMode,
+  EditDonationAmountSelectionLayout,
 } from '../src/donation-form-edit-donation';
 
 @customElement('app-root')
@@ -36,6 +38,12 @@ export class AppRoot extends LitElement {
 
   @query('input[name=donationType]:checked')
   private selectedDonationType!: HTMLInputElement;
+
+  @query('input[name=amounts-layout]:checked')
+  private amountsLayoutOption!: HTMLInputElement;
+
+  @query('input[name=frequency-option]:checked')
+  private frequencySelectionOption!: HTMLInputElement;
 
   @query('#amount-input') private amountInput!: HTMLInputElement;
 
@@ -107,6 +115,51 @@ export class AppRoot extends LitElement {
           </ul>
         </fieldset>
 
+        <fieldset>
+          <legend>Layout</legend>
+          <ul>
+            <li>
+              Amounts Layout:
+              <input
+                type="radio"
+                name="amounts-layout"
+                id="amount-single-line"
+                value="single-line"
+              />
+              <label for="amount-single-line">Single Line</label>
+              <input
+                type="radio"
+                name="amounts-layout"
+                id="amount-multi-line"
+                value="multi-line"
+                checked
+              />
+              <label for="amount-multi-line">Multi Line</label>
+            </li>
+            <li>
+              Frequency Option:
+              <input
+                type="radio"
+                name="frequency-option"
+                id="frequency-layout-buttons"
+                value="button"
+                checked
+              />
+              <label for="frequency-layout-buttons">Buttons</label>
+              <input
+                type="radio"
+                name="frequency-option"
+                id="frequency-layout-checkbox"
+                value="checkbox"
+              />
+              <label for="frequency-layout-checkbox">Checkbox</label>
+            </li>
+            <li>
+              <button @click=${this.updateLayout}>Update</button>
+            </li>
+          </ul>
+        </fieldset>
+
         <div id="error"></div>
       </div>
     `;
@@ -135,6 +188,13 @@ export class AppRoot extends LitElement {
   private editDonationError(e: CustomEvent): void {
     this.errorDiv.innerText = e.detail.error;
     this.totalDiv.innerText = 'Invalid';
+  }
+
+  private updateLayout(): void {
+    this.editDonation.frequencySelectionMode = this.frequencySelectionOption
+      .value as EditDonationFrequencySelectionMode;
+    this.editDonation.amountSelectionLayout = this.amountsLayoutOption
+      .value as EditDonationAmountSelectionLayout;
   }
 
   private updateForm(): void {

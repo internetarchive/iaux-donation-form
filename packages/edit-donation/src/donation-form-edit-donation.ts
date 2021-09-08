@@ -140,6 +140,9 @@ export class DonationFormEditDonation extends LitElement {
       this.updateSelectedDonationInfo();
       this.setupAmountColumnsLayoutConfig();
     }
+    if (changedProperties.has('amountSelectionLayout')) {
+      this.setupAmountColumnsLayoutConfig();
+    }
     if (changedProperties.has('donationInfo')) {
       this.updateSelectedDonationInfo();
     }
@@ -252,7 +255,7 @@ export class DonationFormEditDonation extends LitElement {
       this.amountSelectionLayout ===
       EditDonationAmountSelectionLayout.SingleLine
     ) {
-      columnCount = 6;
+      columnCount = amountCount + 3;
       customAmountSpan = 3;
     }
 
