@@ -9,6 +9,7 @@ import {
   query,
   PropertyValues,
 } from 'lit-element';
+import { nothing } from 'lit-html';
 
 import currency from 'currency.js';
 
@@ -40,6 +41,16 @@ export enum EditDonationInfoStatus {
   DonationTooLow = 'donation_too_low',
 }
 
+export enum EditDonationFrequencySelectionMode {
+  Button = 'button',
+  Checkbox = 'checkbox',
+}
+
+export enum EditDonationAmountSelectionLayout {
+  SingleLine = 'single-line',
+  MultiLine = 'multi-line',
+}
+
 @customElement('donation-form-edit-donation')
 export class DonationFormEditDonation extends LitElement {
   @property({ type: Object })
@@ -61,6 +72,24 @@ export class DonationFormEditDonation extends LitElement {
 
   @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
 
+  /**
+   * Layout the dollar amounts in a single line instead of two lines
+   *
+   * @memberof DonationFormEditDonation
+   */
+  @property({ type: String })
+  amountSelectionLayout: EditDonationAmountSelectionLayout =
+    EditDonationAmountSelectionLayout.MultiLine;
+
+  /**
+   * Layout the
+   *
+   * @memberof DonationFormEditDonation
+   */
+  @property({ type: String })
+  frequencySelectionMode: EditDonationFrequencySelectionMode =
+    EditDonationFrequencySelectionMode.Button;
+
   @property({ type: Object }) private error?: TemplateResult;
 
   @property({ type: Boolean }) private customAmountSelected = false;
@@ -74,18 +103,13 @@ export class DonationFormEditDonation extends LitElement {
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
-      <donation-form-section
-        sectionBadge="1"
-        headline="Choose a frequency"
-        badgeMode=${this.formSectionNumberMode}
-      >
-        <ul class="frequency-selector">
-          ${this.frequencyTemplate}
-        </ul>
-      </donation-form-section>
+      ${this.frequencySelectionMode ===
+      EditDonationFrequencySelectionMode.Button
+        ? this.frequencyButtonsTemplate
+        : nothing}
 
       <donation-form-section
-        sectionBadge="2"
+        sectionBadge="${this.amountSelectionSectionNumber}"
         headline="Choose an amount (USD)"
         badgeMode=${this.formSectionNumberMode}
       >
@@ -96,15 +120,12 @@ export class DonationFormEditDonation extends LitElement {
 
         <div class="errors">${this.error}</div>
 
-        <div class="cover-fees-container">
-          <input
-            type="checkbox"
-            id="cover-fees"
-            @input=${this.coverFeesChecked}
-            .checked=${this.donationInfo.coverFees}
-            tabindex="0"
-          />
-          <label for="cover-fees"> ${this.coverFeesTextTemplate} </label>
+        <div class="checkbox-options">
+          ${this.customFeesCheckboxTemplate}
+          ${this.frequencySelectionMode ===
+          EditDonationFrequencySelectionMode.Checkbox
+            ? this.frequencyCheckboxTemplate
+            : nothing}
         </div>
       </donation-form-section>
     `;
@@ -132,6 +153,57 @@ export class DonationFormEditDonation extends LitElement {
         coverFees: this.donationInfo.coverFees,
       });
     }
+  }
+
+  private get frequencyButtonsTemplate(): TemplateResult {
+    return html`
+      <donation-form-section
+        sectionBadge="1"
+        headline="Choose a frequency"
+        badgeMode=${this.formSectionNumberMode}
+      >
+        <ul class="frequency-selector">
+          ${this.frequencyTemplate}
+        </ul>
+      </donation-form-section>
+    `;
+  }
+
+  private get frequencyCheckboxTemplate(): TemplateResult {
+    return html`
+      <div class="checkbox-option-container">
+        <input
+          type="checkbox"
+          id="make-this-monthly"
+          @input=${this.monthlyCheckboxChecked}
+          .checked=${this.donationInfo.donationType === DonationType.Monthly}
+          tabindex="0"
+        />
+        <label for="make-this-monthly"> Make this monthly </label>
+      </div>
+    `;
+  }
+
+  private get customFeesCheckboxTemplate(): TemplateResult {
+    return html`
+      <div class="checkbox-option-container">
+        <input
+          type="checkbox"
+          id="cover-fees"
+          @input=${this.coverFeesChecked}
+          .checked=${this.donationInfo.coverFees}
+          tabindex="0"
+        />
+        <label for="cover-fees"> ${this.coverFeesTextTemplate} </label>
+      </div>
+    `;
+  }
+
+  private get amountSelectionSectionNumber(): number {
+    return this.frequencySelectionMode ===
+      EditDonationFrequencySelectionMode.Button
+      ? 2
+      : 1;
   }
 
   private get formSectionNumberMode(): DonationFormSectionBadgeMode {
@@ -176,6 +248,14 @@ export class DonationFormEditDonation extends LitElement {
         break;
     }
 
+    if (
+      this.amountSelectionLayout ===
+      EditDonationAmountSelectionLayout.SingleLine
+    ) {
+      columnCount = 6;
+      customAmountSpan = 3;
+    }
+
     this.style.setProperty(
       '--paymentSelectorAmountColumnCount',
       `${columnCount}`
@@ -212,18 +292,11 @@ export class DonationFormEditDonation extends LitElement {
   }
 
   private get coverFeesTextTemplate(): TemplateResult {
-    const shortenedDonationAmount = this.formatShortenedAmount(
-      this.donationInfo.amount
-    );
     const feeAmountString = currency(this.donationInfo.fee, {
       symbol: '$',
     }).format();
 
-    return html`
-      I'll generously add ${feeAmountString} to cover the transaction fees for
-      my ${shortenedDonationAmount} contribution so you can keep 100% of my
-      donation.
-    `;
+    return html` I'll generously add ${feeAmountString} to cover fees. `;
   }
 
   /**
@@ -448,6 +521,14 @@ export class DonationFormEditDonation extends LitElement {
     }
   }
 
+  private monthlyCheckboxChecked(e: Event): void {
+    const isChecked = (e.target as HTMLInputElement).checked;
+    const donationType = isChecked
+      ? DonationType.Monthly
+      : DonationType.OneTime;
+    this.updateDonationInfo({ donationType });
+  }
+
   private dispatchEditDonationError(error: EditDonationInfoStatus): void {
     const event = new CustomEvent('editDonationError', {
       detail: { error: error },
@@ -580,18 +661,21 @@ export class DonationFormEditDonation extends LitElement {
         outline: 2px solid ${buttonFocusedOutlineColorCss};
       }
 
-      .cover-fees-container {
+      .checkbox-options {
         margin-top: 1rem;
+      }
+
+      .checkbox-option-container {
         display: flex;
         align-items: center;
         justify-content: center;
       }
 
-      .cover-fees-container input {
+      .checkbox-option-container input {
         width: 2rem;
       }
 
-      .cover-fees-container label {
+      .checkbox-option-container label {
         font-size: ${coverFeesFontSizeCss};
         font-weight: ${coverFeesFontWeightCss};
         flex: 1;
