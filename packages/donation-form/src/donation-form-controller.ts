@@ -43,6 +43,7 @@ import creditCardImg from '@internetarchive/icon-credit-card';
 import calendarImg from '@internetarchive/icon-calendar';
 import lockImg from '@internetarchive/icon-lock';
 import { AnalyticsHandlerInterface } from './@types/analytics-handler';
+import { EditDonationAmountSelectionLayout, EditDonationFrequencySelectionMode } from '@internetarchive/donation-form-edit-donation';
 
 import {
   DonationPaymentInfo,
@@ -78,6 +79,10 @@ export class DonationFormController extends LitElement {
   @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
 
   @property({ type: Object }) donationInfo: DonationPaymentInfo = defaultSelectedDonationInfo;
+
+  @property({ type: String }) amountSelectionLayout: EditDonationAmountSelectionLayout = EditDonationAmountSelectionLayout.MultiLine;
+
+  @property({ type: String }) frequencySelectionMode: EditDonationFrequencySelectionMode = EditDonationFrequencySelectionMode.Button;
 
   @property({ type: String }) referrer?: string;
 
@@ -247,6 +252,16 @@ export class DonationFormController extends LitElement {
       }
     }
 
+    const amountLayout = urlParams.get('amountLayout') as EditDonationAmountSelectionLayout;
+    if (amountLayout) {
+      this.amountSelectionLayout = amountLayout;
+    }
+
+    const frequencyMode = urlParams.get('frequencyMode') as EditDonationFrequencySelectionMode;
+    if (frequencyMode) {
+      this.frequencySelectionMode = frequencyMode;
+    }
+
     const donationInfo = new DonationPaymentInfo({
       donationType: frequency,
       amount: amount,
@@ -345,6 +360,8 @@ export class DonationFormController extends LitElement {
           .contactForm=${this.contactForm}
           .amountOptions=${this.amountOptions}
           .donationInfo=${this.donationInfo}
+          .amountSelectionLayout=${this.amountSelectionLayout}
+          .frequencySelectionMode=${this.frequencySelectionMode}
           @donationInfoChanged=${this.donationInfoChanged}
           @paymentProviderSelected=${this.paymentProviderSelected}
           @paymentFlowStarted=${this.paymentFlowStarted}
