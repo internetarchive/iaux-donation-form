@@ -252,14 +252,20 @@ export class DonationFormController extends LitElement {
       }
     }
 
-    const amountLayout = urlParams.get('amountLayout') as EditDonationAmountSelectionLayout;
-    if (amountLayout) {
-      this.amountSelectionLayout = amountLayout;
+    const amountLayoutParam = urlParams.get('amountLayout');
+    if (amountLayoutParam) {
+      const amountLayout = amountLayoutParam as EditDonationAmountSelectionLayout;
+      if (Object.values(EditDonationAmountSelectionLayout).includes(amountLayout)) {
+        this.amountSelectionLayout = amountLayout;
+      }
     }
 
-    const frequencyMode = urlParams.get('frequencyMode') as EditDonationFrequencySelectionMode;
-    if (frequencyMode) {
-      this.frequencySelectionMode = frequencyMode;
+    const frequencyModeParam = urlParams.get('frequencyMode');
+    if (frequencyModeParam) {
+      const frequencyMode = frequencyModeParam as EditDonationFrequencySelectionMode;
+      if (Object.values(EditDonationFrequencySelectionMode).includes(frequencyMode)) {
+        this.frequencySelectionMode = frequencyMode;
+      }
     }
 
     const donationInfo = new DonationPaymentInfo({
