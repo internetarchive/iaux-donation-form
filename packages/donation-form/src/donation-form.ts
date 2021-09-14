@@ -35,6 +35,8 @@ import {
 
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
 
+import { EditDonationAmountSelectionLayout, EditDonationFrequencySelectionMode } from '@internetarchive/donation-form-edit-donation';
+
 import '@internetarchive/donation-form-section';
 import {
   DonationFormSection,
@@ -58,6 +60,10 @@ export class DonationForm extends LitElement {
 
   @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
 
+  @property({ type: String }) amountSelectionLayout: EditDonationAmountSelectionLayout = EditDonationAmountSelectionLayout.MultiLine;
+
+  @property({ type: String }) frequencySelectionMode: EditDonationFrequencySelectionMode = EditDonationFrequencySelectionMode.Button;
+
   @property({ type: Boolean }) private creditCardVisible = false;
 
   @property({ type: Boolean }) private contactFormVisible = false;
@@ -79,6 +85,8 @@ export class DonationForm extends LitElement {
     return html`
       <donation-form-header
         .amountOptions=${this.amountOptions}
+        .amountSelectionLayout=${this.amountSelectionLayout}
+        .frequencySelectionMode=${this.frequencySelectionMode}
         @donationInfoChanged=${this.donationInfoChanged}
         @editDonationError=${this.editDonationError}
       >
@@ -92,7 +100,7 @@ export class DonationForm extends LitElement {
         </donation-form-total-amount>
       </donation-form-section>
 
-      <donation-form-section sectionBadge="3" headline="Choose a payment method">
+      <donation-form-section .sectionBadge=${this.paymentSelectorNumberingStart} headline="Choose a payment method">
         <payment-selector
           .paymentProviders=${this.braintreeManager?.paymentProviders}
           @firstUpdated=${this.paymentSelectorFirstUpdated}
@@ -164,7 +172,7 @@ export class DonationForm extends LitElement {
   get contactFormSectionTemplate(): TemplateResult {
     return html`
       <donation-form-section
-        sectionBadge="4"
+        .sectionBadge=${this.paymentSelectorNumberingStart + 1}
         headline="Enter payment information"
         id="contactFormSection"
       >
@@ -174,7 +182,7 @@ export class DonationForm extends LitElement {
         </div>
       </donation-form-section>
 
-      <donation-form-section sectionBadge="5">
+      <donation-form-section .sectionBadge=${this.paymentSelectorNumberingStart + 2}>
         <slot name="recaptcha"></slot>
         <button id="donate-button" @click=${this.donateClicked}>
           Donate
@@ -185,6 +193,38 @@ export class DonationForm extends LitElement {
         </div>
       </donation-form-section>
     `;
+  }
+
+  /**
+   * Where to start the numbering of the payment selector
+   *
+   * - If we show the frequency selector in button mode, it becomes section 1, which makes
+   * the amount selection section 2, and the payment selector section 3.
+   * - If we show the frequency selector in checkbox mode, it is no longer section 1. The amount
+   * selector becomes section 1 and the payment selector becomes section 2.
+   *
+   * Visually:
+   *
+   * Button Mode:
+   * 1. Frequency selector
+   * 2. Amount selector
+   * 3. Payment selector
+   * 4. Contact info
+   * 5. Donate button
+   *
+   * Checkbox Mode:
+   * 1. Amount selector (including the monthly checkbox)
+   * 2. Payment selector <-- changes from 3 to 2
+   * 3. Contact info <-- changes from 4 to 3
+   * 4. Donate button <-- changes from 5 to 4
+   *
+   * @readonly
+   * @private
+   * @type {number}
+   * @memberof DonationForm
+   */
+  private get paymentSelectorNumberingStart(): number {
+    return this.frequencySelectionMode === EditDonationFrequencySelectionMode.Button ? 3 : 2;
   }
 
   private editDonationError(): void {

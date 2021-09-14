@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/donation-form-edit-donation",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "The Internet Archive Donation Form Edit Donation component",
   "license": "AGPL-3.0-only",
   "main": "dist/index.js",
