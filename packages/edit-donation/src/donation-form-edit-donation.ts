@@ -73,7 +73,7 @@ export class DonationFormEditDonation extends LitElement {
   @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
 
   /**
-   * Layout the dollar amounts in a single line instead of two lines
+   * Layout the dollar amounts in a single line or multiple lines
    *
    * @memberof DonationFormEditDonation
    */
@@ -82,7 +82,7 @@ export class DonationFormEditDonation extends LitElement {
     EditDonationAmountSelectionLayout.MultiLine;
 
   /**
-   * Layout the
+   * Layout donation frequency choices as buttons or a checkbox
    *
    * @memberof DonationFormEditDonation
    */
