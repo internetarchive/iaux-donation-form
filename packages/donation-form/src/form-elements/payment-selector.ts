@@ -2,12 +2,11 @@ import {
   LitElement,
   html,
   css,
-  customElement,
   CSSResult,
   TemplateResult,
-  property,
   PropertyValues,
-} from 'lit-element';
+} from 'lit';
+import { property, customElement } from 'lit/decorators.js';
 
 import applePayButtonImage from '@internetarchive/icon-applepay';
 import googlePayButtonImage from '@internetarchive/icon-googlepay';

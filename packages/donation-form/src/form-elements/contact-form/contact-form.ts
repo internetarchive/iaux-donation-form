@@ -1,5 +1,5 @@
-import { LitElement, html, css, customElement, TemplateResult, query } from 'lit-element';
-
+import { LitElement, html, css, TemplateResult } from 'lit';
+import { customElement, query } from 'lit/decorators.js';
 import { ifDefined } from 'lit-html/directives/if-defined';
 
 import {
@@ -99,7 +99,7 @@ export class ContactForm extends LitElement {
               name: 'email',
               autocomplete: 'email',
               maxlength: 255,
-              icon: emailImg,
+              // icon: emailImg,
             })}
           </div>
         </fieldset>
@@ -113,7 +113,7 @@ export class ContactForm extends LitElement {
               required: true,
               maxlength: 255,
               autocomplete: 'given-name',
-              icon: userIcon,
+              // icon: userIcon,
             })}
           </div>
           <div class="row">
@@ -134,7 +134,7 @@ export class ContactForm extends LitElement {
               placeholder: 'Address Line 1',
               required: true,
               autocomplete: 'address-line1',
-              icon: localePinImg,
+              // icon: localePinImg,
               name: 'street-address',
             })}
           </div>

@@ -1,4 +1,5 @@
-import { LitElement, html, css, customElement, CSSResult, TemplateResult } from 'lit-element';
+import { LitElement, html, css, CSSResult, TemplateResult } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
 /**
  * This is shown at the bottom of the error modal.

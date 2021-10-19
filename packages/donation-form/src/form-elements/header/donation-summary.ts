@@ -2,12 +2,10 @@ import {
   LitElement,
   html,
   css,
-  customElement,
   CSSResult,
   TemplateResult,
-  property,
-} from 'lit-element';
-
+} from 'lit';
+import { property, customElement } from 'lit/decorators.js';
 import currency from 'currency.js';
 
 import { DonationType, DonationPaymentInfo } from '@internetarchive/donation-form-data-models';

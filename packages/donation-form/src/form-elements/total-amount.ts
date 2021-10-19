@@ -2,13 +2,12 @@ import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-for
 import {
   css,
   CSSResult,
-  customElement,
   html,
   LitElement,
-  property,
   TemplateResult,
-} from 'lit-element';
+} from 'lit';
 import currency from 'currency.js';
+import { property, customElement } from 'lit/decorators.js';
 
 @customElement('donation-form-total-amount')
 export class TotalAmount extends LitElement {

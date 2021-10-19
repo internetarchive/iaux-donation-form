@@ -2,12 +2,10 @@ import {
   LitElement,
   html,
   css,
-  customElement,
   CSSResult,
   TemplateResult,
-  property,
-  query,
-} from 'lit-element';
+} from 'lit';
+import { property, customElement, query } from 'lit/decorators.js';
 
 import {
   defaultDonationAmounts,

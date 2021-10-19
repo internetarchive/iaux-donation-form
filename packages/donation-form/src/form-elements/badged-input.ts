@@ -2,12 +2,11 @@ import {
   LitElement,
   html,
   css,
-  customElement,
   CSSResult,
   TemplateResult,
-  property,
-} from 'lit-element';
-import { nothing } from 'lit-html';
+  nothing
+} from 'lit';
+import { property, customElement } from 'lit/decorators.js';
 
 export enum SpacerOption {
   LeaveSpace = 'leave-space',

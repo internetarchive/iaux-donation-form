@@ -1,12 +1,10 @@
 import {
   LitElement,
   html,
-  property,
   PropertyValues,
-  query,
   TemplateResult,
-  customElement,
-} from 'lit-element';
+} from 'lit';
+import { property, customElement, query } from 'lit/decorators.js';
 
 import currency from 'currency.js';
 import {
