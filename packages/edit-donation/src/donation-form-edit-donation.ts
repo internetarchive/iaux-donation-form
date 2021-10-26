@@ -570,6 +570,8 @@ export class DonationFormEditDonation extends LitElement {
     const buttonBorderColorCss = css`var(--paymentButtonBorderColor, #333)`;
     const buttonGridGapCss = css`var(--paymentButtonGridGap, 1rem)`;
     const buttonFontSizeCss = css`var(--paymentButtonFontSize, 1.6rem)`;
+    const buttonFontColorCss = css`var(--paymentButtonFontColor, #000)`;
+    const buttonSelectedFontColorCss = css`var(--paymentButtonSelectedFontColor, #000)`;
     const buttonSelectedColorCss = css`var(--paymentButtonSelectedColor, #f9bf3b)`;
     const buttonFocusedOutlineColorCss = css`var(--paymentButtonFocusedOutlineColor, #7fb3f9)`;
     const buttonColorCss = css`var(--paymentButtonColor, #fff)`;
@@ -653,10 +655,12 @@ export class DonationFormEditDonation extends LitElement {
       }
 
       input[type='radio'] + label {
+        color: ${buttonFontColorCss};
         background-color: ${buttonColorCss};
       }
 
       input[type='radio']:checked + label {
+        color: ${buttonSelectedFontColorCss};
         background-color: ${buttonSelectedColorCss};
       }
 
