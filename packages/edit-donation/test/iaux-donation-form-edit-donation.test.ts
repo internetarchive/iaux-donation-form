@@ -273,6 +273,31 @@ describe('EditDonation', () => {
     expect(el.donationInfo.amount).to.equal(8.34);
   });
 
+  /**
+   * If we have a preset amount that matches the default selected amount, make sure
+   * it gets selected and not a custom amount.
+   */
+  it('selects the proper preset if defaultSelectedAmount and amountOptions set', async () => {
+    const el = await fixture<DonationFormEditDonation>(html`
+      <donation-form-edit-donation
+        .amountOptions=${[2.5, 3.7, 5.45, 20]}
+        defaultSelectedAmount="5.45"
+      ></donation-form-edit-donation>
+    `);
+
+    // Make sure the default amount preset is selected
+    const presetToCheck = el.shadowRoot?.querySelector(
+      '.amount-selector input[type=radio][value="5.45"]'
+    );
+    expect((presetToCheck as HTMLInputElement).checked).to.be.true;
+
+    // Make sure the custom amount is not filled in
+    const customInput = el.shadowRoot?.querySelector(
+      '#custom-amount-input'
+    ) as HTMLInputElement;
+    expect(customInput?.value).to.equal('');
+  });
+
   describe('configurable dollar amounts', () => {
     it('supports configurable dollar amounts', async () => {
       const el = await fixture<DonationFormEditDonation>(html`
