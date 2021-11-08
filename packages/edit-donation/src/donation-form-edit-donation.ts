@@ -150,6 +150,7 @@ export class DonationFormEditDonation extends LitElement {
       changedProperties.has('defaultSelectedAmount') &&
       this.defaultSelectedAmount !== undefined
     ) {
+      this.customAmountSelected = false;
       this.donationInfo = new DonationPaymentInfo({
         donationType: this.donationInfo.donationType,
         amount: this.defaultSelectedAmount,
