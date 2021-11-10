@@ -1,14 +1,5 @@
-import {
-  LitElement,
-  html,
-  css,
-  customElement,
-  CSSResult,
-  TemplateResult,
-  property,
-  query,
-  PropertyValues,
-} from 'lit-element';
+import { LitElement, html, css, CSSResult, TemplateResult, PropertyValues } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
 
 import lockImg from '@internetarchive/icon-lock';
 

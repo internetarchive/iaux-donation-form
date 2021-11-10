@@ -1,12 +1,5 @@
-import {
-  LitElement,
-  html,
-  property,
-  PropertyValues,
-  query,
-  TemplateResult,
-  customElement,
-} from 'lit-element';
+import { LitElement, html, PropertyValues, TemplateResult } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
 
 import currency from 'currency.js';
 import {

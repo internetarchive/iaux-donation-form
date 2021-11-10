@@ -1,13 +1,5 @@
-import {
-  LitElement,
-  html,
-  css,
-  customElement,
-  CSSResult,
-  TemplateResult,
-  property,
-  query,
-} from 'lit-element';
+import { LitElement, html, css, CSSResult, TemplateResult } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
 
 import {
   defaultDonationAmounts,

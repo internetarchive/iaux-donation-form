@@ -60,7 +60,7 @@ describe('Donation Flow Modal Manager', () => {
     expect(modalOptions?.config.processingImageMode).to.equal('processing');
     expect(modalOptions?.config.closeOnBackdropClick).to.be.false;
     expect(modalOptions?.config.showCloseButton).to.be.false;
-    expect(modalOptions?.config.title?.getHTML().trim()).to.equal('Processing...');
+    expect(modalOptions?.config.title?.strings[0]).to.contain('Processing...');
   });
 
   it('can show the error modal', async () => {
@@ -78,7 +78,7 @@ describe('Donation Flow Modal Manager', () => {
     expect(modalOptions?.config.showProcessingIndicator).to.be.false;
     expect(modalOptions?.config.closeOnBackdropClick).to.be.true;
     expect(modalOptions?.config.showCloseButton).to.be.true;
-    expect(modalOptions?.config.headline?.getHTML().trim()).to.equal(
+    expect(modalOptions?.config.headline?.strings[0]).to.contain(
       "There's been a problem completing your donation.",
     );
     expect(modalOptions?.config.message?.values[0]).to.equal('foo-error');
@@ -102,7 +102,7 @@ describe('Donation Flow Modal Manager', () => {
     expect(modalOptions?.config.showProcessingIndicator).to.be.true;
     expect(modalOptions?.config.closeOnBackdropClick).to.be.true;
     expect(modalOptions?.config.showCloseButton).to.be.true;
-    expect(modalOptions?.config.title?.getHTML().trim()).to.equal('Thank You!');
+    expect(modalOptions?.config.title?.strings[0]).to.contain('Thank You!');
     const response = mockBraintreeManager.donationSuccessfulOptions?.successResponse;
     expect(response).to.deep.equal(mockSuccessResponse);
   });

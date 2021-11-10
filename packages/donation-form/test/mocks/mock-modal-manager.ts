@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ModalManager, ModalConfig, ModalManagerMode } from '@internetarchive/modal-manager';
-import { TemplateResult } from 'lit-html';
-import { customElement } from 'lit-element';
+import { TemplateResult } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
 @customElement('mock-modal-manager')
 export class MockModalManager extends ModalManager {
