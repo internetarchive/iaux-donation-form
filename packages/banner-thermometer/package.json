@@ -25,8 +25,7 @@
   },
   "dependencies": {
     "currency.js": "^2.0.3",
-    "lit-element": "^2.2.1",
-    "lit-html": "^1.1.2"
+    "lit": "^2.0.2"
   },
   "devDependencies": {
     "@open-wc/eslint-config": "^2.0.0",
