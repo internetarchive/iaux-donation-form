@@ -854,119 +854,112 @@
   resolved "https://registry.npmjs.org/@internetarchive/donation-form-data-models/-/donation-form-data-models-0.3.2.tgz"
   integrity sha512-yxjwwr/2YMIx56IN9ZVETqByc7jlsX6s57zk1K+bWgA0u+D0OKScWKX+dLxaz2viRNSQOEOR1MsQWwaKshh0Tg==
 
-"@internetarchive/donation-form-edit-donation@0.3.10-alpha.1":
-  version "0.3.10-alpha.1"
-  resolved "https://registry.npmjs.org/@internetarchive/donation-form-edit-donation/-/donation-form-edit-donation-0.3.10-alpha.1.tgz"
-  integrity sha512-4A9hOZTOO5uLViA/UQtL8MqBbWRVHPwnSo7gI+BWz+er09lrVBWRc8nME4C8xPFn6EBgktIEsOFQFq9jc1P7TA==
+"@internetarchive/donation-form-edit-donation@^0.3.11":
+  version "0.3.11"
+  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-edit-donation/-/donation-form-edit-donation-0.3.11.tgz#6a8fe9684a5108527bd6c483ece36e5834b13841"
+  integrity sha512-0qjKs08QSGqgsY83Vaf7W7bHoJyXn4/z6xc/Cgz5Ak4dFz/5FEY8laj+rqlpWDlnqF7ehaeYdlsio8rnaNmPqA==
   dependencies:
     "@internetarchive/donation-form-currency-validator" "^0.3.0"
     "@internetarchive/donation-form-data-models" "^0.3.2"
-    "@internetarchive/donation-form-section" "0.3.2-alpha.1"
+    "@internetarchive/donation-form-section" "^0.3.3"
     currency.js "^2.0.3"
     lit "^2.0.2"
 
-"@internetarchive/donation-form-section@0.3.2-alpha.1":
-  version "0.3.2-alpha.1"
-  resolved "https://registry.npmjs.org/@internetarchive/donation-form-section/-/donation-form-section-0.3.2-alpha.1.tgz"
-  integrity sha512-Zn2WxR34a5NRRGnB9SS+tdSjPeR0F7cnV5D1BS2M5+1mct8SXuBPnU63DvRDxQO1S6Rm8XJWsdOEcImXOGu/Zw==
+"@internetarchive/donation-form-section@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-section/-/donation-form-section-0.3.3.tgz#b45a7ccb1964cd823fa2ed28044b85841ab73b43"
+  integrity sha512-8LiIYt8GNgRWIdcSALoK9ITPq4Iz5mT5b22g8ceIjOs4RBDExy1FYLr7x1XBI2uL/oQzVleJZQ9NrVDa0F079g==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/ia-activity-indicator@^0.0.2-alpha.1":
-  version "0.0.2-alpha.1"
-  resolved "https://registry.npmjs.org/@internetarchive/ia-activity-indicator/-/ia-activity-indicator-0.0.2-alpha.1.tgz"
-  integrity sha512-4tkzd2bKcvnU88L4sJ2ncGk8RTUlZ7OxmZneSgh1tO/ms2Fyq1dY2ZwURTJZbbemUfj5zYZo3y62A4QVywiG7w==
+"@internetarchive/ia-activity-indicator@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@internetarchive/ia-activity-indicator/-/ia-activity-indicator-0.0.2.tgz#6e02670d52a9f1b673f322252b6e649453ea2ef0"
+  integrity sha512-PHSTn8LJyozrVcMj6eMQKqBJD+029YhxffbW+oLKGAfmS5tAkpl2LfHlFcLCozT5e9e+KECCq2m2UeUyPYPjcw==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-applepay@1.2.1-alpha.7":
-  version "1.2.1-alpha.7"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-applepay/-/icon-applepay-1.2.1-alpha.7.tgz#bec10f9e564ec99e3ae5b10de188ceb510600370"
-  integrity sha512-C5VPbHagLU3UEpYQf0bdfGk7NP651112mo9y33B9ZVWDutPpytxVPqN6qCpMbreP7pSdJGbhgJKg3zyiAxHJyw==
+"@internetarchive/icon-applepay@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-applepay/-/icon-applepay-1.3.1.tgz#550bbbe53601e6bb673071c38af66c5e4c9dd677"
+  integrity sha512-fXqnfRxq8JMKXPzz5hYhuLkGMHbhddAwKl4YIEbDSmCyradvWxVpa7s19l2GYI0/lVb2WqZLVXI+T82I+Q6haw==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-calendar@1.2.1-alpha.7":
-  version "1.2.1-alpha.7"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-calendar/-/icon-calendar-1.2.1-alpha.7.tgz#03245c294bc4b97cbfeaf34790109674c8e5b03a"
-  integrity sha512-wMUNphLm2Re9R7fQk0kjvsnbGb+rnVzhQz6Gt2AxUsmbp2LUjhhJDN6vtXdIKxwrMOMOmeYGKGarC2F/yObKOw==
+"@internetarchive/icon-calendar@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-calendar/-/icon-calendar-1.3.1.tgz#52eafb6f71a6f2e6733611edac1ec4c8b87ef722"
+  integrity sha512-SEBW+jcRVB26ulwIclXF2A5i/P37EEsT87qHhlmx2+Nu/dQXD7DAyJHpN3MnVyeEV23Sx1B9JKihmK67NVfa+A==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-close@^1.2.1-alpha.6":
-  version "1.2.1-alpha.6"
-  resolved "https://registry.npmjs.org/@internetarchive/icon-close/-/icon-close-1.2.1-alpha.6.tgz"
-  integrity sha512-HYahsuAd/4Sr3YfGz2Zclv1VzWyUbjcCZ547WjTiO9rPayXrzheExTQXoOxSAL/xmV1Dy1bjjI+s6yolCw4o5g==
+"@internetarchive/icon-close@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-close/-/icon-close-1.3.1.tgz#ddd761b2b90a37dc8b540c502f561341f96880f3"
+  integrity sha512-m233IE5GJ/f1OU85ZOWN0aiUFywV4ZiTw3zGzB8muGX72Kdj/qi4rxINP4p90P9hCkNVRb7bwSCpgB0L3vzcLg==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-credit-card@1.2.1-alpha.7":
-  version "1.2.1-alpha.7"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-credit-card/-/icon-credit-card-1.2.1-alpha.7.tgz#559144fcd5362f7b3a0a777708a952c123f418ff"
-  integrity sha512-1P0Vnpbh0iYu6zEUSoJgzZIU8bJUtd3+XATEChuwKTQ6IvRGhVNa2E7zDmSRXrQijoMhYpJEN7lhXUm0+kSlQw==
+"@internetarchive/icon-credit-card@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-credit-card/-/icon-credit-card-1.3.1.tgz#50ceff4e7d86e9194db10b8a9654dd017e356b4f"
+  integrity sha512-IdebWR0jEdFV+yd0vTyxnYb2yUxgmNquu20MfeZS6sN03G48WECSbk94qLzwaoVaiBOtcd2CDcMaSMSiqmxB6g==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-email@1.2.1-alpha.7":
-  version "1.2.1-alpha.7"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-email/-/icon-email-1.2.1-alpha.7.tgz#dc2c0e997c521a42b4911c9e0e56211ee633490f"
-  integrity sha512-noTGr+yr6WO4dUQqk3B92h9niiAG2m0KkWxKS7uLlyeetC1eLk+oS9xvbv+eQmYjT4YjAOCY+Emu5MuduAi76g==
+"@internetarchive/icon-email@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-email/-/icon-email-1.3.1.tgz#8598f960879dee6680dec106eab4a3789bd19407"
+  integrity sha512-pBpqaFAZnob+iUvBq4PoQ0cPVs7DYtWDl3B4C2QTJMtGZhJE1fIBZ01EaBWvdy+D/EC95axZn/3qbazDIly+ew==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-googlepay@1.2.1-alpha.7":
-  version "1.2.1-alpha.7"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-googlepay/-/icon-googlepay-1.2.1-alpha.7.tgz#bacab4a9ba75375d9730fab8b8dd87c3deb6c8c7"
-  integrity sha512-/cd2JkYUDI4MTZ1b0W/sEB/gjSmKimAAGDj+HbdyMaZMdb8DTrBEXq4fgInIIFgUTeyB4HrPl0HA2itR0brN+Q==
+"@internetarchive/icon-googlepay@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-googlepay/-/icon-googlepay-1.3.1.tgz#b1106fc8dde029288f72da0cd6b62e13e03ee263"
+  integrity sha512-XloSL1S8onzBbqG55wfsmhTOJMwuafeHZUsCUILcSYuN1HQSEHtgYIHeXvZSQvwHyBW7Kd6fc91hX3NXg3xn0g==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-ia-logo@^1.2.1-alpha.6":
-  version "1.2.1-alpha.6"
-  resolved "https://registry.npmjs.org/@internetarchive/icon-ia-logo/-/icon-ia-logo-1.2.1-alpha.6.tgz"
-  integrity sha512-vJyX7d3wffVJD7X/Th5wU+M3jD25YI2QgXfess22FNtAPpVtQ9XRIHFQQB8b5KApKeewpuDdlB2HMY1KvHewmQ==
+"@internetarchive/icon-ia-logo@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-ia-logo/-/icon-ia-logo-1.3.1.tgz#34a28a34cf84b069ab4fcdf0944e1fd5bd977d7e"
+  integrity sha512-fodkNt4d9BTQmEz4b/pOdBdpz7fuoeNJ94K8EpRSaNh+44ab3QCPsv+7LjxJGW/3+wzHiVlJ0klcSP68qKmD0g==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-locale-pin@1.2.1-alpha.7":
-  version "1.2.1-alpha.7"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-locale-pin/-/icon-locale-pin-1.2.1-alpha.7.tgz#09a8f538679af7739243719938bc6cd190658269"
-  integrity sha512-R2nViWQEARODHuI6Ig8GY9FUeVUYgnCRXjIUmHfiNLTzzBAI7pZMs5U10g6u8hNCUx+aoVyQ/2EzZmUFIMu97g==
+"@internetarchive/icon-locale-pin@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-locale-pin/-/icon-locale-pin-1.3.1.tgz#bec4cfe0ea001cd28be2e73c59125f23ed4487c1"
+  integrity sha512-ydzX8M8GgzIy6t5160fCS+LjoEWOegZHO8f8R7r/h+BI77RxtXlrsZl/FXUkfyXqUIfPkV6+X0NX3YYbZFC3PA==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-lock@1.2.1-alpha.7":
-  version "1.2.1-alpha.7"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-lock/-/icon-lock-1.2.1-alpha.7.tgz#74ec50e1f0c61438a8e11e6be575c917977bc517"
-  integrity sha512-SYzgZaxYvSKimwcAV3DYMDIubi64NShUTkEOjKU31DEu2y+XCruI0c7xLwzm3uwu1sGYcxKWv6j593Zbsyw2Xg==
+"@internetarchive/icon-lock@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-lock/-/icon-lock-1.3.1.tgz#212083d2091ae06015e3616d1452b3be61bd91e2"
+  integrity sha512-o5mpph/93Wdn89Lwi+luvtCcSFo+DvaoKEAaMwTISqHazunT9lUFjEkTh1Yh7eflMWquu/ga5n3rkyuuINZIjg==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-paypal@1.2.1-alpha.7":
-  version "1.2.1-alpha.7"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-paypal/-/icon-paypal-1.2.1-alpha.7.tgz#acc0558e7011de2dddf5ddfc8ea0c358aa9f0d00"
-  integrity sha512-sxh013TbwBhS3hjE5qd1ahTY0xBnSOqbTd/LB3xBmXE6It/D71PGJLwr+WIrVtvlG1yC19w3+yx5ujO4pRANnw==
+"@internetarchive/icon-paypal@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-paypal/-/icon-paypal-1.3.1.tgz#8897b2931499f8454c0fc04777bcbb87da2c1e55"
+  integrity sha512-EI3JzOi4MtRtBDr9m5l59rMn1CZT4ose7n04CCWgWpAI9Q6ZFwuxkgj1pozLQkJ0iLILajK9TPFC/K6OPI9bRw==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-user@1.2.1-alpha.7":
-  version "1.2.1-alpha.7"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-user/-/icon-user-1.2.1-alpha.7.tgz#1d093ebb06cb520de5b6a6e3c87e359533a382a8"
-  integrity sha512-TfJZpJKmINnw4xuDYs6I5ApuhjTgcc99agDUCoKYdqm8iyTZZ1ajtq24J0H+AuyfDd7u3N/kM0Rc6uRsJRpzPQ==
+"@internetarchive/icon-user@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-user/-/icon-user-1.3.1.tgz#63bcefb3e30b2576db61b40ff42ab0412e93cf40"
+  integrity sha512-WtU3YjuPO3Vi1igcoNtgIhT0sDylD4bMnlR7UC5z3avE+LiXPC20d33U92X2ZpZnqTeWwvMTyuAYrPZarLcQYQ==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-user@^1.2.1-alpha.6":
-  version "1.2.1-alpha.6"
-  resolved "https://registry.npmjs.org/@internetarchive/icon-user/-/icon-user-1.2.1-alpha.6.tgz"
-  integrity sha512-P/HVD1z2ivWbVTyNlxeYMOKlXQU2Kkh0xjlEXToJZ3p6TymjYNtACQ7nMXS7lpTRNt2ktzeQGG5/0naimM4SJA==
-  dependencies:
-    lit "^2.0.2"
-
-"@internetarchive/icon-venmo@1.2.1-alpha.7":
-  version "1.2.1-alpha.7"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-venmo/-/icon-venmo-1.2.1-alpha.7.tgz#e57010770755e5c4ea7f0eae47a9cd73537a5b3f"
-  integrity sha512-cKFQ0AS1QYL18X5kZkTwNvaAz1S2wBSnw4yORYzaDoQmmcxWnBfa6X6xPHtnI18aCkUHQcr6d27yJheZPwyddA==
+"@internetarchive/icon-venmo@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-venmo/-/icon-venmo-1.3.1.tgz#19f1085de43a883374425e475c77a27d30171822"
+  integrity sha512-aUZmZJ+rLrYu2JFvF+bTptXGgp7aqncPofUdsP+bifGszg9pZqbHgfN13+eaq6uWOw1+6mx3zm5DjmVFxAsUUQ==
   dependencies:
     lit "^2.0.2"
 
@@ -975,15 +968,15 @@
   resolved "https://registry.npmjs.org/@internetarchive/lazy-loader-service/-/lazy-loader-service-0.1.0.tgz"
   integrity sha512-Pi/xpavo6o8QhY5m0l4rqJONeeXWfRdYjIzLJ7JDp10GonoR/szaNsSdksFcwUD0geHp0bjpFauiuxZM+WZyFg==
 
-"@internetarchive/modal-manager@^0.1.1-alpha.1":
-  version "0.1.1-alpha.1"
-  resolved "https://registry.npmjs.org/@internetarchive/modal-manager/-/modal-manager-0.1.1-alpha.1.tgz"
-  integrity sha512-zm9sHbDB13f7zRDzs5Dol8M6j+Ax8Nm19JU7bI7y56xJr3S72fzpE/ZZ3Uk+EJhLqRhC+2VVq1bJIP/cODdNOQ==
+"@internetarchive/modal-manager@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@internetarchive/modal-manager/-/modal-manager-0.2.0.tgz#6633eab53a337799e7d515028c4428f4bee90deb"
+  integrity sha512-TmE5wQaYCB2/ybqgEvnXjMzB7YCuFgqi4v0dH/IwhHFTvCdF0MdJm8IAfFRl8yfJGXQ88VI9zyD7ryUeWckrXQ==
   dependencies:
-    "@internetarchive/ia-activity-indicator" "^0.0.2-alpha.1"
-    "@internetarchive/icon-close" "^1.2.1-alpha.6"
-    "@internetarchive/icon-ia-logo" "^1.2.1-alpha.6"
-    "@internetarchive/icon-user" "^1.2.1-alpha.6"
+    "@internetarchive/ia-activity-indicator" "^0.0.2"
+    "@internetarchive/icon-close" "^1.3.1"
+    "@internetarchive/icon-ia-logo" "^1.3.1"
+    "@internetarchive/icon-user" "^1.3.1"
     lit "^2.0.2"
     throttle-debounce "^2.2.1"
 
@@ -8912,16 +8905,9 @@ lit-html@^1.0.0, lit-html@^1.1.1:
   resolved "https://registry.npmjs.org/lit-html/-/lit-html-1.3.0.tgz"
   integrity sha512-0Q1bwmaFH9O14vycPHw8C/IeHMk/uSDldVLIefu/kfbTBGIc44KGH6A8p1bDfxUfHdc8q6Ct7kQklWoHgr4t1Q==
 
-lit-html@^2.0.0:
+lit-html@^2.0.0, lit-html@^2.0.2:
   version "2.0.2"
   resolved "https://registry.npmjs.org/lit-html/-/lit-html-2.0.2.tgz"
-  integrity sha512-dON7Zg8btb14/fWohQLQBdSgkoiQA4mIUy87evmyJHtxRq7zS6LlC32bT5EPWiof5PUQaDpF45v2OlrxHA5Clg==
-  dependencies:
-    "@types/trusted-types" "^2.0.2"
-
-lit-html@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/lit-html/-/lit-html-2.0.2.tgz#6a17caac4135757710c5fb3e4becc622c476e431"
   integrity sha512-dON7Zg8btb14/fWohQLQBdSgkoiQA4mIUy87evmyJHtxRq7zS6LlC32bT5EPWiof5PUQaDpF45v2OlrxHA5Clg==
   dependencies:
     "@types/trusted-types" "^2.0.2"

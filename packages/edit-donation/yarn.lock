@@ -831,10 +831,10 @@
   resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-data-models/-/donation-form-data-models-0.3.2.tgz#5f3e47238918b8c9a7f0a5cf44c5630c1b570bed"
   integrity sha512-yxjwwr/2YMIx56IN9ZVETqByc7jlsX6s57zk1K+bWgA0u+D0OKScWKX+dLxaz2viRNSQOEOR1MsQWwaKshh0Tg==
 
-"@internetarchive/donation-form-section@0.3.2-alpha.1":
-  version "0.3.2-alpha.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-section/-/donation-form-section-0.3.2-alpha.1.tgz#b6d4d99eed014a8b7016d1a2f592e70a33477ee7"
-  integrity sha512-Zn2WxR34a5NRRGnB9SS+tdSjPeR0F7cnV5D1BS2M5+1mct8SXuBPnU63DvRDxQO1S6Rm8XJWsdOEcImXOGu/Zw==
+"@internetarchive/donation-form-section@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-section/-/donation-form-section-0.3.3.tgz#b45a7ccb1964cd823fa2ed28044b85841ab73b43"
+  integrity sha512-8LiIYt8GNgRWIdcSALoK9ITPq4Iz5mT5b22g8ceIjOs4RBDExy1FYLr7x1XBI2uL/oQzVleJZQ9NrVDa0F079g==
   dependencies:
     lit "^2.0.2"
 

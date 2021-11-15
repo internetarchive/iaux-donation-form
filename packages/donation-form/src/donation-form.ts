@@ -26,7 +26,10 @@ import {
 
 import { PaymentFlowHandlersInterface } from './payment-flow-handlers/payment-flow-handlers';
 
-import { EditDonationAmountSelectionLayout, EditDonationFrequencySelectionMode } from '@internetarchive/donation-form-edit-donation';
+import {
+  EditDonationAmountSelectionLayout,
+  EditDonationFrequencySelectionMode,
+} from '@internetarchive/donation-form-edit-donation';
 
 import '@internetarchive/donation-form-section';
 import {
@@ -51,9 +54,11 @@ export class DonationForm extends LitElement {
 
   @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
 
-  @property({ type: String }) amountSelectionLayout: EditDonationAmountSelectionLayout = EditDonationAmountSelectionLayout.MultiLine;
+  @property({ type: String }) amountSelectionLayout: EditDonationAmountSelectionLayout =
+    EditDonationAmountSelectionLayout.MultiLine;
 
-  @property({ type: String }) frequencySelectionMode: EditDonationFrequencySelectionMode = EditDonationFrequencySelectionMode.Button;
+  @property({ type: String }) frequencySelectionMode: EditDonationFrequencySelectionMode =
+    EditDonationFrequencySelectionMode.Button;
 
   @property({ type: Boolean }) private creditCardVisible = false;
 
@@ -91,7 +96,10 @@ export class DonationForm extends LitElement {
         </donation-form-total-amount>
       </donation-form-section>
 
-      <donation-form-section .sectionBadge=${this.paymentSelectorNumberingStart} headline="Choose a payment method">
+      <donation-form-section
+        .sectionBadge=${this.paymentSelectorNumberingStart}
+        headline="Choose a payment method"
+      >
         <payment-selector
           .paymentProviders=${this.braintreeManager?.paymentProviders}
           @firstUpdated=${this.paymentSelectorFirstUpdated}

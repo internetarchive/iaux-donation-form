@@ -7,7 +7,11 @@ import {
 } from '@internetarchive/donation-form-data-models';
 
 import '@internetarchive/donation-form-edit-donation';
-import { DonationFormEditDonation, EditDonationAmountSelectionLayout, EditDonationFrequencySelectionMode } from '@internetarchive/donation-form-edit-donation';
+import {
+  DonationFormEditDonation,
+  EditDonationAmountSelectionLayout,
+  EditDonationFrequencySelectionMode,
+} from '@internetarchive/donation-form-edit-donation';
 
 export enum DonationFormHeaderMode {
   Summary = 'summary',
@@ -22,9 +26,11 @@ export class DonationFormHeader extends LitElement {
 
   @property({ type: Array }) amountOptions: number[] = defaultDonationAmounts;
 
-  @property({ type: String }) amountSelectionLayout: EditDonationAmountSelectionLayout = EditDonationAmountSelectionLayout.MultiLine;
+  @property({ type: String }) amountSelectionLayout: EditDonationAmountSelectionLayout =
+    EditDonationAmountSelectionLayout.MultiLine;
 
-  @property({ type: String }) frequencySelectionMode: EditDonationFrequencySelectionMode = EditDonationFrequencySelectionMode.Button;
+  @property({ type: String }) frequencySelectionMode: EditDonationFrequencySelectionMode =
+    EditDonationFrequencySelectionMode.Button;
 
   @query('edit-donation') editDonation?: DonationFormEditDonation;
 
