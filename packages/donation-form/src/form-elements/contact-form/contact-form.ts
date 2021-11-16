@@ -1,6 +1,6 @@
-import { LitElement, html, css, customElement, TemplateResult, query } from 'lit-element';
-
-import { ifDefined } from 'lit-html/directives/if-defined';
+import { LitElement, html, css, TemplateResult } from 'lit';
+import { customElement, query } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 import {
   BillingInfo,

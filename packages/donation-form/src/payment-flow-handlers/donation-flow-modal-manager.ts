@@ -1,4 +1,4 @@
-import { html } from 'lit-html';
+import { html } from 'lit';
 import { ModalConfig, ModalManagerInterface } from '@internetarchive/modal-manager';
 import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
 import { BraintreeManagerInterface } from '../braintree-manager/braintree-interfaces';
@@ -288,7 +288,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       }
     } catch (error) {
       this.showErrorModal({
-        message: error,
+        message: `${error}`,
       });
       console.error('error getting a response', error);
       return undefined;
@@ -322,7 +322,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       return response;
     } catch (error) {
       this.showErrorModal({
-        message: error,
+        message: `${error}`,
       });
       console.error('error getting a response', error);
       return undefined;

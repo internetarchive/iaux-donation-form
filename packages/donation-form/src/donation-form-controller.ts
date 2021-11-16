@@ -1,12 +1,5 @@
-import {
-  LitElement,
-  html,
-  property,
-  PropertyValues,
-  query,
-  TemplateResult,
-  customElement,
-} from 'lit-element';
+import { LitElement, html, PropertyValues, TemplateResult } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
 
 import currency from 'currency.js';
 import {
@@ -43,7 +36,10 @@ import creditCardImg from '@internetarchive/icon-credit-card';
 import calendarImg from '@internetarchive/icon-calendar';
 import lockImg from '@internetarchive/icon-lock';
 import { AnalyticsHandlerInterface } from './@types/analytics-handler';
-import { EditDonationAmountSelectionLayout, EditDonationFrequencySelectionMode } from '@internetarchive/donation-form-edit-donation';
+import {
+  EditDonationAmountSelectionLayout,
+  EditDonationFrequencySelectionMode,
+} from '@internetarchive/donation-form-edit-donation';
 
 import {
   DonationPaymentInfo,
@@ -80,9 +76,11 @@ export class DonationFormController extends LitElement {
 
   @property({ type: Object }) donationInfo: DonationPaymentInfo = defaultSelectedDonationInfo;
 
-  @property({ type: String }) amountSelectionLayout: EditDonationAmountSelectionLayout = EditDonationAmountSelectionLayout.MultiLine;
+  @property({ type: String }) amountSelectionLayout: EditDonationAmountSelectionLayout =
+    EditDonationAmountSelectionLayout.MultiLine;
 
-  @property({ type: String }) frequencySelectionMode: EditDonationFrequencySelectionMode = EditDonationFrequencySelectionMode.Button;
+  @property({ type: String }) frequencySelectionMode: EditDonationFrequencySelectionMode =
+    EditDonationFrequencySelectionMode.Button;
 
   @property({ type: String }) referrer?: string;
 

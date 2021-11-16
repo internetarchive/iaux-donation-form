@@ -1,12 +1,5 @@
-import {
-  html,
-  css,
-  LitElement,
-  property,
-  TemplateResult,
-  CSSResult,
-  customElement,
-} from 'lit-element';
+import { html, css, LitElement, TemplateResult, CSSResult } from 'lit';
+import { property, customElement } from 'lit/decorators.js';
 import currency from 'currency.js';
 
 export enum GoalMessageMode {

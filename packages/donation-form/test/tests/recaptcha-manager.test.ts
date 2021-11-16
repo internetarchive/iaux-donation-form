@@ -1,7 +1,6 @@
-import { fixture, expect } from '@open-wc/testing';
+import { html, fixture, expect } from '@open-wc/testing';
 import { MockGrecaptcha, MockGrecaptchaMode } from '../mocks/payment-clients/mock-grecaptcha';
 import { RecaptchaManager } from '../../src/recaptcha-manager/recaptcha-manager';
-import { html } from 'lit-html';
 
 describe('ReCaptcha Manager', () => {
   it('can execute the recaptcha like a Promise', async () => {

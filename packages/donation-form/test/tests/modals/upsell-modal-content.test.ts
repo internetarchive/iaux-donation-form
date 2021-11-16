@@ -1,6 +1,7 @@
 import { html, fixture, expect, oneEvent } from '@open-wc/testing';
 import { UpsellModalContent, UpsellModalCTAMode } from '../../../src/modals/upsell-modal-content';
 import '../../../src/modals/upsell-modal-content';
+import { html as lit2html } from 'lit';
 
 describe('Upsell Modal Content', () => {
   describe('UI Actions', () => {
@@ -163,7 +164,7 @@ describe('Upsell Modal Content', () => {
       ) as HTMLDivElement;
       expect(el.error).to.be.undefined;
       expect(paypalBlocker.classList.contains('hidden')).to.be.true;
-      el.error = html`
+      el.error = lit2html`
         Some error
       `;
       await el.updateComplete;

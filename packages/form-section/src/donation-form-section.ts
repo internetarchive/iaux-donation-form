@@ -1,12 +1,5 @@
-import {
-  LitElement,
-  html,
-  css,
-  customElement,
-  CSSResult,
-  TemplateResult,
-  property,
-} from 'lit-element';
+import { LitElement, html, css, CSSResult, TemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
 export enum DonationFormSectionBadgeMode {
   HideBadge = 'hidebadge',
