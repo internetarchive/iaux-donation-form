@@ -879,87 +879,87 @@
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-applepay@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-applepay/-/icon-applepay-1.3.1.tgz#550bbbe53601e6bb673071c38af66c5e4c9dd677"
-  integrity sha512-fXqnfRxq8JMKXPzz5hYhuLkGMHbhddAwKl4YIEbDSmCyradvWxVpa7s19l2GYI0/lVb2WqZLVXI+T82I+Q6haw==
+"@internetarchive/icon-applepay@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-applepay/-/icon-applepay-1.3.2.tgz#757dd7513e4f624265869d091affa81f9084f3d7"
+  integrity sha512-LNVEfjP+UuZMUGDtskPejsaCxhqhUv8+0hemAoFh5R8qW9S22gTADwWgf0DasoxEH3NFNHx7kDvxRjTTBeCAfg==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-calendar@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-calendar/-/icon-calendar-1.3.1.tgz#52eafb6f71a6f2e6733611edac1ec4c8b87ef722"
-  integrity sha512-SEBW+jcRVB26ulwIclXF2A5i/P37EEsT87qHhlmx2+Nu/dQXD7DAyJHpN3MnVyeEV23Sx1B9JKihmK67NVfa+A==
+"@internetarchive/icon-calendar@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-calendar/-/icon-calendar-1.3.2.tgz#34bf9773f191b8173ac3e8cdddd4e92e9ffd7a26"
+  integrity sha512-RT+uNtT2662XnuuLnTo5mlAWXRQkYu3fXQK+BPNyhIi52QWhvD11Ukts1eXJIaydgOfDjOEZm8mmWHw/4//IAw==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-close@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-close/-/icon-close-1.3.1.tgz#ddd761b2b90a37dc8b540c502f561341f96880f3"
-  integrity sha512-m233IE5GJ/f1OU85ZOWN0aiUFywV4ZiTw3zGzB8muGX72Kdj/qi4rxINP4p90P9hCkNVRb7bwSCpgB0L3vzcLg==
+"@internetarchive/icon-close@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-close/-/icon-close-1.3.2.tgz#391b025241fe4c065263414870d21034823aebdf"
+  integrity sha512-4QhM/MDC1IsWQZoE3lt7A4l3/VOopJta+xVnDLqsbA3OW2sT+ilm/mUiP4l4Lm/NzdbQQwhnQMOZPcQvllxkzA==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-credit-card@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-credit-card/-/icon-credit-card-1.3.1.tgz#50ceff4e7d86e9194db10b8a9654dd017e356b4f"
-  integrity sha512-IdebWR0jEdFV+yd0vTyxnYb2yUxgmNquu20MfeZS6sN03G48WECSbk94qLzwaoVaiBOtcd2CDcMaSMSiqmxB6g==
+"@internetarchive/icon-credit-card@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-credit-card/-/icon-credit-card-1.3.2.tgz#4059446d93e58a78a4fda091ab17a637b95d022a"
+  integrity sha512-/CLBvqmtWN1a13JtjDdSGt461ukZdrzb+Ch6Hkg4T4AnqTSbucl3+3C5sBmNhjIisJGzEI2nxNIQHIlIu+WoIg==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-email@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-email/-/icon-email-1.3.1.tgz#8598f960879dee6680dec106eab4a3789bd19407"
-  integrity sha512-pBpqaFAZnob+iUvBq4PoQ0cPVs7DYtWDl3B4C2QTJMtGZhJE1fIBZ01EaBWvdy+D/EC95axZn/3qbazDIly+ew==
+"@internetarchive/icon-email@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-email/-/icon-email-1.3.2.tgz#2def001ef1eb30cc2825125859247079891295fe"
+  integrity sha512-VzJ1Qsoal19+rZqEcwbsSzhFpV1Fn51hw2Qiq4pa7KAU6QzDMzJVkcvCK7bBOxLoVe3HwaeSMzKEXxr5h+VBfw==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-googlepay@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-googlepay/-/icon-googlepay-1.3.1.tgz#b1106fc8dde029288f72da0cd6b62e13e03ee263"
-  integrity sha512-XloSL1S8onzBbqG55wfsmhTOJMwuafeHZUsCUILcSYuN1HQSEHtgYIHeXvZSQvwHyBW7Kd6fc91hX3NXg3xn0g==
+"@internetarchive/icon-googlepay@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-googlepay/-/icon-googlepay-1.3.2.tgz#e09ad1b5de4813db6a8c466a0e2ec49380832221"
+  integrity sha512-lKEqkboTNIVNStpdkSaZUbA8MndC/c7+aACu5RAQjHo2i0IUwb5EzuUZkt86PMoXswJe+HtCHowFVkirFZ427w==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-ia-logo@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-ia-logo/-/icon-ia-logo-1.3.1.tgz#34a28a34cf84b069ab4fcdf0944e1fd5bd977d7e"
-  integrity sha512-fodkNt4d9BTQmEz4b/pOdBdpz7fuoeNJ94K8EpRSaNh+44ab3QCPsv+7LjxJGW/3+wzHiVlJ0klcSP68qKmD0g==
+"@internetarchive/icon-ia-logo@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-ia-logo/-/icon-ia-logo-1.3.2.tgz#0ec0f5b537ea6b8c46ba6410e5d925d806141c03"
+  integrity sha512-lDZdaqj7A6nv5dJPaes6UZwDqlr3yMgaKJZSuMTqMUpjaZ0bcfDIoDFO4y2YjQ2uUHoRIgRNqyZVMSNJMowXzQ==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-locale-pin@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-locale-pin/-/icon-locale-pin-1.3.1.tgz#bec4cfe0ea001cd28be2e73c59125f23ed4487c1"
-  integrity sha512-ydzX8M8GgzIy6t5160fCS+LjoEWOegZHO8f8R7r/h+BI77RxtXlrsZl/FXUkfyXqUIfPkV6+X0NX3YYbZFC3PA==
+"@internetarchive/icon-locale-pin@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-locale-pin/-/icon-locale-pin-1.3.2.tgz#19605789b43b8ae7b470d09a5ad677ea2d0a9abf"
+  integrity sha512-wwsGwLMk5JMzEjgIvUwdZZo9Y8OKkvr0LuX3DVcaP/3t6XPTZngScst3NzcOav5+JHaAvKucRK8mI8tThSPZ9Q==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-lock@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-lock/-/icon-lock-1.3.1.tgz#212083d2091ae06015e3616d1452b3be61bd91e2"
-  integrity sha512-o5mpph/93Wdn89Lwi+luvtCcSFo+DvaoKEAaMwTISqHazunT9lUFjEkTh1Yh7eflMWquu/ga5n3rkyuuINZIjg==
+"@internetarchive/icon-lock@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-lock/-/icon-lock-1.3.2.tgz#a13e0b7304282d327c3ec43819edf4cb602628f2"
+  integrity sha512-OwD0HC6SSIwN+oG0fmHM+desP7Pxw7X2bVoE55xHK4oA10l55DtMnbxzHb/HKVDltNvk9YaIV7/T+HgTa2heHA==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-paypal@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-paypal/-/icon-paypal-1.3.1.tgz#8897b2931499f8454c0fc04777bcbb87da2c1e55"
-  integrity sha512-EI3JzOi4MtRtBDr9m5l59rMn1CZT4ose7n04CCWgWpAI9Q6ZFwuxkgj1pozLQkJ0iLILajK9TPFC/K6OPI9bRw==
+"@internetarchive/icon-paypal@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-paypal/-/icon-paypal-1.3.2.tgz#8adbea75e4fc8aad941ff89d6a6e51c97510a4bc"
+  integrity sha512-X4IFJw/sSUjXV7OMqnftfkY1i22UvdgctUgf7/R4v7eJO4mhGQnwtH6DkBXzKbAt+FL9f1RhI1Wmz6WrxH19HQ==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-user@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-user/-/icon-user-1.3.1.tgz#63bcefb3e30b2576db61b40ff42ab0412e93cf40"
-  integrity sha512-WtU3YjuPO3Vi1igcoNtgIhT0sDylD4bMnlR7UC5z3avE+LiXPC20d33U92X2ZpZnqTeWwvMTyuAYrPZarLcQYQ==
+"@internetarchive/icon-user@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-user/-/icon-user-1.3.2.tgz#727b9be48889c9abc089f16ff5cf0632c20d4fba"
+  integrity sha512-A5fCby40AEWWbrSSgGzhcSVDfL9M+S/Zl1oPTid/+mBuZPik0KPS5xoMBkT/952/ujbnLLR9URemzfPdSeBx+Q==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/icon-venmo@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-venmo/-/icon-venmo-1.3.1.tgz#19f1085de43a883374425e475c77a27d30171822"
-  integrity sha512-aUZmZJ+rLrYu2JFvF+bTptXGgp7aqncPofUdsP+bifGszg9pZqbHgfN13+eaq6uWOw1+6mx3zm5DjmVFxAsUUQ==
+"@internetarchive/icon-venmo@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@internetarchive/icon-venmo/-/icon-venmo-1.3.2.tgz#650ec290e3f46f070f720cd4f0b3d1e53655a482"
+  integrity sha512-/gJ+/UpdBkqjo9L9zRL2BzUmHihcNCTyGybI8JShCPV0cW4NFIX9dr37cB70UuZpKdQZ5JsiJda0W8mPgO98aQ==
   dependencies:
     lit "^2.0.2"
 
@@ -968,15 +968,15 @@
   resolved "https://registry.npmjs.org/@internetarchive/lazy-loader-service/-/lazy-loader-service-0.1.0.tgz"
   integrity sha512-Pi/xpavo6o8QhY5m0l4rqJONeeXWfRdYjIzLJ7JDp10GonoR/szaNsSdksFcwUD0geHp0bjpFauiuxZM+WZyFg==
 
-"@internetarchive/modal-manager@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@internetarchive/modal-manager/-/modal-manager-0.2.0.tgz#6633eab53a337799e7d515028c4428f4bee90deb"
-  integrity sha512-TmE5wQaYCB2/ybqgEvnXjMzB7YCuFgqi4v0dH/IwhHFTvCdF0MdJm8IAfFRl8yfJGXQ88VI9zyD7ryUeWckrXQ==
+"@internetarchive/modal-manager@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/modal-manager/-/modal-manager-0.2.1.tgz#ed006083db9f841b8a0912e627e5803d16a008c3"
+  integrity sha512-ULac71ZxwWNzsy9mY0R19CeaJsAIW6fvqgRQdbjMG3u2trH6XH+GTJLhxVl1QKTQQwIkaowxiGPS+GTRz+eaGA==
   dependencies:
     "@internetarchive/ia-activity-indicator" "^0.0.2"
-    "@internetarchive/icon-close" "^1.3.1"
-    "@internetarchive/icon-ia-logo" "^1.3.1"
-    "@internetarchive/icon-user" "^1.3.1"
+    "@internetarchive/icon-close" "^1.3.2"
+    "@internetarchive/icon-ia-logo" "^1.3.2"
+    "@internetarchive/icon-user" "^1.3.2"
     lit "^2.0.2"
     throttle-debounce "^2.2.1"
 
