@@ -6,7 +6,7 @@ import {
 } from '../src/banner-thermometer';
 import '../src/banner-thermometer';
 
-import { MockSharedResizeObserver } from '@internetarchive/shared-resize-observer/test/mock-shared-resize-observer';
+import { MockSharedResizeObserver } from '@internetarchive/shared-resize-observer/dist/test/mock-shared-resize-observer';
 
 describe('DonationBannerThermometer', () => {
   it('has a background track and fill layer', async () => {
