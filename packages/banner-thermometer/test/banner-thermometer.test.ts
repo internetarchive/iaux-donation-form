@@ -6,7 +6,6 @@ import {
 } from '../src/banner-thermometer';
 import '../src/banner-thermometer';
 
-import { SharedResizeObserver } from '@internetarchive/shared-resize-observer';
 import { MockResizeObserver } from './mock-resize-observer';
 
 describe('DonationBannerThermometer', () => {
@@ -33,19 +32,6 @@ describe('DonationBannerThermometer', () => {
       '.donate-goal'
     ) as HTMLDivElement;
     expect(goalMessage.innerText).to.equal('$1MM GOAL');
-  });
-
-  it('can show numbers formatted for billions', async () => {
-    const el: DonationBannerThermometer = await fixture(html`
-      <donation-banner-thermometer
-        .goalAmount=${12_300_000_000}
-      ></donation-banner-thermometer>
-    `);
-
-    const goalMessage = el.shadowRoot?.querySelector(
-      '.donate-goal'
-    ) as HTMLDivElement;
-    expect(goalMessage.innerText).to.equal('$12B GOAL');
   });
 
   it('can display goal met message', async () => {

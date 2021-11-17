@@ -177,18 +177,9 @@ export class DonationBannerThermometer
   }
 
   private formatNumber(number: number): string {
-    let suffix = '';
-    let divisor = 1;
-    if (number >= 1_000_000_000) {
-      suffix = 'B';
-      divisor = 1_000_000_000;
-    } else if (number >= 1_000_000) {
-      suffix = 'MM';
-      divisor = 1_000_000;
-    } else if (number >= 1_000) {
-      suffix = 'K';
-      divisor = 1_000;
-    }
+    if (number === 0) return '$0';
+    const suffix = 'MM';
+    const divisor = 1_000_000;
     const result = number / divisor;
     const roundToOne = result < 10;
     let rounded = 0;
