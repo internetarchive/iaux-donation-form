@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/donation-banner-thermometer",
-  "version": "0.3.0",
+  "version": "0.4.0-alpha.1",
   "description": "The thermometer in the Donation Banner",
   "license": "AGPL-3.0-only",
   "main": "dist/index.js",
