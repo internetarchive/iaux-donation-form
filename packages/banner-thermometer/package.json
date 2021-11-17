@@ -24,7 +24,7 @@
     "test:watch": "concurrently --kill-others --names tsc,karma \"yarn run tsc:watch\" \"karma start --auto-watch=true --single-run=false\""
   },
   "dependencies": {
-    "@internetarchive/shared-resize-observer": "0.0.2-alpha.3",
+    "@internetarchive/shared-resize-observer": "^0.1.0",
     "lit": "^2.0.2"
   },
   "devDependencies": {

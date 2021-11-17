@@ -821,10 +821,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@internetarchive/shared-resize-observer@0.0.2-alpha.3":
-  version "0.0.2-alpha.3"
-  resolved "https://registry.yarnpkg.com/@internetarchive/shared-resize-observer/-/shared-resize-observer-0.0.2-alpha.3.tgz#48a96fb5083700d16af36d482caaa386103aec3f"
-  integrity sha512-NhwGKSngAsAEWu5S/zHLz7Vyrom7cc5c6P4PoEgAZ/ZViBpC7ropfoafA0/v5knXBsO4XF8WAB51vwRuNOl5eg==
+"@internetarchive/shared-resize-observer@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@internetarchive/shared-resize-observer/-/shared-resize-observer-0.1.0.tgz#3b3f5a6acadc3659d3237b38899cc7fca3a56d26"
+  integrity sha512-mJ6CrqL4XrTIv+Oz/ayK38ZByQgWweCSKUJrS8jUyea1gTinBT9RAZberhzw4wjivoBTPsWFWpOid4BW5OJTEg==
 
 "@koa/cors@^3.1.0":
   version "3.1.0"
