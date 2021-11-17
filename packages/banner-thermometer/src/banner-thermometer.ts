@@ -213,6 +213,7 @@ export class DonationBannerThermometer
     const borderStyle = css`var(--bannerThermometerBorder, 1px solid ${progressColor})`;
     const borderRadius = css`var(--bannerThermometerBorderRadius, calc(${thermometerHeight} / 2))`;
     const goalMessagePadding = css`var(--bannerThermometerGoalMessagePadding, 0 10px)`;
+    const goalValueColor = css`var(--bannerThermometerGoalValueColor, #2c2c2c)`;
 
     return css`
       :host {
@@ -272,6 +273,8 @@ export class DonationBannerThermometer
         text-align: left;
         padding: ${goalMessagePadding};
         text-transform: uppercase;
+        font-weight: bold;
+        color: ${goalValueColor};
       }
     `;
   }
