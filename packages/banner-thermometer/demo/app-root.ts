@@ -6,14 +6,13 @@ import {
   DonationBannerThermometer,
   GoalMessageMode,
 } from '../src/banner-thermometer';
+import { SharedResizeObserver } from '@internetarchive/shared-resize-observer';
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
   @query('#thermometer') thermometer!: DonationBannerThermometer;
 
-  @query('#markerTopValue') markerTopValue!: HTMLSpanElement;
-
-  @query('#markerHeightValue') markerHeightValue!: HTMLSpanElement;
+  @query('#thermometerHeightValue') thermometerHeightValue!: HTMLSpanElement;
 
   @query('#currentAmountSlider') currentAmountSlider!: HTMLInputElement;
 
@@ -25,13 +24,16 @@ export class AppRoot extends LitElement {
 
   @state() defaultCurrentAmount = 2_350_000;
 
+  private resizeObserver = new SharedResizeObserver();
+
   render(): TemplateResult {
     return html`
       <div class="thermometer-container">
         <donation-banner-thermometer
           id="thermometer"
-          currentAmount=${this.defaultCurrentAmount}
-          goalAmount=${this.defaultGoal}
+          .currentAmount=${this.defaultCurrentAmount}
+          .goalAmount=${this.defaultGoal}
+          .resizeObserver=${this.resizeObserver}
         >
         </donation-banner-thermometer>
       </div>
@@ -121,66 +123,29 @@ export class AppRoot extends LitElement {
             />
           </dd>
 
-          <dt><label for="markerBorder">Marker Border</label></dt>
-          <dd>
-            <input
-              type="text"
-              id="markerBorder"
-              @input=${this.changeMarkerBorder}
-              value="1px solid #31A481"
-            />
-          </dd>
-
-          <dt><label for="markerTop">Marker Top</label></dt>
+          <dt><label for="thermometerHeight">Thermometer Height</label></dt>
           <dd>
             <input
               type="range"
-              id="markerTop"
-              @input=${this.changeMarkerTop}
-              min="0"
-              max="200"
-              value="50"
+              id="thermometerHeight"
+              @input=${this.changeThermometerHeight}
+              min="10"
+              max="100"
+              value="20"
             />
-            <span id="markerTopValue">50%</span>
-          </dd>
-
-          <dt><label for="markerHeight">Marker Height</label></dt>
-          <dd>
-            <input
-              type="range"
-              id="markerHeight"
-              @input=${this.changeMarkerHeight}
-              min="50"
-              max="200"
-              value="100"
-            />
-            <span id="markerHeightValue">100%</span>
+            <span id="thermometerHeightValue">20px</span>
           </dd>
         </dl>
       </fieldset>
     `;
   }
 
-  changeMarkerTop(e: Event): void {
+  changeThermometerHeight(e: Event): void {
     if (!e.target) return;
     const value = (e.target as HTMLInputElement).value;
-    this.thermometer.style.setProperty(
-      '--bannerThermometerMarkerTop',
-      value + '%'
-    );
+    this.thermometer.style.height = value + 'px';
     const numberValue = parseFloat(value);
-    this.markerTopValue.innerHTML = `${Math.round(numberValue)}%`;
-  }
-
-  changeMarkerHeight(e: Event): void {
-    if (!e.target) return;
-    const value = (e.target as HTMLInputElement).value;
-    this.thermometer.style.setProperty(
-      '--bannerThermometerMarkerHeight',
-      value + '%'
-    );
-    const numberValue = parseFloat(value);
-    this.markerHeightValue.innerHTML = `${Math.round(numberValue)}%`;
+    this.thermometerHeightValue.innerHTML = `${Math.round(numberValue)}px`;
   }
 
   goalMet(e: Event): void {
@@ -260,8 +225,7 @@ export class AppRoot extends LitElement {
   static get styles(): CSSResultGroup {
     return css`
       #thermometer {
-        height: 50px;
-        --bannerThermometerHeight: 30px;
+        height: 20px;
       }
 
       .thermometer-container {

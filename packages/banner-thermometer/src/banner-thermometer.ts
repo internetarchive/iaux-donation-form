@@ -1,6 +1,17 @@
-import { html, css, LitElement, TemplateResult, CSSResult } from 'lit';
-import { property, customElement } from 'lit/decorators.js';
-import currency from 'currency.js';
+import {
+  html,
+  css,
+  LitElement,
+  TemplateResult,
+  CSSResult,
+  PropertyValues,
+  nothing,
+} from 'lit';
+import { property, customElement, query, state } from 'lit/decorators.js';
+import type {
+  SharedResizeObserverResizeHandlerInterface,
+  SharedResizeObserverInterface,
+} from '@internetarchive/shared-resize-observer';
 
 export enum GoalMessageMode {
   ShowGoalAmount = 'showgoalamount',
@@ -8,7 +19,9 @@ export enum GoalMessageMode {
 }
 
 @customElement('donation-banner-thermometer')
-export class DonationBannerThermometer extends LitElement {
+export class DonationBannerThermometer
+  extends LitElement
+  implements SharedResizeObserverResizeHandlerInterface {
   @property({ type: String }) goalMessageMode: GoalMessageMode =
     GoalMessageMode.ShowGoalAmount;
 
@@ -20,6 +33,16 @@ export class DonationBannerThermometer extends LitElement {
   @property({ type: Number }) goalAmount = 7_500_000;
 
   @property({ type: Number }) currentAmount = 0;
+
+  @property({ type: Object }) resizeObserver?: SharedResizeObserverInterface;
+
+  @query('.thermometer-value') private thermometerValue!: HTMLDivElement;
+
+  @query('.thermometer-fill') private thermometerFill!: HTMLDivElement;
+
+  @state() private thermometerValueWidth = 0;
+
+  @state() private thermometerFillWidth = 0;
 
   render(): TemplateResult {
     return html`
@@ -33,26 +56,110 @@ export class DonationBannerThermometer extends LitElement {
       >
         <div class="thermometer-message-container">
           <div class="thermometer-container">
-            <div class="thermometer-background">
+            <div
+              class="thermometer-background ${this.thermometerValuePosition}"
+            >
               <div
                 class="thermometer-fill"
                 style="width: ${this.percentComplete}%"
-              ></div>
-            </div>
-            <div
-              class="theremometer-value-container"
-              style="width: ${this.percentComplete}%"
-            >
-              <div class="thermometer-value-indicator"></div>
-              <div class="thermometer-value">
-                ${this.currentAmountDisplayValue}
+              >
+                ${this.thermometerValuePosition === 'value-left'
+                  ? this.thermometerValueTemplate
+                  : nothing}
               </div>
+              ${this.thermometerValuePosition === 'value-right'
+                ? this.thermometerValueTemplate
+                : nothing}
             </div>
           </div>
           <div class="donate-goal">${this.currentGoalMessage}</div>
         </div>
       </div>
     `;
+  }
+
+  private get thermometerValueTemplate(): TemplateResult {
+    return html`
+      <div class="thermometer-value">${this.currentAmountDisplayValue}</div>
+    `;
+  }
+
+  /**
+   * Determines the position of the thermometer value. (Left or right of the thermometer fill)
+   */
+  private get thermometerValuePosition(): 'value-left' | 'value-right' {
+    const buffer = 10;
+    return this.thermometerValueWidth + buffer < this.thermometerFillWidth
+      ? 'value-left'
+      : 'value-right';
+  }
+
+  updated(changed: PropertyValues): void {
+    if (changed.has('resizeObserver')) {
+      this.setupResizeObserver();
+    }
+  }
+
+  disconnectedCallback(): void {
+    this.disconnectResizeObserver();
+  }
+
+  /** @inheritdoc */
+  handleResize(entry: ResizeObserverEntry): void {
+    switch (entry.target) {
+      /* istanbul ignore next */
+      case this.shadowRoot?.host:
+        this.style.setProperty(
+          '--bannerThermometerHeight',
+          entry.contentRect.height + 'px'
+        );
+        break;
+      case this.thermometerValue:
+        this.thermometerValueWidth = entry.contentRect.width;
+        break;
+      case this.thermometerFill:
+        this.thermometerFillWidth = entry.contentRect.width;
+        break;
+    }
+  }
+
+  private setupResizeObserver(): void {
+    this.disconnectResizeObserver();
+    /* istanbul ignore next */
+    if (!this.shadowRoot?.host || !this.resizeObserver) return;
+    this.resizeObserver.addObserver({
+      handler: this,
+      target: this.shadowRoot.host,
+    });
+
+    this.resizeObserver.addObserver({
+      handler: this,
+      target: this.thermometerValue,
+    });
+
+    this.resizeObserver.addObserver({
+      handler: this,
+      target: this.thermometerFill,
+    });
+  }
+
+  private disconnectResizeObserver(): void {
+    /* istanbul ignore next */
+    if (!this.shadowRoot?.host || !this.resizeObserver) return;
+    this.resizeObserver.removeObserver({
+      handler: this,
+      target: this.shadowRoot.host,
+    });
+
+    this.resizeObserver.removeObserver({
+      handler: this,
+      target: this.thermometerValue,
+    });
+
+    this.resizeObserver.removeObserver({
+      handler: this,
+      target: this.thermometerFill,
+    });
   }
 
   private get goalMessage(): string {
@@ -62,18 +169,35 @@ export class DonationBannerThermometer extends LitElement {
   }
 
   private get currentAmountDisplayValue(): string {
-    return this.currencyFormatted(this.currentAmount);
+    return this.formatNumber(this.currentAmount);
   }
 
   private get goalAmountDisplayValue(): string {
-    return this.currencyFormatted(this.goalAmount);
+    return this.formatNumber(this.goalAmount);
   }
 
-  private currencyFormatted(value: number): string {
-    return currency(value, {
-      symbol: '$',
-      precision: 0,
-    }).format();
+  private formatNumber(number: number): string {
+    let suffix = '';
+    let divisor = 1;
+    if (number >= 1_000_000_000) {
+      suffix = 'B';
+      divisor = 1_000_000_000;
+    } else if (number >= 1_000_000) {
+      suffix = 'MM';
+      divisor = 1_000_000;
+    } else if (number >= 1_000) {
+      suffix = 'K';
+      divisor = 1_000;
+    }
+    const result = number / divisor;
+    const roundToOne = result < 10;
+    let rounded = 0;
+    if (roundToOne) {
+      rounded = Math.round((result + Number.EPSILON) * 10) / 10;
+    } else {
+      rounded = Math.round(result);
+    }
+    return `$${rounded}${suffix}`;
   }
 
   private get currentGoalMessage(): string {
@@ -90,16 +214,13 @@ export class DonationBannerThermometer extends LitElement {
   }
 
   static get styles(): CSSResult {
-    const thermometerHeight = css`var(--bannerThermometerHeight, 30px)`;
-    const borderStyle = css`var(--bannerThermometerBorder, 1px solid #31A481)`;
-    const backgroundColor = css`var(--bannerThermometerBackgroundColor, #D1FAED)`;
-    const progressColor = css`var(--bannerThermometerProgressColor, #31A481)`;
-    const borderRadius = css`var(--bannerThermometerBorderRadius, 20px)`;
-    const markerTop = css`var(--bannerThermometerMarkerTop, 50%)`;
-    const markerHeight = css`var(--bannerThermometerMarkerHeight, 75%)`;
-    const markerBorder = css`var(--bannerThermometerMarkerBorder, ${borderStyle})`;
-    const progressValueLineHeight = css`var(--bannerThermometerProgressValueLineHeight, 1)`;
-    const goalMessageLineHeight = css`var(--bannerThermometerGoalMessageLineHeight, 1)`;
+    const thermometerHeight = css`var(--bannerThermometerHeight, 20px)`;
+    const currentValueLeftColor = css`var(--bannerThermometerCurrentValueLeftColor, #fff)`;
+    const progressColor = css`var(--bannerThermometerProgressColor, #23765D)`;
+    const currentValueRightColor = css`var(--bannerThermometerCurrentValueRightColor, ${progressColor})`;
+    const backgroundColor = css`var(--bannerThermometerBackgroundColor, #B8F5E2)`;
+    const borderStyle = css`var(--bannerThermometerBorder, 1px solid ${progressColor})`;
+    const borderRadius = css`var(--bannerThermometerBorderRadius, calc(${thermometerHeight} / 2))`;
     const goalMessagePadding = css`var(--bannerThermometerGoalMessagePadding, 0 10px)`;
 
     return css`
@@ -112,15 +233,14 @@ export class DonationBannerThermometer extends LitElement {
       }
 
       .thermometer-message-container {
-        height: ${thermometerHeight};
+        height: 100%;
         display: flex;
         align-items: center;
       }
 
       .thermometer-container {
-        height: ${thermometerHeight};
+        height: 100%;
         flex: 1;
-        position: relative;
       }
 
       .thermometer-background {
@@ -130,36 +250,37 @@ export class DonationBannerThermometer extends LitElement {
         border-radius: ${borderRadius};
         border: ${borderStyle};
         overflow: hidden;
+        display: flex;
+        align-items: center;
       }
 
       .thermometer-fill {
         background-color: ${progressColor};
         text-align: right;
         height: 100%;
-        border-radius: ${borderRadius};
-      }
-
-      .theremometer-value-container {
-        position: absolute;
-        height: ${markerHeight};
-        top: ${markerTop};
-      }
-
-      .thermometer-value-indicator {
-        height: 100%;
-        border-right: ${markerBorder};
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
       }
 
       .thermometer-value {
-        line-height: ${progressValueLineHeight};
-        text-align: right;
+        font-weight: bold;
+      }
+
+      .value-left .thermometer-value {
+        color: ${currentValueLeftColor};
+        padding: 0 0.5rem 0 1rem;
+      }
+
+      .value-right .thermometer-value {
+        color: ${currentValueRightColor};
+        padding: 0 1rem 0 0.5rem;
       }
 
       .donate-goal {
         text-align: left;
         padding: ${goalMessagePadding};
         text-transform: uppercase;
-        line-height: ${goalMessageLineHeight};
       }
     `;
   }
