@@ -15,10 +15,7 @@
     "inlineSources": true,
     "declaration": true,
     "rootDir": "./",
-    "allowUmdGlobalAccess": true, // this is only for paypal. I can't figure out how to use it properly without this.
-    "types": [
-      "resize-observer-browser"
-    ]
+    "allowUmdGlobalAccess": true // this is only for paypal. I can't figure out how to use it properly without this.
   },
   "include": ["src/**/*.ts", "demo/**/*.ts", "test/**/*.ts"]
 }
