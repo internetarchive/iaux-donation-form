@@ -6,7 +6,7 @@ import {
 } from '../src/banner-thermometer';
 import '../src/banner-thermometer';
 
-import { MockResizeObserver } from './mock-resize-observer';
+import { MockSharedResizeObserver } from '@internetarchive/shared-resize-observer/test/mock-shared-resize-observer';
 
 describe('DonationBannerThermometer', () => {
   it('has a background track and fill layer', async () => {
@@ -108,9 +108,9 @@ describe('DonationBannerThermometer', () => {
     });
 
     await new Promise<void>(resolve => {
-      const mockResizeObserver = new MockResizeObserver({
+      const mockResizeObserver = new MockSharedResizeObserver({
         targetSizes: sizes,
-        observationComplete: (): void => {
+        addObserverComplete: (): void => {
           resolve();
         },
       });
@@ -165,9 +165,9 @@ describe('DonationBannerThermometer', () => {
     });
 
     await new Promise<void>(resolve => {
-      const mockResizeObserver = new MockResizeObserver({
+      const mockResizeObserver = new MockSharedResizeObserver({
         targetSizes: sizes,
-        observationComplete: (): void => {
+        addObserverComplete: (): void => {
           resolve();
         },
       });
@@ -207,9 +207,9 @@ describe('DonationBannerThermometer', () => {
     });
 
     await new Promise<void>(resolve => {
-      const mockResizeObserver = new MockResizeObserver({
+      const mockResizeObserver = new MockSharedResizeObserver({
         targetSizes: sizes,
-        observationComplete: (): void => {
+        addObserverComplete: (): void => {
           resolve();
         },
       });
