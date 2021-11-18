@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/donation-banner-thermometer",
-  "version": "0.3.0",
+  "version": "0.4.0-alpha.1",
   "description": "The thermometer in the Donation Banner",
   "license": "AGPL-3.0-only",
   "main": "dist/index.js",
@@ -24,7 +24,7 @@
     "test:watch": "concurrently --kill-others --names tsc,karma \"yarn run tsc:watch\" \"karma start --auto-watch=true --single-run=false\""
   },
   "dependencies": {
-    "currency.js": "^2.0.3",
+    "@internetarchive/shared-resize-observer": "^0.1.0",
     "lit": "^2.0.2"
   },
   "devDependencies": {
@@ -32,6 +32,7 @@
     "@open-wc/testing": "^2.0.0",
     "@open-wc/testing-karma": "^3.0.0",
     "@types/node": "13.11.1",
+    "@types/resize-observer-browser": "^0.1.6",
     "@typescript-eslint/eslint-plugin": "^2.20.0",
     "@typescript-eslint/parser": "^2.20.0",
     "concurrently": "^5.1.0",
@@ -43,7 +44,7 @@
     "lint-staged": "^10.0.0",
     "madge": "^4.0.1",
     "prettier": "^2.0.4",
-    "tslib": "^1.11.0",
+    "tslib": "^2.3.1",
     "typescript": "~3.9.0"
   },
   "eslintConfig": {
