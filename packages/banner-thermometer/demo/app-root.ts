@@ -71,47 +71,57 @@ export class AppRoot extends LitElement {
 
           <dt><label>Current Amount Mode</label></dt>
           <dd>
-            <input
-              type="radio"
-              name="currentAmountModeRadio"
-              value="on"
-              @click=${this.changeCurrentAmountMode}
-              checked
-            />
-            On
-            <input
-              type="radio"
-              name="currentAmountModeRadio"
-              value="off"
-              @click=${this.changeCurrentAmountMode}
-            />
-            Off
+            <label>
+              <input
+                type="radio"
+                name="currentAmountModeRadio"
+                value="on"
+                @click=${this.changeCurrentAmountMode}
+                checked
+              />
+              On
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="currentAmountModeRadio"
+                value="off"
+                @click=${this.changeCurrentAmountMode}
+              />
+              Off
+            </label>
           </dd>
 
           <dt><label>Goal Mode</label></dt>
           <dd>
-            <input
-              type="radio"
-              name="goalModeRadio"
-              value="off"
-              @click=${this.changeGoalMode}
-            />
-            Off
-            <input
-              type="radio"
-              name="goalModeRadio"
-              value="amount"
-              @click=${this.changeGoalMode}
-              checked
-            />
-            Amount
-            <input
-              type="radio"
-              name="goalModeRadio"
-              value="message"
-              @click=${this.changeGoalMode}
-            />
-            Message
+            <label>
+              <input
+                type="radio"
+                name="goalModeRadio"
+                value="off"
+                @click=${this.changeGoalMode}
+              />
+              Off
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="goalModeRadio"
+                value="amount"
+                @click=${this.changeGoalMode}
+                checked
+              />
+              Amount
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="goalModeRadio"
+                value="message"
+                @click=${this.changeGoalMode}
+              />
+              Message
+            </label>
           </dd>
 
           <dt><label for="goalMet">Goal Message</label></dt>
