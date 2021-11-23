@@ -21,9 +21,10 @@ describe('DonationBannerThermometer', () => {
     expect(fill).to.exist;
   });
 
-  it('defaults to showing the goal value at the end of the thermometer', async () => {
+  it('defaults to showing the goal value at the end of the thermometer and the current value', async () => {
     const el: DonationBannerThermometer = await fixture(html`
       <donation-banner-thermometer
+        .currentAmount="${500_000}"
         .goalAmount=${1_000_000}
       ></donation-banner-thermometer>
     `);
@@ -31,7 +32,39 @@ describe('DonationBannerThermometer', () => {
     const goalMessage = el.shadowRoot?.querySelector(
       '.donate-goal'
     ) as HTMLDivElement;
+    const currentValue = el.shadowRoot?.querySelector(
+      '.thermometer-value'
+    ) as HTMLDivElement;
     expect(goalMessage.innerText).to.equal('$1MM GOAL');
+    expect(currentValue.innerText).to.equal('$0.5MM');
+  });
+
+  it('can hide the goal', async () => {
+    const el: DonationBannerThermometer = await fixture(html`
+      <donation-banner-thermometer
+        .goalMessageMode=${'off'}
+        .goalAmount=${1_000}
+        .currentAmount=${1_200}
+      >
+      </donation-banner-thermometer>
+    `);
+
+    const goalMessage = el.shadowRoot?.querySelector('.donate-goal');
+    expect(goalMessage).to.be.null;
+  });
+
+  it('can hide the current amount', async () => {
+    const el: DonationBannerThermometer = await fixture(html`
+      <donation-banner-thermometer
+        .currentAmountMode=${'off'}
+        .goalAmount=${1_000}
+        .currentAmount=${1_200}
+      >
+      </donation-banner-thermometer>
+    `);
+
+    const currentValue = el.shadowRoot?.querySelector('.thermometer-value');
+    expect(currentValue).to.be.null;
   });
 
   it('can display goal met message', async () => {
