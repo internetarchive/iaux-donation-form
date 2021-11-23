@@ -3,6 +3,7 @@ import { customElement, query, state } from 'lit/decorators.js';
 
 import '../src/banner-thermometer';
 import {
+  CurrentAmountMode,
   DonationBannerThermometer,
   GoalMessageMode,
 } from '../src/banner-thermometer';
@@ -68,11 +69,53 @@ export class AppRoot extends LitElement {
             />
           </dd>
 
+          <dt><label>Current Amount Mode</label></dt>
+          <dd>
+            <input
+              type="radio"
+              name="currentAmountModeRadio"
+              value="on"
+              @click=${this.changeCurrentAmountMode}
+              checked
+            />
+            On
+            <input
+              type="radio"
+              name="currentAmountModeRadio"
+              value="off"
+              @click=${this.changeCurrentAmountMode}
+            />
+            Off
+          </dd>
+
+          <dt><label>Goal Mode</label></dt>
+          <dd>
+            <input
+              type="radio"
+              name="goalModeRadio"
+              value="off"
+              @click=${this.changeGoalMode}
+            />
+            Off
+            <input
+              type="radio"
+              name="goalModeRadio"
+              value="amount"
+              @click=${this.changeGoalMode}
+              checked
+            />
+            Amount
+            <input
+              type="radio"
+              name="goalModeRadio"
+              value="message"
+              @click=${this.changeGoalMode}
+            />
+            Message
+          </dd>
+
           <dt><label for="goalMet">Goal Message</label></dt>
           <dd>
-            <div>
-              <input type="checkbox" id="goalMet" @input=${this.goalMet} />
-            </div>
             <div>
               <label>Goal Met Message:</label>
               <input
@@ -148,13 +191,18 @@ export class AppRoot extends LitElement {
     this.thermometerHeightValue.innerHTML = `${Math.round(numberValue)}px`;
   }
 
-  goalMet(e: Event): void {
+  changeGoalMode(e: Event): void {
     if (!e.target) return;
     const target = e.target as HTMLInputElement;
-    const mode = target.checked
-      ? GoalMessageMode.ShowGoalMessage
-      : GoalMessageMode.ShowGoalAmount;
+    const mode = target.value as GoalMessageMode;
     this.thermometer.goalMessageMode = mode;
+  }
+
+  changeCurrentAmountMode(e: Event): void {
+    if (!e.target) return;
+    const target = e.target as HTMLInputElement;
+    const mode = target.value as CurrentAmountMode;
+    this.thermometer.currentAmountMode = mode;
   }
 
   setGoal(e: Event): void {

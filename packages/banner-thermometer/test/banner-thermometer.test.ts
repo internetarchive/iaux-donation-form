@@ -38,7 +38,7 @@ describe('DonationBannerThermometer', () => {
     const el: DonationBannerThermometer = await fixture(html`
       <donation-banner-thermometer
         .goalReachedMessage=${'GOAL MET'}
-        .goalMessageMode=${GoalMessageMode.ShowGoalMessage}
+        .goalMessageMode=${'message'}
         .goalAmount=${1_000}
         .currentAmount=${1_200}
       >
@@ -55,7 +55,7 @@ describe('DonationBannerThermometer', () => {
     const el: DonationBannerThermometer = await fixture(html`
       <donation-banner-thermometer
         .goalNearMessage=${'GOAL NEAR'}
-        .goalMessageMode=${GoalMessageMode.ShowGoalMessage}
+        .goalMessageMode=${'message'}
         .goalAmount=${1_000}
         .currentAmount=${800}
       >
