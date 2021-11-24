@@ -1,9 +1,6 @@
 import { html, fixture, expect } from '@open-wc/testing';
 
-import {
-  DonationBannerThermometer,
-  GoalMessageMode,
-} from '../src/banner-thermometer';
+import { DonationBannerThermometer } from '../src/banner-thermometer';
 import '../src/banner-thermometer';
 
 import { MockSharedResizeObserver } from '@internetarchive/shared-resize-observer/dist/test/mock-shared-resize-observer';
@@ -99,6 +96,21 @@ describe('DonationBannerThermometer', () => {
       '.donate-goal'
     ) as HTMLDivElement;
     expect(goalMessage.innerText).to.equal('GOAL NEAR');
+  });
+
+  it('rounds the display value properly', async () => {
+    const el: DonationBannerThermometer = await fixture(html`
+      <donation-banner-thermometer
+        .goalAmount=${50_000_000}
+        .currentAmount=${35_000_000}
+      >
+      </donation-banner-thermometer>
+    `);
+
+    const currentAmountMessage = el.shadowRoot?.querySelector(
+      '.thermometer-value'
+    ) as HTMLDivElement;
+    expect(currentAmountMessage.innerText).to.equal('$35MM');
   });
 
   it('shows the current value on the right if the fill is too skinny', async () => {

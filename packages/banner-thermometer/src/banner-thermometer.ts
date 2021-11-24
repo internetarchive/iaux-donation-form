@@ -201,6 +201,9 @@ export class DonationBannerThermometer
         return `${this.goalAmountDisplayValue} goal`;
       case 'message':
         return this.goalMessage;
+      // the `off` case will never be reached since it's off, but here for completeness
+      // so ignoring test coverage
+      /* istanbul ignore next */
       case 'off':
         return '';
     }
