@@ -13,17 +13,15 @@ import type {
   SharedResizeObserverInterface,
 } from '@internetarchive/shared-resize-observer';
 
-export enum GoalMessageMode {
-  ShowGoalAmount = 'showgoalamount',
-  ShowGoalMessage = 'showgoalmessage',
-}
+export type GoalMessageMode = 'off' | 'amount' | 'message';
+
+export type CurrentAmountMode = 'on' | 'off';
 
 @customElement('donation-banner-thermometer')
 export class DonationBannerThermometer
   extends LitElement
   implements SharedResizeObserverResizeHandlerInterface {
-  @property({ type: String }) goalMessageMode: GoalMessageMode =
-    GoalMessageMode.ShowGoalAmount;
+  @property({ type: String }) goalMessageMode: GoalMessageMode = 'amount';
 
   @property({ type: String }) goalNearMessage =
     'We’ve almost reached our goal!';
@@ -31,6 +29,8 @@ export class DonationBannerThermometer
   @property({ type: String }) goalReachedMessage = "We've reached our goal!";
 
   @property({ type: Number }) goalAmount = 7_500_000;
+
+  @property({ type: String }) currentAmountMode: CurrentAmountMode = 'on';
 
   @property({ type: Number }) currentAmount = 0;
 
@@ -72,16 +72,20 @@ export class DonationBannerThermometer
                 : nothing}
             </div>
           </div>
-          <div class="donate-goal">${this.currentGoalMessage}</div>
+          ${this.goalMessageMode !== 'off'
+            ? html` <div class="donate-goal">${this.currentGoalMessage}</div> `
+            : nothing}
         </div>
       </div>
     `;
   }
 
   private get thermometerValueTemplate(): TemplateResult {
-    return html`
-      <div class="thermometer-value">${this.currentAmountDisplayValue}</div>
-    `;
+    return this.currentAmountMode === 'off'
+      ? html`${nothing}`
+      : html`
+          <div class="thermometer-value">${this.currentAmountDisplayValue}</div>
+        `;
   }
 
   /**
@@ -193,10 +197,15 @@ export class DonationBannerThermometer
 
   private get currentGoalMessage(): string {
     switch (this.goalMessageMode) {
-      case GoalMessageMode.ShowGoalAmount:
+      case 'amount':
         return `${this.goalAmountDisplayValue} goal`;
-      case GoalMessageMode.ShowGoalMessage:
+      case 'message':
         return this.goalMessage;
+      // the `off` case will never be reached since it's off, but here for completeness
+      // so ignoring test coverage
+      /* istanbul ignore next */
+      case 'off':
+        return '';
     }
   }
 
