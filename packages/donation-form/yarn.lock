@@ -856,7 +856,7 @@
 
 "@internetarchive/donation-form-edit-donation@^0.3.11":
   version "0.3.11"
-  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-edit-donation/-/donation-form-edit-donation-0.3.11.tgz#6a8fe9684a5108527bd6c483ece36e5834b13841"
+  resolved "https://registry.npmjs.org/@internetarchive/donation-form-edit-donation/-/donation-form-edit-donation-0.3.11.tgz"
   integrity sha512-0qjKs08QSGqgsY83Vaf7W7bHoJyXn4/z6xc/Cgz5Ak4dFz/5FEY8laj+rqlpWDlnqF7ehaeYdlsio8rnaNmPqA==
   dependencies:
     "@internetarchive/donation-form-currency-validator" "^0.3.0"
@@ -867,110 +867,112 @@
 
 "@internetarchive/donation-form-section@^0.3.3":
   version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-section/-/donation-form-section-0.3.3.tgz#b45a7ccb1964cd823fa2ed28044b85841ab73b43"
+  resolved "https://registry.npmjs.org/@internetarchive/donation-form-section/-/donation-form-section-0.3.3.tgz"
   integrity sha512-8LiIYt8GNgRWIdcSALoK9ITPq4Iz5mT5b22g8ceIjOs4RBDExy1FYLr7x1XBI2uL/oQzVleJZQ9NrVDa0F079g==
   dependencies:
     lit "^2.0.2"
 
 "@internetarchive/ia-activity-indicator@^0.0.2":
   version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/ia-activity-indicator/-/ia-activity-indicator-0.0.2.tgz#6e02670d52a9f1b673f322252b6e649453ea2ef0"
+  resolved "https://registry.npmjs.org/@internetarchive/ia-activity-indicator/-/ia-activity-indicator-0.0.2.tgz"
   integrity sha512-PHSTn8LJyozrVcMj6eMQKqBJD+029YhxffbW+oLKGAfmS5tAkpl2LfHlFcLCozT5e9e+KECCq2m2UeUyPYPjcw==
   dependencies:
     lit "^2.0.2"
 
 "@internetarchive/icon-applepay@^1.3.2":
   version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-applepay/-/icon-applepay-1.3.2.tgz#757dd7513e4f624265869d091affa81f9084f3d7"
+  resolved "https://registry.npmjs.org/@internetarchive/icon-applepay/-/icon-applepay-1.3.2.tgz"
   integrity sha512-LNVEfjP+UuZMUGDtskPejsaCxhqhUv8+0hemAoFh5R8qW9S22gTADwWgf0DasoxEH3NFNHx7kDvxRjTTBeCAfg==
   dependencies:
     lit "^2.0.2"
 
 "@internetarchive/icon-calendar@^1.3.2":
   version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-calendar/-/icon-calendar-1.3.2.tgz#34bf9773f191b8173ac3e8cdddd4e92e9ffd7a26"
+  resolved "https://registry.npmjs.org/@internetarchive/icon-calendar/-/icon-calendar-1.3.2.tgz"
   integrity sha512-RT+uNtT2662XnuuLnTo5mlAWXRQkYu3fXQK+BPNyhIi52QWhvD11Ukts1eXJIaydgOfDjOEZm8mmWHw/4//IAw==
   dependencies:
     lit "^2.0.2"
 
 "@internetarchive/icon-close@^1.3.2":
   version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-close/-/icon-close-1.3.2.tgz#391b025241fe4c065263414870d21034823aebdf"
+  resolved "https://registry.npmjs.org/@internetarchive/icon-close/-/icon-close-1.3.2.tgz"
   integrity sha512-4QhM/MDC1IsWQZoE3lt7A4l3/VOopJta+xVnDLqsbA3OW2sT+ilm/mUiP4l4Lm/NzdbQQwhnQMOZPcQvllxkzA==
   dependencies:
     lit "^2.0.2"
 
 "@internetarchive/icon-credit-card@^1.3.2":
   version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-credit-card/-/icon-credit-card-1.3.2.tgz#4059446d93e58a78a4fda091ab17a637b95d022a"
+  resolved "https://registry.npmjs.org/@internetarchive/icon-credit-card/-/icon-credit-card-1.3.2.tgz"
   integrity sha512-/CLBvqmtWN1a13JtjDdSGt461ukZdrzb+Ch6Hkg4T4AnqTSbucl3+3C5sBmNhjIisJGzEI2nxNIQHIlIu+WoIg==
   dependencies:
     lit "^2.0.2"
 
 "@internetarchive/icon-email@^1.3.2":
   version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-email/-/icon-email-1.3.2.tgz#2def001ef1eb30cc2825125859247079891295fe"
+  resolved "https://registry.npmjs.org/@internetarchive/icon-email/-/icon-email-1.3.2.tgz"
   integrity sha512-VzJ1Qsoal19+rZqEcwbsSzhFpV1Fn51hw2Qiq4pa7KAU6QzDMzJVkcvCK7bBOxLoVe3HwaeSMzKEXxr5h+VBfw==
   dependencies:
     lit "^2.0.2"
 
 "@internetarchive/icon-googlepay@^1.3.2":
   version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-googlepay/-/icon-googlepay-1.3.2.tgz#e09ad1b5de4813db6a8c466a0e2ec49380832221"
+  resolved "https://registry.npmjs.org/@internetarchive/icon-googlepay/-/icon-googlepay-1.3.2.tgz"
   integrity sha512-lKEqkboTNIVNStpdkSaZUbA8MndC/c7+aACu5RAQjHo2i0IUwb5EzuUZkt86PMoXswJe+HtCHowFVkirFZ427w==
   dependencies:
     lit "^2.0.2"
 
 "@internetarchive/icon-ia-logo@^1.3.2":
   version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-ia-logo/-/icon-ia-logo-1.3.2.tgz#0ec0f5b537ea6b8c46ba6410e5d925d806141c03"
+  resolved "https://registry.npmjs.org/@internetarchive/icon-ia-logo/-/icon-ia-logo-1.3.2.tgz"
   integrity sha512-lDZdaqj7A6nv5dJPaes6UZwDqlr3yMgaKJZSuMTqMUpjaZ0bcfDIoDFO4y2YjQ2uUHoRIgRNqyZVMSNJMowXzQ==
   dependencies:
     lit "^2.0.2"
 
 "@internetarchive/icon-locale-pin@^1.3.2":
   version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-locale-pin/-/icon-locale-pin-1.3.2.tgz#19605789b43b8ae7b470d09a5ad677ea2d0a9abf"
+  resolved "https://registry.npmjs.org/@internetarchive/icon-locale-pin/-/icon-locale-pin-1.3.2.tgz"
   integrity sha512-wwsGwLMk5JMzEjgIvUwdZZo9Y8OKkvr0LuX3DVcaP/3t6XPTZngScst3NzcOav5+JHaAvKucRK8mI8tThSPZ9Q==
   dependencies:
     lit "^2.0.2"
 
 "@internetarchive/icon-lock@^1.3.2":
   version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-lock/-/icon-lock-1.3.2.tgz#a13e0b7304282d327c3ec43819edf4cb602628f2"
+  resolved "https://registry.npmjs.org/@internetarchive/icon-lock/-/icon-lock-1.3.2.tgz"
   integrity sha512-OwD0HC6SSIwN+oG0fmHM+desP7Pxw7X2bVoE55xHK4oA10l55DtMnbxzHb/HKVDltNvk9YaIV7/T+HgTa2heHA==
   dependencies:
     lit "^2.0.2"
 
 "@internetarchive/icon-paypal@^1.3.2":
   version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-paypal/-/icon-paypal-1.3.2.tgz#8adbea75e4fc8aad941ff89d6a6e51c97510a4bc"
+  resolved "https://registry.npmjs.org/@internetarchive/icon-paypal/-/icon-paypal-1.3.2.tgz"
   integrity sha512-X4IFJw/sSUjXV7OMqnftfkY1i22UvdgctUgf7/R4v7eJO4mhGQnwtH6DkBXzKbAt+FL9f1RhI1Wmz6WrxH19HQ==
   dependencies:
     lit "^2.0.2"
 
 "@internetarchive/icon-user@^1.3.2":
   version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-user/-/icon-user-1.3.2.tgz#727b9be48889c9abc089f16ff5cf0632c20d4fba"
+  resolved "https://registry.npmjs.org/@internetarchive/icon-user/-/icon-user-1.3.2.tgz"
   integrity sha512-A5fCby40AEWWbrSSgGzhcSVDfL9M+S/Zl1oPTid/+mBuZPik0KPS5xoMBkT/952/ujbnLLR9URemzfPdSeBx+Q==
   dependencies:
     lit "^2.0.2"
 
 "@internetarchive/icon-venmo@^1.3.2":
   version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/icon-venmo/-/icon-venmo-1.3.2.tgz#650ec290e3f46f070f720cd4f0b3d1e53655a482"
+  resolved "https://registry.npmjs.org/@internetarchive/icon-venmo/-/icon-venmo-1.3.2.tgz"
   integrity sha512-/gJ+/UpdBkqjo9L9zRL2BzUmHihcNCTyGybI8JShCPV0cW4NFIX9dr37cB70UuZpKdQZ5JsiJda0W8mPgO98aQ==
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/lazy-loader-service@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/@internetarchive/lazy-loader-service/-/lazy-loader-service-0.1.0.tgz"
-  integrity sha512-Pi/xpavo6o8QhY5m0l4rqJONeeXWfRdYjIzLJ7JDp10GonoR/szaNsSdksFcwUD0geHp0bjpFauiuxZM+WZyFg==
+"@internetarchive/lazy-loader-service@0.2.0-alpha.1":
+  version "0.2.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/lazy-loader-service/-/lazy-loader-service-0.2.0-alpha.1.tgz#609c369236ec7a01fff0686a388db3827d1111ce"
+  integrity sha512-MMD4yuqZg005YGXIlPBXwUdoKSZj4hnKeLIjGbF/3P2NYXxskHmpJF+4GUMcIXy1lRLnxDhH5u4pI3UiRPh+bg==
+  dependencies:
+    nanoevents "^6.0.2"
 
 "@internetarchive/modal-manager@^0.2.1":
   version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/modal-manager/-/modal-manager-0.2.1.tgz#ed006083db9f841b8a0912e627e5803d16a008c3"
+  resolved "https://registry.npmjs.org/@internetarchive/modal-manager/-/modal-manager-0.2.1.tgz"
   integrity sha512-ULac71ZxwWNzsy9mY0R19CeaJsAIW6fvqgRQdbjMG3u2trH6XH+GTJLhxVl1QKTQQwIkaowxiGPS+GTRz+eaGA==
   dependencies:
     "@internetarchive/ia-activity-indicator" "^0.0.2"
@@ -3794,9 +3796,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001033, caniuse-lite@^1.0.30001280:
-  version "1.0.30001280"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001280.tgz#066a506046ba4be34cde5f74a08db7a396718fb7"
-  integrity sha512-kFXwYvHe5rix25uwueBxC569o53J6TpnGu0BEEn+6Lhl2vsnAumRFWEBhDft1fwyo6m1r4i+RqA4+163FpeFcA==
+  version "1.0.30001283"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001283.tgz#8573685bdae4d733ef18f78d44ba0ca5fe9e896b"
+  integrity sha512-9RoKo841j1GQFSJz/nCXOj0sD7tHBtlowjYlrqIUS812x9/emfBLBt6IyMz1zIaYc/eRL8Cs6HPUVi2Hzq4sIg==
 
 capture-stack-trace@^1.0.0:
   version "1.0.1"
@@ -4186,9 +4188,9 @@ color-name@^1.0.0, color-name@~1.1.4:
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
 
 color-string@^1.5.2:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/color-string/-/color-string-1.6.0.tgz#c3915f61fe267672cb7e1e064c9d692219f6c312"
-  integrity sha512-c/hGS+kRWJutUBEngKKmk4iH3sD59MBkoxVapS/0wgpCz2u7XsNloxknyvBhzwEs1IbV36D9PwqLPJ2DTu3vMA==
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/color-string/-/color-string-1.8.2.tgz#08bd49fa5f3889c27b0c670052ed746dd7a671de"
+  integrity sha512-w5ZkKRdLsc5NOYsmnpS2DpyRW71npwZGwbRpLrJTuqjfTs2Bhrba7UiV59IX9siBlCPl2pne5NtiwnVWUzvYFA==
   dependencies:
     color-name "^1.0.0"
     simple-swizzle "^0.2.2"
@@ -5244,9 +5246,9 @@ ejs@^3.1.5:
     jake "^10.6.1"
 
 electron-to-chromium@^1.3.896:
-  version "1.3.897"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.897.tgz#16ddf5943eeec6ae08704b015ecd26b143b03947"
-  integrity sha512-nRNZhAZ7hVCe75jrCUG7xLOqHMwloJMj6GEXEzY4OMahRGgwerAo+ls/qbqUwFH+E20eaSncKkQ4W8KP5SOiAg==
+  version "1.4.7"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.7.tgz#58e0b4ec9096ee1422e4d9e83ceeb05b0cf076eb"
+  integrity sha512-UPy2MsQw1OdcbxR7fvwWZH/rXcv+V26+uvQVHx0fGa1kqRfydtfOw+NMGAvZJ63hyaH4aEBxbhSEtqbpliSNWA==
 
 elegant-spinner@^1.0.1:
   version "1.0.1"
@@ -5572,7 +5574,7 @@ es6-weak-map@^2.0.1:
 
 escalade@^3.1.1:
   version "3.1.1"
-  resolved "https://registry.yarnpkg.com/escalade/-/escalade-3.1.1.tgz#d8cfdc7000965c5a0174b4a82eaa5c0552742e40"
+  resolved "https://registry.npmjs.org/escalade/-/escalade-3.1.1.tgz"
   integrity sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==
 
 escape-html@^1.0.3, escape-html@~1.0.3:
@@ -7651,7 +7653,7 @@ is-arrayish@^0.2.1:
 
 is-arrayish@^0.3.1:
   version "0.3.2"
-  resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.3.2.tgz#4574a2ae56f7ab206896fb431eaeed066fdf8f03"
+  resolved "https://registry.npmjs.org/is-arrayish/-/is-arrayish-0.3.2.tgz"
   integrity sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==
 
 is-binary-path@^1.0.0:
@@ -8587,7 +8589,7 @@ keyv@^4.0.0:
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
-  resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-3.2.2.tgz#31ea21a734bab9bbb0f32466d893aea51e4a3c64"
+  resolved "https://registry.npmjs.org/kind-of/-/kind-of-3.2.2.tgz"
   integrity sha1-MeohpzS6ubuw8yRm2JOupR5KPGQ=
   dependencies:
     is-buffer "^1.1.5"
@@ -9777,6 +9779,11 @@ nanoevents@^5.1.8:
   version "5.1.10"
   resolved "https://registry.npmjs.org/nanoevents/-/nanoevents-5.1.10.tgz"
   integrity sha512-QOE78g63vQ7V1JzhOLP8UNlaLOF/llDtfUhCj9GlbhQQc0YdPi5GNJKZdeWE0fvDtGF39un6uSf7RObeBm0eAg==
+
+nanoevents@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.npmjs.org/nanoevents/-/nanoevents-6.0.2.tgz"
+  integrity sha512-FRS2otuFcPPYDPYViNWQ42+1iZqbXydinkRHTHFxrF4a1CpBfmydR9zkI44WSXAXCyPrkcGtPk5CnpW6Y3lFKQ==
 
 nanoid@^3.1.23:
   version "3.1.23"
@@ -12191,7 +12198,7 @@ simple-git@^1.85.0:
 
 simple-swizzle@^0.2.2:
   version "0.2.2"
-  resolved "https://registry.yarnpkg.com/simple-swizzle/-/simple-swizzle-0.2.2.tgz#a4da6b635ffcccca33f70d17cb92592de95e557a"
+  resolved "https://registry.npmjs.org/simple-swizzle/-/simple-swizzle-0.2.2.tgz"
   integrity sha1-pNprY1/8zMoz9w0Xy5JZLeleVXo=
   dependencies:
     is-arrayish "^0.3.1"
@@ -13205,7 +13212,7 @@ to-fast-properties@^2.0.0:
 
 to-object-path@^0.3.0:
   version "0.3.0"
-  resolved "https://registry.yarnpkg.com/to-object-path/-/to-object-path-0.3.0.tgz#297588b7b0e7e0ac08e04e672f85c1f4999e17af"
+  resolved "https://registry.npmjs.org/to-object-path/-/to-object-path-0.3.0.tgz"
   integrity sha1-KXWIt7Dn4KwI4E5nL4XB9JmeF68=
   dependencies:
     kind-of "^3.0.2"
