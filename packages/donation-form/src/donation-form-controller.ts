@@ -156,7 +156,10 @@ export class DonationFormController extends LitElement {
       this.setupPaymentFlowHandlers();
     }
 
-    if (changedProperties.has('environment') && this.environment && !this.paymentClients) {
+    if (
+      (changedProperties.has('environment') || changedProperties.has('lazyLoaderService')) &&
+      this.environment
+    ) {
       this.paymentClients = new PaymentClients(this.lazyLoaderService, this.environment);
     }
   }

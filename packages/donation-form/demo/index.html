@@ -65,9 +65,22 @@
     import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-form-data-models';
     import { BraintreeEndpointManager } from '../dist/demo/braintree-endpoint-manager.js';
     import { DemoAnalyticsHandler } from '../dist/demo/demo-analytics-handler.js';
+    import { LazyLoaderService } from '@internetarchive/lazy-loader-service';
 
     const braintreeEndpointManager = new BraintreeEndpointManager();
     const analyticsHandler = new DemoAnalyticsHandler();
+    const lazyLoader = new LazyLoaderService();
+
+    lazyLoader.on(
+      'scriptLoadRetried',
+      async (src, retryCount) => {
+        console.debug('scriptLoadRetried', src, retryCount);
+      },
+    );
+
+    lazyLoader.on('scriptLoadFailed', async (src) => {
+      console.debug('scriptLoadFailed', src);
+    });
 
     document.querySelector('#show-regular-upsell-button').addEventListener('click', () => {
       const formController = document.querySelector('donation-form-controller');
@@ -115,6 +128,7 @@
           venmoProfileId='1953896702662410263'
           googlePayMerchantId=''
           .endpointManager=${braintreeEndpointManager}
+          .lazyLoaderService=${lazyLoader}
           referrer='demo-app'
           ?showCreditCardButtonText=${true}
           loggedInUser='demo-user'>
