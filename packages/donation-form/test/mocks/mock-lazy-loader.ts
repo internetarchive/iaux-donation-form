@@ -31,17 +31,4 @@ export class MockLazyLoader implements LazyLoaderServiceInterface {
   }): Promise<void> {
     return;
   }
-  // async loadBundle(bundle: {
-  //   module?: string | undefined;
-  //   nomodule?: string | undefined;
-  // }): Promise<Event | undefined> {
-  //   return new Event('done');
-  // }
-  // async loadScript(options: {
-  //   src: string;
-  //   bundleType?: BundleType | undefined;
-  //   attributes?: { key: string; value: any }[] | undefined;
-  // }): Promise<Event> {
-  //   return new Event('done');
-  // }
 }
