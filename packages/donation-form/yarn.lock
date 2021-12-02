@@ -963,10 +963,10 @@
   dependencies:
     lit "^2.0.2"
 
-"@internetarchive/lazy-loader-service@0.2.0-alpha.2":
-  version "0.2.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/lazy-loader-service/-/lazy-loader-service-0.2.0-alpha.2.tgz#881aa2717aaf4407d31413cd550b4f3f47a795fa"
-  integrity sha512-sCSdAOR8WVB3m+m2UKUQIgXny85H31ndTMETGgxYHrjxEKhXI7gKr1zE4ek8chkZnwQKmBlIBqhFxeBq8vaVew==
+"@internetarchive/lazy-loader-service@0.2.0-alpha.3":
+  version "0.2.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@internetarchive/lazy-loader-service/-/lazy-loader-service-0.2.0-alpha.3.tgz#d229a7467ad2898207f9db2b42efae46b607d7de"
+  integrity sha512-aI+EAyI9cJXrtY4DEqdFcH/1eEv3OS3EJLLsTkqEckbiIInS1NsgpLRweDJ81wMjFneUwmzYzZtBblpgNxv0dg==
   dependencies:
     nanoevents "^6.0.2"
 

@@ -73,8 +73,8 @@
 
     lazyLoader.on(
       'scriptLoadRetried',
-      async (src, retryCount) => {
-        console.debug('scriptLoadRetried', src, retryCount);
+      async (src, retryNumber) => {
+        console.debug('scriptLoadRetried', src, retryNumber);
       },
     );
 
