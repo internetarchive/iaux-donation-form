@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/donation-form",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "The Internet Archive Donation Form",
   "license": "AGPL-3.0-only",
   "main": "dist/index.js",
@@ -42,7 +42,7 @@
     "@internetarchive/icon-paypal": "^1.3.2",
     "@internetarchive/icon-user": "^1.3.2",
     "@internetarchive/icon-venmo": "^1.3.2",
-    "@internetarchive/lazy-loader-service": "^0.1.0",
+    "@internetarchive/lazy-loader-service": "^0.2.0",
     "@internetarchive/modal-manager": "^0.2.1",
     "@internetarchive/promised-singleton": "^0.2.1",
     "currency.js": "^2.0.2",

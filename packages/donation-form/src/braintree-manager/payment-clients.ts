@@ -118,10 +118,10 @@ export class PaymentClients implements PaymentClientsInterface {
     generator: async (): Promise<any> => {
       await this.lazyLoader.loadScript({
         src: 'https://www.paypalobjects.com/api/checkout.js',
-        attributes: [
-          { key: 'data-version-4', value: '' },
-          { key: 'log-level', value: 'warn' },
-        ],
+        attributes: {
+          'data-version-4': '',
+          'log-level': 'warn',
+        },
       });
       return window.paypal;
     },
@@ -133,11 +133,11 @@ export class PaymentClients implements PaymentClientsInterface {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private async loadBraintreeScript(scriptName: string): Promise<any> {
+  private async loadBraintreeScript(scriptName: string): Promise<void> {
     const extension = this.environment === HostingEnvironment.Production ? 'min.js' : 'js';
     const scriptWithSuffix = `${scriptName}.${extension}`;
     const url = `https://js.braintreegateway.com/web/${this.braintreeVersion}/js/${scriptWithSuffix}`;
-    return this.lazyLoader.loadScript({ src: url });
+    await this.lazyLoader.loadScript({ src: url });
   }
 
   private braintreeVersion = '3.62.2';
