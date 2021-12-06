@@ -10,6 +10,10 @@ export class MockHostedFieldContainer implements HostedFieldContainerInterface {
   showErrorMessageCalled = false;
   hideErrorMessageCalled = false;
 
+  resetIframes(): void {
+    // noop
+  }
+
   fieldFor(field: HostedFieldName): HTMLInputElement {
     const input = document.createElement('input') as HTMLInputElement;
     return input;

@@ -5,13 +5,20 @@ import { mockHostedFieldTokenizePayload } from '../../mocks/payment-clients/mock
 import { CreditCardHandler } from '../../../src/braintree-manager/payment-providers/credit-card/credit-card';
 import { MockHostedFieldContainer } from '../../mocks/mock-hosted-fields-container';
 import { HostedFieldConfiguration } from '../../../src/braintree-manager/payment-providers/credit-card/hosted-field-configuration';
+import Sinon from 'sinon';
 import {
   mockHostedFieldStyle,
   mockHostedFieldFieldOptions,
   mockHostedFieldConfig,
 } from '../../mocks/mock-hosted-fields-config';
 
+const sandbox = Sinon.createSandbox();
+
 describe('CreditCardHandler', () => {
+  afterEach(() => {
+    sandbox.restore();
+  });
+
   it('can tokenize the hosted fields', async () => {
     const braintreeManager = new MockBraintreeManager();
     const client = new MockHostedFieldsClient({
@@ -99,5 +106,73 @@ describe('CreditCardHandler', () => {
     });
     handler.hideErrorMessage();
     expect(mockHostedFieldContainer.hideErrorMessageCalled).to.be.true;
+  });
+
+  it('retries the expected number of times before failure', async () => {
+    const braintreeManager = new MockBraintreeManager();
+    const client = new MockHostedFieldsClient();
+
+    let retryCount = 0;
+    Sinon.stub(client, 'create').callsFake(() => {
+      retryCount++;
+      throw new Error('Error');
+    });
+
+    const mockHostedFieldContainer = new MockHostedFieldContainer();
+    const hostedFieldsSpy = Sinon.spy(mockHostedFieldContainer, 'resetIframes');
+
+    const mockHostedFieldConfig: HostedFieldConfiguration = new HostedFieldConfiguration({
+      hostedFieldStyle: mockHostedFieldStyle,
+      hostedFieldFieldOptions: mockHostedFieldFieldOptions,
+      hostedFieldContainer: mockHostedFieldContainer,
+    });
+    const handler = new CreditCardHandler({
+      braintreeManager: braintreeManager,
+      hostedFieldClient: client,
+      hostedFieldConfig: mockHostedFieldConfig,
+      retryInverval: 0.1,
+      maxRetryCount: 3,
+    });
+
+    try {
+      await handler.instance.get();
+      expect.fail('Should have thrown an error');
+    } catch (e) {}
+
+    // initial call + 3 retries
+    expect(retryCount).to.equal(4);
+    expect(hostedFieldsSpy.callCount).to.equal(4);
+  });
+
+  it('retries creating the hosted fields if they fail', async () => {
+    const braintreeManager = new MockBraintreeManager();
+    const client = new MockHostedFieldsClient();
+
+    let retryCount = 0;
+    Sinon.stub(client, 'create').callsFake(() => {
+      if (retryCount < 2) {
+        retryCount++;
+        throw new Error('Error');
+      }
+      return Promise.resolve(client);
+    });
+
+    const mockHostedFieldContainer = new MockHostedFieldContainer();
+    const mockHostedFieldConfig: HostedFieldConfiguration = new HostedFieldConfiguration({
+      hostedFieldStyle: mockHostedFieldStyle,
+      hostedFieldFieldOptions: mockHostedFieldFieldOptions,
+      hostedFieldContainer: mockHostedFieldContainer,
+    });
+    const handler = new CreditCardHandler({
+      braintreeManager: braintreeManager,
+      hostedFieldClient: client,
+      hostedFieldConfig: mockHostedFieldConfig,
+      retryInverval: 0.1,
+      maxRetryCount: 3,
+    });
+
+    const instance = await handler.instance.get();
+    expect(instance).to.not.be.null;
+    expect(retryCount).to.equal(2);
   });
 });
