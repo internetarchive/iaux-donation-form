@@ -12,6 +12,7 @@ export interface HostedFieldContainerInterface {
   removeFieldErrors(fields: HostedFieldName[]): void;
   showErrorMessage(message?: string): void;
   hideErrorMessage(): void;
+  resetIframes(): void;
 }
 
 export class HostedFieldContainer implements HostedFieldContainerInterface {
@@ -56,6 +57,13 @@ export class HostedFieldContainer implements HostedFieldContainerInterface {
 
   hideErrorMessage(): void {
     this.errorContainer.style.display = 'none';
+  }
+
+  resetIframes(): void {
+    const elements = [this.number, this.cvv, this.expirationDate];
+    elements.forEach(element => {
+      element.querySelector('iframe[name^="braintree-"]')?.remove();
+    });
   }
 
   constructor(options: {

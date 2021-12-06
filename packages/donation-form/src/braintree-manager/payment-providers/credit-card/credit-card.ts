@@ -5,7 +5,13 @@ import { HostedFieldName } from './hosted-field-container';
 import { CreditCardHandlerInterface } from './credit-card-interface';
 
 export class CreditCardHandler implements CreditCardHandlerInterface {
-  instance: PromisedSingleton<braintree.HostedFields | undefined>;
+  instance = new PromisedSingleton<braintree.HostedFields | undefined>({
+    generator: async (): Promise<braintree.HostedFields | undefined> => {
+      const braintreeClient = await this.braintreeManager.instance.get();
+      const hostedFields = await this.createHostedFields(braintreeClient);
+      return hostedFields;
+    },
+  });
 
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;
@@ -15,22 +21,29 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
     this.braintreeManager = options.braintreeManager;
     this.hostedFieldClient = options.hostedFieldClient;
     this.hostedFieldConfig = options.hostedFieldConfig;
-
-    this.instance = new PromisedSingleton<braintree.HostedFields | undefined>({
-      generator: async (): Promise<braintree.HostedFields | undefined> => {
-        const braintreeClient = await this.braintreeManager.instance.get();
-        return this.hostedFieldClient.create({
-          client: braintreeClient,
-          styles: this.hostedFieldConfig.hostedFieldStyle,
-          fields: this.hostedFieldConfig.hostedFieldFieldOptions,
-        });
-      },
-    });
   }
 
   private braintreeManager: BraintreeManagerInterface;
   private hostedFieldClient: braintree.HostedFields;
   private hostedFieldConfig: HostedFieldConfiguration;
+
+  private maxRetryCount = 2;
+  private async createHostedFields(
+    braintreeClient: braintree.Client,
+    retryCount = 0
+  ): Promise<braintree.HostedFields | undefined> {
+    this.hostedFieldConfig.hostedFieldContainer.resetIframes();
+    try {
+      return this.hostedFieldClient.create({
+        client: braintreeClient,
+        styles: this.hostedFieldConfig.hostedFieldStyle,
+        fields: this.hostedFieldConfig.hostedFieldFieldOptions,
+      });
+    } catch (error) {
+      if (retryCount > this.maxRetryCount) throw error;
+      return this.createHostedFields(braintreeClient, retryCount + 1);
+    }
+  }
 
   async tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload | undefined> {
     const hostedFields = await this.instance.get();
