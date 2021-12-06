@@ -7,7 +7,7 @@ export enum HostedFieldName {
 }
 
 export interface HostedFieldContainerInterface {
-  fieldFor(field: HostedFieldName): HTMLInputElement;
+  fieldFor(field: HostedFieldName): HTMLDivElement;
   markFieldErrors(fields: HostedFieldName[]): void;
   removeFieldErrors(fields: HostedFieldName[]): void;
   showErrorMessage(message?: string): void;
@@ -15,15 +15,15 @@ export interface HostedFieldContainerInterface {
 }
 
 export class HostedFieldContainer implements HostedFieldContainerInterface {
-  private number: HTMLInputElement;
+  private number: HTMLDivElement;
 
-  private cvv: HTMLInputElement;
+  private cvv: HTMLDivElement;
 
-  private expirationDate: HTMLInputElement;
+  private expirationDate: HTMLDivElement;
 
   private errorContainer: HTMLDivElement;
 
-  fieldFor(field: HostedFieldName): HTMLInputElement {
+  fieldFor(field: HostedFieldName): HTMLDivElement {
     switch (field) {
       case HostedFieldName.Number:
         return this.number;
@@ -59,9 +59,9 @@ export class HostedFieldContainer implements HostedFieldContainerInterface {
   }
 
   constructor(options: {
-    number: HTMLInputElement;
-    cvv: HTMLInputElement;
-    expirationDate: HTMLInputElement;
+    number: HTMLDivElement;
+    cvv: HTMLDivElement;
+    expirationDate: HTMLDivElement;
     errorContainer: HTMLDivElement;
   }) {
     this.number = options.number;

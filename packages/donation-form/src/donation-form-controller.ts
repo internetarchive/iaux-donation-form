@@ -109,11 +109,11 @@ export class DonationFormController extends LitElement {
 
   @query('donation-form') private donationForm!: DonationForm;
 
-  @query('#braintree-creditcard') private braintreeNumberInput!: HTMLInputElement;
+  @query('#braintree-creditcard') private braintreeNumberInput!: HTMLDivElement;
 
-  @query('#braintree-cvv') private braintreeCVVInput!: HTMLInputElement;
+  @query('#braintree-cvv') private braintreeCVVInput!: HTMLDivElement;
 
-  @query('#braintree-expiration') private braintreeExpirationDateInput!: HTMLInputElement;
+  @query('#braintree-expiration') private braintreeExpirationDateInput!: HTMLDivElement;
 
   @query('#braintree-error-message') private braintreeErrorMessage!: HTMLDivElement;
 
