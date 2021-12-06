@@ -62,7 +62,9 @@ export class HostedFieldContainer implements HostedFieldContainerInterface {
   resetIframes(): void {
     const elements = [this.number, this.cvv, this.expirationDate];
     elements.forEach(element => {
-      element.querySelector('iframe[name^="braintree-"]')?.remove();
+      while (element.firstChild) {
+        element.firstChild.remove();
+      }
     });
   }
 
