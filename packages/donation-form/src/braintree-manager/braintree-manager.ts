@@ -21,7 +21,7 @@ import {
 import { HostedFieldConfiguration } from './payment-providers/credit-card/hosted-field-configuration';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { PaymentProvidersInterface } from './payment-providers-interface';
-import { createNanoEvents, Emitter, Unsubscribe } from 'nanoevents';
+import { createNanoEvents, Unsubscribe } from 'nanoevents';
 
 /** @inheritdoc */
 export class BraintreeManager implements BraintreeManagerInterface {

@@ -15,7 +15,7 @@ import { CreditCardHandlerInterface } from './payment-providers/credit-card/cred
 import { VenmoHandlerInterface } from './payment-providers/venmo-interface';
 import { PayPalHandlerInterface } from './payment-providers/paypal/paypal-interface';
 import { GooglePayHandlerInterface } from './payment-providers/google-pay-interface';
-import { createNanoEvents, Emitter, Unsubscribe } from 'nanoevents';
+import { createNanoEvents, Unsubscribe } from 'nanoevents';
 
 /**
  * The PaymentProviders class contains the IA-specific handlers for each of the
