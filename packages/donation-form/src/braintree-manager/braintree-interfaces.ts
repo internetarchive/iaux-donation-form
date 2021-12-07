@@ -8,7 +8,11 @@ import {
   BillingInfo,
 } from '@internetarchive/donation-form-data-models';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
-import { PaymentProvidersInterface } from './payment-providers-interface';
+import { Unsubscribe } from 'nanoevents';
+import { PaymentProvidersEvents, PaymentProvidersInterface } from './payment-providers-interface';
+
+// this will bubble up child events
+export type BraintreeManagerEvents = PaymentProvidersEvents;
 
 /**
  * The BraintreeManager is the main entrypoint for much of the common braintree functionality.
@@ -19,6 +23,11 @@ import { PaymentProvidersInterface } from './payment-providers-interface';
  * @interface BraintreeManagerInterface
  */
 export interface BraintreeManagerInterface {
+  on<E extends keyof BraintreeManagerEvents>(
+    event: E,
+    callback: BraintreeManagerEvents[E],
+  ): Unsubscribe;
+
   /**
    * The PaymentProviders class contains the IA-specific handlers for each of the
    * different payment providers.

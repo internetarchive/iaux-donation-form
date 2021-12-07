@@ -16,6 +16,8 @@ import { MockPaymentProviders } from './payment-providers/mock-payment-providers
 import { mockSuccessResponse } from './models/mock-success-response';
 import { MockBraintreeClient } from './payment-clients/mock-braintree-client';
 import { PaymentProvidersInterface } from '../../src/braintree-manager/payment-providers-interface';
+import { Unsubscribe } from 'nanoevents';
+import { CreditCardHandlerEvents } from '../../src/braintree-manager/payment-providers/credit-card/credit-card-interface';
 
 export class MockBraintreeManager implements BraintreeManagerInterface {
   donationSuccessfulOptions?: {
@@ -34,7 +36,15 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
     this.submitDonationResponse = options?.submitDonationResponse ?? 'success';
   }
 
+  on<E extends keyof CreditCardHandlerEvents>(
+    event: E,
+    callback: CreditCardHandlerEvents[E],
+  ): Unsubscribe {
+    throw new Error('Method not implemented.');
+  }
+
   paymentProviders: PaymentProvidersInterface = new MockPaymentProviders();
+
   instance = new PromisedSingleton<braintree.Client>({
     generator: (): Promise<braintree.Client> =>
       new Promise(resolve => {

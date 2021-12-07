@@ -2,10 +2,18 @@ import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { BraintreeManagerInterface } from '../../braintree-interfaces';
 import { HostedFieldConfiguration } from './hosted-field-configuration';
 import { HostedFieldName } from './hosted-field-container';
-import { CreditCardHandlerInterface } from './credit-card-interface';
+import { CreditCardHandlerEvents, CreditCardHandlerInterface } from './credit-card-interface';
 import { promisedSleep } from '../../../util/promisedSleep';
+import { createNanoEvents, Emitter, Unsubscribe } from 'nanoevents';
 
 export class CreditCardHandler implements CreditCardHandlerInterface {
+  on<E extends keyof CreditCardHandlerEvents>(
+    event: E,
+    callback: CreditCardHandlerEvents[E],
+  ): Unsubscribe {
+    return this.emitter.on(event, callback);
+  }
+
   instance = new PromisedSingleton<braintree.HostedFields | undefined>({
     generator: async (): Promise<braintree.HostedFields | undefined> => {
       const braintreeClient = await this.braintreeManager.instance.get();
@@ -13,6 +21,8 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
       return hostedFields;
     },
   });
+
+  private emitter = createNanoEvents<CreditCardHandlerEvents>();
 
   private maxRetryCount: number;
 
@@ -51,9 +61,14 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
       });
       return hostedFields;
     } catch (error) {
-      if (retryCount >= this.maxRetryCount) throw error;
+      if (retryCount >= this.maxRetryCount) {
+        this.emitter.emit('hostedFieldsFailed', error);
+        throw error;
+      }
       await promisedSleep(this.retryInverval * 1000); // wait before retrying
-      return this.createHostedFields(braintreeClient, retryCount + 1);
+      const newRetryCount = retryCount + 1;
+      this.emitter.emit('hostedFieldsRetry', newRetryCount);
+      return this.createHostedFields(braintreeClient, newRetryCount);
     }
   }
 

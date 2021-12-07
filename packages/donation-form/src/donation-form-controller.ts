@@ -195,6 +195,20 @@ export class DonationFormController extends LitElement {
         loggedInUser: this.loggedInUser,
         origin: this.origin,
       });
+
+      this.braintreeManager.on('hostedFieldsRetry', (retryNumber: number) => {
+        const event = new CustomEvent('hostedFieldsRetry', {
+          detail: { retryNumber },
+        });
+        this.dispatchEvent(event);
+      });
+
+      this.braintreeManager.on('hostedFieldsFailed', (error: unknown) => {
+        const event = new CustomEvent('hostedFieldsFailed', {
+          detail: { error },
+        });
+        this.dispatchEvent(event);
+      });
     }
   }
 

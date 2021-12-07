@@ -16,10 +16,12 @@ import {
   BraintreeManagerInterface,
   BraintreeEndpointManagerInterface,
   HostingEnvironment,
+  BraintreeManagerEvents,
 } from './braintree-interfaces';
 import { HostedFieldConfiguration } from './payment-providers/credit-card/hosted-field-configuration';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { PaymentProvidersInterface } from './payment-providers-interface';
+import { createNanoEvents, Emitter, Unsubscribe } from 'nanoevents';
 
 /** @inheritdoc */
 export class BraintreeManager implements BraintreeManagerInterface {
@@ -57,6 +59,15 @@ export class BraintreeManager implements BraintreeManagerInterface {
    * @memberof BraintreeManager
    */
   private deviceData?: string;
+
+  private emitter = createNanoEvents<BraintreeManagerEvents>();
+
+  on<E extends keyof BraintreeManagerEvents>(
+    event: E,
+    callback: BraintreeManagerEvents[E],
+  ): Unsubscribe {
+    return this.emitter.on(event, callback);
+  }
 
   /** @inheritdoc */
   paymentProviders: PaymentProvidersInterface;
@@ -244,6 +255,14 @@ export class BraintreeManager implements BraintreeManagerInterface {
       googlePayMerchantId: options.googlePayMerchantId,
       hostingEnvironment: options.hostingEnvironment,
       hostedFieldConfig: options.hostedFieldConfig,
+    });
+
+    this.paymentProviders.on('hostedFieldsRetry', (retryNumber: number) => {
+      this.emitter.emit('hostedFieldsRetry', retryNumber);
+    });
+
+    this.paymentProviders.on('hostedFieldsFailed', (error: unknown) => {
+      this.emitter.emit('hostedFieldsFailed', error);
     });
   }
 

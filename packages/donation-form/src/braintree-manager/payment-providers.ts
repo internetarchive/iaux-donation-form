@@ -9,12 +9,13 @@ import { PaymentClientsInterface } from './payment-clients';
 import { GooglePayHandler } from './payment-providers/google-pay';
 import { BraintreeManagerInterface, HostingEnvironment } from './braintree-interfaces';
 import { HostedFieldConfiguration } from './payment-providers/credit-card/hosted-field-configuration';
-import { PaymentProvidersInterface } from './payment-providers-interface';
+import { PaymentProvidersEvents, PaymentProvidersInterface } from './payment-providers-interface';
 import { ApplePayHandlerInterface } from './payment-providers/apple-pay/apple-pay-interface';
 import { CreditCardHandlerInterface } from './payment-providers/credit-card/credit-card-interface';
 import { VenmoHandlerInterface } from './payment-providers/venmo-interface';
 import { PayPalHandlerInterface } from './payment-providers/paypal/paypal-interface';
 import { GooglePayHandlerInterface } from './payment-providers/google-pay-interface';
+import { createNanoEvents, Emitter, Unsubscribe } from 'nanoevents';
 
 /**
  * The PaymentProviders class contains the IA-specific handlers for each of the
@@ -28,14 +29,31 @@ import { GooglePayHandlerInterface } from './payment-providers/google-pay-interf
  * @implements {PaymentProvidersInterface}
  */
 export class PaymentProviders implements PaymentProvidersInterface {
+  on<E extends keyof PaymentProvidersEvents>(
+    event: E,
+    callback: PaymentProvidersEvents[E],
+  ): Unsubscribe {
+    return this.emitter.on(event, callback);
+  }
+
   creditCardHandler = new PromisedSingleton<CreditCardHandlerInterface>({
     generator: async (): Promise<CreditCardHandlerInterface> => {
       const client = await this.paymentClients.hostedFields.get();
-      return new CreditCardHandler({
+      const handler = new CreditCardHandler({
         braintreeManager: this.braintreeManager,
         hostedFieldClient: client,
         hostedFieldConfig: this.hostedFieldConfig,
       });
+
+      handler.on('hostedFieldsRetry', (retryNumber: number) => {
+        this.emitter.emit('hostedFieldsRetry', retryNumber);
+      });
+
+      handler.on('hostedFieldsFailed', (error: unknown) => {
+        this.emitter.emit('hostedFieldsFailed', error);
+      });
+
+      return handler;
     },
   });
 
@@ -108,6 +126,8 @@ export class PaymentProviders implements PaymentProvidersInterface {
   private hostingEnvironment: HostingEnvironment = HostingEnvironment.Development;
 
   private paymentClients: PaymentClientsInterface;
+
+  private emitter = createNanoEvents<PaymentProvidersEvents>();
 
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;

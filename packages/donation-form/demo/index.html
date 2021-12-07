@@ -145,6 +145,14 @@
     formController.modalManager = modalManager;
     formController.recaptchaElement = recaptchaElement;
     formController.analyticsHandler = analyticsHandler;
-  </script>
+
+  formController.addEventListener('hostedFieldsRetry', (event) => {
+    console.log('hostedFieldsRetry', event);
+  });
+
+  formController.addEventListener('hostedFieldsFailed', (event) => {
+    console.log('hostedFieldsFailed', event);
+  });
+</script>
 </body>
 </html>
