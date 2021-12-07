@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { BraintreeManagerInterface } from '../../src/braintree-manager/braintree-interfaces';
+import {
+  BraintreeManagerEvents,
+  BraintreeManagerInterface,
+} from '../../src/braintree-manager/braintree-interfaces';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import {
   PaymentProvider,
@@ -16,8 +19,7 @@ import { MockPaymentProviders } from './payment-providers/mock-payment-providers
 import { mockSuccessResponse } from './models/mock-success-response';
 import { MockBraintreeClient } from './payment-clients/mock-braintree-client';
 import { PaymentProvidersInterface } from '../../src/braintree-manager/payment-providers-interface';
-import { Unsubscribe } from 'nanoevents';
-import { CreditCardHandlerEvents } from '../../src/braintree-manager/payment-providers/credit-card/credit-card-interface';
+import { createNanoEvents, Unsubscribe } from 'nanoevents';
 
 export class MockBraintreeManager implements BraintreeManagerInterface {
   donationSuccessfulOptions?: {
@@ -36,11 +38,13 @@ export class MockBraintreeManager implements BraintreeManagerInterface {
     this.submitDonationResponse = options?.submitDonationResponse ?? 'success';
   }
 
-  on<E extends keyof CreditCardHandlerEvents>(
+  private emitter = createNanoEvents<BraintreeManagerEvents>();
+
+  on<E extends keyof BraintreeManagerEvents>(
     event: E,
-    callback: CreditCardHandlerEvents[E],
+    callback: BraintreeManagerEvents[E],
   ): Unsubscribe {
-    throw new Error('Method not implemented.');
+    return this.emitter.on(event, callback);
   }
 
   paymentProviders: PaymentProvidersInterface = new MockPaymentProviders();
