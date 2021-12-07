@@ -196,15 +196,15 @@ export class DonationFormController extends LitElement {
         origin: this.origin,
       });
 
-      this.braintreeManager.on('hostedFieldsRetry', (retryNumber: number) => {
-        const event = new CustomEvent('hostedFieldsRetry', {
+      this.braintreeManager.on('paymentProvidersHostedFieldsRetry', (retryNumber: number) => {
+        const event = new CustomEvent('paymentProvidersHostedFieldsRetry', {
           detail: { retryNumber },
         });
         this.dispatchEvent(event);
       });
 
-      this.braintreeManager.on('hostedFieldsFailed', (error: unknown) => {
-        const event = new CustomEvent('hostedFieldsFailed', {
+      this.braintreeManager.on('paymentProvidersHostedFieldsFailed', (error: unknown) => {
+        const event = new CustomEvent('paymentProvidersHostedFieldsFailed', {
           detail: { error },
         });
         this.dispatchEvent(event);

@@ -258,11 +258,11 @@ export class BraintreeManager implements BraintreeManagerInterface {
     });
 
     this.paymentProviders.on('hostedFieldsRetry', (retryNumber: number) => {
-      this.emitter.emit('hostedFieldsRetry', retryNumber);
+      this.emitter.emit('paymentProvidersHostedFieldsRetry', retryNumber);
     });
 
     this.paymentProviders.on('hostedFieldsFailed', (error: unknown) => {
-      this.emitter.emit('hostedFieldsFailed', error);
+      this.emitter.emit('paymentProvidersHostedFieldsFailed', error);
     });
   }
 

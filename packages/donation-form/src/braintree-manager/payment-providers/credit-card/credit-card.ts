@@ -4,7 +4,7 @@ import { HostedFieldConfiguration } from './hosted-field-configuration';
 import { HostedFieldName } from './hosted-field-container';
 import { CreditCardHandlerEvents, CreditCardHandlerInterface } from './credit-card-interface';
 import { promisedSleep } from '../../../util/promisedSleep';
-import { createNanoEvents, Emitter, Unsubscribe } from 'nanoevents';
+import { createNanoEvents, Unsubscribe } from 'nanoevents';
 
 export class CreditCardHandler implements CreditCardHandlerInterface {
   on<E extends keyof CreditCardHandlerEvents>(

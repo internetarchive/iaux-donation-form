@@ -146,12 +146,12 @@
     formController.recaptchaElement = recaptchaElement;
     formController.analyticsHandler = analyticsHandler;
 
-  formController.addEventListener('hostedFieldsRetry', (event) => {
-    console.log('hostedFieldsRetry', event);
+    formController.addEventListener('paymentProvidersHostedFieldsRetry', (event) => {
+      console.log('paymentProvidersHostedFieldsRetry', event);
   });
 
-  formController.addEventListener('hostedFieldsFailed', (event) => {
-    console.log('hostedFieldsFailed', event);
+    formController.addEventListener('paymentProvidersHostedFieldsFailed', (event) => {
+      console.log('paymentProvidersHostedFieldsFailed', event);
   });
 </script>
 </body>

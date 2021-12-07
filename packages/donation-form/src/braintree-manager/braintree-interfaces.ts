@@ -9,10 +9,12 @@ import {
 } from '@internetarchive/donation-form-data-models';
 import { PromisedSingleton } from '@internetarchive/promised-singleton';
 import { Unsubscribe } from 'nanoevents';
-import { PaymentProvidersEvents, PaymentProvidersInterface } from './payment-providers-interface';
+import { PaymentProvidersInterface } from './payment-providers-interface';
 
-// this will bubble up child events
-export type BraintreeManagerEvents = PaymentProvidersEvents;
+export interface BraintreeManagerEvents {
+  paymentProvidersHostedFieldsRetry: (retryNumber: number) => void;
+  paymentProvidersHostedFieldsFailed: (error: unknown) => void;
+}
 
 /**
  * The BraintreeManager is the main entrypoint for much of the common braintree functionality.
