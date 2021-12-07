@@ -60,7 +60,7 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
     try {
       // The hosted fields have a 60 second timeout internally, but braintree
       // support recommended setting a shorter timeout because 99% of users
-      // load the hosted fields in under 4 seconds.
+      // load the hosted fields in under 4 seconds and 99.9% with 18 seconds.
       // What we're doing here is creating a "timeout" promise
       // and a "create hosted fields" promise and doing a `Promise.race()` to
       // resolve when the first one finishes. If the timeout finishes first,
