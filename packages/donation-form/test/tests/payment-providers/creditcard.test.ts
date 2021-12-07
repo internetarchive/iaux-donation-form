@@ -119,7 +119,7 @@ describe('CreditCardHandler', () => {
     });
 
     const mockHostedFieldContainer = new MockHostedFieldContainer();
-    const hostedFieldsSpy = Sinon.spy(mockHostedFieldContainer, 'resetIframes');
+    const hostedFieldsSpy = Sinon.spy(mockHostedFieldContainer, 'resetHostedFields');
 
     const mockHostedFieldConfig: HostedFieldConfiguration = new HostedFieldConfiguration({
       hostedFieldStyle: mockHostedFieldStyle,
@@ -130,8 +130,9 @@ describe('CreditCardHandler', () => {
       braintreeManager: braintreeManager,
       hostedFieldClient: client,
       hostedFieldConfig: mockHostedFieldConfig,
-      retryInverval: 0.1,
+      retryInverval: 0.01,
       maxRetryCount: 3,
+      loadTimeout: 0.01,
     });
 
     try {
@@ -167,12 +168,53 @@ describe('CreditCardHandler', () => {
       braintreeManager: braintreeManager,
       hostedFieldClient: client,
       hostedFieldConfig: mockHostedFieldConfig,
-      retryInverval: 0.1,
+      retryInverval: 0.01,
       maxRetryCount: 3,
+      loadTimeout: 0.01,
     });
 
     const instance = await handler.instance.get();
     expect(instance).to.not.be.null;
     expect(retryCount).to.equal(2);
+  });
+
+  it('emits an event when retrying or failing', async () => {
+    const braintreeManager = new MockBraintreeManager();
+    const client = new MockHostedFieldsClient();
+
+    Sinon.stub(client, 'create').callsFake(() => {
+      throw new Error('Error');
+    });
+
+    const mockHostedFieldContainer = new MockHostedFieldContainer();
+    const mockHostedFieldConfig: HostedFieldConfiguration = new HostedFieldConfiguration({
+      hostedFieldStyle: mockHostedFieldStyle,
+      hostedFieldFieldOptions: mockHostedFieldFieldOptions,
+      hostedFieldContainer: mockHostedFieldContainer,
+    });
+    const handler = new CreditCardHandler({
+      braintreeManager: braintreeManager,
+      hostedFieldClient: client,
+      hostedFieldConfig: mockHostedFieldConfig,
+      retryInverval: 0.01,
+      maxRetryCount: 3,
+      loadTimeout: 0.01,
+    });
+
+    let retryCountEvent = 0;
+    let retryFailedEvent = 0;
+    handler.on('hostedFieldsRetry', () => {
+      retryCountEvent++;
+    });
+    handler.on('hostedFieldsFailed', () => {
+      retryFailedEvent++;
+    });
+
+    try {
+      await handler.instance.get();
+    } catch (e) {}
+
+    expect(retryCountEvent).to.equal(3);
+    expect(retryFailedEvent).to.equal(1);
   });
 });

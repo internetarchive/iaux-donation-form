@@ -28,18 +28,22 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
 
   private retryInverval: number;
 
+  private loadTimeout: number;
+
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;
     hostedFieldClient: braintree.HostedFields;
     hostedFieldConfig: HostedFieldConfiguration;
     maxRetryCount?: number;
     retryInverval?: number;
+    loadTimeout?: number;
   }) {
     this.braintreeManager = options.braintreeManager;
     this.hostedFieldClient = options.hostedFieldClient;
     this.hostedFieldConfig = options.hostedFieldConfig;
     this.maxRetryCount = options.maxRetryCount ?? 2;
-    this.retryInverval = options.retryInverval ?? 1;
+    this.retryInverval = (options.retryInverval ?? 1) * 1000;
+    this.loadTimeout = (options.loadTimeout ?? 6) * 1000;
   }
 
   private braintreeManager: BraintreeManagerInterface;
@@ -52,20 +56,47 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
   ): Promise<braintree.HostedFields | undefined> {
     // we mainly want to do this for retry events, but it doesn't
     // hurt to do it on the first try
-    this.hostedFieldConfig.hostedFieldContainer.resetIframes();
+    this.hostedFieldConfig.hostedFieldContainer.resetHostedFields();
     try {
-      const hostedFields = await this.hostedFieldClient.create({
-        client: braintreeClient,
-        styles: this.hostedFieldConfig.hostedFieldStyle,
-        fields: this.hostedFieldConfig.hostedFieldFieldOptions,
+      // The hosted fields have a 60 second timeout internally, but braintree
+      // support recommended setting a shorter timeout because 99% of users
+      // load the hosted fields in under 4 seconds.
+      // What we're doing here is creating a "timeout" promise
+      // and a "create hosted fields" promise and doing a `Promise.race()` to
+      // resolve when the first one finishes. If the timeout finishes first,
+      // we throw an error to trigger the retry logic. If the hosted fields
+      // finishes first, we cancel the timeout promise since we're done.
+      let timeout: number;
+      const timeoutPromise = new Promise<void>(resolve => {
+        timeout = window.setTimeout(() => {
+          resolve();
+        }, this.loadTimeout);
       });
-      return hostedFields;
+
+      const hostedFieldsPromise = new Promise<braintree.HostedFields | undefined>(async resolve => {
+        const fields = await this.hostedFieldClient.create({
+          client: braintreeClient,
+          styles: this.hostedFieldConfig.hostedFieldStyle,
+          fields: this.hostedFieldConfig.hostedFieldFieldOptions,
+        });
+        // clear the timeout when this finishes so we don't also get the timeout callback
+        window.clearTimeout(timeout);
+        resolve(fields);
+      });
+
+      const result = await Promise.race([timeoutPromise, hostedFieldsPromise]);
+
+      if (result as braintree.HostedFields) {
+        return result as braintree.HostedFields;
+      } else {
+        throw new Error('Timeout loading Hosted Fields');
+      }
     } catch (error) {
       if (retryCount >= this.maxRetryCount) {
         this.emitter.emit('hostedFieldsFailed', error);
         throw error;
       }
-      await promisedSleep(this.retryInverval * 1000); // wait before retrying
+      await promisedSleep(this.retryInverval); // wait before retrying
       const newRetryCount = retryCount + 1;
       this.emitter.emit('hostedFieldsRetry', newRetryCount);
       return this.createHostedFields(braintreeClient, newRetryCount);
