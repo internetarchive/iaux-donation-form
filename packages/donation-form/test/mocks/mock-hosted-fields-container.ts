@@ -10,10 +10,6 @@ export class MockHostedFieldContainer implements HostedFieldContainerInterface {
   showErrorMessageCalled = false;
   hideErrorMessageCalled = false;
 
-  allHostedFieldsAreLoaded(): boolean {
-    return true;
-  }
-
   resetHostedFields(): void {
     // noop
   }

@@ -13,12 +13,6 @@ export interface HostedFieldContainerInterface {
   showErrorMessage(message?: string): void;
   hideErrorMessage(): void;
   /**
-   * Determine if the hosted fields have loaded.
-   *
-   * This is used to detect timeouts on the credit card hosted fields.
-   */
-  allHostedFieldsAreLoaded(): boolean;
-  /**
    * Reset the hosted fields to retry in case of timeout
    */
   resetHostedFields(): void;
@@ -66,14 +60,6 @@ export class HostedFieldContainer implements HostedFieldContainerInterface {
 
   hideErrorMessage(): void {
     this.errorContainer.style.display = 'none';
-  }
-
-  /** @inheritdoc */
-  allHostedFieldsAreLoaded(): boolean {
-    const elements = [this.number, this.cvv, this.expirationDate];
-    return elements.every(element => {
-      return element.firstChild !== null;
-    });
   }
 
   resetHostedFields(): void {
