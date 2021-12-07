@@ -67,9 +67,9 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
       // we throw an error to trigger the retry logic. If the hosted fields
       // finishes first, we cancel the timeout promise since we're done.
       let timeout: number;
-      const timeoutPromise = new Promise<void>(resolve => {
+      const timeoutPromise = new Promise<void>((resolve, reject) => {
         timeout = window.setTimeout(() => {
-          resolve();
+          reject(new Error('Timeout loading Hosted Fields'));
         }, this.loadTimeout);
       });
 
@@ -79,18 +79,14 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
           styles: this.hostedFieldConfig.hostedFieldStyle,
           fields: this.hostedFieldConfig.hostedFieldFieldOptions,
         });
-        // clear the timeout when this finishes so we don't also get the timeout callback
+        // clear the timeout when this finishes so we don't also get the timeout rejection
         window.clearTimeout(timeout);
         resolve(fields);
       });
 
       const result = await Promise.race([timeoutPromise, hostedFieldsPromise]);
 
-      if (result as braintree.HostedFields) {
-        return result as braintree.HostedFields;
-      } else {
-        throw new Error('Timeout loading Hosted Fields');
-      }
+      return result as braintree.HostedFields;
     } catch (error) {
       if (retryCount >= this.maxRetryCount) {
         this.emitter.emit('hostedFieldsFailed', error);
