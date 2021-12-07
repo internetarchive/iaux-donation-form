@@ -130,7 +130,6 @@ describe('CreditCardHandler', () => {
       braintreeManager: braintreeManager,
       hostedFieldClient: client,
       hostedFieldConfig: mockHostedFieldConfig,
-      retryInverval: 0.01,
       maxRetryCount: 3,
       loadTimeout: 0.01,
     });
@@ -168,7 +167,6 @@ describe('CreditCardHandler', () => {
       braintreeManager: braintreeManager,
       hostedFieldClient: client,
       hostedFieldConfig: mockHostedFieldConfig,
-      retryInverval: 0.01,
       maxRetryCount: 3,
       loadTimeout: 0.01,
     });
@@ -196,7 +194,6 @@ describe('CreditCardHandler', () => {
       braintreeManager: braintreeManager,
       hostedFieldClient: client,
       hostedFieldConfig: mockHostedFieldConfig,
-      retryInverval: 0.01,
       maxRetryCount: 3,
       loadTimeout: 0.01,
     });

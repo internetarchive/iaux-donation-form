@@ -3,7 +3,6 @@ import { BraintreeManagerInterface } from '../../braintree-interfaces';
 import { HostedFieldConfiguration } from './hosted-field-configuration';
 import { HostedFieldName } from './hosted-field-container';
 import { CreditCardHandlerEvents, CreditCardHandlerInterface } from './credit-card-interface';
-import { promisedSleep } from '../../../util/promisedSleep';
 import { createNanoEvents, Unsubscribe } from 'nanoevents';
 
 export class CreditCardHandler implements CreditCardHandlerInterface {
@@ -26,8 +25,6 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
 
   private maxRetryCount: number;
 
-  private retryInverval: number;
-
   private loadTimeout: number;
 
   constructor(options: {
@@ -35,14 +32,12 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
     hostedFieldClient: braintree.HostedFields;
     hostedFieldConfig: HostedFieldConfiguration;
     maxRetryCount?: number;
-    retryInverval?: number;
     loadTimeout?: number;
   }) {
     this.braintreeManager = options.braintreeManager;
     this.hostedFieldClient = options.hostedFieldClient;
     this.hostedFieldConfig = options.hostedFieldConfig;
     this.maxRetryCount = options.maxRetryCount ?? 2;
-    this.retryInverval = (options.retryInverval ?? 1) * 1000;
     this.loadTimeout = (options.loadTimeout ?? 6) * 1000;
   }
 
@@ -92,7 +87,6 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
         this.emitter.emit('hostedFieldsFailed', error);
         throw error;
       }
-      await promisedSleep(this.retryInverval); // wait before retrying
       const newRetryCount = retryCount + 1;
       this.emitter.emit('hostedFieldsRetry', newRetryCount);
       return this.createHostedFields(braintreeClient, newRetryCount);
