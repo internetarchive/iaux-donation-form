@@ -5,12 +5,19 @@ import { MockApplePayHandler } from './individual-providers/mock-applepay-handle
 import { MockPayPalHandler } from './individual-providers/mock-paypal-handler';
 import { MockGooglePayHandler } from './individual-providers/mock-googlepay-handler';
 import { mockHostedFieldTokenizePayload } from '../payment-clients/mock-hostedfieldtokenizepayload';
-import { PaymentProvidersInterface } from '../../../src/braintree-manager/payment-providers-interface';
-import { CreditCardHandlerInterface } from '../../../src/braintree-manager/payment-providers/credit-card/credit-card-interface';
+import {
+  PaymentProvidersEvents,
+  PaymentProvidersInterface,
+} from '../../../src/braintree-manager/payment-providers-interface';
+import {
+  CreditCardHandlerEvents,
+  CreditCardHandlerInterface,
+} from '../../../src/braintree-manager/payment-providers/credit-card/credit-card-interface';
 import { ApplePayHandlerInterface } from '../../../src/braintree-manager/payment-providers/apple-pay/apple-pay-interface';
 import { PayPalHandlerInterface } from '../../../src/braintree-manager/payment-providers/paypal/paypal-interface';
 import { GooglePayHandlerInterface } from '../../../src/braintree-manager/payment-providers/google-pay-interface';
 import { VenmoHandlerInterface } from '../../../src/braintree-manager/payment-providers/venmo-interface';
+import { createNanoEvents, Unsubscribe } from 'nanoevents';
 
 export class MockPaymentProviders implements PaymentProvidersInterface {
   creditCardHandler = new PromisedSingleton<CreditCardHandlerInterface>({
@@ -57,6 +64,15 @@ export class MockPaymentProviders implements PaymentProvidersInterface {
   }) {
     this.mockHostedFieldTokenizePayload =
       options?.mockHostedFieldTokenizePayload ?? mockHostedFieldTokenizePayload;
+  }
+
+  private emitter = createNanoEvents<PaymentProvidersEvents>();
+
+  on<E extends keyof PaymentProvidersEvents>(
+    event: E,
+    callback: PaymentProvidersEvents[E],
+  ): Unsubscribe {
+    return this.emitter.on(event, callback);
   }
 
   mockHostedFieldTokenizePayload: braintree.HostedFieldsTokenizePayload;

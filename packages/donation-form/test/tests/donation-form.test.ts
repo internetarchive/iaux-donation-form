@@ -10,7 +10,7 @@ import {
 import { PaymentSelector } from '../../src/form-elements/payment-selector';
 import { MockBraintreeManager } from '../mocks/mock-braintree-manager';
 import { MockPaymentFlowHandlers } from '../mocks/flow-handlers/mock-payment-flow-handlers';
-import { promisedSleep } from '../helpers/promisedSleep';
+import { promisedSleep } from '../../src/util/promisedSleep';
 import { MockDonationInfo } from '../mocks/mock-donation-info';
 
 describe('Donation Form', () => {

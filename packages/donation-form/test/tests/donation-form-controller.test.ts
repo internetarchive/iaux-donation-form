@@ -9,7 +9,7 @@ import { MockEndpointManager } from '../mocks/mock-endpoint-manager';
 import { MockPaymentClients } from '../mocks/mock-payment-clients';
 import { ContactForm } from '../../src/form-elements/contact-form/contact-form';
 import { fillInContactForm } from '../helpers/fillInContactForm';
-import { promisedSleep } from '../helpers/promisedSleep';
+import { promisedSleep } from '../../src/util/promisedSleep';
 import { MockModalManager } from '../mocks/mock-modal-manager';
 import { MockHostedFieldsClient } from '../mocks/payment-clients/mock-hostedfields-client';
 import { DonationForm } from '../../src/donation-form';

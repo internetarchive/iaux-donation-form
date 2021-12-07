@@ -145,6 +145,14 @@
     formController.modalManager = modalManager;
     formController.recaptchaElement = recaptchaElement;
     formController.analyticsHandler = analyticsHandler;
-  </script>
+
+    formController.addEventListener('paymentProvidersHostedFieldsRetry', (event) => {
+      console.log('paymentProvidersHostedFieldsRetry', event);
+  });
+
+    formController.addEventListener('paymentProvidersHostedFieldsFailed', (event) => {
+      console.log('paymentProvidersHostedFieldsFailed', event);
+  });
+</script>
 </body>
 </html>
