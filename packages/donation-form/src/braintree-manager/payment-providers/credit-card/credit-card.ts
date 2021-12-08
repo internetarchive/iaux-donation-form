@@ -4,6 +4,7 @@ import { HostedFieldConfiguration } from './hosted-field-configuration';
 import { HostedFieldName } from './hosted-field-container';
 import { CreditCardHandlerEvents, CreditCardHandlerInterface } from './credit-card-interface';
 import { createNanoEvents, Unsubscribe } from 'nanoevents';
+import { DonationFormError } from '../../../donation-form-error';
 
 export class CreditCardHandler implements CreditCardHandlerInterface {
   on<E extends keyof CreditCardHandlerEvents>(
@@ -62,22 +63,35 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
       // we throw an error to trigger the retry logic. If the hosted fields
       // finishes first, we cancel the timeout promise since we're done.
       let timeout: number;
+
       const timeoutPromise = new Promise<void>((resolve, reject) => {
         timeout = window.setTimeout(() => {
-          reject(new Error('Timeout loading Hosted Fields'));
+          const error = new DonationFormError('Timeout loading Hosted Fields');
+          reject(error);
         }, this.loadTimeout);
       });
 
-      const hostedFieldsPromise = new Promise<braintree.HostedFields | undefined>(async resolve => {
-        const fields = await this.hostedFieldClient.create({
-          client: braintreeClient,
-          styles: this.hostedFieldConfig.hostedFieldStyle,
-          fields: this.hostedFieldConfig.hostedFieldFieldOptions,
-        });
-        // clear the timeout when this finishes so we don't also get the timeout rejection
-        window.clearTimeout(timeout);
-        resolve(fields);
-      });
+      const hostedFieldsPromise = new Promise<braintree.HostedFields | undefined>(
+        async (resolve, reject) => {
+          try {
+            const fields = await this.hostedFieldClient.create({
+              client: braintreeClient,
+              styles: this.hostedFieldConfig.hostedFieldStyle,
+              fields: this.hostedFieldConfig.hostedFieldFieldOptions,
+            });
+            // clear the timeout when this finishes so we don't also get the timeout rejection
+            window.clearTimeout(timeout);
+            resolve(fields);
+          } catch (error) {
+            if (error instanceof Error && error.message.includes('Hosted Fields timed out')) {
+              // this is the timeout error, so we don't need to do anything
+            } else {
+              // this is some other error. reject so it bubbles up to Sentry
+              reject(error);
+            }
+          }
+        },
+      );
 
       const result = await Promise.race([timeoutPromise, hostedFieldsPromise]);
 
