@@ -36,7 +36,7 @@ export class DonationBannerThermometer
 
   @property({ type: Object }) resizeObserver?: SharedResizeObserverInterface;
 
-  @query('.thermometer-value') private thermometerValue!: HTMLDivElement;
+  @query('.thermometer-value') private thermometerValue?: HTMLDivElement;
 
   @query('.thermometer-fill') private thermometerFill!: HTMLDivElement;
 
@@ -100,12 +100,21 @@ export class DonationBannerThermometer
 
   updated(changed: PropertyValues): void {
     if (changed.has('resizeObserver')) {
-      this.setupResizeObserver();
+      const oldObserver = changed.get(
+        'resizeObserver'
+      ) as SharedResizeObserverInterface;
+      this.disconnectResizeObserver(oldObserver);
+      this.setupResizeObserver(this.resizeObserver);
+    }
+
+    if (changed.has('currentAmountMode')) {
+      this.unobserveCurrentAmountResize(this.resizeObserver);
+      this.observeCurrentAmountResize(this.resizeObserver);
     }
   }
 
   disconnectedCallback(): void {
-    this.disconnectResizeObserver();
+    this.disconnectResizeObserver(this.resizeObserver);
   }
 
   /** @inheritdoc */
@@ -127,42 +136,57 @@ export class DonationBannerThermometer
     }
   }
 
-  private setupResizeObserver(): void {
-    this.disconnectResizeObserver();
+  private setupResizeObserver(observer?: SharedResizeObserverInterface): void {
     /* istanbul ignore next */
-    if (!this.shadowRoot?.host || !this.resizeObserver) return;
-    this.resizeObserver.addObserver({
+    if (!this.shadowRoot?.host || !observer) return;
+    observer.addObserver({
       handler: this,
       target: this.shadowRoot.host,
     });
 
-    this.resizeObserver.addObserver({
-      handler: this,
-      target: this.thermometerValue,
-    });
-
-    this.resizeObserver.addObserver({
+    observer.addObserver({
       handler: this,
       target: this.thermometerFill,
+    });
+
+    this.observeCurrentAmountResize(observer);
+  }
+
+  private disconnectResizeObserver(
+    observer?: SharedResizeObserverInterface
+  ): void {
+    /* istanbul ignore next */
+    if (!this.shadowRoot?.host || !observer) return;
+    observer.removeObserver({
+      handler: this,
+      target: this.shadowRoot.host,
+    });
+
+    observer.removeObserver({
+      handler: this,
+      target: this.thermometerFill,
+    });
+
+    this.unobserveCurrentAmountResize(observer);
+  }
+
+  private observeCurrentAmountResize(
+    observer?: SharedResizeObserverInterface
+  ): void {
+    if (!this.thermometerValue || !observer) return;
+    observer?.addObserver({
+      handler: this,
+      target: this.thermometerValue,
     });
   }
 
-  private disconnectResizeObserver(): void {
-    /* istanbul ignore next */
-    if (!this.shadowRoot?.host || !this.resizeObserver) return;
-    this.resizeObserver.removeObserver({
-      handler: this,
-      target: this.shadowRoot.host,
-    });
-
-    this.resizeObserver.removeObserver({
+  private unobserveCurrentAmountResize(
+    observer?: SharedResizeObserverInterface
+  ): void {
+    if (!this.thermometerValue || !observer) return;
+    observer?.removeObserver({
       handler: this,
       target: this.thermometerValue,
-    });
-
-    this.resizeObserver.removeObserver({
-      handler: this,
-      target: this.thermometerFill,
     });
   }
 
