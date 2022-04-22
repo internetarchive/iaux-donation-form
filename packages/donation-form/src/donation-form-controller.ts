@@ -218,12 +218,12 @@ export class DonationFormController extends LitElement {
     if (!this.recaptchaSiteKey || !this.paymentClients || this.recaptchaManagerSetup) {
       return;
     }
-    this.recaptchaManagerSetup = true;
     const grecaptchaLibrary = await this.paymentClients.recaptchaLibrary.get();
     this.recaptchaManager = new RecaptchaManager({
       grecaptchaLibrary: grecaptchaLibrary,
       siteKey: this.recaptchaSiteKey,
     });
+    this.recaptchaManagerSetup = true;
   }
 
   /** @inheritdoc */
