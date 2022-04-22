@@ -157,6 +157,7 @@ export class PayPalButtonDataSource implements PayPalButtonDataSourceInterface {
 
     const options: braintree.PayPalCheckoutCreatePaymentOptions = {
       flow: flow as paypal.FlowType,
+      intent: 'capture',
     };
     options.enableShippingAddress = true;
 
