@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { LitElement, html, TemplateResult, css } from 'lit';
+import { LitElement, html, TemplateResult, css, CSSResultGroup } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { DonationType } from '@internetarchive/donation-form-data-models';
+import currency from 'currency.js';
 
 /**
  * This is the content that we show in the upsell modal.
@@ -26,7 +27,9 @@ export class ConfirmDonationContent extends LitElement {
   @property({ type: Function }) donationConfirmed: Function= (): void => {};
 
   get confirmationText(): string {
-    return `You are about to make a ${this.donationType} donation of ${this.currencySymbol}${this.amount}${this.currencyType} to the Internet Archive`;
+    const amount = currency(this.amount, { symbol: this.currencySymbol }).format();
+
+    return `You are about to make a ${this.donationType} donation of ${amount} to the Internet Archive`;
   }
 
   get currencySymbol(): string {
@@ -72,7 +75,7 @@ export class ConfirmDonationContent extends LitElement {
     `;
   }
 
-  static get styles() {
+  static get styles(): CSSResultGroup {
     const ctaButtonColor = css`var(--upsellCTAButtonColor, #194880)`;
     const ctaButtonDisabledColor = css`var(--upsellCTAButtonDisabledColor, rgba(109,148,201,0.5))`;
 
