@@ -21,6 +21,7 @@ import {
   GooglePayFlowHandler,
 } from './handlers/googlepay-flow-handler';
 import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
+import { DonationType } from '@internetarchive/donation-form-data-models';
 
 export interface PaymentFlowHandlersInterface {
   startup(): Promise<void>;
@@ -44,6 +45,12 @@ export interface PaymentFlowHandlersInterface {
     noSelected?: () => void;
     amountChanged?: (amount: number) => void;
     userClosedModalCallback?: () => void;
+  }): Promise<void>;
+
+  showConfirmationStepModal(options: {
+    amount: number;
+    donationType: DonationType;
+    currencyType: string;
   }): Promise<void>;
 
   creditCardHandler: CreditCardFlowHandlerInterface | undefined;
@@ -175,6 +182,10 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
       braintreeManager: this.braintreeManager,
       modalManager: this.modalManager,
     });
+  }
+
+  showConfirmationStepModal(options: { amount: number; donationType: DonationType; currencyType: string }): Promise<void> {
+    return this.donationFlowModalManager.showConfirmationStepModal(options);
   }
 
   private braintreeManager: BraintreeManagerInterface;

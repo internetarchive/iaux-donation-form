@@ -121,6 +121,14 @@ export class DonationForm extends LitElement {
     `;
   }
 
+    async showConfirmationModalDev(options: {
+      donationType: DonationType;
+      amount: number;
+      currencyType: string;
+    }): Promise<void> {
+      this.paymentFlowHandlers?.showConfirmationStepModal(options);
+    }
+
   /**
    * This is a developer convenience method that allows us to show the upsell modal without going
    * through the purchasing flow. If it's showing the PayPal button, it will trigger

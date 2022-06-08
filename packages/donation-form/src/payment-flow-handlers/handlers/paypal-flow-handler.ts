@@ -115,7 +115,13 @@ export class PayPalFlowHandler
     this.emitter.emit('payPalPaymentStarted', dataSource, options);
   }
 
-  async payPalPaymentAuthorized(
+  async payPalPaymentAuthorized(dataSource: PayPalButtonDataSourceInterface,
+    payload: paypal.TokenizePayload
+    ): Promise<void> {
+    console.log('payPalPaymentAuthorized *******', { dataSource, payload });
+  }
+
+  async payPalPaymentConfirmed(
     dataSource: PayPalButtonDataSourceInterface,
     payload: paypal.TokenizePayload,
   ): Promise<void> {

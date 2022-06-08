@@ -164,6 +164,10 @@ export class DonationFormController extends LitElement {
     }
   }
 
+  async showConfirmationStepDev(options: { donationType: DonationType; amount: number; currencyType: string }): Promise<void> {
+    this.donationForm.showConfirmationModalDev(options);
+  }
+
   async showUpsellModalDev(options: {
     oneTimeAmount: number;
     ctaMode?: UpsellModalCTAMode;
@@ -319,7 +323,7 @@ export class DonationFormController extends LitElement {
     this.donationForm.paymentFlowHandlers = this.paymentFlowHandlers;
 
     this.braintreeManager.startup();
-    this.paymentFlowHandlers.startup();
+    this.paymentFlowHandlers?.startup();
     this.recaptchaManager.setup(this.recaptchaElement, 1, 'light', 'image');
   }
 

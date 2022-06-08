@@ -1,6 +1,7 @@
 import { html } from 'lit';
 import { ModalConfig, ModalManagerInterface } from '@internetarchive/modal-manager';
 import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
+import '../modals/payment-confirmation-content';
 import { BraintreeManagerInterface } from '../braintree-manager/braintree-interfaces';
 import {
   SuccessResponse,
@@ -32,6 +33,7 @@ enum ModalHeaderColor {
  * @interface DonationFlowModalManagerInterface
  */
 export interface DonationFlowModalManagerInterface {
+  showConfirmationStepModal(options: { amount: number; donationType: DonationType; currencyType: string }): Promise<void>;
   /**
    * Close the modal
    *
@@ -209,6 +211,34 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       customModalContent: html`
         <donation-form-error-modal-content></donation-form-error-modal-content>
       `,
+    });
+  }
+
+  showConfirmationStepModal(options: { amount: number; donationType: DonationType; currencyType: string}): Promise<void> {
+    debugger;
+    const modalConfig = new ModalConfig({
+      headerColor: ModalHeaderColor.Blue,
+      title: html`
+        Confirm:
+      `,
+      headline: html`
+        <payment-confirmation-modal
+          .amount="${options.amount}"
+          .currencyType="${options.currencyType}"
+          .donationType="${options.donationType}"
+        ></payment-confirmation-modal>
+        Please confirm your donation.
+      `,
+      message: html`
+        <donation-form-confirmation-modal-content
+          .amount="${options.amount}"
+          .donationType="${options.donationType}"
+          .currencyType="${options.currencyType}"
+        ></donation-form-confirmation-modal-content>
+      `,
+    });
+    return this.modalManager.showModal({
+      config: modalConfig,
     });
   }
 
