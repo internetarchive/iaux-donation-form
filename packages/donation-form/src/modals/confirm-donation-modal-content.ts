@@ -82,7 +82,6 @@ export class ConfirmDonationContent extends LitElement {
     return css`
       :host {
         display: block;
-        padding: 1rem;
       }
 
       button {
@@ -108,6 +107,7 @@ export class ConfirmDonationContent extends LitElement {
         margin-top: 1rem;
         border: 0;
         text-decoration: underline;
+        background-color: transparent;
       }
 
       button:disabled {
