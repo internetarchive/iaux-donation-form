@@ -29,7 +29,7 @@ export class ConfirmDonationContent extends LitElement {
   get confirmationText(): string {
     const amount = currency(this.amount, { symbol: this.currencySymbol }).format();
 
-    return `You are about to make a ${this.donationType} donation of ${amount} to the Internet Archive`;
+    return `You are about to make a ${this.donationType} donation of ${amount} ${this.currencyType} to the Internet Archive.`;
   }
 
   get currencySymbol(): string {
@@ -69,7 +69,7 @@ export class ConfirmDonationContent extends LitElement {
       <p>${this.confirmationText}</p>
 
       <div class="cta-group">
-        <button id="confirm" @click=${(e: Event): void => this.confirm(e)}>COMPLETE DONATION</button>
+        <button id="confirm" @click=${(e: Event): void => this.confirm(e)}>Complete donation</button>
         <button id="cancel" @click=${(e: Event): void => this.cancel(e)}>Cancel</button>
       </div>
     `;

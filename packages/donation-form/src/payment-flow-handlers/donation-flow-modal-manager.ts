@@ -219,10 +219,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     const modalConfig = new ModalConfig({
       headerColor: ModalHeaderColor.Green,
       title: html`
-        Confirm:
-      `,
-      headline: html`
-        Please confirm your donation.
+        Confirm donation
       `,
       message: html`
         <confirm-donation-modal
