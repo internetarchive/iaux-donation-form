@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { ModalConfig, ModalManagerInterface } from '@internetarchive/modal-manager';
 import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
-import '../modals/payment-confirmation-content';
+import '../modals/confirm-donation-modal-content';
 import { BraintreeManagerInterface } from '../braintree-manager/braintree-interfaces';
 import {
   SuccessResponse,
@@ -217,24 +217,19 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
   showConfirmationStepModal(options: { amount: number; donationType: DonationType; currencyType: string}): Promise<void> {
     debugger;
     const modalConfig = new ModalConfig({
-      headerColor: ModalHeaderColor.Blue,
+      headerColor: ModalHeaderColor.Green,
       title: html`
         Confirm:
       `,
       headline: html`
-        <payment-confirmation-modal
-          .amount="${options.amount}"
-          .currencyType="${options.currencyType}"
-          .donationType="${options.donationType}"
-        ></payment-confirmation-modal>
         Please confirm your donation.
       `,
       message: html`
-        <donation-form-confirmation-modal-content
+        <confirm-donation-modal
           .amount="${options.amount}"
-          .donationType="${options.donationType}"
           .currencyType="${options.currencyType}"
-        ></donation-form-confirmation-modal-content>
+          .donationType="${options.donationType}"
+        ></confirm-donation-modal>
       `,
     });
     return this.modalManager.showModal({

@@ -1,4 +1,5 @@
-import { LitElement, html, TemplateResult } from 'lit';
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { LitElement, html, TemplateResult, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { DonationType } from '@internetarchive/donation-form-data-models';
 
@@ -9,16 +10,20 @@ import { DonationType } from '@internetarchive/donation-form-data-models';
  * show the PayPal upsell button.
  *
  * @export
- * @class PaymentConfirmationContent
+ * @class ConfirmDonationContent
  * @extends {LitElement}
  */
-@customElement('payment-confirmation-modal')
-export class PaymentConfirmationContent extends LitElement {
+@customElement('confirm-donation-modal')
+export class ConfirmDonationContent extends LitElement {
   @property({ type: Number }) amount = 5;
 
   @property({ type: String }) currencyType = '$';
 
   @property({ type: String }) donationType: DonationType = DonationType.OneTime;
+
+  @property({ type: Function }) donationCancelled: Function = (): void => {};
+
+  @property({ type: Function }) donationConfirmed: Function= (): void => {};
 
   get confirmationText(): string {
     return `You are about to make a ${this.donationType} donation of ${this.currencySymbol}${this.amount}${this.currencyType} to the Internet Archive`;
@@ -45,12 +50,14 @@ export class PaymentConfirmationContent extends LitElement {
     }
   }
 
-  donationConfirmed(e: Event): void {
+  confirm(e: Event): void {
     console.log('donationConfirmed --- ', e);
+    this?.donationConfirmed();
   }
 
-  donationCancelled(e: Event): void {
+  cancel(e: Event): void {
     console.log('donationCancelled --- ', e);
+    this?.donationCancelled();
   }
 
   /** @inheritdoc */
@@ -59,36 +66,49 @@ export class PaymentConfirmationContent extends LitElement {
       <p>${this.confirmationText}</p>
 
       <div class="cta-group">
-        <button @click=${(e: Event) => this.donationConfirmed(e)}>COMPLETE DONATION</button>
-        <button @click=${(e: Event) => this.donationCancelled(e)}>Cancel</button>
+        <button id="confirm" @click=${(e: Event): void => this.confirm(e)}>COMPLETE DONATION</button>
+        <button id="cancel" @click=${(e: Event): void => this.cancel(e)}>Cancel</button>
       </div>
     `;
   }
 
   static get styles() {
+    const ctaButtonColor = css`var(--upsellCTAButtonColor, #194880)`;
+    const ctaButtonDisabledColor = css`var(--upsellCTAButtonDisabledColor, rgba(109,148,201,0.5))`;
+
     return css`
       :host {
         display: block;
         padding: 1rem;
       }
+
       button {
+        outline: none;
+        cursor: pointer;
+      }
+
+      button#confirm {
         font-size: 2rem;
         display: block;
         width: 100%;
         margin-top: 0.5rem;
         padding: 1rem 2rem;
-        background-color: rebeccapurple;
+        background-color: ${ctaButtonColor};
         color: #fff;
         border-radius: 5px;
         border: 0;
         font-weight: bold;
         line-height: normal;
-        outline: none;
-        cursor: pointer;
+      }
+
+      button#cancel {
+        margin-top: 1rem;
+        border: 0;
+        text-decoration: underline;
       }
 
       button:disabled {
-        background-color: blue;
+        background-color: ${ctaButtonDisabledColor};
         cursor: not-allowed;
       }
     }`;
