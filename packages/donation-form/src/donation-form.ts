@@ -125,6 +125,8 @@ export class DonationForm extends LitElement {
       donationType: DonationType;
       amount: number;
       currencyType: string;
+      cancelDonationCB: Function;
+      confirmDonationCB: Function;
     }): Promise<void> {
       this.paymentFlowHandlers?.showConfirmationStepModal(options);
     }

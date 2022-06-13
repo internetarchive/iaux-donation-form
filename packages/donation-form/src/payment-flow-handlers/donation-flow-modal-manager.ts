@@ -33,7 +33,13 @@ enum ModalHeaderColor {
  * @interface DonationFlowModalManagerInterface
  */
 export interface DonationFlowModalManagerInterface {
-  showConfirmationStepModal(options: { amount: number; donationType: DonationType; currencyType: string }): Promise<void>;
+  showConfirmationStepModal(options: {
+    amount: number;
+    donationType: DonationType;
+    currencyType: string;
+    confirmDonationCB: Function;
+    cancelDonationCB: Function;
+  }): Promise<void>;
   /**
    * Close the modal
    *
@@ -214,9 +220,24 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     });
   }
 
-  showConfirmationStepModal(options: { amount: number; donationType: DonationType; currencyType: string}): Promise<void> {
-    debugger;
+  showConfirmationStepModal(options: {
+    amount: number;
+    donationType: DonationType;
+    currencyType: string;
+    confirmDonationCB: Function;
+    cancelDonationCB: Function;
+  }): Promise<void> {
+    const confirmDonation = (): void => {
+      console.log('confirmDonation ~~~~~~~');
+      options?.confirmDonationCB();
+    };
+    const cancelDonation = (): void => {
+      console.log('cancelDonation ~~~~~~~');
+      options?.cancelDonationCB();
+    };
     const modalConfig = new ModalConfig({
+      closeOnBackdropClick: false,
+      // call close callback
       headerColor: ModalHeaderColor.Green,
       title: html`
         Confirm donation
@@ -226,6 +247,8 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
           .amount="${options.amount}"
           .currencyType="${options.currencyType}"
           .donationType="${options.donationType}"
+          .confirmDonation=${confirmDonation}
+          .cancelDonation=${cancelDonation}
         ></confirm-donation-modal>
       `,
     });

@@ -112,13 +112,36 @@ export class PayPalFlowHandler
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options: object,
   ): Promise<void> {
+    console.log('payPalPaymentStarted *******', { dataSource, options });
     this.emitter.emit('payPalPaymentStarted', dataSource, options);
   }
 
   async payPalPaymentAuthorized(dataSource: PayPalButtonDataSourceInterface,
     payload: paypal.TokenizePayload
     ): Promise<void> {
+
+      // we got dataSource & payload
+      // we need to send it to `payPalPaymentConfirmed`
+      // after patron confirms the payment
     console.log('payPalPaymentAuthorized *******', { dataSource, payload });
+
+    const { donationType, amount } = dataSource.donationInfo;
+    this.donationFlowModalManager.showConfirmationStepModal({
+      donationType,
+      amount,
+      currencyType: 'USD', // defaults to USD for now
+      confirmDonationCB: () => {
+        this.payPalPaymentConfirmed(dataSource, payload);
+      },
+      cancelDonationCB: () => {
+        this.donationFlowModalManager.closeModal();
+        this.payPalPaymentCancelled(dataSource, {});
+      }
+    });
+
+    // cancel payment on modal X
+    // cancel payment on cancel
+    
   }
 
   async payPalPaymentConfirmed(

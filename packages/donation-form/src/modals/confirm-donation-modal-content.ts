@@ -22,45 +22,22 @@ export class ConfirmDonationContent extends LitElement {
 
   @property({ type: String }) donationType: DonationType = DonationType.OneTime;
 
-  @property({ type: Function }) donationCancelled: Function = (): void => {};
+  @property({ type: Function }) confirmDonation: Function = (): void => {};
 
-  @property({ type: Function }) donationConfirmed: Function= (): void => {};
+  @property({ type: Function }) cancelDonation: Function= (): void => {};
 
-  get confirmationText(): string {
+  get confirmationText(): TemplateResult {
     const amount = currency(this.amount, { symbol: this.currencySymbol }).format();
 
-    return `You are about to make a ${this.donationType} donation of ${amount} ${this.currencyType} to the Internet Archive.`;
+    return html`<p>You are about to make a <b>${this.donationType}</b> donation of <b>${amount} ${this.currencyType}</b> to the Internet Archive.</p>`;
   }
 
-  get currencySymbol(): string {
-    switch(this.currencyType) {
-      case 'USD':
-        return '$';
-      case 'EUR':
-        return '€';
-      case 'GBP':
-        return '£';
-      case 'JPY':
-        return '¥';
-      case 'CAD':
-        return '$';
-      case 'AUD':
-        return '$';
-      case 'NZD':
-        return '$';
-      default:
-        return '$';
-    }
+  confirm(): void {
+    this?.confirmDonation();
   }
 
-  confirm(e: Event): void {
-    console.log('donationConfirmed --- ', e);
-    this?.donationConfirmed();
-  }
-
-  cancel(e: Event): void {
-    console.log('donationCancelled --- ', e);
-    this?.donationCancelled();
+  cancel(): void {
+    this?.cancelDonation();
   }
 
   /** @inheritdoc */
@@ -69,8 +46,8 @@ export class ConfirmDonationContent extends LitElement {
       <p>${this.confirmationText}</p>
 
       <div class="cta-group">
-        <button id="confirm" @click=${(e: Event): void => this.confirm(e)}>Complete donation</button>
-        <button id="cancel" @click=${(e: Event): void => this.cancel(e)}>Cancel</button>
+        <button id="confirm" @click=${(): void => this.confirm()}>Complete donation</button>
+        <button id="cancel" @click=${(): void => this.cancel()}>Cancel</button>
       </div>
     `;
   }
@@ -115,5 +92,59 @@ export class ConfirmDonationContent extends LitElement {
         cursor: not-allowed;
       }
     }`;
+  }
+
+  /**
+   * https://developer.paypal.com/docs/reports/reference/paypal-supported-currencies/
+   */
+   get currencySymbol(): string {
+    switch(this.currencyType) {
+      case 'AUD':
+        return 'AU$';
+      case 'BRL':
+        return 'R$';
+      case 'CAD':
+        return 'CA$';
+      case 'CHF':
+        return 'Fr';
+      case 'CNY':
+        return '¥';
+      case 'CZK':
+        return 'Kč';
+      case 'DKK':
+        return 'Kr';
+      case 'EUR':
+        return '€';
+      case 'GBP':
+        return '£';
+      case 'HKD':
+        return 'HK$';
+      case 'HUF':
+        return 'Ft';
+      case 'ILS':
+        return '₪';
+      case 'JPY':
+        return '¥';
+      case 'MXN':
+        return 'MX$';
+      case 'MYR':
+        return 'RM';
+      case 'NOK':
+        return 'kr';
+      case 'PLN':
+        return 'zł';
+      case 'RUB':
+        return '₽';
+      case 'SEK':
+        return 'kr';
+      case 'SGD':
+        return 'S$';
+      case 'THB':
+        return '฿';
+      case 'TYD':
+        return 'NT$';
+      default:
+        return '$'; // $ as default USD, NZD
+    }
   }
 }

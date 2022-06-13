@@ -164,7 +164,13 @@ export class DonationFormController extends LitElement {
     }
   }
 
-  async showConfirmationStepDev(options: { donationType: DonationType; amount: number; currencyType: string }): Promise<void> {
+  async showConfirmationStepDev(options: {
+    donationType: DonationType;
+    amount: number;
+    currencyType: string;
+    cancelDonationCB: Function;
+    confirmDonationCB: Function;
+  }): Promise<void> {
     this.donationForm.showConfirmationModalDev(options);
   }
 

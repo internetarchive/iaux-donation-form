@@ -51,6 +51,8 @@ export interface PaymentFlowHandlersInterface {
     amount: number;
     donationType: DonationType;
     currencyType: string;
+    confirmDonationCB: Function;
+    cancelDonationCB: Function;
   }): Promise<void>;
 
   creditCardHandler: CreditCardFlowHandlerInterface | undefined;
@@ -95,6 +97,17 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
     userClosedModalCallback?: () => void;
   }): Promise<void> {
     return this.donationFlowModalManager.showUpsellModal(options);
+  }
+
+    /** @inheritdoc */
+  showConfirmationStepModal(options: {
+    amount: number;
+    donationType: DonationType;
+    currencyType: string;
+    confirmDonationCB: Function;
+    cancelDonationCB: Function;
+  }): Promise<void> {
+    return this.donationFlowModalManager.showConfirmationStepModal(options);
   }
 
   get creditCardHandler(): CreditCardFlowHandlerInterface | undefined {
@@ -182,10 +195,6 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
       braintreeManager: this.braintreeManager,
       modalManager: this.modalManager,
     });
-  }
-
-  showConfirmationStepModal(options: { amount: number; donationType: DonationType; currencyType: string }): Promise<void> {
-    return this.donationFlowModalManager.showConfirmationStepModal(options);
   }
 
   private braintreeManager: BraintreeManagerInterface;

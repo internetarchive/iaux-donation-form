@@ -117,16 +117,33 @@
         donationType: DonationType.OneTime,
         amount: 33,
         currencyType: 'USD',
+        cancelDonationCB: () => {
+          alert('Donation Cancelled');
+          formController.modalManager.closeModal()
+        },
+        confirmDonationCB: () => {
+          alert('Donation Confirmed');
+          formController.modalManager.closeModal()
+        }
       });
 
     });
 
     document.querySelector('#confirm-step-modal-monthly').addEventListener('click', () => {
       const formController = document.querySelector('donation-form-controller');
+      debugger;
       formController.showConfirmationStepDev({
         donationType: DonationType.Monthly,
         amount: 5,
         currencyType: 'USD',
+        cancelDonationCB: () => {
+          alert('Donation Cancelled');
+          formController.modalManager.closeModal()
+        },
+        confirmDonationCB: () => {
+          alert('Donation Confirmed');
+          formController.modalManager.closeModal()
+        }
       });
 
     });
