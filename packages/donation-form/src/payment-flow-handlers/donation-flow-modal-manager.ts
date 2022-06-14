@@ -228,20 +228,19 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     cancelDonationCB: Function;
   }): Promise<void> {
     const confirmDonation = (): void => {
-      console.log('confirmDonation ~~~~~~~');
       options?.confirmDonationCB();
     };
     const cancelDonation = (): void => {
-      console.log('cancelDonation ~~~~~~~');
       options?.cancelDonationCB();
     };
+    const modalTitle = options.donationType === DonationType.Upsell
+      ? 'Confirm monthly donations'
+      : 'Confirm donation';
+
     const modalConfig = new ModalConfig({
       closeOnBackdropClick: false,
-      // call close callback
       headerColor: ModalHeaderColor.Green,
-      title: html`
-        Confirm donation
-      `,
+      title: html`${modalTitle}`,
       message: html`
         <confirm-donation-modal
           .amount="${options.amount}"
@@ -254,6 +253,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     });
     return this.modalManager.showModal({
       config: modalConfig,
+      userClosedModalCallback: cancelDonation
     });
   }
 

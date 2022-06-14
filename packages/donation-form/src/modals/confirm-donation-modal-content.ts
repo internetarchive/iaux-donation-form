@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { LitElement, html, TemplateResult, css, CSSResultGroup } from 'lit';
+import { LitElement, html, TemplateResult, css, CSSResultGroup, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { DonationType } from '@internetarchive/donation-form-data-models';
 import currency from 'currency.js';
@@ -28,8 +28,14 @@ export class ConfirmDonationContent extends LitElement {
 
   get confirmationText(): TemplateResult {
     const amount = currency(this.amount, { symbol: this.currencySymbol }).format();
+    return html`
+    <p>You are about to make a <b>${this.donationType}</b> donation of <b>${amount} ${this.currencyType}</b> to the Internet Archive.</p>
+    `;
+  }
 
-    return html`<p>You are about to make a <b>${this.donationType}</b> donation of <b>${amount} ${this.currencyType}</b> to the Internet Archive.</p>`;
+  get confirmUpsellText(): TemplateResult {
+    const amount = currency(this.amount, { symbol: this.currencySymbol }).format();
+    return html`<p>You are about to begin making <b>monthly</b> donations of <b>${amount} ${this.currencyType}</b> to the Internet Archive starting next month.</p>`;
   }
 
   confirm(): void {
@@ -40,13 +46,17 @@ export class ConfirmDonationContent extends LitElement {
     this?.cancelDonation();
   }
 
+  get confirmCTA(): string {
+    return this.donationType === DonationType.Upsell ? 'Start Monthly Donation' : 'Confirm Donation';
+  }
+
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
-      <p>${this.confirmationText}</p>
+      ${this.donationType === DonationType.Upsell ? this.confirmUpsellText : this.confirmationText}
 
       <div class="cta-group">
-        <button id="confirm" @click=${(): void => this.confirm()}>Complete donation</button>
+        <button id="confirm" @click=${(): void => this.confirm()}>${this.confirmCTA}</button>
         <button id="cancel" @click=${(): void => this.cancel()}>Cancel</button>
       </div>
     `;
