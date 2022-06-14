@@ -234,8 +234,8 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       options?.cancelDonationCB();
     };
     const modalTitle = options.donationType === DonationType.Upsell
-      ? 'Confirm monthly donations'
-      : 'Confirm donation';
+      ? 'Confirm monthly donation'
+      : 'Complete donation';
 
     const modalConfig = new ModalConfig({
       closeOnBackdropClick: false,

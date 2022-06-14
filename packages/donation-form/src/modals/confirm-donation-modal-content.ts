@@ -35,7 +35,7 @@ export class ConfirmDonationContent extends LitElement {
 
   get confirmUpsellText(): TemplateResult {
     const amount = currency(this.amount, { symbol: this.currencySymbol }).format();
-    return html`<p>You are about to begin making <b>monthly</b> donations of <b>${amount} ${this.currencyType}</b> to the Internet Archive starting next month.</p>`;
+    return html`<p>You are about to begin making <b>monthly</b> donations of <b>${amount} ${this.currencyType}</b> to the Internet Archive. (Your first recurring contribution will be next month.)</p>`;
   }
 
   confirm(): void {
@@ -47,7 +47,7 @@ export class ConfirmDonationContent extends LitElement {
   }
 
   get confirmCTA(): string {
-    return this.donationType === DonationType.Upsell ? 'Start monthly donation' : 'Confirm donation';
+    return this.donationType === DonationType.Upsell ? 'Start monthly donation' : 'Complete donation';
   }
 
   /** @inheritdoc */
