@@ -47,7 +47,7 @@ export class ConfirmDonationContent extends LitElement {
   }
 
   get confirmCTA(): string {
-    return this.donationType === DonationType.Upsell ? 'Start Monthly Donation' : 'Confirm Donation';
+    return this.donationType === DonationType.Upsell ? 'Start monthly donation' : 'Confirm donation';
   }
 
   /** @inheritdoc */
