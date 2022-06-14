@@ -125,10 +125,10 @@ export class PayPalFlowHandler
       // after patron confirms the payment
     console.log('payPalPaymentAuthorized *******', { dataSource, payload });
 
-    const { donationType, amount } = dataSource.donationInfo;
+    const { donationType, total } = dataSource.donationInfo;
     this.donationFlowModalManager.showConfirmationStepModal({
       donationType,
-      amount,
+      amount: total,
       currencyType: 'USD', // defaults to USD for now
       confirmDonationCB: () => {
         this.payPalPaymentConfirmed(dataSource, payload);
