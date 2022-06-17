@@ -12,6 +12,7 @@ import {
 } from '@internetarchive/donation-form-data-models';
 import { mockBillingInfo } from '../../mocks/models/mock-billing-info';
 import { mockCustomerInfo } from '../../mocks/models/mock-customer-info';
+import { ModalConfig } from '@internetarchive/modal-manager';
 
 describe('Donation Flow Modal Manager', () => {
   it('can close the modal', async () => {
@@ -105,6 +106,30 @@ describe('Donation Flow Modal Manager', () => {
     expect(modalOptions?.config.title?.strings[0]).to.contain('Thank You!');
     const response = mockBraintreeManager.donationSuccessfulOptions?.successResponse;
     expect(response).to.deep.equal(mockSuccessResponse);
+  });
+
+  it('can show the confirmation modal', async () => {
+    const mockModalManager = (await fixture(html`
+      <mock-modal-manager></mock-modal-manager>
+    `)) as MockModalManager;
+    const mockBraintreeManager = new MockBraintreeManager();
+    const manager = new DonationFlowModalManager({
+      braintreeManager: mockBraintreeManager,
+      modalManager: mockModalManager,
+    });
+    manager.showConfirmationStepModal({
+      donationType: DonationType.Upsell,
+      amount: 8,
+      currencyType: 'USD',
+      cancelDonationCB: () => console.log('donation cancelled'),
+      confirmDonationCB: () => console.log('donation confirmed'),
+    });
+
+    const modalOptions = mockModalManager.showModalOptions;
+    expect(modalOptions?.config.headerColor).to.equal('#55A183');
+    expect(modalOptions?.config.closeOnBackdropClick).to.be.false;
+    expect(modalOptions?.config.showCloseButton).to.be.true;
+    expect(modalOptions?.config?.title?.values).to.contain('Confirm monthly donation');
   });
 
   it('can start the donation submission flow', async () => {
