@@ -396,6 +396,7 @@ export class DonationFormController extends LitElement {
           @donationInfoChanged=${this.donationInfoChanged}
           @paymentProviderSelected=${this.paymentProviderSelected}
           @paymentFlowStarted=${this.paymentFlowStarted}
+          @paymentFlowConfirmed=${this.paymentFlowConfirmed}
           @paymentFlowCancelled=${this.paymentFlowCancelled}
           @paymentFlowError=${this.paymentFlowError}
         >
@@ -477,6 +478,12 @@ export class DonationFormController extends LitElement {
       previousProviderInfo = `ProviderChangedFrom-${this.removeSpaces(previousPaymentProvider)}`;
     }
     this.logEvent(eventName, previousProviderInfo);
+  }
+
+  private paymentFlowConfirmed(e: CustomEvent): void {
+    const selectedProvider = e.detail.paymentProvider as PaymentProvider;
+    const providerNoSpaces = this.removeSpaces(selectedProvider);
+    this.logEvent('PaymentFlowConfirmed', providerNoSpaces);
   }
 
   private paymentFlowStarted(e: CustomEvent): void {

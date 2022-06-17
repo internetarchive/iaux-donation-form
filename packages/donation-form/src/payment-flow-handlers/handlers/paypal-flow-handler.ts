@@ -57,6 +57,7 @@ export interface PayPalFlowHandlerEvents {
   payPalPaymentStarted: (dataSource: PayPalButtonDataSourceInterface, options: object) => void;
   payPalPaymentCancelled: (dataSource: PayPalButtonDataSourceInterface, data: object) => void;
   payPalPaymentError: (dataSource: PayPalButtonDataSourceInterface, error: string) => void;
+  payPalPaymentConfirmed: (dataSource: PayPalButtonDataSourceInterface, data: object) => void;
 }
 
 /**
@@ -112,18 +113,16 @@ export class PayPalFlowHandler
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options: object,
   ): Promise<void> {
-    console.log('payPalPaymentStarted *******', { dataSource, options });
     this.emitter.emit('payPalPaymentStarted', dataSource, options);
   }
 
+  /**
+   * Once we have the dataSource & payload, we ask patron to confirm donation.
+   * Once confirmed, we move forward to: `payPalPaymentConfirmed`
+   */
   async payPalPaymentAuthorized(dataSource: PayPalButtonDataSourceInterface,
     payload: paypal.TokenizePayload
     ): Promise<void> {
-
-      // we got dataSource & payload
-      // we need to send it to `payPalPaymentConfirmed`
-      // after patron confirms the payment
-    console.log('payPalPaymentAuthorized *******', { dataSource, payload });
 
     const { donationType, total } = dataSource.donationInfo;
     this.donationFlowModalManager.showConfirmationStepModal({
@@ -138,10 +137,6 @@ export class PayPalFlowHandler
         this.payPalPaymentCancelled(dataSource, {});
       }
     });
-
-    // cancel payment on modal X
-    // cancel payment on cancel
-    
   }
 
   async payPalPaymentConfirmed(

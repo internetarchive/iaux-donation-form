@@ -372,6 +372,16 @@ export class DonationForm extends LitElement {
     this.dispatchEvent(event);
   }
 
+  private emitPaymentFlowConfirmedEvent(): void {
+    if (!this.selectedPaymentProvider) {
+      return;
+    }
+    const event = new CustomEvent('paymentFlowConfirmed', {
+      detail: { paymentProvider: this.selectedPaymentProvider },
+    });
+    this.dispatchEvent(event);
+  }
+
   private emitPaymentFlowCancelledEvent(): void {
     if (!this.selectedPaymentProvider) {
       return;
@@ -461,6 +471,10 @@ export class DonationForm extends LitElement {
     this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentStarted', () => {
       this.selectedPaymentProvider = PaymentProvider.PayPal;
       this.emitPaymentFlowStartedEvent();
+    });
+    this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentConfirmed', () => {
+      this.selectedPaymentProvider = PaymentProvider.PayPal;
+      this.emitPaymentFlowConfirmedEvent();
     });
     this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentCancelled', () => {
       this.selectedPaymentProvider = PaymentProvider.PayPal;
