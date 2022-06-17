@@ -121,6 +121,16 @@ export class DonationForm extends LitElement {
     `;
   }
 
+    async showConfirmationModalDev(options: {
+      donationType: DonationType;
+      amount: number;
+      currencyType: string;
+      cancelDonationCB: Function;
+      confirmDonationCB: Function;
+    }): Promise<void> {
+      this.paymentFlowHandlers?.showConfirmationStepModal(options);
+    }
+
   /**
    * This is a developer convenience method that allows us to show the upsell modal without going
    * through the purchasing flow. If it's showing the PayPal button, it will trigger
@@ -362,6 +372,16 @@ export class DonationForm extends LitElement {
     this.dispatchEvent(event);
   }
 
+  private emitPaymentFlowConfirmedEvent(): void {
+    if (!this.selectedPaymentProvider) {
+      return;
+    }
+    const event = new CustomEvent('paymentFlowConfirmed', {
+      detail: { paymentProvider: this.selectedPaymentProvider },
+    });
+    this.dispatchEvent(event);
+  }
+
   private emitPaymentFlowCancelledEvent(): void {
     if (!this.selectedPaymentProvider) {
       return;
@@ -451,6 +471,10 @@ export class DonationForm extends LitElement {
     this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentStarted', () => {
       this.selectedPaymentProvider = PaymentProvider.PayPal;
       this.emitPaymentFlowStartedEvent();
+    });
+    this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentConfirmed', () => {
+      this.selectedPaymentProvider = PaymentProvider.PayPal;
+      this.emitPaymentFlowConfirmedEvent();
     });
     this.paymentFlowHandlers?.paypalHandler?.on('payPalPaymentCancelled', () => {
       this.selectedPaymentProvider = PaymentProvider.PayPal;

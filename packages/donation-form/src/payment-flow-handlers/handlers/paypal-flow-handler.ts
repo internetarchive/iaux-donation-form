@@ -57,6 +57,7 @@ export interface PayPalFlowHandlerEvents {
   payPalPaymentStarted: (dataSource: PayPalButtonDataSourceInterface, options: object) => void;
   payPalPaymentCancelled: (dataSource: PayPalButtonDataSourceInterface, data: object) => void;
   payPalPaymentError: (dataSource: PayPalButtonDataSourceInterface, error: string) => void;
+  payPalPaymentConfirmed: (dataSource: PayPalButtonDataSourceInterface, data: object) => void;
 }
 
 /**
@@ -115,10 +116,34 @@ export class PayPalFlowHandler
     this.emitter.emit('payPalPaymentStarted', dataSource, options);
   }
 
-  async payPalPaymentAuthorized(
+  /**
+   * Once we have the dataSource & payload, we ask patron to confirm donation.
+   * Once confirmed, we move forward to: `payPalPaymentConfirmed`
+   */
+  async payPalPaymentAuthorized(dataSource: PayPalButtonDataSourceInterface,
+    payload: paypal.TokenizePayload
+    ): Promise<void> {
+
+    const { donationType, total } = dataSource.donationInfo;
+    this.donationFlowModalManager.showConfirmationStepModal({
+      donationType,
+      amount: total,
+      currencyType: 'USD', // defaults to USD for now
+      confirmDonationCB: () => {
+        this.payPalPaymentConfirmed(dataSource, payload);
+      },
+      cancelDonationCB: () => {
+        this.donationFlowModalManager.closeModal();
+        this.payPalPaymentCancelled(dataSource, {});
+      }
+    });
+  }
+
+  async payPalPaymentConfirmed(
     dataSource: PayPalButtonDataSourceInterface,
     payload: paypal.TokenizePayload,
   ): Promise<void> {
+    this.emitter.emit('payPalPaymentConfirmed', dataSource, {});
     this.donationFlowModalManager.showProcessingModal();
 
     const donationType = dataSource.donationInfo.donationType;

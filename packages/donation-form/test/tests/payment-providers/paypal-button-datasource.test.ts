@@ -46,6 +46,7 @@ describe('PayPalButtonDataSource', () => {
         enableShippingAddress: true,
         amount: 3.5,
         currency: 'USD',
+        intent: 'capture',
       });
     });
 
@@ -70,6 +71,7 @@ describe('PayPalButtonDataSource', () => {
         enableShippingAddress: true,
         amount: expectedTotal,
         currency: 'USD',
+        intent: 'capture',
       });
     });
 
@@ -91,6 +93,7 @@ describe('PayPalButtonDataSource', () => {
         flow: 'vault',
         enableShippingAddress: true,
         billingAgreementDescription: 'Subscribe to donate $1.50 monthly',
+        intent: 'capture',
       });
     });
   });

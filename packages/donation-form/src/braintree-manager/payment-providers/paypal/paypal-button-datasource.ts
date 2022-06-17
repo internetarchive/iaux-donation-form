@@ -92,7 +92,7 @@ export interface PayPalButtonDataSourceDelegate {
   payPalPaymentStarted(dataSource: PayPalButtonDataSourceInterface, options: object): Promise<void>;
 
   /**
-   * Payment has been authorized
+   * Payment has been authorized by patron and submits to PayPal
    *
    * @param {PayPalButtonDataSourceInterface} dataSource
    * @param {paypal.TokenizePayload} payload
@@ -100,6 +100,19 @@ export interface PayPalButtonDataSourceDelegate {
    * @memberof PayPalButtonDataSourceDelegate
    */
   payPalPaymentAuthorized(
+    dataSource: PayPalButtonDataSourceInterface,
+    payload: paypal.TokenizePayload,
+  ): Promise<void>;
+
+  /**
+   * Payment has been authorized
+   *
+   * @param {PayPalButtonDataSourceInterface} dataSource
+   * @param {paypal.TokenizePayload} payload
+   * @returns {Promise<void>}
+   * @memberof PayPalButtonDataSourceDelegate
+   */
+   payPalPaymentConfirmed(
     dataSource: PayPalButtonDataSourceInterface,
     payload: paypal.TokenizePayload,
   ): Promise<void>;
@@ -181,6 +194,13 @@ export class PayPalButtonDataSource implements PayPalButtonDataSourceInterface {
     const payload: paypal.TokenizePayload = await this.paypalInstance.tokenizePayment(data);
 
     this.delegate?.payPalPaymentAuthorized(this, payload);
+
+    return payload;
+  }
+
+  async onConfirm(data: paypal.AuthorizationData): Promise<paypal.TokenizePayload> {
+    const payload: paypal.TokenizePayload = await this.paypalInstance.tokenizePayment(data);
+    this.delegate?.payPalPaymentConfirmed(this, payload);
 
     return payload;
   }

@@ -164,6 +164,16 @@ export class DonationFormController extends LitElement {
     }
   }
 
+  async showConfirmationStepDev(options: {
+    donationType: DonationType;
+    amount: number;
+    currencyType: string;
+    cancelDonationCB: Function;
+    confirmDonationCB: Function;
+  }): Promise<void> {
+    this.donationForm.showConfirmationModalDev(options);
+  }
+
   async showUpsellModalDev(options: {
     oneTimeAmount: number;
     ctaMode?: UpsellModalCTAMode;
@@ -319,7 +329,7 @@ export class DonationFormController extends LitElement {
     this.donationForm.paymentFlowHandlers = this.paymentFlowHandlers;
 
     this.braintreeManager.startup();
-    this.paymentFlowHandlers.startup();
+    this.paymentFlowHandlers?.startup();
     this.recaptchaManager.setup(this.recaptchaElement, 1, 'light', 'image');
   }
 
@@ -386,6 +396,7 @@ export class DonationFormController extends LitElement {
           @donationInfoChanged=${this.donationInfoChanged}
           @paymentProviderSelected=${this.paymentProviderSelected}
           @paymentFlowStarted=${this.paymentFlowStarted}
+          @paymentFlowConfirmed=${this.paymentFlowConfirmed}
           @paymentFlowCancelled=${this.paymentFlowCancelled}
           @paymentFlowError=${this.paymentFlowError}
         >
@@ -467,6 +478,12 @@ export class DonationFormController extends LitElement {
       previousProviderInfo = `ProviderChangedFrom-${this.removeSpaces(previousPaymentProvider)}`;
     }
     this.logEvent(eventName, previousProviderInfo);
+  }
+
+  private paymentFlowConfirmed(e: CustomEvent): void {
+    const selectedProvider = e.detail.paymentProvider as PaymentProvider;
+    const providerNoSpaces = this.removeSpaces(selectedProvider);
+    this.logEvent('PaymentFlowConfirmed', providerNoSpaces);
   }
 
   private paymentFlowStarted(e: CustomEvent): void {

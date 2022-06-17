@@ -21,6 +21,7 @@ import {
   GooglePayFlowHandler,
 } from './handlers/googlepay-flow-handler';
 import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
+import { DonationType } from '@internetarchive/donation-form-data-models';
 
 export interface PaymentFlowHandlersInterface {
   startup(): Promise<void>;
@@ -44,6 +45,14 @@ export interface PaymentFlowHandlersInterface {
     noSelected?: () => void;
     amountChanged?: (amount: number) => void;
     userClosedModalCallback?: () => void;
+  }): Promise<void>;
+
+  showConfirmationStepModal(options: {
+    amount: number;
+    donationType: DonationType;
+    currencyType: string;
+    confirmDonationCB: Function;
+    cancelDonationCB: Function;
   }): Promise<void>;
 
   creditCardHandler: CreditCardFlowHandlerInterface | undefined;
@@ -88,6 +97,17 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
     userClosedModalCallback?: () => void;
   }): Promise<void> {
     return this.donationFlowModalManager.showUpsellModal(options);
+  }
+
+    /** @inheritdoc */
+  showConfirmationStepModal(options: {
+    amount: number;
+    donationType: DonationType;
+    currencyType: string;
+    confirmDonationCB: Function;
+    cancelDonationCB: Function;
+  }): Promise<void> {
+    return this.donationFlowModalManager.showConfirmationStepModal(options);
   }
 
   get creditCardHandler(): CreditCardFlowHandlerInterface | undefined {

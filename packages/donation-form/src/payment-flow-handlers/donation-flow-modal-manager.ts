@@ -1,6 +1,7 @@
 import { html } from 'lit';
 import { ModalConfig, ModalManagerInterface } from '@internetarchive/modal-manager';
 import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
+import '../modals/confirm-donation-modal-content';
 import { BraintreeManagerInterface } from '../braintree-manager/braintree-interfaces';
 import {
   SuccessResponse,
@@ -32,6 +33,13 @@ enum ModalHeaderColor {
  * @interface DonationFlowModalManagerInterface
  */
 export interface DonationFlowModalManagerInterface {
+  showConfirmationStepModal(options: {
+    amount: number;
+    donationType: DonationType;
+    currencyType: string;
+    confirmDonationCB: Function;
+    cancelDonationCB: Function;
+  }): Promise<void>;
   /**
    * Close the modal
    *
@@ -209,6 +217,43 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       customModalContent: html`
         <donation-form-error-modal-content></donation-form-error-modal-content>
       `,
+    });
+  }
+
+  showConfirmationStepModal(options: {
+    amount: number;
+    donationType: DonationType;
+    currencyType: string;
+    confirmDonationCB: Function;
+    cancelDonationCB: Function;
+  }): Promise<void> {
+    const confirmDonation = (): void => {
+      options?.confirmDonationCB();
+    };
+    const cancelDonation = (): void => {
+      options?.cancelDonationCB();
+    };
+    const modalTitle = options.donationType === DonationType.Upsell
+      ? 'Confirm monthly donation'
+      : 'Complete donation';
+
+    const modalConfig = new ModalConfig({
+      closeOnBackdropClick: false,
+      headerColor: ModalHeaderColor.Green,
+      title: html`${modalTitle}`,
+      message: html`
+        <confirm-donation-modal
+          .amount="${options.amount}"
+          .currencyType="${options.currencyType}"
+          .donationType="${options.donationType}"
+          .confirmDonation=${confirmDonation}
+          .cancelDonation=${cancelDonation}
+        ></confirm-donation-modal>
+      `,
+    });
+    return this.modalManager.showModal({
+      config: modalConfig,
+      userClosedModalCallback: cancelDonation
     });
   }
 

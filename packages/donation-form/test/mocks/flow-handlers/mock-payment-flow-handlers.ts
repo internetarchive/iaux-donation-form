@@ -6,6 +6,7 @@ import { MockApplePayFlowHandler } from './individual-handlers/mock-applepay-flo
 import { MockVenmoFlowHandler } from './individual-handlers/mock-venmo-flow-handler';
 import { MockGooglePayFlowHandler } from './individual-handlers/mock-googlepay-flow-handler';
 import { UpsellModalCTAMode } from '../../../src/modals/upsell-modal-content';
+import { DonationType } from '@internetarchive/donation-form-data-models';
 
 export class MockPaymentFlowHandlers implements PaymentFlowHandlersInterface {
   showUpsellModal(options: {
@@ -15,6 +16,13 @@ export class MockPaymentFlowHandlers implements PaymentFlowHandlersInterface {
     noSelected?: () => void;
     amountChanged?: (amount: number) => void;
     userClosedModalCallback?: () => void;
+  }): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  showConfirmationStepModal(options: {
+    amount: number;
+    donationType: DonationType;
+    currencyType: string;
   }): Promise<void> {
     throw new Error('Method not implemented.');
   }

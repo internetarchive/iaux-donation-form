@@ -54,6 +54,15 @@ export class MockPayPalButtonDataSourceDelegate implements PayPalButtonDataSourc
     this.paymentAuthorizedResults.payload = payload;
   }
 
+  async payPalPaymentConfirmed(
+    dataSource: PayPalButtonDataSourceInterface,
+    payload: paypal.TokenizePayload,
+  ): Promise<void> {
+    this.paymentAuthorizedResults.called = true;
+    this.paymentAuthorizedResults.datasource = dataSource;
+    this.paymentAuthorizedResults.payload = payload;
+  }
+
   async payPalPaymentCancelled(
     dataSource: PayPalButtonDataSourceInterface,
     data: object,
