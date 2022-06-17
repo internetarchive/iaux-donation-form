@@ -143,6 +143,7 @@ export class PayPalFlowHandler
     dataSource: PayPalButtonDataSourceInterface,
     payload: paypal.TokenizePayload,
   ): Promise<void> {
+    this.emitter.emit('payPalPaymentConfirmed', dataSource, {});
     this.donationFlowModalManager.showProcessingModal();
 
     const donationType = dataSource.donationInfo.donationType;
