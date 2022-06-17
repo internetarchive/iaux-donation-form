@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { LitElement, html, TemplateResult, css, CSSResultGroup, nothing } from 'lit';
+import { LitElement, html, TemplateResult, css, CSSResultGroup } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { DonationType } from '@internetarchive/donation-form-data-models';
 import currency from 'currency.js';
