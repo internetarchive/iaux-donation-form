@@ -325,6 +325,7 @@ export class ContactForm extends LitElement {
           padding: 0;
           margin: 0;
           margin-bottom: ${fieldSetSpacing};
+          background-color: white;
         }
 
         /* These 1px and 0 margins in the next few selectors are to account for the

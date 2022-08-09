@@ -536,6 +536,24 @@ export class DonationFormController extends LitElement {
   private get getStyles(): TemplateResult {
     return html`
       <style>
+        .donation-form-controller-container {
+          color: var(--donateFormTextColor, #333);
+          background-color: var(--donateFormBgColor, transparent);
+
+          --formSectionContentBackgroundColor: var(--donateFormBgColor, transparent);
+
+          --editFormBadgeBgColor: var(--donateFormBadgeBgColor, #333);
+          --formSectionBadgeBackgroundColor: var(--donateFormBadgeBgColor, #333);
+
+          --editFormBadgeFontColor: var(--donateFormBadgeTextColor, #fff);
+          --formSectionBadgeFontColor: var(--donateFormBadgeTextColor, #fff);
+
+          --paymentButtonFontColor: var(--donateFormPaymentOptionTextColor);
+          --paymentButtonColor: var(--donateFormPaymentOptionBgColor);
+
+          --paymentButtonSelectedColor: var(--donateFormSelectedOptionBgColor);
+          --paymentButtonSelectedFontColor: var(--donateFormSelectedOptionTextColor);
+        }
         .donation-form-controller-container donation-form:focus {
           outline: none;
         }
@@ -569,6 +587,10 @@ export class DonationFormController extends LitElement {
           color: red;
           font-size: 1.4rem;
           margin-bottom: 0.6rem;
+        }
+
+        .donation-form-controller-container div[slot="braintree-hosted-fields"] {
+          background-color: white;
         }
       </style>
     `;

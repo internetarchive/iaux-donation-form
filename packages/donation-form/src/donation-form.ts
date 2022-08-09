@@ -508,6 +508,7 @@ export class DonationForm extends LitElement {
     const donateButtonFontSize = css`var(--donateButtonFontSize, 2.6rem)`;
     const donateButtonHeight = css`var(--donateButtonHeight, 4rem)`;
     const donateButtonColor = css`var(--donateButtonColor, rgba(49, 164, 129, 1))`;
+    const donateButtonTextColor = css`var(--donateButtonTextColor, #fff)`;
     const donateButtonHoverColor = css`var(--donateButtonHoverColor, rgba(39, 131, 103, 1))`;
     const totalAmountTopMargin = css`var(--donateTotalAmountTopMargin, 1.5rem)`;
     const totalAmountBottomMargin = css`var(--donateTotalAmountBottomMargin, 1.2rem)`;
@@ -541,7 +542,7 @@ export class DonationForm extends LitElement {
         font-size: ${donateButtonFontSize};
         font-weight: bold;
         text-align: center;
-        color: #fff;
+        color: ${donateButtonTextColor};
         cursor: pointer;
         border: none;
         border-radius: 5px;
