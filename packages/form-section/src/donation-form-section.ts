@@ -78,6 +78,10 @@ export class DonationFormSection extends LitElement {
         width: 100%;
       }
 
+      .hidebadge .badge-container {
+        display: none;
+      }
+
       .hidebadgeleavespacing .badge {
         display: none;
       }
