@@ -831,10 +831,10 @@
   resolved "https://registry.npmjs.org/@internetarchive/donation-form-data-models/-/donation-form-data-models-0.3.2.tgz"
   integrity sha512-yxjwwr/2YMIx56IN9ZVETqByc7jlsX6s57zk1K+bWgA0u+D0OKScWKX+dLxaz2viRNSQOEOR1MsQWwaKshh0Tg==
 
-"@internetarchive/donation-form-section@^0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-section/-/donation-form-section-0.3.4.tgz#0602588d0a4d66bdd1467cdee51aa4a712527301"
-  integrity sha512-EfQBmLFaN5sTXzJl0dGj8gNYyrgXVVJ5JMKTjoFWvm4bb1cV/cNTUIQY0dpKQpxeNsy9uknYQftmf7nl6P81ZA==
+"@internetarchive/donation-form-section@0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-section/-/donation-form-section-0.3.5.tgz#ed840d30a56bd301eeee6d47d016e549926399cd"
+  integrity sha512-m/F03l/Qw/tFaaSmub50KGChiVqMvqHh+q81wXzbTmfMeIYI1g1p72fkKJLIWnkDspcGBurRZJMntWV824g8wQ==
   dependencies:
     lit "^2.0.2"
 
@@ -1700,7 +1700,7 @@ async-limiter@~1.0.0:
 
 async@^2.6.2:
   version "2.6.4"
-  resolved "https://registry.yarnpkg.com/async/-/async-2.6.4.tgz#706b7ff6084664cd7eae713f6f965433b5504221"
+  resolved "https://registry.npmjs.org/async/-/async-2.6.4.tgz"
   integrity sha512-mzo5dfJYwAn29PeiJ0zvwTo04zj8HDJj0Mn8TD7sno7q12prdbnasKJHhkm2c1LgrhlJ0teaea8860oxi51mGA==
   dependencies:
     lodash "^4.17.14"
@@ -3444,7 +3444,7 @@ flatten@^1.0.2:
 
 follow-redirects@^1.0.0:
   version "1.15.1"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.1.tgz#0ca6a452306c9b276e4d3127483e29575e207ad5"
+  resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.1.tgz"
   integrity sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==
 
 forever-agent@~0.6.1:
@@ -5018,7 +5018,7 @@ mz@^2.1.0:
 
 nanoid@^3.1.23:
   version "3.3.4"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
+  resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.3.4.tgz"
   integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
 
 natural-compare@^1.4.0:
@@ -5054,7 +5054,7 @@ node-environment-flags@1.0.5:
 
 node-fetch@^2.6.0:
   version "2.6.7"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
+  resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.7.tgz"
   integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
   dependencies:
     whatwg-url "^5.0.0"
@@ -6632,7 +6632,7 @@ tr46@^1.0.1:
 
 tr46@~0.0.3:
   version "0.0.3"
-  resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
+  resolved "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz"
   integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
 
 tree-kill@^1.2.2:
@@ -6955,7 +6955,7 @@ wcwidth@^1.0.1:
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
-  resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
+  resolved "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz"
   integrity sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==
 
 webidl-conversions@^4.0.2:
@@ -6970,7 +6970,7 @@ whatwg-fetch@^3.0.0:
 
 whatwg-url@^5.0.0:
   version "5.0.0"
-  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-5.0.0.tgz#966454e8765462e37644d3626f6742ce8b70965d"
+  resolved "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz"
   integrity sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==
   dependencies:
     tr46 "~0.0.3"
