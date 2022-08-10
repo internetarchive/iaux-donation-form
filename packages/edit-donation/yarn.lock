@@ -831,10 +831,10 @@
   resolved "https://registry.npmjs.org/@internetarchive/donation-form-data-models/-/donation-form-data-models-0.3.2.tgz"
   integrity sha512-yxjwwr/2YMIx56IN9ZVETqByc7jlsX6s57zk1K+bWgA0u+D0OKScWKX+dLxaz2viRNSQOEOR1MsQWwaKshh0Tg==
 
-"@internetarchive/donation-form-section@^0.3.4-a2":
-  version "0.3.4-a2"
-  resolved "https://registry.npmjs.org/@internetarchive/donation-form-section/-/donation-form-section-0.3.4-a2.tgz"
-  integrity sha512-4NE+fb5RMtnig8xZsmWQ9v7KvdzTXVSDAuDEZTQxCaqNAz0eiYpfA2Fj2txDZod+WE03sFMy/ei6PEt3PEIrGg==
+"@internetarchive/donation-form-section@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-section/-/donation-form-section-0.3.4.tgz#0602588d0a4d66bdd1467cdee51aa4a712527301"
+  integrity sha512-EfQBmLFaN5sTXzJl0dGj8gNYyrgXVVJ5JMKTjoFWvm4bb1cV/cNTUIQY0dpKQpxeNsy9uknYQftmf7nl6P81ZA==
   dependencies:
     lit "^2.0.2"
 
