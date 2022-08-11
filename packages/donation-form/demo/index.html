@@ -40,6 +40,39 @@
       opacity: 0.01;
       padding-bottom: 0.6rem;
     }
+
+    donation-form-controller.custom-colors {      
+      /* CSS vars to set */
+      /* Donate Button */
+      --donateButtonColor: pink;
+      --donateButtonTextColor: rebeccapurple;
+      --donateButtonHoverColor: deepskyblue;
+
+      /* Credit Card Button */
+      --ccButtonFontColor: darkblue;
+      --ccButtonColor: coral;
+
+      /* Form Background color */
+      --donateFormBgColor: turquoise;
+
+      /* Form Text color */
+      --donateFormTextColor: darkblue;
+
+      /* Flow Badges Background color `(1), (2), (3)` */
+      --donateFormBadgeBgColor: pink;
+      /* Flow Badges Text color `(1), (2), (3)` */
+      --donateFormBadgeTextColor: rebeccapurple;
+
+      /* Form Options Background color `[$5], [$10], [monthly]` */
+      --donateFormPaymentOptionTextColor: darkblue;
+      /* Form Options Text color `[$5], [$10], [monthly]` */
+      --donateFormPaymentOptionBgColor: lightblue;
+
+      /* Selected Option Background color `[$5], [$10], [monthly]` */
+      --donateFormSelectedOptionBgColor: green;
+      /* Selected Option Text color `[$5], [$10], [monthly]` */
+      --donateFormSelectedOptionTextColor: yellow;
+    }
   </style>
 
 </head>
@@ -55,7 +88,9 @@
       <button id="confirm-step-modal-onetime">Show Confirmation Step for 1x</button> |
       <button id="confirm-step-modal-monthly">Show Confirmation Step for Monthly</button> |
       <button id="confirm-step-modal-upsell">Show Confirmation Step for Upsell</button> |
-      <button id="change-donation-amounts">Change Donation Amounts</button>
+      <button id="change-donation-amounts">Change Donation Amounts</button> |
+      <button id="show-custom-colors">Show Custom Color Skinning</button> |
+      <button id="reset-custom-colors">Reset Custom Color Skinning</button> |
     </div>
   </div>
 
@@ -161,6 +196,16 @@
           formController.modalManager.closeModal()
         }
       });
+    });
+
+    document.querySelector('#show-custom-colors').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.classList.add('custom-colors');
+    });
+
+    document.querySelector('#reset-custom-colors').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.classList.remove('custom-colors');
     });
 
     render(

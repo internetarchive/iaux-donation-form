@@ -6,12 +6,11 @@ import {
 import {
   css,
   CSSResult,
-  customElement,
   html,
   LitElement,
-  query,
   TemplateResult,
-} from 'lit-element';
+} from 'lit';
+import { customElement, property, query } from 'lit/decorators';
 import {
   DonationFormEditDonation,
   DonationFormEditDonationStepNumberMode,
@@ -49,6 +48,8 @@ export class AppRoot extends LitElement {
 
   @query('#dollar-amounts') private dollarAmounts!: HTMLInputElement;
 
+  @property({ type: Boolean }) showCustomColors = false;
+
   render(): TemplateResult {
     return html`
       <donation-form-edit-donation
@@ -56,6 +57,7 @@ export class AppRoot extends LitElement {
         @donationInfoChanged=${this.donationInfoChanged}
         @editDonationError=${this.editDonationError}
         stepNumberMode="shownumbers"
+        class=${this.showCustomColors ? 'custom-color' : ''}
       >
       </donation-form-edit-donation>
 
@@ -65,11 +67,17 @@ export class AppRoot extends LitElement {
     `;
   }
 
+  toggleColors(): void {
+    this.showCustomColors = !this.showCustomColors;
+  }
+
   private get devToolsTemplate(): TemplateResult {
     return html`
       <div id="dev-tools">
         <h2>Dev Tools:</h2>
 
+        <button @click=${this.toggleColors}>Toggle Colors</button>
+        <br>
         <button @click=${this.toggleNumbers}>Toggle Number Visibility</button>
 
         <div class="amount">
@@ -220,6 +228,17 @@ export class AppRoot extends LitElement {
       donation-form-edit-donation {
         width: 32rem;
         display: block;
+      }
+
+      donation-form-edit-donation.custom-color {
+        --editFormBgColor: turquoise;
+        --editFormBadgeBgColor: pink;
+        --editFormBadgeFontColor: rebeccapurple;
+        --editFormTextColor: darkBlue;
+        --paymentButtonFontColor: darkBlue;
+        --paymentButtonColor: white;
+        --paymentButtonSelectedColor: green;
+        --paymentButtonSelectedFontColor: yellow;
       }
 
       #dev-tools {

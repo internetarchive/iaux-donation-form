@@ -264,7 +264,8 @@ export class PaymentSelector extends LitElement {
       }
 
       .credit-card-button {
-        background-color: white;
+        color: var(--ccButtonFontColor, #333);
+        background-color: var(--ccButtonColor, white);
         border: 1px solid #333;
         border-radius: 4px;
         cursor: pointer;

@@ -48,14 +48,21 @@ export class DonationFormSection extends LitElement {
     const titleFontSize = css`var(--formSectionTitleFontSize, 1.8rem)`;
     const titleFontWeight = css`var(--formSectionTitleFontWeight, bold)`;
 
-    const sectionContentBackgroundColor = css`var(--formSectionContentBackgroundColor, white)`;
+    const sectionContentBackgroundColor = css`var(--formSectionContentBackgroundColor, transparent)`;
+
+    const textColor = css`var(--formSectionTextColor, #333)`;
 
     const lineHeightCss = css`calc(${badgeRadius} * 2)`;
 
     return css`
+      :host {
+        display: block;
+        background-color: ${sectionContentBackgroundColor};
+        color: ${textColor};
+      }
       .container {
         position: relative;
-        margin-bottom: 1rem;
+        padding: 0.5rem;
       }
 
       .content-container {
@@ -64,12 +71,15 @@ export class DonationFormSection extends LitElement {
         width: calc(100% - (${badgeWidth} + ${badgeMargin}));
         transition: ${badgeTransition};
         z-index: 1;
-        background-color: ${sectionContentBackgroundColor};
       }
 
       .hidebadge .content-container {
         left: 0;
         width: 100%;
+      }
+
+      .hidebadge .badge-container {
+        display: none;
       }
 
       .hidebadgeleavespacing .badge {

@@ -583,6 +583,12 @@ export class DonationFormEditDonation extends LitElement {
     const customAmountColSpan = css`var(--paymentSelectorCustomAmountColSpan, 3)`;
 
     return css`
+      :host {
+        --formSectionContentBackgroundColor: var(--editFormBgColor, transparent);
+        --formSectionBadgeBackgroundColor: var(--editFormBadgeBgColor, #333);
+        --formSectionBadgeFontColor: var(--editFormBadgeFontColor, #fff);
+        --formSectionTextColor: var(--editFormTextColor, #333);
+      }
       .errors {
         color: red;
         font-size: 1.4rem;

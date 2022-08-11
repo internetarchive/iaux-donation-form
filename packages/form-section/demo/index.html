@@ -45,10 +45,31 @@
         allModes = allModes === 'hidebadge' ? 'showbadge' : 'hidebadge';
       }
 
+      function changeFormColor() {
+        const form = document.querySelector('donation-form-section[sectionBadge="A"]');
+        
+        const bgColor = '--formSectionContentBackgroundColor: turquoise;';
+        const badgeBgColor = '--formSectionBadgeBackgroundColor: pink;';
+        const badgeTextColor = '--formSectionBadgeFontColor: rebeccapurple;';
+        const textColor = '--formSectionTextColor: darkBlue;';
+        form.style = `${bgColor} ${textColor} ${badgeBgColor} ${badgeTextColor}`;
+      }
+
+      function resetColor() {
+        const form = document.querySelector('donation-form-section[sectionBadge="A"]');
+        form.style = '';
+      }
+
       render(
         html`
           <donation-form-section sectionBadge="1" headline="A nice catchy headline">
             <div class="section-content">Some nice content here</div>
+          </donation-form-section>
+
+          <donation-form-section sectionBadge="A" headline="Custom BG Color">
+            <div class="section-content">Some nice content here</div>
+            <button @click=${changeFormColor}>Click to change Color</button>
+            <button @click=${resetColor}>Reset Color</button>
           </donation-form-section>
 
           <donation-form-section sectionBadge="2" headline="Another catchy headline">
