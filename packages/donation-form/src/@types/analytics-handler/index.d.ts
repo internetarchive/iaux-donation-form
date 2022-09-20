@@ -1,3 +1,12 @@
+/** Analytics functionality from Donation Form Controller
+ * this will get passed thru to the children handlers
+ * so that they can send analytics events in donation form context
+ */
+export interface DonationControllerEventLoggerInterface {
+  logEvent(action: string, label: string): void;
+  logEventNoSampling(action: string, label: string): void;
+}
+
 /**
  * This is an interface for the analytics handler in petabox
  * because we don't currently have a declarations file for it.

@@ -99,7 +99,7 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
     return this.donationFlowModalManager.showUpsellModal(options);
   }
 
-    /** @inheritdoc */
+  /** @inheritdoc */
   showConfirmationStepModal(options: {
     amount: number;
     donationType: DonationType;
@@ -186,14 +186,22 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
     braintreeManager: BraintreeManagerInterface;
     modalManager: ModalManagerInterface;
     recaptchaManager: RecaptchaManagerInterface;
+    resources: {
+      analytics: {
+        logEvent: (action: string, label: string) => void;
+        logEventNoSampling: (action: string, label: string) => void;
+      };
+    };
   }) {
     this.braintreeManager = options.braintreeManager;
     this.modalManager = options.modalManager;
     this.recaptchaManager = options.recaptchaManager;
+    this.resources = options.resources;
 
     this.donationFlowModalManager = new DonationFlowModalManager({
       braintreeManager: this.braintreeManager,
       modalManager: this.modalManager,
+      analytics: this.resources.analytics,
     });
   }
 
@@ -201,4 +209,10 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
   private modalManager: ModalManagerInterface;
   private recaptchaManager: RecaptchaManagerInterface;
   private donationFlowModalManager: DonationFlowModalManagerInterface;
+  private resources: {
+    analytics: {
+      logEvent: (action: string, label: string) => void;
+      logEventNoSampling: (action: string, label: string) => void;
+    };
+  };
 }

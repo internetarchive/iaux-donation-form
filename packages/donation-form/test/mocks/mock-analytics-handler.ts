@@ -18,4 +18,17 @@ export class MockAnalyticHandler implements AnalyticsHandlerInterface {
     this.callLabel = label;
     this.callAdditionalEventParams = additionalEventParams;
   }
+
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  send_event_no_sampling(
+    category: string,
+    action: string,
+    label?: string,
+    additionalEventParams?: object,
+  ): void {
+    this.callCategory = category;
+    this.callAction = action;
+    this.callLabel = label;
+    this.callAdditionalEventParams = additionalEventParams;
+  }
 }

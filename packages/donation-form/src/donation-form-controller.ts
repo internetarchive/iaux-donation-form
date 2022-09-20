@@ -35,7 +35,7 @@ import './form-elements/contact-form/contact-form';
 import creditCardImg from '@internetarchive/icon-credit-card';
 import calendarImg from '@internetarchive/icon-calendar';
 import lockImg from '@internetarchive/icon-lock';
-import { AnalyticsHandlerInterface } from './@types/analytics-handler';
+import { AnalyticsHandlerInterface, DonationControllerEventLoggerInterface } from './@types/analytics-handler';
 import {
   EditDonationAmountSelectionLayout,
   EditDonationFrequencySelectionMode,
@@ -323,6 +323,12 @@ export class DonationFormController extends LitElement {
       braintreeManager: this.braintreeManager,
       modalManager: this.modalManager,
       recaptchaManager: this.recaptchaManager,
+      resources: {
+        analytics: {
+          logEvent: this.logEvent.bind(this),
+          logEventNoSampling: this.logEventNoSampling.bind(this),
+        } as DonationControllerEventLoggerInterface,
+      }
     });
 
     this.donationForm.braintreeManager = this.braintreeManager;
@@ -517,8 +523,18 @@ export class DonationFormController extends LitElement {
    * @param {string} label Event label, optional
    */
   private logEvent(action: string, label?: string): void {
-    this.analyticsHandler?.send_event_no_sampling(this.analyticsCategory, action, label);
+    this.analyticsHandler?.send_event(this.analyticsCategory, action, label);
   }
+
+  /**
+   * Log an event in no sample bucket
+   *
+   * @param {string} action Name of event
+   * @param {string} label Event label, optional
+   */
+     private logEventNoSampling(action: string, label?: string): void {
+      this.analyticsHandler?.send_event_no_sampling(this.analyticsCategory, action, label);
+    }
 
   /**
    * This is not the normal LitElement styles block.

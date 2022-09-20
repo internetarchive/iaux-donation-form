@@ -14,6 +14,7 @@ import {
   DonationResponse,
 } from '@internetarchive/donation-form-data-models';
 import '../modals/error-modal-content';
+import { AnalyticsHandlerInterface, DonationControllerEventLoggerInterface } from '../@types/analytics-handler';
 
 enum ModalHeaderColor {
   Blue = '#497fbf',
@@ -149,12 +150,16 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
 
   private modalManager: ModalManagerInterface;
 
+  private analytics: DonationControllerEventLoggerInterface;
+
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;
     modalManager: ModalManagerInterface;
+    analytics: DonationControllerEventLoggerInterface;
   }) {
     this.modalManager = options.modalManager;
     this.braintreeManager = options.braintreeManager;
+    this.analytics = options.analytics;
   }
 
   /** @inheritdoc */
@@ -193,6 +198,17 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     this.modalManager.showModal({
       config: modalConfig,
     });
+
+    // post analytic
+    const selectedPayment = options.successResponse.paymentProvider.replace(/\s+/g, '');
+    let action = `Donated-${selectedPayment}`;
+    if (options.upsellSuccessResponse) {
+      action += `-upsell`;
+    }
+    const label = options.successResponse.donationType;
+    this.analytics.logEventNoSampling(action, label);
+
+    // post donation
     this.braintreeManager.donationSuccessful(options);
   }
 
@@ -379,6 +395,13 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     upsellSuccessResponse?: SuccessResponse;
   }): void {
     this.showThankYouModal(options);
+
+    // post analytic
+    const selectedPayment = options.successResponse.paymentProvider.replace(/\s+/g, '');
+    const action = `Donated-${selectedPayment}-upsell`;
+    const label = options.successResponse.donationType;
+    this.analytics.logEventNoSampling(action, label);
+
     this.braintreeManager.donationSuccessful(options);
   }
 

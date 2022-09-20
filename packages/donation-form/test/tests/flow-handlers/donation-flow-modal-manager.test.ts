@@ -12,9 +12,21 @@ import {
 } from '@internetarchive/donation-form-data-models';
 import { mockBillingInfo } from '../../mocks/models/mock-billing-info';
 import { mockCustomerInfo } from '../../mocks/models/mock-customer-info';
-import { ModalConfig } from '@internetarchive/modal-manager';
+import { DonationControllerEventLoggerInterface } from '../../../src/@types/analytics-handler';
+import sinon from 'sinon';
+
+let analytics: DonationControllerEventLoggerInterface;
 
 describe('Donation Flow Modal Manager', () => {
+  beforeEach(() => {
+    analytics = {
+      logEvent: sinon.fake(),
+      logEventNoSampling: sinon.fake(),
+    };
+  });
+  afterEach(() => {
+    sinon.restore();
+  });
   it('can close the modal', async () => {
     const mockModalManager = (await fixture(html`
       <mock-modal-manager></mock-modal-manager>
@@ -23,6 +35,7 @@ describe('Donation Flow Modal Manager', () => {
     const manager = new DonationFlowModalManager({
       braintreeManager: mockBraintreeManager,
       modalManager: mockModalManager,
+      analytics
     });
     manager.closeModal();
     expect(mockModalManager.closeCalled).to.be.true;
@@ -53,6 +66,7 @@ describe('Donation Flow Modal Manager', () => {
     const manager = new DonationFlowModalManager({
       braintreeManager: mockBraintreeManager,
       modalManager: mockModalManager,
+      analytics
     });
     manager.showProcessingModal();
     const modalOptions = mockModalManager.showModalOptions;
@@ -72,6 +86,7 @@ describe('Donation Flow Modal Manager', () => {
     const manager = new DonationFlowModalManager({
       braintreeManager: mockBraintreeManager,
       modalManager: mockModalManager,
+      analytics
     });
     manager.showErrorModal({ message: 'foo-error' });
     const modalOptions = mockModalManager.showModalOptions;
@@ -90,9 +105,15 @@ describe('Donation Flow Modal Manager', () => {
       <mock-modal-manager></mock-modal-manager>
     `)) as MockModalManager;
     const mockBraintreeManager = new MockBraintreeManager();
+    const logEvent = sinon.fake();
+    const logEventNoSampling = sinon.fake();
     const manager = new DonationFlowModalManager({
       braintreeManager: mockBraintreeManager,
       modalManager: mockModalManager,
+      analytics: {
+        logEvent,
+        logEventNoSampling,
+      }
     });
     manager.showThankYouModal({
       successResponse: mockSuccessResponse,
@@ -106,6 +127,11 @@ describe('Donation Flow Modal Manager', () => {
     expect(modalOptions?.config.title?.strings[0]).to.contain('Thank You!');
     const response = mockBraintreeManager.donationSuccessfulOptions?.successResponse;
     expect(response).to.deep.equal(mockSuccessResponse);
+
+    // fires analytics, too
+    expect(logEventNoSampling.callCount).to.equal(1);
+    expect(logEventNoSampling.args[0][0]).to.equal('Donated-CreditCard');
+    expect(logEventNoSampling.args[0][1]).to.equal('one-time');
   });
 
   it('can show the confirmation modal', async () => {
@@ -116,6 +142,7 @@ describe('Donation Flow Modal Manager', () => {
     const manager = new DonationFlowModalManager({
       braintreeManager: mockBraintreeManager,
       modalManager: mockModalManager,
+      analytics
     });
     manager.showConfirmationStepModal({
       donationType: DonationType.Upsell,
@@ -140,6 +167,7 @@ describe('Donation Flow Modal Manager', () => {
     const manager = new DonationFlowModalManager({
       braintreeManager: mockBraintreeManager,
       modalManager: mockModalManager,
+      analytics
     });
     const result = await manager.startDonationSubmissionFlow({
       nonce: 'foo',
