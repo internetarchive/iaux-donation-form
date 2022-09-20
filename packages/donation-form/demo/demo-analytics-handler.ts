@@ -8,9 +8,8 @@ export class DemoAnalyticsHandler implements AnalyticsManagerInterface {
     label?: string;
     additionalEventParams?: object;
   }): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.nodeToUpdate.innerHTML = `Action: ${options.action} - Label: ${options.label}`;
-    console.debug('DemoAnalyticsHandler -- sendEventNoSampling ', { ...options }, this.nodeToUpdate.innerHTML);
+    this.nodeToUpdate.innerHTML = `Category: ${options.category} - Action: ${options.action} - Label: ${options.label}`;
+    console.debug('DemoAnalyticsHandler -- sendEvent ', { ...options }, this.nodeToUpdate.innerHTML);
   }
 
   sendEventNoSampling(
@@ -20,8 +19,7 @@ export class DemoAnalyticsHandler implements AnalyticsManagerInterface {
       label?: string;
       additionalEventParams?: object;
     }): void {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      this.nodeToUpdate.innerHTML = `Action: ${options.action} - Label: ${options.label}`;
+      this.nodeToUpdate.innerHTML = `Category: ${options.category} - Action: ${options.action} - Label: ${options.label}`;
       console.debug('DemoAnalyticsHandler -- sendEventNoSampling ', { ...options }, this.nodeToUpdate.innerHTML);
   }
 

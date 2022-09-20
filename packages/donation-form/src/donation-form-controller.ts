@@ -124,6 +124,7 @@ export class DonationFormController extends LitElement {
   updated(changedProperties: PropertyValues): void {
     if (changedProperties.has('referrer') && this.referrer) {
       this.braintreeManager?.setReferrer(this.referrer);
+      this.logEventNoSampling('referrer', this.referrer);
     }
 
     if (changedProperties.has('loggedInUser') && this.loggedInUser) {
@@ -132,6 +133,7 @@ export class DonationFormController extends LitElement {
 
     if (changedProperties.has('origin') && this.origin) {
       this.braintreeManager?.setOrigin(this.origin);
+      this.logEventNoSampling('origin', this.origin);
     }
 
     if (
