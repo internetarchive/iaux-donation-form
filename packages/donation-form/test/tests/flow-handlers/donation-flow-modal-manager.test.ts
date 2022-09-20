@@ -127,11 +127,33 @@ describe('Donation Flow Modal Manager', () => {
     expect(modalOptions?.config.title?.strings[0]).to.contain('Thank You!');
     const response = mockBraintreeManager.donationSuccessfulOptions?.successResponse;
     expect(response).to.deep.equal(mockSuccessResponse);
+  });
 
-    // fires analytics, too
+  it('donation submitted analytics gets sent when drawing thank you modal', async () => {
+    const mockModalManager = (await fixture(html`
+      <mock-modal-manager></mock-modal-manager>
+    `)) as MockModalManager;
+    const mockBraintreeManager = new MockBraintreeManager();
+    const logEvent = sinon.fake();
+    const logEventNoSampling = sinon.fake();
+    const manager = new DonationFlowModalManager({
+      braintreeManager: mockBraintreeManager,
+      modalManager: mockModalManager,
+      analytics: {
+        logEvent,
+        logEventNoSampling,
+      }
+    });
+    const successResponse = mockSuccessResponse;
+    successResponse.paymentProvider = PaymentProvider.GooglePay;
+    manager.showThankYouModal({
+      successResponse: mockSuccessResponse,
+    });
+
+    // fires analytics
     expect(logEventNoSampling.callCount).to.equal(1);
-    expect(logEventNoSampling.args[0][0]).to.equal('Donated-CreditCard');
-    expect(logEventNoSampling.args[0][1]).to.equal('one-time');
+    expect(logEventNoSampling.args[0][0]).to.equal(`Donated-GooglePay`);
+    expect(logEventNoSampling.args[0][1]).to.equal(DonationType.OneTime);
   });
 
   it('can show the confirmation modal', async () => {
