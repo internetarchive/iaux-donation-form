@@ -35,7 +35,8 @@ import './form-elements/contact-form/contact-form';
 import creditCardImg from '@internetarchive/icon-credit-card';
 import calendarImg from '@internetarchive/icon-calendar';
 import lockImg from '@internetarchive/icon-lock';
-import { AnalyticsHandlerInterface, DonationControllerEventLoggerInterface } from './@types/analytics-handler';
+import { DonationControllerEventLoggerInterface } from './@types/analytics-handler';
+import { AnalyticsManagerInterface, AnalyticsEvent } from '@internetarchive/analytics-manager';
 import {
   EditDonationAmountSelectionLayout,
   EditDonationFrequencySelectionMode,
@@ -90,7 +91,7 @@ export class DonationFormController extends LitElement {
 
   @property({ type: Object }) endpointManager?: BraintreeEndpointManagerInterface;
 
-  @property({ type: Object }) analyticsHandler?: AnalyticsHandlerInterface;
+  @property({ type: Object }) analyticsHandler?: AnalyticsManagerInterface;
 
   @property({ type: Object }) modalManager?: ModalManagerInterface;
 
@@ -523,7 +524,8 @@ export class DonationFormController extends LitElement {
    * @param {string} label Event label, optional
    */
   private logEvent(action: string, label?: string): void {
-    this.analyticsHandler?.send_event(this.analyticsCategory, action, label);
+    const analyticEvent = { action, label, category: this.analyticsCategory } as AnalyticsEvent;
+    this.analyticsHandler?.sendEvent(analyticEvent);
   }
 
   /**
@@ -532,8 +534,9 @@ export class DonationFormController extends LitElement {
    * @param {string} action Name of event
    * @param {string} label Event label, optional
    */
-     private logEventNoSampling(action: string, label?: string): void {
-      this.analyticsHandler?.send_event_no_sampling(this.analyticsCategory, action, label);
+    private logEventNoSampling(action: string, label?: string): void {
+      const analyticEvent = { action, label, category: this.analyticsCategory } as AnalyticsEvent;
+      this.analyticsHandler?.sendEventNoSampling(analyticEvent);
     }
 
   /**

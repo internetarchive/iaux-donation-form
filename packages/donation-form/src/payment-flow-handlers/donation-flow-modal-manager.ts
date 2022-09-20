@@ -14,7 +14,7 @@ import {
   DonationResponse,
 } from '@internetarchive/donation-form-data-models';
 import '../modals/error-modal-content';
-import { AnalyticsHandlerInterface, DonationControllerEventLoggerInterface } from '../@types/analytics-handler';
+import { DonationControllerEventLoggerInterface } from '../@types/analytics-handler';
 
 enum ModalHeaderColor {
   Blue = '#497fbf',

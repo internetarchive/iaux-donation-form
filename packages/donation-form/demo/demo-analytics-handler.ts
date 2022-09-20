@@ -1,25 +1,31 @@
-import { AnalyticsHandlerInterface } from '../src/@types/analytics-handler';
-
-export class DemoAnalyticsHandler implements AnalyticsHandlerInterface {
+import { AnalyticsManagerInterface } from '@internetarchive/analytics-manager';
+export class DemoAnalyticsHandler implements AnalyticsManagerInterface {
   nodeToUpdate!: HTMLElement;
-  // eslint-disable-next-line @typescript-eslint/camelcase
-  send_event(
-    category: string,
-    action: string,
-    label?: string,
-    additionalEventParams?: object,
-  ): void {
-    console.debug('DemoAnalyticsHandler', category, action, label, additionalEventParams);
+
+  sendEvent(options: {
+    category: string;
+    action: string;
+    label?: string;
+    additionalEventParams?: object;
+  }): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.nodeToUpdate.innerHTML = `Action: ${options.action} - Label: ${options.label}`;
+    console.debug('DemoAnalyticsHandler -- sendEventNoSampling ', { ...options }, this.nodeToUpdate.innerHTML);
   }
-  // eslint-disable-next-line @typescript-eslint/camelcase
-  send_event_no_sampling(
-    category: string,
-    action: string,
-    label?: string,
-    additionalEventParams?: object,
-  ): void {
-    console.debug('DemoAnalyticsHandler', category, action, label, additionalEventParams);
-    const placeholder = document.querySelector('#latest-analytic');
-    this.nodeToUpdate.innerHTML = `Action: ${action} - Label: ${label}`;
+
+  sendEventNoSampling(
+    options: {
+      category: string;
+      action: string;
+      label?: string;
+      additionalEventParams?: object;
+    }): void {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.nodeToUpdate.innerHTML = `Action: ${options.action} - Label: ${options.label}`;
+      console.debug('DemoAnalyticsHandler -- sendEventNoSampling ', { ...options }, this.nodeToUpdate.innerHTML);
+  }
+
+  sendPing(values: Record<string, any>): void {
+    console.debug('DemoAnalyticsHandler -- sendPing ', { ...values });
   }
 }
