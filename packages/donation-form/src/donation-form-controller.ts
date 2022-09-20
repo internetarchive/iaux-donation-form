@@ -513,11 +513,11 @@ export class DonationFormController extends LitElement {
   /**
    * Log an event
    *
-   * @param {string} name Name of event
+   * @param {string} action Name of event
    * @param {string} label Event label, optional
    */
-  private logEvent(name: string, label?: string): void {
-    this.analyticsHandler?.send_event(this.analyticsCategory, name, label);
+  private logEvent(action: string, label?: string): void {
+    this.analyticsHandler?.send_event_no_sampling(this.analyticsCategory, action, label);
   }
 
   /**
