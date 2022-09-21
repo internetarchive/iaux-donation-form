@@ -124,7 +124,7 @@ export class DonationFormController extends LitElement {
   updated(changedProperties: PropertyValues): void {
     if (changedProperties.has('referrer') && this.referrer) {
       this.braintreeManager?.setReferrer(this.referrer);
-      this.logEventNoSampling('referrer', this.referrer);
+      this.logDonationFlowEvent('referrer', this.referrer);
     }
 
     if (changedProperties.has('loggedInUser') && this.loggedInUser) {
@@ -133,7 +133,7 @@ export class DonationFormController extends LitElement {
 
     if (changedProperties.has('origin') && this.origin) {
       this.braintreeManager?.setOrigin(this.origin);
-      this.logEventNoSampling('origin', this.origin);
+      this.logDonationFlowEvent('origin', this.origin);
     }
 
     if (
@@ -329,7 +329,7 @@ export class DonationFormController extends LitElement {
       resources: {
         analytics: {
           logEvent: this.logEvent.bind(this),
-          logEventNoSampling: this.logEventNoSampling.bind(this),
+          logDonationFlowEvent: this.logDonationFlowEvent.bind(this),
         } as DonationControllerEventLoggerInterface,
       }
     });
@@ -531,13 +531,13 @@ export class DonationFormController extends LitElement {
   }
 
   /**
-   * Log an event in no sample bucket
+   * Logs `DonationFlow` Event category into no sample bucket
    *
    * @param {string} action Name of event
    * @param {string} label Event label, optional
    */
-    private logEventNoSampling(action: string, label?: string): void {
-      const analyticEvent = { action, label, category: this.analyticsCategory } as AnalyticsEvent;
+    private logDonationFlowEvent(action: string, label?: string): void {
+      const analyticEvent = { action, label, category: 'DonationFlow' } as AnalyticsEvent;
       this.analyticsHandler?.sendEventNoSampling(analyticEvent);
     }
 

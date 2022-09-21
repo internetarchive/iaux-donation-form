@@ -206,7 +206,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       action += `-upsell`;
     }
     const label = options.successResponse.donationType;
-    this.analytics.logEventNoSampling(action, label);
+    this.analytics.logDonationFlowEvent(action, label);
 
     // post donation
     this.braintreeManager.donationSuccessful(options);
@@ -400,7 +400,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     const selectedPayment = options.successResponse.paymentProvider.replace(/\s+/g, '');
     const action = `Donated-${selectedPayment}-upsell`;
     const label = options.successResponse.donationType;
-    this.analytics.logEventNoSampling(action, label);
+    this.analytics.logDonationFlowEvent(action, label);
 
     this.braintreeManager.donationSuccessful(options);
   }

@@ -4,5 +4,5 @@
  */
 export interface DonationControllerEventLoggerInterface {
   logEvent(action: string, label: string): void;
-  logEventNoSampling(action: string, label: string): void;
+  logDonationFlowEvent(action: string, label: string): void;
 }

@@ -21,7 +21,7 @@ describe('Donation Flow Modal Manager', () => {
   beforeEach(() => {
     analytics = {
       logEvent: sinon.fake(),
-      logEventNoSampling: sinon.fake(),
+      logDonationFlowEvent: sinon.fake(),
     };
   });
   afterEach(() => {
@@ -106,13 +106,13 @@ describe('Donation Flow Modal Manager', () => {
     `)) as MockModalManager;
     const mockBraintreeManager = new MockBraintreeManager();
     const logEvent = sinon.fake();
-    const logEventNoSampling = sinon.fake();
+    const logDonationFlowEvent = sinon.fake();
     const manager = new DonationFlowModalManager({
       braintreeManager: mockBraintreeManager,
       modalManager: mockModalManager,
       analytics: {
         logEvent,
-        logEventNoSampling,
+        logDonationFlowEvent,
       }
     });
     manager.showThankYouModal({
@@ -135,13 +135,13 @@ describe('Donation Flow Modal Manager', () => {
     `)) as MockModalManager;
     const mockBraintreeManager = new MockBraintreeManager();
     const logEvent = sinon.fake();
-    const logEventNoSampling = sinon.fake();
+    const logDonationFlowEvent = sinon.fake();
     const manager = new DonationFlowModalManager({
       braintreeManager: mockBraintreeManager,
       modalManager: mockModalManager,
       analytics: {
         logEvent,
-        logEventNoSampling,
+        logDonationFlowEvent,
       }
     });
     const successResponse = mockSuccessResponse;
@@ -151,9 +151,9 @@ describe('Donation Flow Modal Manager', () => {
     });
 
     // fires analytics
-    expect(logEventNoSampling.callCount).to.equal(1);
-    expect(logEventNoSampling.args[0][0]).to.equal(`Donated-GooglePay`);
-    expect(logEventNoSampling.args[0][1]).to.equal(DonationType.OneTime);
+    expect(logDonationFlowEvent.callCount).to.equal(1);
+    expect(logDonationFlowEvent.args[0][0]).to.equal(`Donated-GooglePay`);
+    expect(logDonationFlowEvent.args[0][1]).to.equal(DonationType.OneTime);
   });
 
   it('can show the confirmation modal', async () => {

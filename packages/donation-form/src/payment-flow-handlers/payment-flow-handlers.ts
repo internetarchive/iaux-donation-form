@@ -189,7 +189,7 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
     resources: {
       analytics: {
         logEvent: (action: string, label: string) => void;
-        logEventNoSampling: (action: string, label: string) => void;
+        logDonationFlowEvent: (action: string, label: string) => void;
       };
     };
   }) {
@@ -212,7 +212,7 @@ export class PaymentFlowHandlers implements PaymentFlowHandlersInterface {
   private resources: {
     analytics: {
       logEvent: (action: string, label: string) => void;
-      logEventNoSampling: (action: string, label: string) => void;
+      logDonationFlowEvent: (action: string, label: string) => void;
     };
   };
 }
