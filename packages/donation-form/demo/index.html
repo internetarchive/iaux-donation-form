@@ -10,6 +10,8 @@
   <style>
     body {
       color: #333;
+      font-family: sans-serif;
+      font-size: 10px;
     }
 
     body.modal-manager-open {
@@ -92,6 +94,7 @@
       <button id="show-custom-colors">Show Custom Color Skinning</button> |
       <button id="reset-custom-colors">Reset Custom Color Skinning</button> |
     </div>
+    <p>Latest analytic event: <span id="latest-analytic"></span></p>
   </div>
 
   <div id="demo">
@@ -207,6 +210,9 @@
       const formController = document.querySelector('donation-form-controller');
       formController.classList.remove('custom-colors');
     });
+
+    analyticsHandler.nodeToUpdate = document.querySelector('#latest-analytic');
+    window.analyticsHandlerNode = document.querySelector('#latest-analytic');
 
     render(
       html`

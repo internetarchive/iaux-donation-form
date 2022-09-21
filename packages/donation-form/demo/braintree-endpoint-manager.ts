@@ -13,7 +13,7 @@ import { BraintreeEndpointManagerInterface } from '../index';
 export class BraintreeEndpointManager implements BraintreeEndpointManagerInterface {
   async submitData(request: DonationRequest): Promise<DonationResponse> {
     const response = await fetch(
-      'https://www-jasonb.archive.org/services/donations/braintree-charge.php?debug=true',
+      'https://ia-petabox.archive.org/services/donations/braintree-charge.php?debug=true',
       {
         method: 'POST',
         headers: {

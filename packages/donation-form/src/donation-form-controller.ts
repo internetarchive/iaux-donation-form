@@ -35,7 +35,8 @@ import './form-elements/contact-form/contact-form';
 import creditCardImg from '@internetarchive/icon-credit-card';
 import calendarImg from '@internetarchive/icon-calendar';
 import lockImg from '@internetarchive/icon-lock';
-import { AnalyticsHandlerInterface } from './@types/analytics-handler';
+import { DonationControllerEventLoggerInterface } from './@types/analytics-handler';
+import { AnalyticsManagerInterface, AnalyticsEvent } from '@internetarchive/analytics-manager';
 import {
   EditDonationAmountSelectionLayout,
   EditDonationFrequencySelectionMode,
@@ -90,7 +91,7 @@ export class DonationFormController extends LitElement {
 
   @property({ type: Object }) endpointManager?: BraintreeEndpointManagerInterface;
 
-  @property({ type: Object }) analyticsHandler?: AnalyticsHandlerInterface;
+  @property({ type: Object }) analyticsHandler?: AnalyticsManagerInterface;
 
   @property({ type: Object }) modalManager?: ModalManagerInterface;
 
@@ -123,6 +124,7 @@ export class DonationFormController extends LitElement {
   updated(changedProperties: PropertyValues): void {
     if (changedProperties.has('referrer') && this.referrer) {
       this.braintreeManager?.setReferrer(this.referrer);
+      this.logDonationFlowEvent('referrer', this.referrer);
     }
 
     if (changedProperties.has('loggedInUser') && this.loggedInUser) {
@@ -131,6 +133,7 @@ export class DonationFormController extends LitElement {
 
     if (changedProperties.has('origin') && this.origin) {
       this.braintreeManager?.setOrigin(this.origin);
+      this.logDonationFlowEvent('origin', this.origin);
     }
 
     if (
@@ -323,6 +326,12 @@ export class DonationFormController extends LitElement {
       braintreeManager: this.braintreeManager,
       modalManager: this.modalManager,
       recaptchaManager: this.recaptchaManager,
+      resources: {
+        analytics: {
+          logEvent: this.logEvent.bind(this),
+          logDonationFlowEvent: this.logDonationFlowEvent.bind(this),
+        } as DonationControllerEventLoggerInterface,
+      }
     });
 
     this.donationForm.braintreeManager = this.braintreeManager;
@@ -513,12 +522,24 @@ export class DonationFormController extends LitElement {
   /**
    * Log an event
    *
-   * @param {string} name Name of event
+   * @param {string} action Name of event
    * @param {string} label Event label, optional
    */
-  private logEvent(name: string, label?: string): void {
-    this.analyticsHandler?.send_event(this.analyticsCategory, name, label);
+  private logEvent(action: string, label?: string): void {
+    const analyticEvent = { action, label, category: this.analyticsCategory } as AnalyticsEvent;
+    this.analyticsHandler?.sendEvent(analyticEvent);
   }
+
+  /**
+   * Logs `DonationFlow` Event category into no sample bucket
+   *
+   * @param {string} action Name of event
+   * @param {string} label Event label, optional
+   */
+    private logDonationFlowEvent(action: string, label?: string): void {
+      const analyticEvent = { action, label, category: 'DonationFlow' } as AnalyticsEvent;
+      this.analyticsHandler?.sendEventNoSampling(analyticEvent);
+    }
 
   /**
    * This is not the normal LitElement styles block.

@@ -14,10 +14,10 @@ import { MockModalManager } from '../mocks/mock-modal-manager';
 import { MockHostedFieldsClient } from '../mocks/payment-clients/mock-hostedfields-client';
 import { DonationForm } from '../../src/donation-form';
 import { PaymentSelector } from '../../src/form-elements/payment-selector';
-import { MockAnalyticHandler } from '../mocks/mock-analytics-handler';
 import { DonationFormHeader } from '../../src/form-elements/header/donation-form-header';
 import { DonationFormEditDonation } from '@internetarchive/donation-form-edit-donation';
 import { MockPaymentFlowHandlers } from '../mocks/flow-handlers/mock-payment-flow-handlers';
+import { MockAnalyticsManager } from '@internetarchive/analytics-manager/dist/test/mock-analytics-manager';
 
 describe('Donation Form Controller', () => {
   beforeEach(() => {
@@ -37,7 +37,7 @@ describe('Donation Form Controller', () => {
   });
 
   it('can submit a donation', async () => {
-    const mockAnalytics = new MockAnalyticHandler();
+    const mockAnalytics = new MockAnalyticsManager();
     const controller = (await fixture(html`
       <donation-form-controller .analyticsHandler=${mockAnalytics}> </donation-form-controller>
     `)) as DonationFormController;
@@ -98,14 +98,14 @@ describe('Donation Form Controller', () => {
     donateButton?.dispatchEvent(donateClickEvent);
     await promisedSleep(100);
 
-    expect(mockAnalytics.callAction).to.equal('PaymentFlowStarted');
+    expect(mockAnalytics.sendEventOptions?.action).to.equal('PaymentFlowStarted');
 
     // verify that a payload has been requested to be submitted to the backend
     expect(endpointManager.requestSubmitted).to.not.equal(undefined);
   });
 
   it('sends Viewed analytics when it first updates', async () => {
-    const mockAnalytics = new MockAnalyticHandler();
+    const mockAnalytics = new MockAnalyticsManager();
     const analyticsCategory = 'FooCategory';
     (await fixture(html`
       <donation-form-controller
@@ -115,13 +115,12 @@ describe('Donation Form Controller', () => {
       >
       </donation-form-controller>
     `)) as DonationFormController;
-
-    expect(mockAnalytics.callCategory).to.equal(analyticsCategory);
-    expect(mockAnalytics.callAction).to.equal('Viewed');
+    expect(mockAnalytics.sendEventOptions?.category).to.equal(analyticsCategory);
+    expect(mockAnalytics.sendEventOptions?.action).to.equal('Viewed');
   });
 
   it('sends DonationInfoChanged analytics when donation info changes', async () => {
-    const mockAnalytics = new MockAnalyticHandler();
+    const mockAnalytics = new MockAnalyticsManager();
     const analyticsCategory = 'FooCategory';
     const controller = (await fixture(html`
       <donation-form-controller
@@ -143,12 +142,12 @@ describe('Donation Form Controller', () => {
     const clickEvent = new MouseEvent('click');
     monthlyOption?.dispatchEvent(clickEvent);
 
-    expect(mockAnalytics.callCategory).to.equal(analyticsCategory);
-    expect(mockAnalytics.callAction).to.equal('DonationInfoChanged');
+    expect(mockAnalytics.sendEventOptions?.category).to.equal(analyticsCategory);
+    expect(mockAnalytics.sendEventOptions?.action).to.equal('DonationInfoChanged');
   });
 
   it('sends ProviderSelected analytics', async () => {
-    const mockAnalytics = new MockAnalyticHandler();
+    const mockAnalytics = new MockAnalyticsManager();
     const analyticsCategory = 'FooCategory';
     const controller = (await fixture(html`
       <donation-form-controller
@@ -173,7 +172,7 @@ describe('Donation Form Controller', () => {
       creditCardButton.dispatchEvent(ccClickEvent);
     });
     await oneEvent(donationForm, 'paymentProviderSelected');
-    expect(mockAnalytics.callAction).to.equal('ProviderFirstSelected-CreditCard');
+    expect(mockAnalytics.sendEventOptions?.action).to.equal('ProviderFirstSelected-CreditCard');
 
     // on subsequent payment provider choices, the previousPaymentProvider is populated
     const venmoButton = paymentSelector.shadowRoot?.querySelector('.venmo') as HTMLButtonElement;
@@ -182,11 +181,11 @@ describe('Donation Form Controller', () => {
       venmoButton.dispatchEvent(venmoClickEvent);
     });
     await oneEvent(donationForm, 'paymentProviderSelected');
-    expect(mockAnalytics.callAction).to.equal('ProviderChangedTo-Venmo');
+    expect(mockAnalytics.sendEventOptions?.action).to.equal('ProviderChangedTo-Venmo');
   });
 
   it('sends PaymentFlowCancelled analytics', async () => {
-    const mockAnalytics = new MockAnalyticHandler();
+    const mockAnalytics = new MockAnalyticsManager();
     const analyticsCategory = 'FooCategory';
     const controller = (await fixture(html`
       <donation-form-controller
@@ -203,12 +202,12 @@ describe('Donation Form Controller', () => {
     await elementUpdated(donationForm);
     await promisedSleep(250);
     flowHandlers.paypalHandler.emitPaymentCancelledEvent();
-    expect(mockAnalytics.callAction).to.equal('PaymentFlowCancelled');
-    expect(mockAnalytics.callLabel).to.equal('PayPal');
+    expect(mockAnalytics.sendEventOptions?.action).to.equal('PaymentFlowCancelled');
+    expect(mockAnalytics.sendEventOptions?.label).to.equal('PayPal');
   });
 
   it('sends PaymentFlowError analytics', async () => {
-    const mockAnalytics = new MockAnalyticHandler();
+    const mockAnalytics = new MockAnalyticsManager();
     const analyticsCategory = 'FooCategory';
     const controller = (await fixture(html`
       <donation-form-controller
@@ -225,7 +224,7 @@ describe('Donation Form Controller', () => {
     await elementUpdated(donationForm);
     await promisedSleep(250);
     flowHandlers.paypalHandler.emitPaymentErrorEvent();
-    expect(mockAnalytics.callAction).to.equal('PaymentFlowError');
-    expect(mockAnalytics.callLabel).to.equal('PayPal-foo-error');
+    expect(mockAnalytics.sendEventOptions?.action).to.equal('PaymentFlowError');
+    expect(mockAnalytics.sendEventOptions?.label).to.equal('PayPal-foo-error');
   });
 });
