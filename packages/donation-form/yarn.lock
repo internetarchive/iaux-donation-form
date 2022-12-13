@@ -1269,6 +1269,11 @@
   resolved "https://registry.npmjs.org/@internetarchive/donation-form-data-models/-/donation-form-data-models-0.3.2.tgz"
   integrity sha512-yxjwwr/2YMIx56IN9ZVETqByc7jlsX6s57zk1K+bWgA0u+D0OKScWKX+dLxaz2viRNSQOEOR1MsQWwaKshh0Tg==
 
+"@internetarchive/donation-form-data-models@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-data-models/-/donation-form-data-models-0.3.3.tgz#10fe5ca116cecef19a061c830389ef3146b94dd0"
+  integrity sha512-EZVCJNQxmZRxSu7vFtLhr/wktUaVTIlSmsUI6Pc0Zccio5lYWMxSXJVEZ6UEn0q7Y/UJavwpne5G56f2jfAWsw==
+
 "@internetarchive/donation-form-edit-donation@^0.3.13":
   version "0.3.13"
   resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-edit-donation/-/donation-form-edit-donation-0.3.13.tgz#a783451b083f6196eb2dd1c1897a6d5b0644a80d"
