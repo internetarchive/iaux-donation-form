@@ -195,11 +195,15 @@ export class ContactForm extends LitElement {
         @change=${(e: Event) => {
           const currCountry = this.selectedCountry;
           this.selectedCountry = (e.target as HTMLInputElement)?.value ? (e.target as HTMLInputElement)?.value as string : currCountry;
-          // update required visual cue on region/state/province
+          // update required visual cue on region/state/province & postal code fields
           if (this.selectedCountry === 'US') {
+            this.postalBadgedInput?.setAttribute('required', '');
+            this.postalCodeField?.setAttribute('required', '');
             this.regionBadgedInput?.setAttribute('required', '');
             this.regionField?.setAttribute('required', '');
           } else {
+            this.postalBadgedInput?.removeAttribute('required');
+            this.postalCodeField?.removeAttribute('required');
             this.regionBadgedInput?.removeAttribute('required');
             this.regionField?.removeAttribute('required');
           }
