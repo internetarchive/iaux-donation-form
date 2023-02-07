@@ -52,7 +52,7 @@ export class ContactForm extends LitElement {
   @query('form') form!: HTMLFormElement;
 
   /** @keyof countries */
-  @property({ type: String }) selectedCountry: string = 'US';
+  @property({ type: String }) selectedCountry = 'US';
 
   reportValidity(): boolean {
     const fieldBadgedInputs: Array<[HTMLInputElement, BadgedInput]> = [
