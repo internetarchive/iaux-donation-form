@@ -1,5 +1,5 @@
 import { LitElement, html, css, TemplateResult } from 'lit';
-import { customElement, query } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
 import {
@@ -50,6 +50,9 @@ export class ContactForm extends LitElement {
 
   @query('#donation-contact-form-error-message') errorMessage!: HTMLDivElement;
   @query('form') form!: HTMLFormElement;
+
+  /** @keyof countries */
+  @property({ type: String }) selectedCountry: string = 'US';
 
   reportValidity(): boolean {
     const fieldBadgedInputs: Array<[HTMLInputElement, BadgedInput]> = [
@@ -186,15 +189,25 @@ export class ContactForm extends LitElement {
   }
 
   private get countrySelectorTemplate(): TemplateResult {
-    const selectedCountry = 'US';
-
     return html`
       <badged-input>
-        <select id="donation-contact-form-countryCodeAlpha2">
+        <select id="donation-contact-form-countryCodeAlpha2"
+        @change=${(e: Event) => {
+          const currCountry = this.selectedCountry;
+          this.selectedCountry = (e.target as HTMLInputElement)?.value ? (e.target as HTMLInputElement)?.value as string : currCountry;
+          // update required visual cue on postal code
+          if (this.selectedCountry === 'US') {
+            this.postalBadgedInput?.setAttribute('required', '');
+            this.postalCodeField?.setAttribute('required', '');
+          } else {
+            this.postalBadgedInput?.removeAttribute('required');
+            this.postalCodeField?.removeAttribute('required');
+          }
+        }}>
           ${Object.keys(countries).map(key => {
             const name = countries[key];
             return html`
-              <option value=${key} ?selected=${key === selectedCountry}>${name}</option>
+              <option value=${key} ?selected=${key === this.selectedCountry}>${name}</option>
             `;
           })}
         </select>
