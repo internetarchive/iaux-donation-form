@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { LitElement, html, css, CSSResult, TemplateResult, PropertyValues } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 

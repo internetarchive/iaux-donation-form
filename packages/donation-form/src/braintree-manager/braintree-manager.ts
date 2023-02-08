@@ -99,9 +99,7 @@ export class BraintreeManager implements BraintreeManagerInterface {
     binName?: string; // credit card bank name
   }): Promise<DonationResponse> {
     const customFields = new DonationRequestCustomFields();
-    // eslint-disable-next-line @typescript-eslint/camelcase
     customFields.fee_amount_covered = options.donationInfo.feeAmountCovered;
-    // eslint-disable-next-line @typescript-eslint/camelcase
     customFields.logged_in_user = this.loggedInUser;
     customFields.referrer = this.referrer;
     customFields.origin = this.origin;
