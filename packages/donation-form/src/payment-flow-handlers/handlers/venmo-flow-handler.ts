@@ -9,6 +9,7 @@ import {
   VenmoRestorationStateHandler,
 } from './venmo-restoration-state-handler';
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
+import { BraintreeError } from '../../@types/braintree-web';
 
 export interface VenmoFlowHandlerInterface {
   startup(): Promise<void>;
@@ -81,7 +82,7 @@ export class VenmoFlowHandler implements VenmoFlowHandlerInterface {
       this.handleTokenizationResult(result, contactInfo, donationInfo);
     } catch (tokenizeError) {
       this.restorationStateHandler.clearState();
-      this.handleTokenizationError(tokenizeError);
+      this.handleTokenizationError(tokenizeError as unknown as BraintreeError);
       this.donationFlowModalManager.showErrorModal({
         message: `There was a problem loading your donation information. Please try again.`,
       });

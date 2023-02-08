@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { html, fixture, expect } from '@open-wc/testing';
 import { DonationFlowModalManager } from '../../../src/payment-flow-handlers/donation-flow-modal-manager';
 import { MockModalManager } from '../../mocks/mock-modal-manager';

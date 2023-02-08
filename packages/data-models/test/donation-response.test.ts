@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { SuccessResponse } from '../src/response-models/success-models/success-response';
 import { PaymentProvider } from '../src/common/payment-provider-name';
 import { DonationType } from '../src/donation-info/donation-type';
@@ -14,9 +15,7 @@ describe('Donation Payment Info', () => {
       paymentMethodNonce: 'foo',
       amount: 12.34,
       donationType: DonationType.OneTime,
-      // eslint-disable-next-line @typescript-eslint/camelcase
       transaction_id: 'bar',
-      // eslint-disable-next-line @typescript-eslint/camelcase
       customer_id: '12345',
       customer: new CustomerInfo(),
       billing: new BillingInfo(),
