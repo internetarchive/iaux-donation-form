@@ -93,6 +93,8 @@ export class DonationFormEditDonation extends LitElement {
 
   @property({ type: String, reflect: true }) customFeesCheckboxMode: 'display' | 'hide' = 'display';
 
+  @property({ type: String, reflect: true }) amountTitleDisplayMode: 'default' | 'slot' = 'default';
+
   @property({ type: Object }) private error?: TemplateResult;
 
   @property({ type: Boolean }) private customAmountSelected = false;
@@ -105,6 +107,8 @@ export class DonationFormEditDonation extends LitElement {
 
   /** @inheritdoc */
   render(): TemplateResult {
+    const defaultAmountTitle = 'Choose an amount (USD)';
+    const amountTitle = this.amountTitleDisplayMode === 'default' ? defaultAmountTitle : '';
     return html`
       ${this.frequencySelectionMode ===
       EditDonationFrequencySelectionMode.Button
@@ -113,9 +117,10 @@ export class DonationFormEditDonation extends LitElement {
 
       <donation-form-section
         sectionBadge="${this.amountSelectionSectionNumber}"
-        headline="Choose an amount (USD)"
+        headline=${amountTitle}
         badgeMode=${this.formSectionNumberMode}
       >
+        ${this.amountTitleDisplayMode === 'slot' ? html`<slot name="edit-donation-amount-title"></slot>` : nothing}
         <ul class="amount-selector">
           ${this.presetAmountsTemplate}
           ${ this.customAmountMode === 'display'

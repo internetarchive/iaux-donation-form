@@ -59,6 +59,7 @@ export class AppRoot extends LitElement {
         stepNumberMode="shownumbers"
         class=${this.showCustomColors ? 'custom-color' : ''}
       >
+        <p slot="edit-donation-amount-title"><b>Can you chip in?</b> <span>(USD)</span></p>
       </donation-form-edit-donation>
 
       <hr />
@@ -193,6 +194,7 @@ export class AppRoot extends LitElement {
     this.editDonation.customAmountMode = this.editDonation.customAmountMode === 'display' ? 'hide' : 'display';
     this.editDonation.customFeesCheckboxMode = this.editDonation.customFeesCheckboxMode === 'display' ? 'hide' : 'display';
     this.editDonation.frequencySelectionMode = this.editDonation.frequencySelectionMode === 'hide' ? EditDonationFrequencySelectionMode.Button : EditDonationFrequencySelectionMode.Hide;
+    this.editDonation.amountTitleDisplayMode = this.editDonation.amountTitleDisplayMode === 'default' ? 'slot' : 'default';
     this.editDonation.amountOptions = [5, 55, 155, 255];
     this.toggleNumbers();
 
@@ -253,6 +255,12 @@ export class AppRoot extends LitElement {
         --paymentButtonSelectedColor: green;
         --paymentButtonSelectedFontColor: white;
         width: 25rem;
+      }
+
+      donation-form-edit-donation.minimal p {
+        margin: 0 0 5px 0;
+        font-size: 1.8rem;
+        line-height: calc(1.2rem * 2);
       }
 
       donation-form-edit-donation.custom-color {
