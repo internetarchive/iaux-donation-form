@@ -146,7 +146,9 @@ export class DonationFormEditDonation extends LitElement {
 
   updated(changedProperties: PropertyValues): void {
     if (changedProperties.has('customAmountSelected')) {
-      this.customAmountButton.checked = this.customAmountSelected;
+      if (this.customAmountButton) {
+        this.customAmountButton.checked = this.customAmountSelected;
+      }
     }
     if (changedProperties.has('amountOptions')) {
       this.customAmountSelected = false;
