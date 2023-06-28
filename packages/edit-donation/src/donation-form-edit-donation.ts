@@ -42,6 +42,7 @@ export enum EditDonationInfoStatus {
 export enum EditDonationFrequencySelectionMode {
   Button = 'button',
   Checkbox = 'checkbox',
+  Hide = 'hide',
 }
 
 export enum EditDonationAmountSelectionLayout {
@@ -84,9 +85,15 @@ export class DonationFormEditDonation extends LitElement {
    *
    * @memberof DonationFormEditDonation
    */
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   frequencySelectionMode: EditDonationFrequencySelectionMode =
     EditDonationFrequencySelectionMode.Button;
+
+  @property({ type: String, reflect: true }) customAmountMode: 'display' | 'hide' = 'display';
+
+  @property({ type: String, reflect: true }) customFeesCheckboxMode: 'display' | 'hide' = 'display';
+
+  @property({ type: String, reflect: true }) amountTitleDisplayMode: 'default' | 'slot' = 'default';
 
   @property({ type: Object }) private error?: TemplateResult;
 
@@ -100,6 +107,8 @@ export class DonationFormEditDonation extends LitElement {
 
   /** @inheritdoc */
   render(): TemplateResult {
+    const defaultAmountTitle = 'Choose an amount (USD)';
+    const amountTitle = this.amountTitleDisplayMode === 'default' ? defaultAmountTitle : '';
     return html`
       ${this.frequencySelectionMode ===
       EditDonationFrequencySelectionMode.Button
@@ -108,23 +117,29 @@ export class DonationFormEditDonation extends LitElement {
 
       <donation-form-section
         sectionBadge="${this.amountSelectionSectionNumber}"
-        headline="Choose an amount (USD)"
+        headline=${amountTitle}
         badgeMode=${this.formSectionNumberMode}
       >
+        ${this.amountTitleDisplayMode === 'slot' ? html`<slot name="edit-donation-amount-title"></slot>` : nothing}
         <ul class="amount-selector">
           ${this.presetAmountsTemplate}
-          <li class="custom-amount">${this.customAmountTemplate}</li>
+          ${ this.customAmountMode === 'display'
+            ? html`<li class="custom-amount">${this.customAmountTemplate}</li>`
+            : nothing }
         </ul>
 
         <div class="errors">${this.error}</div>
 
-        <div class="checkbox-options">
-          ${this.customFeesCheckboxTemplate}
-          ${this.frequencySelectionMode ===
-          EditDonationFrequencySelectionMode.Checkbox
-            ? this.frequencyCheckboxTemplate
-            : nothing}
-        </div>
+        ${ this.customFeesCheckboxMode === 'display'
+          ? html`
+          <div class="checkbox-options">
+            ${this.customFeesCheckboxTemplate}
+            ${this.frequencySelectionMode === EditDonationFrequencySelectionMode.Checkbox
+              ? this.frequencyCheckboxTemplate
+              : nothing
+            }
+          </div>`
+          : nothing }
       </donation-form-section>
     `;
   }
@@ -224,6 +239,10 @@ export class DonationFormEditDonation extends LitElement {
    * @memberof DonationFormEditDonation
    */
   private setupAmountColumnsLayoutConfig(): void {
+    const minimalView =
+      this.customAmountMode === 'hide'
+      && this.customFeesCheckboxMode === 'hide'
+      && this.frequencySelectionMode === EditDonationFrequencySelectionMode.Hide;
     const amountCount = this.amountOptions.length;
     let columnCount = 5;
     let customAmountSpan = 3;
@@ -241,6 +260,11 @@ export class DonationFormEditDonation extends LitElement {
         customAmountSpan = 3;
         break;
       case 4:
+        if (minimalView) {
+          columnCount = 4;
+          customAmountSpan = 0;
+          break;
+        }
         columnCount = 3;
         customAmountSpan = 2;
         break;
@@ -278,7 +302,9 @@ export class DonationFormEditDonation extends LitElement {
       ) as HTMLInputElement;
       radioButton.checked = true;
       this.customAmountSelected = false;
-      this.customAmountInput.value = '';
+      if (this.customAmountInput) {
+        this.customAmountInput.value = '';
+      }
     } else {
       this.customAmountSelected = true;
       // don't update the value if it currently has focus
