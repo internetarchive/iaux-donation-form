@@ -409,6 +409,17 @@ export class DonationFormEditDonation extends LitElement {
           tabindex="0"
           .checked=${options.checked}
           @change=${this.radioSelected}
+          @click=${(e: Event): void => {
+            const isAmountSelection = options.group === EditDonationSelectionGroup.Amount;
+            if (isAmountSelection) {
+              // catch click here that @change cannot
+              const isSameValue = parseFloat(options.value) === this.donationInfo.amount;
+              if (isSameValue) {
+                console.log("SAME VALUE");
+                this.radioSelected(e);
+              }
+            }
+          }}
         />
         <label for=${radioId}> ${options.displayText} </label>
       </div>
