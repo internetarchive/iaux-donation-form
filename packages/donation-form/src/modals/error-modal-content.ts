@@ -15,7 +15,7 @@ export class ErrorModalContent extends LitElement {
     return html`
       <div class="container">
         <a
-          href="https://help.archive.org/hc/en-us/articles/360037568971-Why-is-there-a-problem-processing-my-donation-"
+          href="https://help.archive.org/help/why-is-there-a-problem-processing-my-donation/"
           rel="noopener"
           target="_blank"
         >
