@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { LitElement, html, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
@@ -32,9 +33,9 @@ import './form-elements/badged-input';
 import { ContactForm } from './form-elements/contact-form/contact-form';
 import './form-elements/contact-form/contact-form';
 
-import creditCardImg from '@internetarchive/icon-credit-card';
-import calendarImg from '@internetarchive/icon-calendar';
-import lockImg from '@internetarchive/icon-lock';
+import creditCardImg from '@internetarchive/icon-credit-card/index.js';
+import calendarImg from '@internetarchive/icon-calendar/index.js';
+import lockImg from '@internetarchive/icon-lock/index.js';
 import { DonationControllerEventLoggerInterface } from './@types/analytics-handler';
 import { AnalyticsManagerInterface, AnalyticsEvent } from '@internetarchive/analytics-manager';
 import {
@@ -331,7 +332,7 @@ export class DonationFormController extends LitElement {
           logEvent: this.logEvent.bind(this),
           logDonationFlowEvent: this.logDonationFlowEvent.bind(this),
         } as DonationControllerEventLoggerInterface,
-      }
+      },
     });
 
     this.donationForm.braintreeManager = this.braintreeManager;
@@ -536,10 +537,10 @@ export class DonationFormController extends LitElement {
    * @param {string} action Name of event
    * @param {string} label Event label, optional
    */
-    private logDonationFlowEvent(action: string, label?: string): void {
-      const analyticEvent = { action, label, category: 'DonationFlow' } as AnalyticsEvent;
-      this.analyticsHandler?.sendEventNoSampling(analyticEvent);
-    }
+  private logDonationFlowEvent(action: string, label?: string): void {
+    const analyticEvent = { action, label, category: 'DonationFlow' } as AnalyticsEvent;
+    this.analyticsHandler?.sendEventNoSampling(analyticEvent);
+  }
 
   /**
    * This is not the normal LitElement styles block.
@@ -610,7 +611,7 @@ export class DonationFormController extends LitElement {
           margin-bottom: 0.6rem;
         }
 
-        .donation-form-controller-container div[slot="braintree-hosted-fields"] {
+        .donation-form-controller-container div[slot='braintree-hosted-fields'] {
           background-color: white;
         }
       </style>

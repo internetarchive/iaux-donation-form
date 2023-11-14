@@ -5,9 +5,7 @@ import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-for
 
 describe('DonationSummary', () => {
   it('shows the proper title for one-time donations', async () => {
-    const el = (await fixture(html`
-      <donation-summary></donation-summary>>
-    `)) as DonationSummary;
+    const el = (await fixture(html` <donation-summary></donation-summary>> `)) as DonationSummary;
 
     const donationInfo = new DonationPaymentInfo({
       amount: 3.5,
@@ -25,9 +23,7 @@ describe('DonationSummary', () => {
   });
 
   it('shows the proper title for monthly donations', async () => {
-    const el = (await fixture(html`
-      <donation-summary></donation-summary>>
-    `)) as DonationSummary;
+    const el = (await fixture(html` <donation-summary></donation-summary>> `)) as DonationSummary;
 
     const donationInfo = new DonationPaymentInfo({
       amount: 7.5,

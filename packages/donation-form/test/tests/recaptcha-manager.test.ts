@@ -4,9 +4,7 @@ import { RecaptchaManager } from '../../src/recaptcha-manager/recaptcha-manager'
 
 describe('ReCaptcha Manager', () => {
   it('can execute the recaptcha like a Promise', async () => {
-    const recaptchaElement = (await fixture(html`
-      <div></div>
-    `)) as HTMLElement;
+    const recaptchaElement = (await fixture(html` <div></div> `)) as HTMLElement;
     const mockGrecaptcha = new MockGrecaptcha(MockGrecaptchaMode.Success);
     const recaptchaManager = new RecaptchaManager({
       grecaptchaLibrary: mockGrecaptcha,
@@ -18,9 +16,7 @@ describe('ReCaptcha Manager', () => {
   });
 
   it('can error properly like a Promise', async () => {
-    const recaptchaElement = (await fixture(html`
-      <div></div>
-    `)) as HTMLElement;
+    const recaptchaElement = (await fixture(html` <div></div> `)) as HTMLElement;
     const mockGrecaptcha = new MockGrecaptcha(MockGrecaptchaMode.Error);
     const recaptchaManager = new RecaptchaManager({
       grecaptchaLibrary: mockGrecaptcha,
@@ -36,9 +32,7 @@ describe('ReCaptcha Manager', () => {
   });
 
   it('can expire properly like a Promise', async () => {
-    const recaptchaElement = (await fixture(html`
-      <div></div>
-    `)) as HTMLElement;
+    const recaptchaElement = (await fixture(html` <div></div> `)) as HTMLElement;
     const mockGrecaptcha = new MockGrecaptcha(MockGrecaptchaMode.Expired);
     const recaptchaManager = new RecaptchaManager({
       grecaptchaLibrary: mockGrecaptcha,
@@ -54,9 +48,7 @@ describe('ReCaptcha Manager', () => {
   });
 
   it('resets the captcha if execute() gets called more than once', async () => {
-    const recaptchaElement = (await fixture(html`
-      <div></div>
-    `)) as HTMLElement;
+    const recaptchaElement = (await fixture(html` <div></div> `)) as HTMLElement;
     const mockGrecaptcha = new MockGrecaptcha(MockGrecaptchaMode.Success, true);
     const recaptchaManager = new RecaptchaManager({
       grecaptchaLibrary: mockGrecaptcha,

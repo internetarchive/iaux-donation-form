@@ -12,9 +12,8 @@ export class MockCreditCardFlowHandler implements CreditCardFlowHandlerInterface
   paymentInitiatedDonorContactInfo?: DonorContactInfo;
   hostedFieldsResponse?: braintree.HostedFieldsTokenizePayload;
 
-  private emitter: Emitter<CreditCardFlowHandlerEvents> = createNanoEvents<
-    CreditCardFlowHandlerEvents
-  >();
+  private emitter: Emitter<CreditCardFlowHandlerEvents> =
+    createNanoEvents<CreditCardFlowHandlerEvents>();
 
   emitValidHostedFieldsEvent(): void {
     this.emitter.emit('validityChanged', true);

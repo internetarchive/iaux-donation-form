@@ -6,9 +6,7 @@ import { promisedSleep } from '../../../src/util/promisedSleep';
 
 describe('Payment Selector', () => {
   it('shows Venmo if it is available', async () => {
-    const el = (await fixture(html`
-      <payment-selector></payment-selector>
-    `)) as PaymentSelector;
+    const el = (await fixture(html` <payment-selector></payment-selector> `)) as PaymentSelector;
 
     const paymentProviders = new MockPaymentProviders();
     el.paymentProviders = paymentProviders;
@@ -20,9 +18,7 @@ describe('Payment Selector', () => {
   });
 
   it('can show PayPal when called', async () => {
-    const el = (await fixture(html`
-      <payment-selector></payment-selector>
-    `)) as PaymentSelector;
+    const el = (await fixture(html` <payment-selector></payment-selector> `)) as PaymentSelector;
     el.showPaypalButton();
     await elementUpdated(el);
     const paypalButton = el.shadowRoot?.querySelector('.paypal-container.provider-button');
@@ -30,9 +26,7 @@ describe('Payment Selector', () => {
   });
 
   it('emits paypalBlockerSelected event when paypal is selected in an error state', async () => {
-    const el = (await fixture(html`
-      <payment-selector></payment-selector>
-    `)) as PaymentSelector;
+    const el = (await fixture(html` <payment-selector></payment-selector> `)) as PaymentSelector;
     const paypalBlocker = el.shadowRoot?.querySelector('.paypal-local-button');
     const clickEvent = new MouseEvent('click');
     setTimeout(() => {
@@ -43,9 +37,7 @@ describe('Payment Selector', () => {
   });
 
   it('emits applePaySelected event with original click event when ApplePay is selected', async () => {
-    const el = (await fixture(html`
-      <payment-selector></payment-selector>
-    `)) as PaymentSelector;
+    const el = (await fixture(html` <payment-selector></payment-selector> `)) as PaymentSelector;
     const paypalBlocker = el.shadowRoot?.querySelector('.applepay.provider-button');
     const clickEvent = new MouseEvent('click');
     setTimeout(() => {
@@ -57,9 +49,7 @@ describe('Payment Selector', () => {
   });
 
   it('emits googlePaySelected when GooglePay is selected', async () => {
-    const el = (await fixture(html`
-      <payment-selector></payment-selector>
-    `)) as PaymentSelector;
+    const el = (await fixture(html` <payment-selector></payment-selector> `)) as PaymentSelector;
     const paypalBlocker = el.shadowRoot?.querySelector('.googlepay.provider-button');
     const clickEvent = new MouseEvent('click');
     setTimeout(() => {

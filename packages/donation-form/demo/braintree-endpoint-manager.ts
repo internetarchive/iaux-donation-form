@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { submitFormWith } from './submit-form-with';
 import currency from 'currency.js';
 

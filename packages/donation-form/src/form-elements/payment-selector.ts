@@ -1,10 +1,10 @@
 import { LitElement, html, css, CSSResult, TemplateResult, PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import applePayButtonImage from '@internetarchive/icon-applepay';
-import googlePayButtonImage from '@internetarchive/icon-googlepay';
-import paypalButtonImage from '@internetarchive/icon-paypal';
-import venmoButtonImage from '@internetarchive/icon-venmo';
+import applePayButtonImage from '@internetarchive/icon-applepay/index.js';
+import googlePayButtonImage from '@internetarchive/icon-googlepay/index.js';
+import paypalButtonImage from '@internetarchive/icon-paypal/index.js';
+import venmoButtonImage from '@internetarchive/icon-venmo/index.js';
 import { PaymentProvidersInterface } from '../braintree-manager/payment-providers-interface';
 
 enum PaymentButtonMode {

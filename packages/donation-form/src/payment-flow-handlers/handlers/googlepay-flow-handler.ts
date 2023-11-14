@@ -25,9 +25,8 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
 
   private braintreeManager: BraintreeManagerInterface;
 
-  private emitter: Emitter<GooglePayFlowHandlerEvents> = createNanoEvents<
-    GooglePayFlowHandlerEvents
-  >();
+  private emitter: Emitter<GooglePayFlowHandlerEvents> =
+    createNanoEvents<GooglePayFlowHandlerEvents>();
 
   constructor(options: {
     braintreeManager: BraintreeManagerInterface;
@@ -67,9 +66,8 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
 
     try {
       const paymentData = await handler.paymentsClient.loadPaymentData(paymentDataRequest);
-      const result: braintree.GooglePaymentTokenizePayload = await instance.parseResponse(
-        paymentData,
-      );
+      const result: braintree.GooglePaymentTokenizePayload =
+        await instance.parseResponse(paymentData);
 
       const billingInfo = paymentData.paymentMethodData.info?.billingAddress;
       const name = billingInfo?.name;

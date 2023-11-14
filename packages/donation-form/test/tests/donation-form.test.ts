@@ -16,9 +16,7 @@ import { MockDonationInfo } from '../mocks/mock-donation-info';
 describe('Donation Form', () => {
   describe('Configuration', () => {
     it('has no configuration', async () => {
-      const el = (await fixture(html`
-        <donation-form></donation-form>
-      `)) as DonationForm;
+      const el = (await fixture(html` <donation-form></donation-form> `)) as DonationForm;
 
       expect(el.braintreeManager).to.equal(undefined);
       expect(el.donationRequest).to.equal(undefined);
@@ -39,9 +37,7 @@ describe('Donation Form', () => {
   });
 
   it('shows the contact form when Credit Card is selected', async () => {
-    const el = (await fixture(html`
-      <donation-form></donation-form>
-    `)) as DonationForm;
+    const el = (await fixture(html` <donation-form></donation-form> `)) as DonationForm;
     const contactFormSection = el.shadowRoot?.querySelector('.contact-form-section');
     const paymentSelector = el.shadowRoot?.querySelector('payment-selector') as PaymentSelector;
     const creditCardButton = paymentSelector.shadowRoot?.querySelector(
@@ -55,9 +51,7 @@ describe('Donation Form', () => {
   });
 
   it('shows the contact form when Venmo is selected', async () => {
-    const el = (await fixture(html`
-      <donation-form></donation-form>
-    `)) as DonationForm;
+    const el = (await fixture(html` <donation-form></donation-form> `)) as DonationForm;
     const braintreeManager = new MockBraintreeManager();
     el.braintreeManager = braintreeManager;
     await elementUpdated(el);
@@ -88,9 +82,7 @@ describe('Donation Form', () => {
   });
 
   it('emits paymentProviderSelected when the selected provider changes', async () => {
-    const el = (await fixture(html`
-      <donation-form></donation-form>
-    `)) as DonationForm;
+    const el = (await fixture(html` <donation-form></donation-form> `)) as DonationForm;
     const braintreeManager = new MockBraintreeManager();
     el.braintreeManager = braintreeManager;
     await elementUpdated(el);

@@ -1,6 +1,5 @@
 import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-form-data-models';
 import {
-  AuthorizationData,
   TokenizePayload,
   CancellationData,
 } from '../../../../src/@types/paypal-checkout-components';

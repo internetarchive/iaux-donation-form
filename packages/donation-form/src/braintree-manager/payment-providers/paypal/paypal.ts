@@ -44,9 +44,9 @@ export class PayPalHandler implements PayPalHandlerInterface {
     style: paypal.ButtonStyle;
     donationInfo: DonationPaymentInfo;
   }): Promise<PayPalButtonDataSourceInterface | undefined> {
-    const env: paypal.Environment = (this.hostingEnvironment === HostingEnvironment.Development
-      ? 'sandbox'
-      : 'production') as paypal.Environment;
+    const env: paypal.Environment = (
+      this.hostingEnvironment === HostingEnvironment.Development ? 'sandbox' : 'production'
+    ) as paypal.Environment;
 
     const paypalInstance = await this.instance.get();
     if (!paypalInstance) {

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/ban-types */
 import { LitElement, html, TemplateResult, css, CSSResultGroup } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { DonationType } from '@internetarchive/donation-form-data-models';
@@ -24,18 +25,25 @@ export class ConfirmDonationContent extends LitElement {
 
   @property({ type: Function }) confirmDonation: Function = (): void => {};
 
-  @property({ type: Function }) cancelDonation: Function= (): void => {};
+  @property({ type: Function }) cancelDonation: Function = (): void => {};
 
   get confirmationText(): TemplateResult {
     const amount = currency(this.amount, { symbol: this.currencySymbol }).format();
     return html`
-    <p>You are about to make a <b>${this.donationType}</b> donation of <b>${amount} ${this.currencyType}</b> to the Internet Archive.</p>
+      <p>
+        You are about to make a <b>${this.donationType}</b> donation of
+        <b>${amount} ${this.currencyType}</b> to the Internet Archive.
+      </p>
     `;
   }
 
   get confirmUpsellText(): TemplateResult {
     const amount = currency(this.amount, { symbol: this.currencySymbol }).format();
-    return html`<p>You are about to begin making <b>monthly</b> donations of <b>${amount} ${this.currencyType}</b> to the Internet Archive. (Your first recurring contribution will be next month.)</p>`;
+    return html`<p>
+      You are about to begin making <b>monthly</b> donations of
+      <b>${amount} ${this.currencyType}</b> to the Internet Archive. (Your first recurring
+      contribution will be next month.)
+    </p>`;
   }
 
   confirm(): void {
@@ -47,7 +55,9 @@ export class ConfirmDonationContent extends LitElement {
   }
 
   get confirmCTA(): string {
-    return this.donationType === DonationType.Upsell ? 'Start monthly donation' : 'Complete donation';
+    return this.donationType === DonationType.Upsell
+      ? 'Start monthly donation'
+      : 'Complete donation';
   }
 
   /** @inheritdoc */
@@ -107,8 +117,8 @@ export class ConfirmDonationContent extends LitElement {
   /**
    * https://developer.paypal.com/docs/reports/reference/paypal-supported-currencies/
    */
-   get currencySymbol(): string {
-    switch(this.currencyType) {
+  get currencySymbol(): string {
+    switch (this.currencyType) {
       case 'AUD':
         return 'AU$';
       case 'BRL':

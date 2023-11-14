@@ -11,6 +11,7 @@ import {
 import { DonationFlowModalManagerInterface } from '../donation-flow-modal-manager';
 import { HostedFieldName } from '../../braintree-manager/payment-providers/credit-card/hosted-field-container';
 import { BadgedInput } from '../../form-elements/badged-input';
+import { BraintreeError } from '../../@types/braintree-web';
 
 export interface CreditCardFlowHandlerInterface {
   /**
@@ -146,7 +147,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     try {
       hostedFieldsResponse = await handler?.tokenizeHostedFields();
     } catch (error) {
-      this.handleHostedFieldTokenizationError(error);
+      this.handleHostedFieldTokenizationError(error as BraintreeError);
       return;
     }
 

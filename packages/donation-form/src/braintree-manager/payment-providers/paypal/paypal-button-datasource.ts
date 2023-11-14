@@ -112,7 +112,7 @@ export interface PayPalButtonDataSourceDelegate {
    * @returns {Promise<void>}
    * @memberof PayPalButtonDataSourceDelegate
    */
-   payPalPaymentConfirmed(
+  payPalPaymentConfirmed(
     dataSource: PayPalButtonDataSourceInterface,
     payload: paypal.TokenizePayload,
   ): Promise<void>;

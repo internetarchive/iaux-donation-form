@@ -69,7 +69,8 @@ export interface PayPalFlowHandlerEvents {
  * @implements {PayPalButtonDataSourceDelegate}
  */
 export class PayPalFlowHandler
-  implements PayPalFlowHandlerInterface, PayPalButtonDataSourceDelegate {
+  implements PayPalFlowHandlerInterface, PayPalButtonDataSourceDelegate
+{
   private upsellButtonDataSourceContainer?: UpsellDataSourceContainer;
 
   private buttonDataSource?: PayPalButtonDataSourceInterface;
@@ -120,10 +121,10 @@ export class PayPalFlowHandler
    * Once we have the dataSource & payload, we ask patron to confirm donation.
    * Once confirmed, we move forward to: `payPalPaymentConfirmed`
    */
-  async payPalPaymentAuthorized(dataSource: PayPalButtonDataSourceInterface,
-    payload: paypal.TokenizePayload
-    ): Promise<void> {
-
+  async payPalPaymentAuthorized(
+    dataSource: PayPalButtonDataSourceInterface,
+    payload: paypal.TokenizePayload,
+  ): Promise<void> {
     const { donationType, total } = dataSource.donationInfo;
     this.donationFlowModalManager.showConfirmationStepModal({
       donationType,
@@ -135,7 +136,7 @@ export class PayPalFlowHandler
       cancelDonationCB: () => {
         this.donationFlowModalManager.closeModal();
         this.payPalPaymentCancelled(dataSource, {});
-      }
+      },
     });
   }
 

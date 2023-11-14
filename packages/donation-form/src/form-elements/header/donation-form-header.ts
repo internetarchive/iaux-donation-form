@@ -36,9 +36,7 @@ export class DonationFormHeader extends LitElement {
 
   /** @inheritdoc */
   render(): TemplateResult {
-    return html`
-      ${this.currentTemplate}
-    `;
+    return html` ${this.currentTemplate} `;
   }
 
   private get currentTemplate(): TemplateResult {

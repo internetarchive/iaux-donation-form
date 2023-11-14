@@ -9,10 +9,7 @@ import {
   PaymentProvidersEvents,
   PaymentProvidersInterface,
 } from '../../../src/braintree-manager/payment-providers-interface';
-import {
-  CreditCardHandlerEvents,
-  CreditCardHandlerInterface,
-} from '../../../src/braintree-manager/payment-providers/credit-card/credit-card-interface';
+import { CreditCardHandlerInterface } from '../../../src/braintree-manager/payment-providers/credit-card/credit-card-interface';
 import { ApplePayHandlerInterface } from '../../../src/braintree-manager/payment-providers/apple-pay/apple-pay-interface';
 import { PayPalHandlerInterface } from '../../../src/braintree-manager/payment-providers/paypal/paypal-interface';
 import { GooglePayHandlerInterface } from '../../../src/braintree-manager/payment-providers/google-pay-interface';

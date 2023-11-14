@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { html } from 'lit';
 import { ModalConfig, ModalManagerInterface } from '@internetarchive/modal-manager';
 import { UpsellModalCTAMode } from '../modals/upsell-modal-content';
@@ -175,9 +176,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       closeOnBackdropClick: false,
       showCloseButton: false,
       processingImageMode: 'processing',
-      title: html`
-        Processing...
-      `,
+      title: html` Processing... `,
     });
     this.modalManager.showModal({ config: modalConfig });
   }
@@ -191,9 +190,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
       showProcessingIndicator: true,
       processingImageMode: 'complete',
       headerColor: ModalHeaderColor.Green,
-      title: html`
-        Thank You!
-      `,
+      title: html` Thank You! `,
     });
     this.modalManager.showModal({
       config: modalConfig,
@@ -216,15 +213,9 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
   showErrorModal(options: { message: string; userClosedModalCallback?: () => void }): void {
     const modalConfig = new ModalConfig({
       headerColor: ModalHeaderColor.Red,
-      title: html`
-        Processing error
-      `,
-      headline: html`
-        There's been a problem completing your donation.
-      `,
-      message: html`
-        ${options?.message}
-      `,
+      title: html` Processing error `,
+      headline: html` There's been a problem completing your donation. `,
+      message: html` ${options?.message} `,
     });
 
     this.modalManager.showModal({
@@ -249,9 +240,10 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     const cancelDonation = (): void => {
       options?.cancelDonationCB();
     };
-    const modalTitle = options.donationType === DonationType.Upsell
-      ? 'Confirm monthly donation'
-      : 'Complete donation';
+    const modalTitle =
+      options.donationType === DonationType.Upsell
+        ? 'Confirm monthly donation'
+        : 'Complete donation';
 
     const modalConfig = new ModalConfig({
       closeOnBackdropClick: false,
@@ -269,7 +261,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
     });
     return this.modalManager.showModal({
       config: modalConfig,
-      userClosedModalCallback: cancelDonation
+      userClosedModalCallback: cancelDonation,
     });
   }
 
@@ -284,9 +276,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
   }): Promise<void> {
     const modalConfig = new ModalConfig({
       headerColor: ModalHeaderColor.Green,
-      title: html`
-        Donation received
-      `,
+      title: html` Donation received `,
       processingImageMode: 'complete',
       showProcessingIndicator: true,
     });

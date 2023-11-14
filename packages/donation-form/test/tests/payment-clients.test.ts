@@ -10,9 +10,7 @@ import { MockGooglePaymentClient } from '../mocks/payment-clients/mock-googlepay
 import { MockHostedFieldsClient } from '../mocks/payment-clients/mock-hostedfields-client';
 import { MockVenmoClient } from '../mocks/payment-clients/mock-venmo-client';
 import { MockGooglePayLibrary } from '../mocks/payment-clients/mock-googlepay-library';
-import { MockRecaptchaManager } from '../mocks/mock-recaptcha-manager';
 import { MockGrecaptcha, MockGrecaptchaMode } from '../mocks/payment-clients/mock-grecaptcha';
-import { MockPayPalClient } from '../mocks/payment-clients/mock-paypal-client';
 import { MockPaypalLibrary } from '../mocks/payment-clients/mock-paypal-library';
 
 describe('PaymentClients', () => {

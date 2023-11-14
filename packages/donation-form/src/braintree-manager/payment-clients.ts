@@ -106,8 +106,7 @@ export class PaymentClients implements PaymentClientsInterface {
         };
 
         this.lazyLoader.loadScript({
-          src:
-            'https://www.google.com/recaptcha/api.js?onload=donationFormGrecaptchaLoadedCallback&render=explicit',
+          src: 'https://www.google.com/recaptcha/api.js?onload=donationFormGrecaptchaLoadedCallback&render=explicit',
         });
       }),
   });

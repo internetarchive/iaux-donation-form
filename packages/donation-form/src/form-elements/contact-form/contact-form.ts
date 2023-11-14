@@ -12,9 +12,9 @@ import { SpacerOption } from '../badged-input';
 import { BadgedInput } from '../badged-input';
 import '../badged-input';
 
-import emailImg from '@internetarchive/icon-email';
-import localePinImg from '@internetarchive/icon-locale-pin';
-import userIcon from '@internetarchive/icon-user';
+import emailImg from '@internetarchive/icon-email/index.js';
+import localePinImg from '@internetarchive/icon-locale-pin/index.js';
+import userIcon from '@internetarchive/icon-user/index.js';
 
 import { countries } from './countries';
 
@@ -179,9 +179,7 @@ export class ContactForm extends LitElement {
               iconSpaceOption: SpacerOption.CompressSpace,
             })}
           </div>
-          <div class="row">
-            ${this.countrySelectorTemplate}
-          </div>
+          <div class="row">${this.countrySelectorTemplate}</div>
         </fieldset>
       </form>
       ${this.getStyles}
@@ -191,23 +189,27 @@ export class ContactForm extends LitElement {
   private get countrySelectorTemplate(): TemplateResult {
     return html`
       <badged-input>
-        <select id="donation-contact-form-countryCodeAlpha2"
-        @change=${(e: Event) => {
-          const currCountry = this.selectedCountry;
-          this.selectedCountry = (e.target as HTMLInputElement)?.value ? (e.target as HTMLInputElement)?.value as string : currCountry;
-          // update required visual cue on region/state/province & postal code fields
-          if (this.selectedCountry === 'US') {
-            this.postalBadgedInput?.setAttribute('required', '');
-            this.postalCodeField?.setAttribute('required', '');
-            this.regionBadgedInput?.setAttribute('required', '');
-            this.regionField?.setAttribute('required', '');
-          } else {
-            this.postalBadgedInput?.removeAttribute('required');
-            this.postalCodeField?.removeAttribute('required');
-            this.regionBadgedInput?.removeAttribute('required');
-            this.regionField?.removeAttribute('required');
-          }
-        }}>
+        <select
+          id="donation-contact-form-countryCodeAlpha2"
+          @change=${(e: Event) => {
+            const currCountry = this.selectedCountry;
+            this.selectedCountry = (e.target as HTMLInputElement)?.value
+              ? ((e.target as HTMLInputElement)?.value as string)
+              : currCountry;
+            // update required visual cue on region/state/province & postal code fields
+            if (this.selectedCountry === 'US') {
+              this.postalBadgedInput?.setAttribute('required', '');
+              this.postalCodeField?.setAttribute('required', '');
+              this.regionBadgedInput?.setAttribute('required', '');
+              this.regionField?.setAttribute('required', '');
+            } else {
+              this.postalBadgedInput?.removeAttribute('required');
+              this.postalCodeField?.removeAttribute('required');
+              this.regionBadgedInput?.removeAttribute('required');
+              this.regionField?.removeAttribute('required');
+            }
+          }}
+        >
           ${Object.keys(countries).map(key => {
             const name = countries[key];
             return html`

@@ -43,11 +43,7 @@ describe('Donation Form Controller', () => {
     `)) as DonationFormController;
 
     // configure the donation-form-controller
-    const recaptchaElement = (await fixture(
-      html`
-        <div></div>
-      `,
-    )) as HTMLElement;
+    const recaptchaElement = (await fixture(html` <div></div> `)) as HTMLElement;
     const endpointManager = new MockEndpointManager();
     const paymentClients = new MockPaymentClients();
     const modalManager = new MockModalManager();
