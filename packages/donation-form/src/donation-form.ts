@@ -2,7 +2,7 @@
 import { LitElement, html, css, CSSResult, TemplateResult, PropertyValues } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
-import lockImg from '@internetarchive/icon-lock';
+import lockImg from '@internetarchive/icon-lock/index.js';
 
 // we have to import the registered component independently from the definition below
 // because inside each of these files, we're registering the custom element inside
