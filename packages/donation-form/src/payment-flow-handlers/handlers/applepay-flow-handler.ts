@@ -15,7 +15,8 @@ export interface ApplePayFlowHandlerInterface {
 }
 
 export class ApplePayFlowHandler
-  implements ApplePayFlowHandlerInterface, ApplePaySessionDataSourceDelegate {
+  implements ApplePayFlowHandlerInterface, ApplePaySessionDataSourceDelegate
+{
   private donationFlowModalManager: DonationFlowModalManagerInterface;
 
   private braintreeManager: BraintreeManagerInterface;

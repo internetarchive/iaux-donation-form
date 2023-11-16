@@ -38,11 +38,7 @@ export class BadgedInput extends LitElement {
       <div class="input-wrapper ${this.errorClass} ${this.iconSpaceOptionClass}">
         <div class="icon-container">${this.icon}</div>
         <div class="required-indicator ${this.requiredIndicatorSpaceOption}">
-          ${this.required
-            ? html`
-                *
-              `
-            : nothing}
+          ${this.required ? html` * ` : nothing}
         </div>
 
         <slot></slot>

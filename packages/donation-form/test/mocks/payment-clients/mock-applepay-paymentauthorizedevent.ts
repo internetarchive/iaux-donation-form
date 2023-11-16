@@ -2,7 +2,8 @@
 import { MockApplePayPayment } from './mock-applepay-payment';
 
 export class MockApplePayPaymentAuthorizedEvent
-  implements ApplePayJS.ApplePayPaymentAuthorizedEvent {
+  implements ApplePayJS.ApplePayPaymentAuthorizedEvent
+{
   payment: ApplePayJS.ApplePayPayment = new MockApplePayPayment();
   bubbles = true;
   cancelBubble = true;

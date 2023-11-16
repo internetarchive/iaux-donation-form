@@ -33,14 +33,10 @@ export class UpsellModalContent extends LitElement {
   render(): TemplateResult {
     return html`
       <h3>Thank you for donating!</h3>
-      <button @click=${this.noThanksSelected} class="cta-button" id="no-button">
-        Continue
-      </button>
+      <button @click=${this.noThanksSelected} class="cta-button" id="no-button">Continue</button>
       <p class="or_separator"><span>or</span></p>
       <h3>Consider donating monthly</h3>
-      <p class="appeal">
-        Monthly support helps us reliably plan for the future.
-      </p>
+      <p class="appeal">Monthly support helps us reliably plan for the future.</p>
       <div class="monthly-amount">
         <h1>Enter your monthly amount</h1>
         <div class="amount-input">
@@ -79,9 +75,7 @@ export class UpsellModalContent extends LitElement {
         return html`
           <div class="paypal-upsell-slot-container">
             <div class="paypal-upsell-slot-blocker ${this.error ? '' : 'hidden'}"></div>
-            <button class="cta-button" id="paypal-cover-button">
-              YES, I'll donate monthly
-            </button>
+            <button class="cta-button" id="paypal-cover-button">YES, I'll donate monthly</button>
             <slot class="paypal-upsell-slot"></slot>
           </div>
         `;
@@ -100,9 +94,7 @@ export class UpsellModalContent extends LitElement {
   private handleCustomAmountInput(value: string): void {
     const amount = parseFloat(value);
     if (isNaN(amount)) {
-      this.error = html`
-        Please enter a valid amount.
-      `;
+      this.error = html` Please enter a valid amount. `;
     } else {
       this.processAmount(amount);
     }
@@ -119,9 +111,7 @@ export class UpsellModalContent extends LitElement {
 
     if (amount < 1) {
       if (this.amountInput && this.amountInput.value.length > 0) {
-        this.error = html`
-          The minimum donation amount is $1.
-        `;
+        this.error = html` The minimum donation amount is $1. `;
       }
       return;
     }

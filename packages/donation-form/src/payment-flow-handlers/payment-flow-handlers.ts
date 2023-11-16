@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { ModalManagerInterface } from '@internetarchive/modal-manager';
 
 import {

@@ -61,7 +61,7 @@ describe('VenmoHandler', () => {
       const originalUserAgent = navigator.userAgent;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (navigator as any)['__defineGetter__']('userAgent', function() {
+      (navigator as any)['__defineGetter__']('userAgent', function () {
         return 'FxiOS Mobile';
       });
 
@@ -78,7 +78,7 @@ describe('VenmoHandler', () => {
       expect(supported).to.be.false;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (navigator as any)['__defineGetter__']('userAgent', function() {
+      (navigator as any)['__defineGetter__']('userAgent', function () {
         return originalUserAgent;
       });
     });

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { html, fixture, expect } from '@open-wc/testing';
 import { DonationFlowModalManager } from '../../../src/payment-flow-handlers/donation-flow-modal-manager';
 import { MockModalManager } from '../../mocks/mock-modal-manager';
@@ -35,7 +34,7 @@ describe('Donation Flow Modal Manager', () => {
     const manager = new DonationFlowModalManager({
       braintreeManager: mockBraintreeManager,
       modalManager: mockModalManager,
-      analytics
+      analytics,
     });
     manager.closeModal();
     expect(mockModalManager.closeCalled).to.be.true;
@@ -66,7 +65,7 @@ describe('Donation Flow Modal Manager', () => {
     const manager = new DonationFlowModalManager({
       braintreeManager: mockBraintreeManager,
       modalManager: mockModalManager,
-      analytics
+      analytics,
     });
     manager.showProcessingModal();
     const modalOptions = mockModalManager.showModalOptions;
@@ -86,7 +85,7 @@ describe('Donation Flow Modal Manager', () => {
     const manager = new DonationFlowModalManager({
       braintreeManager: mockBraintreeManager,
       modalManager: mockModalManager,
-      analytics
+      analytics,
     });
     manager.showErrorModal({ message: 'foo-error' });
     const modalOptions = mockModalManager.showModalOptions;
@@ -113,7 +112,7 @@ describe('Donation Flow Modal Manager', () => {
       analytics: {
         logEvent,
         logDonationFlowEvent,
-      }
+      },
     });
     manager.showThankYouModal({
       successResponse: mockSuccessResponse,
@@ -142,7 +141,7 @@ describe('Donation Flow Modal Manager', () => {
       analytics: {
         logEvent,
         logDonationFlowEvent,
-      }
+      },
     });
     const successResponse = mockSuccessResponse;
     successResponse.paymentProvider = PaymentProvider.GooglePay;
@@ -164,7 +163,7 @@ describe('Donation Flow Modal Manager', () => {
     const manager = new DonationFlowModalManager({
       braintreeManager: mockBraintreeManager,
       modalManager: mockModalManager,
-      analytics
+      analytics,
     });
     manager.showConfirmationStepModal({
       donationType: DonationType.Upsell,
@@ -189,7 +188,7 @@ describe('Donation Flow Modal Manager', () => {
     const manager = new DonationFlowModalManager({
       braintreeManager: mockBraintreeManager,
       modalManager: mockModalManager,
-      analytics
+      analytics,
     });
     const result = await manager.startDonationSubmissionFlow({
       nonce: 'foo',

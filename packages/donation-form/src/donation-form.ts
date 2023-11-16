@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { LitElement, html, css, CSSResult, TemplateResult, PropertyValues } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
@@ -121,15 +122,15 @@ export class DonationForm extends LitElement {
     `;
   }
 
-    async showConfirmationModalDev(options: {
-      donationType: DonationType;
-      amount: number;
-      currencyType: string;
-      cancelDonationCB: Function;
-      confirmDonationCB: Function;
-    }): Promise<void> {
-      this.paymentFlowHandlers?.showConfirmationStepModal(options);
-    }
+  async showConfirmationModalDev(options: {
+    donationType: DonationType;
+    amount: number;
+    currencyType: string;
+    cancelDonationCB: Function;
+    confirmDonationCB: Function;
+  }): Promise<void> {
+    this.paymentFlowHandlers?.showConfirmationStepModal(options);
+  }
 
   /**
    * This is a developer convenience method that allows us to show the upsell modal without going
@@ -193,13 +194,9 @@ export class DonationForm extends LitElement {
 
       <donation-form-section .sectionBadge=${this.paymentSelectorNumberingStart + 2}>
         <slot name="recaptcha"></slot>
-        <button id="donate-button" @click=${this.donateClicked}>
-          Donate
-        </button>
+        <button id="donate-button" @click=${this.donateClicked}>Donate</button>
 
-        <div class="secure-process-note">
-          ${lockImg} Your payment will be securely processed
-        </div>
+        <div class="secure-process-note">${lockImg} Your payment will be securely processed</div>
       </donation-form-section>
     `;
   }

@@ -6,9 +6,8 @@ import { DonationPaymentInfo } from '@internetarchive/donation-form-data-models'
 import { Unsubscribe, createNanoEvents, Emitter } from 'nanoevents';
 
 export class MockGooglePayFlowHandler implements GooglePayFlowHandlerInterface {
-  private emitter: Emitter<GooglePayFlowHandlerEvents> = createNanoEvents<
-    GooglePayFlowHandlerEvents
-  >();
+  private emitter: Emitter<GooglePayFlowHandlerEvents> =
+    createNanoEvents<GooglePayFlowHandlerEvents>();
 
   on<E extends keyof GooglePayFlowHandlerEvents>(
     event: E,
