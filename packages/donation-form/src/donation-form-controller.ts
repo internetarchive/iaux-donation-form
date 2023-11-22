@@ -480,13 +480,14 @@ export class DonationFormController extends LitElement {
   private paymentProviderSelected(e: CustomEvent): void {
     const paymentProvider = e.detail.paymentProvider as PaymentProvider;
     const previousPaymentProvider = e.detail.previousPaymentProvider;
-    const providerNoSpaces = this.removeSpaces(paymentProvider);
+    const providerNoSpaces = this.removeSpaces(paymentProvider ?? 'unset');
     let eventName = `ProviderFirstSelected-${providerNoSpaces}`;
     let previousProviderInfo;
     if (previousPaymentProvider !== undefined) {
       eventName = `ProviderChangedTo-${providerNoSpaces}`;
       previousProviderInfo = `ProviderChangedFrom-${this.removeSpaces(previousPaymentProvider)}`;
     }
+
     this.logEvent(eventName, previousProviderInfo);
   }
 

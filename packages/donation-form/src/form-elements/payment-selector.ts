@@ -1,4 +1,4 @@
-import { LitElement, html, css, CSSResult, TemplateResult, PropertyValues } from 'lit';
+import { LitElement, html, css, CSSResult, TemplateResult, PropertyValues, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import applePayButtonImage from '@internetarchive/icon-applepay/index.js';
@@ -27,43 +27,58 @@ export class PaymentSelector extends LitElement {
 
   @property({ type: String }) private payPalMode: PaymentButtonMode = PaymentButtonMode.Loading;
 
+  @property({ type: String }) private paymentModeSelected: 'apple' | 'google' | 'venmo' | 'cc' | 'paypal' | undefined = undefined;
+
   /** @inheritdoc */
   render(): TemplateResult {
+    const paymentSelectedCss = this.paymentModeSelected ? 'payment-selected' : '';
     return html`
       <div
         class="payment-container ${this.donationInfoValid
           ? 'donation-info-valid'
-          : 'donation-info-invalid'}
-          "
+          : 'donation-info-invalid'} ${paymentSelectedCss}"
       >
         <div class="payment-provider-container">
           <button
-            class="applepay provider-button ${this.applePayMode}"
-            @click=${this.applePaySelected}
+            class="applepay provider-button ${this.applePayMode} ${this.paymentModeSelected === 'apple' ? 'selected' : ''}"
+            @click=${(e: Event) => {
+              this.paymentModeSelected = 'apple';
+              this.applePaySelected(e);}
+              }
             tabindex="0"
           >
             <div class="payment-image">${applePayButtonImage}</div>
           </button>
 
           <button
-            class="googlepay provider-button ${this.googlePayMode}"
-            @click=${this.googlePaySelected}
+            class="googlepay provider-button ${this.googlePayMode} ${this.paymentModeSelected === 'google' ? 'selected' : ''}"
+            @click=${() => {
+              this.paymentModeSelected = 'google';
+              this.googlePaySelected();}
+              }
             tabindex="0"
           >
             <div class="payment-image">${googlePayButtonImage}</div>
           </button>
 
           <button
-            class="venmo provider-button ${this.venmoMode}"
-            @click=${this.venmoSelected}
+            class="venmo provider-button ${this.venmoMode} ${this.paymentModeSelected === 'venmo' ? 'selected' : ''}"
+            @click=${() => {
+              this.paymentModeSelected = 'venmo';
+              this.venmoSelected();}
+              }
             tabindex="0"
           >
             <div class="payment-image">${venmoButtonImage}</div>
           </button>
 
-          <div class="paypal-container provider-button ${this.payPalMode}" tabindex="0">
+          <div class="paypal-container provider-button ${this.payPalMode} ${this.paymentModeSelected === 'paypal' ? 'selected' : ''}" tabindex="0">
             <div class="payment-image">
-              <div class="paypal-local-button" @click=${this.localPaypalButtonClicked}>
+              <div class="paypal-local-button"
+                @click=${() => {
+                this.paymentModeSelected = 'paypal';
+                this.localPaypalButtonClicked();}
+                }>
                 ${paypalButtonImage}
               </div>
               <slot name="paypal-button"></slot>
@@ -73,8 +88,11 @@ export class PaymentSelector extends LitElement {
 
         <div class="credit-card-container">
           <button
-            @click=${this.creditCardSelected}
-            class="button-style credit-card-button"
+            @click=${() => {
+              this.paymentModeSelected = 'cc';
+              this.creditCardSelected();
+            }}
+            class="button-style credit-card-button ${this.paymentModeSelected === 'cc' ? 'selected' : ''}"
             tabindex="0"
           >
             <div class="cc-title">Credit Card</div>
@@ -82,6 +100,20 @@ export class PaymentSelector extends LitElement {
           </button>
         </div>
       </div>
+
+      ${this.paymentModeSelected
+        ? html`
+            <button
+              id="change-payment-method"
+              @click=${() => {
+                this.paymentModeSelected = undefined;
+                this.dispatchEvent(new Event('resetPaymentMethod'));
+                this.setButtonVisibility();
+              }}
+            >Change payment method</button>
+          `
+        : nothing
+      }
     `;
   }
 
@@ -287,6 +319,23 @@ export class PaymentSelector extends LitElement {
         font-size: ${creditCardFontSizeCss};
         font-weight: 700;
         margin-bottom: 0.5rem;
+      }
+
+      button#change-payment-method {
+        margin-top: 10px;
+        background: white;
+        border: 1px solid;
+        border-radius: 3px;
+        padding: 5px;
+      }
+
+      button#change-payment-method:hover {
+        cursor: pointer;
+      }
+
+      .payment-selected button:not(.selected),
+      .payment-selected .paypal-container:not(.selected) {
+        display: none;
       }
     `;
   }

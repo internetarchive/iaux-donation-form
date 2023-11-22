@@ -93,6 +93,7 @@
       <button id="change-donation-amounts">Change Donation Amounts</button> |
       <button id="show-custom-colors">Show Custom Color Skinning</button> |
       <button id="reset-custom-colors">Reset Custom Color Skinning</button> |
+      <button id="show-venmo-payment-method">Show VENMO Payment method</button> |
     </div>
     <p>Latest analytic event: <span id="latest-analytic"></span></p>
   </div>
@@ -209,6 +210,15 @@
     document.querySelector('#reset-custom-colors').addEventListener('click', () => {
       const formController = document.querySelector('donation-form-controller');
       formController.classList.remove('custom-colors');
+    });
+
+    document.querySelector('#show-venmo-payment-method').addEventListener('click', async () => {
+      const formController = document.querySelector('donation-form-controller');
+      const donationForm = formController.querySelector('donation-form');
+      const paymentSelector = donationForm.shadowRoot.querySelector('payment-selector');
+
+      paymentSelector.venmoMode = 'available';
+      await paymentSelector.updateComplete;
     });
 
     analyticsHandler.nodeToUpdate = document.querySelector('#latest-analytic');

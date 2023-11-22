@@ -109,6 +109,11 @@ export class DonationForm extends LitElement {
           @applePaySelected=${this.applePaySelected}
           @googlePaySelected=${this.googlePaySelected}
           @paypalBlockerSelected=${this.paypalBlockerSelected}
+          @resetPaymentMethod=${async () => {
+            this.selectedPaymentProvider = undefined;
+            this.contactFormVisible = false;
+            this.requestUpdate();
+          }}
           tabindex="0"
         >
           <slot name="paypal-button" slot="paypal-button"></slot>
@@ -180,10 +185,14 @@ export class DonationForm extends LitElement {
   }
 
   get contactFormSectionTemplate(): TemplateResult {
+    const headline = this.selectedPaymentProvider === PaymentProvider.Venmo
+      ? 'Help us stay in touch'
+      : 'Enter payment information';
+
     return html`
       <donation-form-section
         .sectionBadge=${this.paymentSelectorNumberingStart + 1}
-        headline="Enter payment information"
+        headline=${headline}
         id="contactFormSection"
       >
         <slot name="contact-form"></slot>
