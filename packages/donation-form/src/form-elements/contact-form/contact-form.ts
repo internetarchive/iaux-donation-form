@@ -411,7 +411,7 @@ export class ContactForm extends LitElement {
         }
 
         contact-form #donation-contact-form-countryCodeAlpha2 {
-          width: ${iconFieldWidth};
+          width: calc(100%);
           height: 100%;
           box-sizing: border-box;
           font-weight: bold;
@@ -419,9 +419,6 @@ export class ContactForm extends LitElement {
           font-family: ${fieldFontFamily};
           border: 0;
           background: #fff;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          appearance: none;
         }
       </style>
     `;
