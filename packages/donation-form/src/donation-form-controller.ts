@@ -90,7 +90,7 @@ export class DonationFormController extends LitElement {
 
   @property({ type: String }) origin?: string;
 
-  @property({ type: String }) donorEmail?: string;
+  @property({ type: String }) donorEmail: string = '';
 
   @property({ type: Object }) endpointManager?: BraintreeEndpointManagerInterface;
 
