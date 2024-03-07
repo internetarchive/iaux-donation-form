@@ -11,7 +11,6 @@
     body {
       color: #333;
       font-family: sans-serif;
-      font-size: 10px;
     }
 
     body.modal-manager-open {
@@ -75,6 +74,16 @@
       /* Selected Option Text color `[$5], [$10], [monthly]` */
       --donateFormSelectedOptionTextColor: yellow;
     }
+
+  div#options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  div#options button {
+    margin: 2px 5px;
+  }
   </style>
 
 </head>
@@ -84,7 +93,7 @@
   </header>
 
   <div class="dev-tools">
-    <div>
+    <div id="options">
       <button id="show-regular-upsell-button">Show Regular Upsell</button> |
       <button id="show-paypal-upsell-button">Show PayPal Upsell</button> |
       <button id="confirm-step-modal-onetime">Show Confirmation Step for 1x</button> |
@@ -95,7 +104,15 @@
       <button id="reset-custom-colors">Reset Custom Color Skinning</button> |
       <button id="show-venmo-payment-method">Show VENMO Payment method</button> |
     </div>
-    <p>Latest analytic event: <span id="latest-analytic"></span></p>
+    <p><b>Latest analytic event: </b><span id="latest-analytic"></span></p>
+    <div>
+      <form id="preload-email">
+        <label for="email"><b>Pre-load Email:</b></label>
+          <input type="email" id="email" name="email" required>
+        <button type="submit">Preload Email</button>
+        <button id="clear-email">Clear Email</button>
+      </form>
+    </div>
   </div>
 
   <div id="demo">
@@ -219,6 +236,14 @@
 
       paymentSelector.venmoMode = 'available';
       await paymentSelector.updateComplete;
+    });
+
+    document.querySelector('#preload-email').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formController = document.querySelector('donation-form-controller');
+      formController.donorEmail = document.querySelector('#email').value;
+
+      await donationForm.updateComplete;
     });
 
     analyticsHandler.nodeToUpdate = document.querySelector('#latest-analytic');
