@@ -243,7 +243,17 @@
       const formController = document.querySelector('donation-form-controller');
       formController.donorEmail = document.querySelector('#email').value;
 
-      await donationForm.updateComplete;
+      await formController.updateComplete;
+    });
+
+    document.querySelector('#clear-email').addEventListener('click', async (e) => {
+      e.preventDefault();
+      const emailInput = document.querySelector('#email');
+      emailInput.value = '';
+      const formController = document.querySelector('donation-form-controller');
+      formController.donorEmail = emailInput.value;
+
+      await formController.updateComplete;
     });
 
     analyticsHandler.nodeToUpdate = document.querySelector('#latest-analytic');
