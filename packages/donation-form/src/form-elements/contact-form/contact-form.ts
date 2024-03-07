@@ -1,4 +1,4 @@
-import { LitElement, html, css, TemplateResult } from 'lit';
+import { LitElement, html, css, TemplateResult, PropertyValues } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
@@ -53,6 +53,14 @@ export class ContactForm extends LitElement {
 
   /** @keyof countries */
   @property({ type: String }) selectedCountry = 'US';
+
+  @property({ type: String }) donorEmail = '';
+
+  updated(changed: PropertyValues): void {
+    if (changed.has('donorEmail')) {
+      this.emailField.value = this.donorEmail ?? '';
+    }
+  }
 
   reportValidity(): boolean {
     const fieldBadgedInputs: Array<[HTMLInputElement, BadgedInput]> = [

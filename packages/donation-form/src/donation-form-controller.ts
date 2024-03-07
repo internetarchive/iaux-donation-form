@@ -90,6 +90,8 @@ export class DonationFormController extends LitElement {
 
   @property({ type: String }) origin?: string;
 
+  @property({ type: String }) donorEmail?: string;
+
   @property({ type: Object }) endpointManager?: BraintreeEndpointManagerInterface;
 
   @property({ type: Object }) analyticsHandler?: AnalyticsManagerInterface;
@@ -445,7 +447,7 @@ export class DonationFormController extends LitElement {
             in a reference to it in the <donation-form> tag above
           -->
           <div slot="contact-form">
-            <contact-form></contact-form>
+            <contact-form .donorEmail=${this.donorEmail}></contact-form>
           </div>
 
           <div slot="paypal-button">
