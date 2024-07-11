@@ -1,0 +1,308 @@
+<!doctype html>
+<html>
+<head>
+  <title>Donation Form Demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="assets/style.css" />
+
+  <style>
+    body {
+      color: #333;
+      font-family: sans-serif;
+    }
+
+    body.modal-manager-open {
+      overflow: hidden;
+    }
+
+    modal-manager {
+      display: none;
+      --modalTopMargin: 4rem;
+      --modalBottomMargin: 0.25rem;
+    }
+
+    modal-manager[mode='open'] {
+      display: block;
+    }
+
+    donation-form-controller {
+      display: block;
+      width: 32rem;
+    }
+
+    .dev-tools {
+      background-color: lightblue;
+      padding: 1rem 1rem;
+    }
+
+    #paypal-upsell-button {
+      opacity: 0.01;
+      padding-bottom: 0.6rem;
+    }
+
+    donation-form-controller.custom-colors {      
+      /* CSS vars to set */
+      /* Donate Button */
+      --donateButtonColor: pink;
+      --donateButtonTextColor: rebeccapurple;
+      --donateButtonHoverColor: deepskyblue;
+
+      /* Credit Card Button */
+      --ccButtonFontColor: darkblue;
+      --ccButtonColor: coral;
+
+      /* Form Background color */
+      --donateFormBgColor: turquoise;
+
+      /* Form Text color */
+      --donateFormTextColor: darkblue;
+
+      /* Flow Badges Background color `(1), (2), (3)` */
+      --donateFormBadgeBgColor: pink;
+      /* Flow Badges Text color `(1), (2), (3)` */
+      --donateFormBadgeTextColor: rebeccapurple;
+
+      /* Form Options Background color `[$5], [$10], [monthly]` */
+      --donateFormPaymentOptionTextColor: darkblue;
+      /* Form Options Text color `[$5], [$10], [monthly]` */
+      --donateFormPaymentOptionBgColor: lightblue;
+
+      /* Selected Option Background color `[$5], [$10], [monthly]` */
+      --donateFormSelectedOptionBgColor: green;
+      /* Selected Option Text color `[$5], [$10], [monthly]` */
+      --donateFormSelectedOptionTextColor: yellow;
+    }
+
+  div#options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  div#options button {
+    margin: 2px 5px;
+  }
+  </style>
+
+</head>
+<body>
+  <header>
+    <a href="recaptcha.html">Recaptcha Demo</a>
+  </header>
+
+  <div class="dev-tools">
+    <div id="options">
+      <button id="show-regular-upsell-button">Show Regular Upsell</button> |
+      <button id="show-paypal-upsell-button">Show PayPal Upsell</button> |
+      <button id="confirm-step-modal-onetime">Show Confirmation Step for 1x</button> |
+      <button id="confirm-step-modal-monthly">Show Confirmation Step for Monthly</button> |
+      <button id="confirm-step-modal-upsell">Show Confirmation Step for Upsell</button> |
+      <button id="change-donation-amounts">Change Donation Amounts</button> |
+      <button id="show-custom-colors">Show Custom Color Skinning</button> |
+      <button id="reset-custom-colors">Reset Custom Color Skinning</button> |
+      <button id="show-venmo-payment-method">Show VENMO Payment method</button> |
+    </div>
+    <p><b>Latest analytic event: </b><span id="latest-analytic"></span></p>
+    <div>
+      <form id="preload-email">
+        <label for="email"><b>Pre-load Email:</b></label>
+          <input type="email" id="email" name="email" required>
+        <button type="submit">Preload Email</button>
+        <button id="clear-email">Clear Email</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="demo">
+  </div>
+
+  <script type="module">
+    import { render, html } from 'https://offshoot.prod.archive.org/lit.js';
+    import '../dist/index.js';
+    import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-form-data-models';
+    import { BraintreeEndpointManager } from '../dist/demo/braintree-endpoint-manager.js';
+    import { DemoAnalyticsHandler } from '../dist/demo/demo-analytics-handler.js';
+    import { LazyLoaderService } from '@internetarchive/lazy-loader-service';
+
+    const braintreeEndpointManager = new BraintreeEndpointManager();
+    const analyticsHandler = new DemoAnalyticsHandler();
+    const lazyLoader = new LazyLoaderService();
+
+    lazyLoader.on(
+      'scriptLoadRetried',
+      async (src, retryNumber) => {
+        console.debug('scriptLoadRetried', src, retryNumber);
+      },
+    );
+
+    lazyLoader.on('scriptLoadFailed', async (src) => {
+      console.debug('scriptLoadFailed', src);
+    });
+
+    document.querySelector('#show-regular-upsell-button').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.showUpsellModalDev({
+        oneTimeAmount: 5,
+        ctaMode: 'YesButton'
+      });
+    });
+
+    document.querySelector('#show-paypal-upsell-button').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.showUpsellModalDev({
+        oneTimeAmount: 5,
+        ctaMode: 'PayPalUpsellSlot'
+      });
+    });
+
+    document.querySelector('#change-donation-amounts').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      const amounts = [2.75, 10, 15, 20];
+      formController.amountOptions = amounts;
+      formController.donationInfo = new DonationPaymentInfo({
+        donationType: DonationType.OneTime,
+        amount: 2.75,
+        coverFees: false,
+      })
+    });
+
+    document.querySelector('#confirm-step-modal-onetime').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.showConfirmationStepDev({
+        donationType: DonationType.OneTime,
+        amount: 33,
+        currencyType: 'USD',
+        cancelDonationCB: () => {
+          alert('Donation Cancelled');
+          formController.modalManager.closeModal()
+        },
+        confirmDonationCB: () => {
+          alert('Donation Confirmed');
+          formController.modalManager.closeModal()
+        }
+      });
+    });
+
+    document.querySelector('#confirm-step-modal-monthly').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.showConfirmationStepDev({
+        donationType: DonationType.Monthly,
+        amount: 5,
+        currencyType: 'USD',
+        cancelDonationCB: () => {
+          alert('Donation Cancelled');
+          formController.modalManager.closeModal()
+        },
+        confirmDonationCB: () => {
+          alert('Donation Confirmed');
+          formController.modalManager.closeModal()
+        }
+      });
+    });
+
+    document.querySelector('#confirm-step-modal-upsell').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.showConfirmationStepDev({
+        donationType: DonationType.Upsell,
+        amount: 8,
+        currencyType: 'USD',
+        cancelDonationCB: () => {
+          alert('Donation Cancelled');
+          formController.modalManager.closeModal()
+        },
+        confirmDonationCB: () => {
+          alert('Donation Confirmed');
+          formController.modalManager.closeModal()
+        }
+      });
+    });
+
+    document.querySelector('#show-custom-colors').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.classList.add('custom-colors');
+    });
+
+    document.querySelector('#reset-custom-colors').addEventListener('click', () => {
+      const formController = document.querySelector('donation-form-controller');
+      formController.classList.remove('custom-colors');
+    });
+
+    document.querySelector('#show-venmo-payment-method').addEventListener('click', async () => {
+      const formController = document.querySelector('donation-form-controller');
+      const donationForm = formController.querySelector('donation-form');
+      const paymentSelector = donationForm.shadowRoot.querySelector('payment-selector');
+
+      paymentSelector.venmoMode = 'available';
+      await paymentSelector.updateComplete;
+    });
+
+    document.querySelector('#preload-email').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formController = document.querySelector('donation-form-controller');
+      formController.donorEmail = document.querySelector('#email').value;
+
+      await formController.updateComplete;
+    });
+
+    document.querySelector('#clear-email').addEventListener('click', async (e) => {
+      e.preventDefault();
+      const emailInput = document.querySelector('#email');
+      emailInput.value = '';
+      const formController = document.querySelector('donation-form-controller');
+      formController.donorEmail = emailInput.value;
+
+      await formController.updateComplete;
+    });
+
+    analyticsHandler.nodeToUpdate = document.querySelector('#latest-analytic');
+    window.analyticsHandlerNode = document.querySelector('#latest-analytic');
+
+    render(
+      html`
+        <modal-manager>
+          <!--
+            The PayPal buttons cannot exist in the shadowDOM so they have to be slotted
+            from the top.
+          -->
+          <div slot="paypal-upsell-button">
+            <div id="paypal-upsell-button"></div>
+          </div>
+        </modal-manager>
+
+        <donation-form-controller
+          environment='dev'
+          braintreeAuthToken='sandbox_x634jsj7_7zybks4ybp63pbmd'
+          recaptchaSiteKey='6LeTUvYUAAAAAPTvW98MaXyS8c6vxk4-9n8DI1ve'
+          venmoProfileId='1953896702662410263'
+          googlePayMerchantId=''
+          .endpointManager=${braintreeEndpointManager}
+          .lazyLoaderService=${lazyLoader}
+          referrer='demo-app'
+          ?showCreditCardButtonText=${true}
+          loggedInUser='demo-user'>
+        </donation-form-controller>
+
+        <div id="recaptcha"></div>
+      `,
+      document.querySelector('#demo')
+    );
+
+    const recaptchaElement = document.querySelector('#recaptcha');
+    const modalManager = document.querySelector('modal-manager');
+    const formController = document.querySelector('donation-form-controller');
+    formController.modalManager = modalManager;
+    formController.recaptchaElement = recaptchaElement;
+    formController.analyticsHandler = analyticsHandler;
+
+    formController.addEventListener('paymentProvidersHostedFieldsRetry', (event) => {
+      console.log('paymentProvidersHostedFieldsRetry', event);
+  });
+
+    formController.addEventListener('paymentProvidersHostedFieldsFailed', (event) => {
+      console.log('paymentProvidersHostedFieldsFailed', event);
+  });
+</script>
+</body>
+</html>

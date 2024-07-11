@@ -1,0 +1,107 @@
+{
+  "name": "@internetarchive/donation-form",
+  "version": "0.6.0",
+  "description": "The Internet Archive Donation Form",
+  "license": "AGPL-3.0-only",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "src/**/*",
+    "index.d.ts",
+    "index.js"
+  ],
+  "scripts": {
+    "prepare": "yarn run build",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds --app-index demo/index.html --node-resolve --open --watch --preserve-symlinks\"",
+    "tsc:watch": "tsc --watch",
+    "lint:eslint": "eslint --ext .ts,.html . --ignore-path .gitignore",
+    "format:eslint": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
+    "lint:prettier": "prettier \"**/*.js\" \"**/*.ts\" --check --ignore-path .gitignore",
+    "format:prettier": "prettier \"**/*.js\" \"**/*.ts\" --write --ignore-path .gitignore",
+    "lint": "yarn run lint:eslint && yarn run lint:prettier",
+    "format": "yarn run format:eslint && yarn run format:prettier",
+    "circular": "madge --circular --extensions ts .",
+    "test": "tsc && yarn run lint && yarn run circular && wtr dist/test/tests/**/*.test.js --node-resolve --coverage",
+    "test:watch": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr test/tests/**/*.test.ts --node-resolve --watch\""
+  },
+  "dependencies": {
+    "@internetarchive/analytics-manager": "^0.1.2",
+    "@internetarchive/donation-form-currency-validator": "^0.3.0",
+    "@internetarchive/donation-form-data-models": "^0.3.3",
+    "@internetarchive/donation-form-edit-donation": "^1.0.2",
+    "@internetarchive/donation-form-section": "^0.3.5",
+    "@internetarchive/icon-applepay": "^1.3.2",
+    "@internetarchive/icon-calendar": "^1.3.2",
+    "@internetarchive/icon-credit-card": "^1.3.2",
+    "@internetarchive/icon-email": "^1.3.2",
+    "@internetarchive/icon-googlepay": "^1.3.2",
+    "@internetarchive/icon-locale-pin": "^1.3.2",
+    "@internetarchive/icon-lock": "^1.3.2",
+    "@internetarchive/icon-paypal": "^1.3.2",
+    "@internetarchive/icon-user": "^1.3.2",
+    "@internetarchive/icon-venmo": "^1.3.2",
+    "@internetarchive/lazy-loader-service": "^0.2.0",
+    "@internetarchive/modal-manager": "^0.2.8",
+    "@internetarchive/promised-singleton": "^0.2.1",
+    "currency.js": "^2.0.2",
+    "lit": "^2.8.0",
+    "nanoevents": "^5.1.8"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.3",
+    "@open-wc/eslint-config": "^12.0.2",
+    "@open-wc/prettier-config": "^1.1.0",
+    "@open-wc/testing": "^3.1.6",
+    "@types/applepayjs": "^3.0.0",
+    "@types/googlepay": "^0.4.1",
+    "@types/grecaptcha": "^2.0.36",
+    "@types/mocha": "^10.0.4",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@web/dev-server": "^0.3.0",
+    "@web/test-runner": "^0.17.0",
+    "concurrently": "^8.0.0",
+    "eslint": "^8.18.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-html": "^7.1.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-lit": "^1.7.2",
+    "eslint-plugin-lit-a11y": "^4.1.1",
+    "eslint-plugin-no-only-tests": "^3.1.0",
+    "eslint-plugin-wc": "^2.0.4",
+    "form-data": "^3.0.0",
+    "husky": "^8.0.3",
+    "karma": "^6.4.2",
+    "lint-staged": "^8.0.0",
+    "madge": "^6.0.0",
+    "prettier": "^3.1.0",
+    "sinon": "^16.0.0",
+    "ts-lit-plugin": "^1.2.1",
+    "tslib": "^2.4.0",
+    "typescript": "^4.7.4"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@open-wc/eslint-config",
+      "eslint-config-prettier"
+    ]
+  },
+  "prettier": "@open-wc/prettier-config",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "git add"
+    ]
+  }
+}
