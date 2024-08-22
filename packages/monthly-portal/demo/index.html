@@ -42,60 +42,18 @@
       padding-bottom: 0.6rem;
     }
 
-    donation-form-controller.custom-colors {      
-      /* CSS vars to set */
-      /* Donate Button */
-      --donateButtonColor: pink;
-      --donateButtonTextColor: rebeccapurple;
-      --donateButtonHoverColor: deepskyblue;
-
-      /* Credit Card Button */
-      --ccButtonFontColor: darkblue;
-      --ccButtonColor: coral;
-
-      /* Form Background color */
-      --donateFormBgColor: turquoise;
-
-      /* Form Text color */
-      --donateFormTextColor: darkblue;
-
-      /* Flow Badges Background color `(1), (2), (3)` */
-      --donateFormBadgeBgColor: pink;
-      /* Flow Badges Text color `(1), (2), (3)` */
-      --donateFormBadgeTextColor: rebeccapurple;
-
-      /* Form Options Background color `[$5], [$10], [monthly]` */
-      --donateFormPaymentOptionTextColor: darkblue;
-      /* Form Options Text color `[$5], [$10], [monthly]` */
-      --donateFormPaymentOptionBgColor: lightblue;
-
-      /* Selected Option Background color `[$5], [$10], [monthly]` */
-      --monthlyFormGreen: green;
-      /* Selected Option Text color `[$5], [$10], [monthly]` */
-      --donateFormSelectedOptionTextColor: yellow;
-    }
-
   div#options {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
     align-items: center;
   }
-  div#options button {
+  /* div#options button {
     margin: 2px 5px;
-  }
+  } */
 
 
   /* custom */
-
-  ul {
-    list-style-type: none;
-  }
-
-  iaux-mgc-subscription-summary ul li {
-    border: 1px solid green;
-    background-color: 
-  }
 
   /* button  */
 
@@ -144,6 +102,105 @@
     background-color: #e51c26;
     border-color: #f8c6c8;
   }
+
+  #demo {
+    max-width: 500px;
+  }
+
+  /**/
+  iaux-monthly-giving-circle  h2 {
+    margin: 0;
+    font-size: 1.5em;
+  }
+
+  iaux-monthly-giving-circle button {
+    background: none;
+    color: #4b64ff;
+    border: none;
+    cursor: pointer;
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 1rem;
+  }
+
+  iaux-monthly-giving-circle .heart-icon {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    fill: rgb(255, 0, 0);
+  }
+
+
+  iaux-monthly-giving-circle .mgc-title {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    margin: 0;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+
+  iaux-monthly-giving-circle .mgc-title .heart-label {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: flex-end;
+    align-items: flex-end;
+    justify-content: flex-start;
+  }
+
+  iaux-monthly-giving-circle {
+    display: block;
+    width: inherit;
+    --background-color: #EEFFEE;
+    --border-color: #23765D:
+  }
+
+  iaux-mgc-welcome {
+    margin-top: .5rem;
+    padding: 0 .5rem;
+    border: 1px solid #23765D;
+    background-color: #EEFFEE;
+    display: block;
+    width: inherit;
+  }
+
+  iaux-mgc-welcome button.click-to-join {
+    font-size: inherit;
+  }
+
+  iaux-mgc-subscription-summary {
+    display: block;
+    width: inherit;
+    --background-color: #EEFFEE;
+    --border-color: #23765D:
+  }
+
+  iaux-mgc-subscription-summary ul {
+    padding: 0;
+    list-style-type: none;
+  }
+
+  iaux-mgc-subscription-summary ul li {
+    border: 1px solid #23765D;
+    background-color: #EEFFEE;
+    margin: .5rem;
+    padding: .5rem;
+  }
+
+  iaux-mgc-subscription-summary ul li .info {
+    display:flex;
+    margin: .5rem;
+    padding: .5rem;
+  }
+
+  iaux-mgc-subscription-summary ul li .info > div {
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+
 
   </style>
 
@@ -194,7 +251,7 @@
     const webComponent = document.querySelector('iaux-monthly-giving-circle');
     const loadSummariesButton = document.querySelector('#load-summaries');
 
-    const x = await fetch('./data.json');
+    const x = await fetch('./demo/data.json');
     const data = await x.json();
     const allSubscriptions = data.value;
     console.log(data);

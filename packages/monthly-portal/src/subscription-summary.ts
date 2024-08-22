@@ -38,9 +38,12 @@ export class MonthlyGivingCircle extends LitElement {
       <section class="monthly-giving-circle">
         <ul>
           ${this.activePlans.map((plan: SubscriptionSummary) => {
-          const cardType = plan.payment.cardType ?? 'not found';
-          const last4 = plan.payment.last4 ?? 'not found';
+          const methodType = plan.payment.paymentMethodType ?? 'Method not found';
+          const cardType = plan.payment.cardType ?? 'Card type not found';
+          const last4 = plan.payment.last4 ? `...${plan.payment.last4}` : 'CC number not found';
           const nextBillingDate = plan.payment.nextBillingDate ?? '';
+          console.log(' ******** ');
+          console.log('plan: ', plan);
           return html`
             <li>
               <div class="info">
@@ -50,7 +53,22 @@ export class MonthlyGivingCircle extends LitElement {
                 </div>
                 <div>
                   <h3>Method</h3>
-                  <p>${cardType} ${last4}</p>
+                  <p>${methodType}</p>
+                  ${ plan.payment.cardType === 'creditCard'
+                  ? html`<p>${cardType}</p><p>${last4}</p>`
+                  : nothing
+                  }
+                  
+                  ${ plan.payment.paymentMethodType === 'Paypal'
+                  ? html`<p>Paypal email: <a href=${`mailto:${plan.payment.paypalEmail}`}>${plan.payment.paypalEmail}</a></p>`
+                  : nothing
+                  }
+
+                  ${ plan.payment.paymentMethodType === 'Venmo'
+                  ? html`<p>Venmo username: <a href=${`mailto:${plan.payment.venmoUsername}`}>${plan.payment.paypalEmail}</a></p>`
+                  : nothing
+                  }
+                  <p>Expires: ${plan.payment.expirationMonth ?? 'month not found'}/${plan.payment.expirationYear ?? 'year not found'}</p>
                 </div>
                 <div>
                   <h3>Next Donation</h3>
@@ -71,7 +89,7 @@ export class MonthlyGivingCircle extends LitElement {
       return '';
     }
     const time = new Date(nextBillingDateInfo.date);
-    const timeToDisplay = time.toLocaleString();
+    const timeToDisplay = time.toLocaleDateString('default', { month: 'long', day: 'numeric', year: 'numeric' });
     // if (nextBillingDateInfo.timezone_type && nextBillingDateInfo.timezone) {
     //   timeToDisplay = time.toLocaleString(nextBillingDate.timezone, { timeZone: nextBillingDateInfo.timezone });
     // }

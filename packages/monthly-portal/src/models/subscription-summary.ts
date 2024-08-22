@@ -13,6 +13,8 @@ type BtData = {
   cardType: string|null;
   expirationMonth: string|null;
   expirationYear: string|null;
+  paypalEmail?: string;
+  venmoUsername?: string;
 }
 
 type aSummary = {
