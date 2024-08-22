@@ -108,6 +108,11 @@
   }
 
   /**/
+  iaux-monthly-giving-circle h2,
+  iaux-monthly-giving-circle h3,
+  iaux-monthly-giving-circle p {
+    margin: 0;
+  }
   iaux-monthly-giving-circle  h2 {
     margin: 0;
     font-size: 1.5em;
@@ -167,6 +172,10 @@
     width: inherit;
   }
 
+  iaux-mgc-welcome section {
+    padding: .5rem;
+  }
+
   iaux-mgc-welcome button.click-to-join {
     font-size: inherit;
   }
@@ -186,7 +195,7 @@
   iaux-mgc-subscription-summary ul li {
     border: 1px solid #23765D;
     background-color: #EEFFEE;
-    margin: .5rem;
+    margin: .5rem 0;
     padding: .5rem;
   }
 
@@ -201,7 +210,23 @@
     flex-basis: 0;
   }
 
+  /* edit */
+  iaux-mgc-edit-subscription {
+    margin: 10px 0;
+    display: block;
+  }
 
+
+  iaux-mgc-cancel-plan {
+    display: block;
+    border: 2px solid red;
+    padding: .5rem;
+    background-color: pink;
+  }
+
+  iaux-mgc-cancel-plan .cancel-donation > * {
+    padding: 5px;
+  }
   </style>
 
 </head>

@@ -11,7 +11,7 @@ export class MonthlyGivingCircle extends LitElement {
 
   @property({ type: Array }) activePlans: SubscriptionSummary[] = [];
 
-  @property({ type: String }) planIdToDisplay = '';
+  @property({ type: String, reflect: true }) planIdToDisplay = '';
 
   protected createRenderRoot() {
     return this;
@@ -22,17 +22,16 @@ export class MonthlyGivingCircle extends LitElement {
       return html`<p>No active plans found</p>`;
     }
 
-    if (this.activePlans.find(plan => plan.id === this.planIdToDisplay)) {
-      return html`
-        <iaux-mgc-edit-subscription
-          .planId=${this.planIdToDisplay}
-          @closeEditSubscription=${() => {
-            this.planIdToDisplay = '';
-          }}
-        ></iaux-mgc-edit-subscription>
-      `;
-
-    }
+    // if (this.activePlans.find(plan => plan.id === this.planIdToDisplay)) {
+    //   return html`
+    //     <iaux-mgc-edit-subscription
+    //       .planId=${this.planIdToDisplay}
+    //       @closeEditSubscription=${() => {
+    //         this.planIdToDisplay = '';
+    //       }}
+    //     ></iaux-mgc-edit-subscription>
+    //   `;
+    // }
 
     return html`
       <section class="monthly-giving-circle">
@@ -76,6 +75,19 @@ export class MonthlyGivingCircle extends LitElement {
                 </div>
               </div>
               <button @click=${() => this.manageDonation(plan)}>Manage this monthly donation</button>
+              
+              ${ this.planIdToDisplay === plan.id ?
+                html`
+                  <div class="edit-plan">
+                    <iaux-mgc-edit-subscription
+                      .plan=${plan}
+                      @closeEditSubscription=${() => {
+                        this.planIdToDisplay = '';
+                      }}
+                    ></iaux-mgc-edit-subscription>
+                  </div>
+                ` : nothing
+              }
             </li>
           `
           })}
@@ -97,6 +109,8 @@ export class MonthlyGivingCircle extends LitElement {
   }
 
   manageDonation(plan: SubscriptionSummary) {
+    const planId = plan.id; 
+    this.planIdToDisplay = planId;
     this.dispatchEvent(new CustomEvent('displaySubscriptionDetails', {
       detail: { plan },
       bubbles: true,

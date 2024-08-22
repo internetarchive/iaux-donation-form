@@ -5,17 +5,7 @@ import '@internetarchive/icon-donate';
 import './welcome-message';
 import './subscription-summary';
 import './edit-subscription';
-
-type aPlan = {
-  id: string;
-  amount: number;
-  currencyType: string;
-  cardInfo: {
-    cardType: string;
-    cardNumber: string;
-  };
-  nextDonation: number;
-};
+import SubscriptionSummary from './models/subscription-summary';
 
 @customElement('iaux-monthly-giving-circle')
 export class MonthlyGivingCircle extends LitElement {
@@ -26,11 +16,13 @@ export class MonthlyGivingCircle extends LitElement {
 
   @property({ type: String }) giverId: string = '';
 
-  @property({ type: Array }) activePlans: aPlan[] = [];
+  @property({ type: Array }) activePlans: SubscriptionSummary[] = [];
 
-  @property({ type: String }) planIdToDisplay = '';
+  @property({ type: String }) planIdToDisplay = ''; // do we need?
 
-  protected createRenderRoot() {
+  @property({ type: Object }) planToDisplay?: SubscriptionSummary;
+
+protected createRenderRoot() {
     return this;
   }
 
@@ -60,26 +52,32 @@ export class MonthlyGivingCircle extends LitElement {
   }
 
   protected renderBody() {
-    if (this.planIdToDisplay) {
-      return html`
-        <iaux-mgc-edit-subscription
-          .planId=${this.planIdToDisplay}
-          .plan=${this.activePlans.find(plan => plan.id === this.planIdToDisplay)}
-          @closeEditSubscription=${() => {
-            this.planIdToDisplay = '';
-          }}
-        ></iaux-mgc-edit-subscription>
-      `;
-    }
+    // if (this.planIdToDisplay) {
+    //   return html`
+    //     <iaux-mgc-edit-subscription
+    //       .planId=${this.planIdToDisplay}
+    //       .plan=${this.activePlans.find(plan => plan.id === this.planIdToDisplay)}
+    //       @closeEditSubscription=${() => {
+    //         this.planIdToDisplay = '';
+    //       }}
+    //     ></iaux-mgc-edit-subscription>
+    //   `;
+    // }
 
     if (this.giverId && this.activePlans.length) {
       return html`
         <iaux-mgc-subscription-summary
           .activePlans=${this.activePlans}
-          .giverId=${this.giverId}      
+          .giverId=${this.giverId}
+          .planIdToDisplay=${this.planIdToDisplay}  
           @displaySubscriptionDetails=${(e: CustomEvent) => {
             console.log('displaySubscriptionDetails', e.detail);
-            this.planIdToDisplay = e.detail.id;
+            this.planToDisplay = e.detail.plan;
+            this.planIdToDisplay = e.detail.plan.id;
+          }}
+          @cancelPlan=${(e: CustomEvent) => {
+            console.log('MGC - cancelPlan', e.detail);
+            this.dispatchEvent(new CustomEvent('cancelPlan', { detail: e.detail }));
           }}
         >
         </iaux-mgc-subscription-summary>
