@@ -3,6 +3,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import type SubscriptionSummary from './models/subscription-summary';
 
 import './form-elements/contact-form/contact-form';
+import './form-elements/payment-selector';
 
 @customElement('iaux-mgc-edit-plan-payment-method')
 export class MonthlyGivingCircle extends LitElement {
@@ -57,7 +58,11 @@ export class MonthlyGivingCircle extends LitElement {
           <slot name="paypal-button" slot="paypal-button"></slot>
           <slot></slot>
         </payment-selector>
-      <!-- <contact-form></contact-form> -->
+      <contact-form></contact-form>
+      <form>
+        <button>Cancel</button>
+        <button>Update</button>
+      </form>
     </section>
       
     `;

@@ -35,7 +35,6 @@ export class MGCEditSubscription extends LitElement {
 
   updated(changed: PropertyValues) {
     if (changed.has('plan')) {
-      debugger;
       console.log('plan updated', this.plan);
     }
   }
@@ -54,21 +53,47 @@ export class MGCEditSubscription extends LitElement {
     console.log('this.plan', this.plan);
 
     /*
-    <iaux-mgc-edit-plan-amount
-      .displayAmount=${this.displayAmount}
-      .amount=${this.plan?.amount}
-      @updateAmount=${(e: CustomEvent) => {
-        console.log('updateAmount', e.detail);
-        debugger;
-      }}>
-    </iaux-mgc-edit-plan-amount>
-    <iaux-mgc-edit-plan-payment-method>
-    </iaux-mgc-edit-plan-payment-method>
-    <iaux-mgc-edit-donation-date>
-    </iaux-mgc-edit-donation-date>
+
+
+
     */
     return html`
       <section id="edit-subscription" planId=${this.plan?.id ?? nothing}>
+        <iaux-mgc-edit-plan-amount
+          .displayAmount=${this.displayAmount}
+          .plan=${this.plan}
+          @updateAmount=${(e: CustomEvent) => {
+            console.log('updateAmount', e.detail);
+            const newAmount = e.detail.newAmount;
+            const plan = e.detail.plan;
+            this.dispatchEvent(new CustomEvent('editAmount', { detail: { newAmount, plan } }));
+            debugger;
+          }}>
+        </iaux-mgc-edit-plan-amount>
+        <hr>
+        <iaux-mgc-edit-plan-payment-method
+          .plan=${this.plan}
+          @editPaymentMethod=${(e: CustomEvent) => {
+            alert('Payment method edited');
+            this.waitingForNetworkRequest = true;
+            const newPaymentMethod = e.detail.newPaymentMethod;
+            const plan = e.detail.plan;
+            this.dispatchEvent(new CustomEvent('editPaymentMethod', { detail: { newPaymentMethod, plan } }));
+          }}
+        ></iaux-mgc-edit-plan-payment-method>
+        <hr>
+        <iaux-mgc-edit-donation-date
+          .plan=${this.plan}
+          @editDate=${(e: CustomEvent) => {
+            alert('Date edited');
+            this.waitingForNetworkRequest = true;
+            const newDate = e.detail.newDate;
+            const plan = e.detail.plan;
+            this.dispatchEvent(new CustomEvent('editDate', { detail: { newDate, plan } }));
+          }}
+        >
+        </iaux-mgc-edit-donation-date>
+        <hr>
         <iaux-mgc-cancel-plan
           .plan=${this.plan}
           @cancelPlan=${(e: CustomEvent) => {

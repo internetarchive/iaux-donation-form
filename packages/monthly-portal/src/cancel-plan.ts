@@ -10,6 +10,8 @@ export class IauxMgcCancelPlan extends LitElement {
 
   @property({ type: Boolean, reflect: true }) requestToCancel = false;
 
+  @property({ type: Boolean, reflect: true }) initialCancelRequest = false;
+
   @query('form') form!: HTMLFormElement;
 
   protected createRenderRoot() {
@@ -46,8 +48,26 @@ export class IauxMgcCancelPlan extends LitElement {
 
   protected render() {
     return html`
+      <div class="warning">
+        <h3>Cancel recurring donation (requires confirmation)</h3>
+        <p>You can also pause your recurring donation by setting the next donation date up to 12 months in the future.</p>
+        <button @click=${()=> {
+          this.initialCancelRequest = true;
+          this.requestToCancel = false;
+        }}>Let's cancel my donation</button>
+      </div>
+      <hr>
+      ${this.initialCancelRequest ? this.confirmCancelation : nothing}
+    `;
+  }
+
+  get confirmCancelation(): TemplateResult | typeof nothing {
+    return html`
     <section class="cancel-donation">
-      <h3>Cancel recurring donation</h3>
+      <h3>Cancel recurring donation <button @click=${() => {
+        this.initialCancelRequest = false;
+        this.requestToCancel = false
+      }}>x</button></h3>
 
       <p>Canceling ends your monthly recurring donation to the Internet Archive, effective immediately. You will not be charged moving forward.</p>
       <p>Canceling does not affect your account or access to the Internet Archive, although you will no longer have access to any of the Monthly Giving Circle perks.</p>

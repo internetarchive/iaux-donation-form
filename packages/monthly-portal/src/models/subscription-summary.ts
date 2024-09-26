@@ -49,4 +49,8 @@ export default class SubscriptionSummary {
   get startDate(): string {
     return this.summary.start_date;
   }
+
+  get isTest(): boolean {
+    return this.summary.is_test;
+  }
 }

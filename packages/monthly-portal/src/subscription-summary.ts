@@ -22,17 +22,6 @@ export class MonthlyGivingCircle extends LitElement {
       return html`<p>No active plans found</p>`;
     }
 
-    // if (this.activePlans.find(plan => plan.id === this.planIdToDisplay)) {
-    //   return html`
-    //     <iaux-mgc-edit-subscription
-    //       .planId=${this.planIdToDisplay}
-    //       @closeEditSubscription=${() => {
-    //         this.planIdToDisplay = '';
-    //       }}
-    //     ></iaux-mgc-edit-subscription>
-    //   `;
-    // }
-
     return html`
       <section class="monthly-giving-circle">
         <ul>
@@ -46,11 +35,12 @@ export class MonthlyGivingCircle extends LitElement {
           return html`
             <li>
               <div class="info">
-                <div>
+                <div class="amount">
                   <h3>Amount</h3>
                   <p>${plan.currencyType} ${plan.amount}/month</p>
+                  ${ plan.isTest ? html`<p>(Test payment)</p>` : nothing }
                 </div>
-                <div>
+                <div class="payment-details">
                   <h3>Method</h3>
                   <p>${methodType}</p>
                   ${ plan.payment.cardType === 'creditCard'
@@ -69,14 +59,14 @@ export class MonthlyGivingCircle extends LitElement {
                   }
                   <p>Expires: ${plan.payment.expirationMonth ?? 'month not found'}/${plan.payment.expirationYear ?? 'year not found'}</p>
                 </div>
-                <div>
+                <div class="next-donation">
                   <h3>Next Donation</h3>
                   <p>${nextBillingDate ? this.formatTime(nextBillingDate) : 'not found'}</p>
                 </div>
               </div>
-              <button @click=${() => this.manageDonation(plan)}>Manage this monthly donation</button>
+              <button class="link edit-donation" @click=${() => this.manageDonation(plan)}>Manage this monthly donation</button>
               
-              ${ this.planIdToDisplay === plan.id ?
+              <!-- ${ this.planIdToDisplay === plan.id ?
                 html`
                   <div class="edit-plan">
                     <iaux-mgc-edit-subscription
@@ -87,7 +77,7 @@ export class MonthlyGivingCircle extends LitElement {
                     ></iaux-mgc-edit-subscription>
                   </div>
                 ` : nothing
-              }
+              } -->
             </li>
           `
           })}

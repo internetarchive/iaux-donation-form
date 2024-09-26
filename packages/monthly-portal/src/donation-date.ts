@@ -8,6 +8,10 @@ import './form-elements/contact-form/contact-form';
 export class MonthlyGivingCircle extends LitElement {
   @property({ type: String }) displayDate: string = '';
 
+  @property({ type: Object }) plan?: SubscriptionSummary;
+
+  @property({ type: Boolean }) currentlyEditing: boolean = false;
+
   protected createRenderRoot() {
     return this;
   }
@@ -24,27 +28,59 @@ export class MonthlyGivingCircle extends LitElement {
     return '';
   }
 
+  get nextBillingDate(): string {
+    const formatted = this.plan?.payment.nextBillingDate.date ? new Date(this.plan?.payment.nextBillingDate.date).toLocaleDateString() : 'not found';
+    return formatted;
+  }
+
   @query('form#edit-donation-date') form!: HTMLFormElement
+
+  updated(changed: PropertyValues) {
+    if (changed.has('currentlyEditing') && this.currentlyEditing) {
+      this.form.focus();
+    }
+  }
 
   protected render() {
     return html`
+      <section>
+        <h3>Donation date - Next billing date: ${this.nextBillingDate}</h3>
+        ${!this.currentlyEditing
+          ? html`<p>${this.nextBillingDate}</p>
+        <button class="link" @click=${() => {
+          this.currentlyEditing = true;
+        }}>Edit...</button>`
+          : nothing
+        }
+        ${
+          this.currentlyEditing
+            ? this.editDateForm
+            : nothing
+        }
+      </section>
+    `;
+  }
+
+  get editDateForm() {
+    return html`
     <section>
-      <h3>Donation date</h3>
       <form id="edit-donation-date">
         <p>${this.displayDate}</p>
-        <input type="date" id="date" name="new-date" value=${this.dateFormatted} min=${this.minDate} max=${this.maxDate} />
-        <button class="ia-button" type="submit" @click=${(e: Event)=> {
-          e.preventDefault();
-          const newDate = this.form.querySelector('input[name="new-date"]') as HTMLInputElement;
-          const newDateValue = newDate!.value;
-          console.log('update date', { newDateValue, displayDate: this.displayDate });
-        }}>Update</button>
-        <button type="button" @click=${(e: Event) => {
+        <input required type="date" id="date" name="new-date" value=${this.dateFormatted} min=${this.minDate} max=${this.maxDate} />
+        <div>
+        <button class="secondary" type="button" @click=${(e: Event) => {
           e.preventDefault();
           const newDate = this.form.querySelector('input[name="new-date"]') as HTMLInputElement;
           const newDateValue = newDate!.value;
           console.log('cancel date', { newDateValue, displayDate: this.displayDate });
         }}>Cancel</button>
+        <button class="primary" type="submit" @click=${(e: Event)=> {
+          e.preventDefault();
+          const newDate = this.form.querySelector('input[name="new-date"]') as HTMLInputElement;
+          const newDateValue = newDate!.value;
+          console.log('update date', { newDateValue, displayDate: this.displayDate });
+        }}>Update</button>
+        </div>
       </form>
     </section>
       

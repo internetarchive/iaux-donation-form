@@ -6,6 +6,7 @@ import './welcome-message';
 import './subscription-summary';
 import './edit-subscription';
 import SubscriptionSummary from './models/subscription-summary';
+import './recent-donations';
 
 @customElement('iaux-monthly-giving-circle')
 export class MonthlyGivingCircle extends LitElement {
@@ -18,7 +19,28 @@ export class MonthlyGivingCircle extends LitElement {
 
   @property({ type: Array }) activePlans: SubscriptionSummary[] = [];
 
-  @property({ type: String }) planIdToDisplay = ''; // do we need?
+  @property({ type: Array }) recentDonations = [
+    {
+      status: 'pending',
+      amount: 20,
+      date: '2021-09-01',
+      id: '1'
+    },
+    {
+      status: 'completed',
+      amount: 50,
+      date: '2021-09-02',
+      id: '2'
+    },
+    {
+      status: 'completed',
+      amount: 100,
+      date: '2021-09-03',
+      id: '3'
+    }
+  ];
+
+  @property({ type: String, reflect: true }) planIdToDisplay = ''; // do we need?
 
   @property({ type: Object }) planToDisplay?: SubscriptionSummary;
 
@@ -27,6 +49,22 @@ protected createRenderRoot() {
   }
 
   protected render() {
+    if (this.seeRecentDonations) {
+      return html`
+        <iaux-mgc-recent-donations
+          .donations=${this.recentDonations}
+          @close=${() => {
+            this.seeRecentDonations = false;
+          }}
+          @EmailReceiptRequest=${(e: CustomEvent) => {
+            const { donation } = e.detail;
+            console.log('EmailReceiptRequest', donation);
+            this.dispatchEvent(new CustomEvent('sendDonationReceipt', { detail: { donation } }));
+          }}
+        ></iaux-mgc-recent-donations>
+      `;
+    }
+
     const withPlansClass = this.activePlans.length ? 'with-plans' : 'without-plans';
     return html`
       <section class=${withPlansClass}>
@@ -34,35 +72,58 @@ protected createRenderRoot() {
           <span class="heart-label">
             <span class="heart-icon">
               <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-labelledby="donateTitleID donateDescID">
-                <title id="donateTitleID">Donate</title>
                 <path class="fill-color" d="m30.0120362 11.0857287c-1.2990268-1.12627221-2.8599641-1.65258786-4.682812-1.57894699-.8253588.02475323-1.7674318.3849128-2.8262192 1.08047869-1.0587873.6955659-1.89622 1.5724492-2.512298 2.63065-.591311-1.0588196-1.4194561-1.9357029-2.4844351-2.63065-1.0649791-.69494706-2.0039563-1.05510663-2.8169316-1.08047869-1.2067699-.04950647-2.318187.17203498-3.3342513.66462439-1.0160643.4925893-1.82594378 1.2002224-2.42963831 2.1228992-.60369453.9226769-.91173353 1.9629315-.92411701 3.1207641-.03715043 1.9202322.70183359 3.7665141 2.21695202 5.5388457 1.2067699 1.4035084 2.912594 3.1606786 5.1174721 5.2715107 2.2048782 2.1108321 3.7565279 3.5356901 4.6549492 4.2745742.8253588-.6646243 2.355647-2.0647292 4.5908647-4.2003145s3.9747867-3.9171994 5.218707-5.3448422c1.502735-1.7723316 2.2355273-3.6186135 2.1983769-5.5388457-.0256957-1.7608832-.6875926-3.2039968-1.9866194-4.3302689z"></path>
               </svg>
             </span>
-            <span>Monthly Giving Circle</span>
+            <p style="margin: 5px 0 0;">Monthly Giving Circle</p>
           </span>
-          <button id="click-to-join" @click=${() => {
-              this.seeRecentDonations = true;
-              this.dispatchEvent(new Event('mgc-recent-donations-request'));
-              console.log('View recent donation history');
-          }}>View recent donation history</button>
+          ${
+            this.planIdToDisplay
+              ? this.renderReturnToAccountSettingsButton
+              : this.renderSeeRecentDonationsButton
+          }
         </h2>
         ${this.renderBody()}
       </section>
     `;
   }
 
+  protected get renderReturnToAccountSettingsButton() {
+    return html`
+      <button class="primary" @click=${() => this.seeRecentDonations = false}>Back to account settings
+      </button>`;
+  }
+
+  protected get renderSeeRecentDonationsButton() {
+    if (!this.recentDonations.length) {
+      return nothing;
+    }
+
+    return html`
+     <button class="link"  @click=${() => {
+        this.seeRecentDonations = true;
+          if (this.recentDonations.length) { 
+          } else {
+            this.seeRecentDonations = true;
+            this.dispatchEvent(new Event('mgc-recent-donations-request'));
+            console.log('View recent donation history');
+          }
+      }}>View recent donation history</button>
+    `;
+  }
+
   protected renderBody() {
-    // if (this.planIdToDisplay) {
-    //   return html`
-    //     <iaux-mgc-edit-subscription
-    //       .planId=${this.planIdToDisplay}
-    //       .plan=${this.activePlans.find(plan => plan.id === this.planIdToDisplay)}
-    //       @closeEditSubscription=${() => {
-    //         this.planIdToDisplay = '';
-    //       }}
-    //     ></iaux-mgc-edit-subscription>
-    //   `;
-    // }
+    if (this.planIdToDisplay) {
+      return html`
+        <iaux-mgc-edit-subscription
+          .planId=${this.planIdToDisplay}
+          .plan=${this.activePlans.find(plan => plan.id === this.planIdToDisplay)}
+          @closeEditSubscription=${() => {
+            this.planIdToDisplay = '';
+          }}
+        ></iaux-mgc-edit-subscription>
+      `;
+    }
 
     if (this.giverId && this.activePlans.length) {
       return html`
@@ -85,6 +146,6 @@ protected createRenderRoot() {
     }
 
 
-    return html`<iaux-mgc-welcome></iaux-mgc-welcome>`;
+    return html`<iaux-mgc-welcome .patronName=${this.giverId}></iaux-mgc-welcome>`;
   }
 }
