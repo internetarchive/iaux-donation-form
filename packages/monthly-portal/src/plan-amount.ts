@@ -2,14 +2,8 @@ import { LitElement, html, PropertyValues, nothing } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import type SubscriptionSummary from './models/subscription-summary';
 
-// import '@internetarchive/donation-form/dist/src/form-elements/contact-form/contact-form';
-
 import '@internetarchive/donation-form-section';
 import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-form-data-models';
-// import {
-//   DonationFormSection,
-//   DonationFormSectionBadgeMode,
-// } from '@internetarchive/donation-form-section';
 export { DonationPaymentInfo } from '@internetarchive/donation-form-data-models';
 
 @customElement('iaux-mgc-edit-plan-amount')
@@ -37,6 +31,10 @@ export class MonthlyGivingCircle extends LitElement {
     }
     if (changed.has('currentlyEditing') && this.currentlyEditing) {
       this.form.focus();
+    }
+
+    if (changed.has('donationPaymentInfo') && !this.donationPaymentInfo) {
+      this.updatePlanInfo();
     }
   }
 

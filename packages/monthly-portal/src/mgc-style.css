@@ -1,0 +1,246 @@
+  /* custom */
+
+  /* button  */
+  .ia-button {
+    min-height: 3rem;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    line-height: normal;
+    border-radius: .4rem;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1.4rem;
+    display: inline-block;
+    padding: .6rem 1.2rem;
+    border: 1px solid transparent;
+
+    white-space: nowrap;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+  }
+
+  .ia-button:disabled,
+  .ia-button.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .ia-button.transparent {
+    background-color: transparent;
+  }
+
+  .ia-button.slim {
+    padding: 0;
+  }
+
+  .ia-button.primary {
+    background-color: #194880;
+    border-color: #c5d1df;
+  }
+
+  .ia-button.secondary {
+    background: #333;
+  }
+
+  .ia-button.cancel {
+    background-color: #e51c26;
+    border-color: #f8c6c8;
+  }
+
+  .ia-button.link {
+    color: #4b64ff;
+    border: none;
+    background: transparent;
+    padding: 6px 0;
+  }
+
+  #demo {
+    max-width: 500px;
+  }
+
+  /**/
+  iaux-monthly-giving-circle h2,
+  iaux-monthly-giving-circle h3,
+  iaux-monthly-giving-circle p {
+    margin: 5px;
+  }
+
+  iaux-monthly-giving-circle  h2 {
+    margin: 0;
+    font-size: 1.5em;
+  }
+
+  iaux-monthly-giving-circle  h2 button {
+    margin: 0;
+    font-size: 1.3rem;
+  }
+
+  iaux-monthly-giving-circle .heart-icon {
+    display: inline-block;
+    width: 3rem;
+    fill: rgb(255, 0, 0);
+  }
+
+  iaux-monthly-giving-circle .mgc-title {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    margin: 0;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  iaux-monthly-giving-circle .mgc-title .heart-label {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: flex-end;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 3rem;
+  }
+
+  iaux-monthly-giving-circle .mgc-title button {
+    font-size: 1.3rem;
+  }
+
+  iaux-monthly-giving-circle {
+    display: block;
+    width: inherit;
+    --background-color: #EEFFEE;
+    --border-color: #23765D:
+  }
+
+  iaux-mgc-welcome {
+    margin-top: .5rem;
+    border: 1px solid #23765D;
+    background-color: #EEFFEE;
+    display: block;
+    width: inherit;
+  }
+
+  iaux-mgc-welcome p {
+    margin: 5px 0;
+  }
+
+  iaux-mgc-welcome section {
+    padding: .5rem;
+  }
+
+  iaux-mgc-recent-donations {
+    display: block;
+    width: inherit;
+  }
+
+  iaux-mgc-recent-donations table {
+    text-align: left;
+    width: 100%;
+  }
+
+  iaux-mgc-recent-donations table .status {
+    text-transform: capitalize;
+  }
+
+  iaux-mgc-subscription-summary {
+    display: block;
+    width: inherit;
+    --background-color: #EEFFEE;
+    --border-color: #23765D:
+  }
+
+  iaux-mgc-subscription-summary ul {
+    padding: 0;
+    list-style-type: none;
+    margin: 0;
+  }
+
+  iaux-mgc-subscription-summary ul li {
+    border: 1px solid #23765D;
+    background-color: #EEFFEE;
+    margin: .5rem 0;
+    padding: .5rem;
+    height: 150px;
+    position: relative;
+    min-width: 420px;
+  }
+
+  iaux-mgc-subscription-summary ul li button.edit-donation {
+    height: 30px;
+    display: block;
+    position: absolute;
+    bottom: 0;
+  }
+
+  iaux-mgc-subscription-summary ul li .info {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
+    grid-template-rows: 1fr;
+    gap: 0px 5px;
+    grid-auto-flow: row;
+    grid-template-areas: "amount details next-donation";
+  }
+
+  iaux-mgc-subscription-summary ul li .info  .amount{
+    grid-area: amount;
+  }
+
+  iaux-mgc-subscription-summary ul li .info  .payment-details {
+    grid-area: details;
+  }
+
+  iaux-mgc-subscription-summary ul li .info  .next-donation {
+    grid-area: next-donation;
+  }
+
+  /* edit */
+  iaux-mgc-edit-subscription {
+    margin: 10px 0;
+    display: block;
+    padding: 5px;
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 10px;
+  }
+
+  iaux-mgc-cancel-plan .warning > * {
+    margin: 5px 0;
+  }
+
+  iaux-mgc-cancel-plan .cancel-donation {
+    display: block;
+    border: 2px solid #E51C23;
+    padding: .5rem;
+    background-color: #FFEEEE;
+  }
+
+  iaux-mgc-cancel-plan .cancel-donation > * {
+    padding: 5px;
+  }
+
+  iaux-mgc-cancel-plan button {
+    background-color: #E51C23;
+    color: white;
+  }
+
+  form#edit-plan-amount > *,
+  form#edit-donation-date > * {
+    display: block;
+    margin: 5px 0;
+  }
+
+  form#edit-plan-amount .checkbox-option-container {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  input {
+    height: 30px;
+  }
