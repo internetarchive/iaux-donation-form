@@ -64,7 +64,7 @@ export class MonthlyGivingCircle extends LitElement {
                   <p>${nextBillingDate ? this.formatTime(nextBillingDate) : 'not found'}</p>
                 </div>
               </div>
-              <button class="link edit-donation" @click=${() => this.manageDonation(plan)}>Manage this monthly donation</button>
+              <button class="ia-button link edit-donation" @click=${() => this.manageDonation(plan)}>Manage this monthly donation</button>
               
               <!-- ${ this.planIdToDisplay === plan.id ?
                 html`

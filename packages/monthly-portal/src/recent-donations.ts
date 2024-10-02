@@ -31,7 +31,7 @@ export class MGCWelcome extends LitElement {
 
   protected render() {
     return html`
-      <h3>Recent donations <button class="primary" @click=${() => this.dispatchEvent(new CustomEvent('close'))}>Back to account settings</button></h3>
+      <h3>Recent donations <button class="ia-button primary" @click=${() => this.dispatchEvent(new CustomEvent('close'))}>Back to account settings</button></h3>
       <section id="recent-donations-list">
         <table>
         <tr>
@@ -48,7 +48,7 @@ export class MGCWelcome extends LitElement {
               <td>${this.donationAmountFormatted(donation.amount)}</td>
               <td class="status">${donation.status}</td>
               <td>
-                <button class="link" @click=${() => {
+                <button class="ia-button link" @click=${() => {
                   if (emailUnavailable) return;
                   this.emailReceipt(donation);
                 }} ?disabled=${emailUnavailable}>

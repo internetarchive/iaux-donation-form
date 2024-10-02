@@ -53,34 +53,61 @@
   /* custom */
 
   /* button  */
-  button.primary {
+  .ia-button {
+    min-height: 3rem;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    line-height: normal;
+    border-radius: .4rem;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1.4rem;
+    display: inline-block;
+    padding: .6rem 1.2rem;
+    border: 1px solid transparent;
+
+    white-space: nowrap;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+  }
+
+  .ia-button:disabled,
+  .ia-button.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .ia-button.transparent {
+    background-color: transparent;
+  }
+
+  .ia-button.slim {
+    padding: 0;
+  }
+
+  .ia-button.primary {
     background-color: #194880;
     border-color: #c5d1df;
-    color: #fff;
   }
 
-  button.secondary {
-    background-color: #333;
-    color: #fff;
+  ia-button.secondary {
+    background: #333;
   }
 
-  button.link,
-  a.link {
-    height: inherit;
-    border: none;
-    border-radius: 0;
-    padding: 0;
-    color: #4b64ff;
-  }
-
-  button.link:disabled {
-    color: #ccc;
-    cursor: not-allowed;
-  }
-
-  button.cancel {
+  .ia-button.cancel {
     background-color: #e51c26;
     border-color: #f8c6c8;
+  }
+
+  .ia-button.link {
+    color: #4b64ff;
+    border: none;
+    background: transparent;
+    padding: 6px 0;
   }
 
   #demo {
@@ -101,10 +128,10 @@
 
   iaux-monthly-giving-circle  h2 button {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.3rem;
   }
 
-  iaux-monthly-giving-circle button {
+  /* iaux-monthly-giving-circle button {
     background: none;
     color: #4b64ff;
     border: none;
@@ -115,7 +142,7 @@
     border: 1px solid;
     border-radius: 5px;
     padding: 5px;
-  }
+  } */
 
   iaux-monthly-giving-circle .heart-icon {
     display: inline-block;
@@ -130,8 +157,8 @@
     flex-wrap: nowrap;
     align-content: center;
     margin: 0;
-    justify-content: space-between;
-    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 10px;
   }
 
 
@@ -146,7 +173,7 @@
   }
 
   iaux-monthly-giving-circle .mgc-title button {
-    font-size: 1rem;
+    font-size: 1.3rem;
   }
 
   iaux-monthly-giving-circle {
@@ -273,11 +300,17 @@
     margin: 5px 0;
   }
 
+  form#edit-plan-amount .checkbox-option-container {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
   input {
     height: 30px;
   }
-
-
   </style>
 
 </head>
@@ -327,8 +360,8 @@
     const webComponent = document.querySelector('iaux-monthly-giving-circle');
     const loadSummariesButton = document.querySelector('#load-summaries');
 
-    // const x = await fetch('./data.json');
-    const x = await fetch('./demo/data-short.json');
+    const x = await fetch('./data.json');
+    // const x = await fetch('./demo/data-short.json');
     const data = await x.json();
     const allSubscriptions = data.value;
     console.log(data);
@@ -354,3 +387,25 @@
 </script>
 </body>
 </html>
+
+<!----->
+<!-- [
+    {
+      status: 'pending',
+      amount: 20,
+      date: '2021-09-01',
+      id: '1'
+    },
+    {
+      status: 'completed',
+      amount: 50,
+      date: '2021-09-02',
+      id: '2'
+    },
+    {
+      status: 'completed',
+      amount: 100,
+      date: '2021-09-03',
+      id: '3'
+    }
+  ]; -->

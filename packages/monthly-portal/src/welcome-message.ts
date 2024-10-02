@@ -1,7 +1,7 @@
 import { LitElement, html, css, CSSResult, TemplateResult, PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-const mailToString = `mailto:donations@archive.org?subject=Monthly%20Giving%20Circle%20Inquiry&body=Hi%2C%20I'd%20like%20to%20learn%20more%20about%20the%20Internet%20Archive's%20Monthly%20Giving%20Circle.%20%20Looking%20forward%20to%20hearing%20from%20you%20soon.`;
+const mailToString = `mailto:donations@archive.org?subject=Please%20Confirm%20my%20Monthly%20Giving%20Circle%20Status&body=Dear%20Philanthropy%20Team%2C%0A%0AI%20am%20already%20a%20member%20of%20the%20Monthly%20Giving%20Circle%2C%20but%20I%20do%20not%20see%20my%20recurring%20donation%20under%20Account%20Settings.%20Please%20use%20the%20following%20information%20to%20locate%20my%20donation%3A%0A%0AFull%20name%3A%20____________%0A%0AEmail%20address(es)%3A%20____________%0A%0A*Please%20provide%20any%20alternative%20email%20addresses%20you%20may%20have%20used%20to%20create%20your%20recurring%20donation.%0A%0AIf%20you%20have%20access%20to%20a%20monthly%20donation%20receipt%2C%20please%20include%20a%20screenshot%20with%20your%20email.%0A%0AThanks!`;
 
 @customElement('iaux-mgc-welcome')
 export class MGCWelcome extends LitElement {
@@ -21,8 +21,8 @@ export class MGCWelcome extends LitElement {
           <li>Access to the curated Monthly Giving Circle newsletter and more!</li>
         </ul>
 
-        <a href=${this.mailToInquiryLink} class="link join-mgc">Click here to join the Monthly Giving Circle</a>
-        <p>Already a monthly donor but don't see your donation details here? Contact us at <a class="link" href=${mailToString}>donations@archive.org</a></p>
+        <a href="https://archive.org/donate/?amt=5&contrib_type=monthly&origin=iawww-usrsttng" target="_blank" class="link join-mgc">Click here to join the Monthly Giving Circle</a>
+        <p>Already a monthly donor but don't see your donation details here?  <a class="link" href=${mailToString}>Contact us at donations@archive.org</a></p>
       </section>
     `;
   }

@@ -1,4 +1,4 @@
-import { LitElement, html, css, CSSResult, TemplateResult, PropertyValues } from 'lit';
+import { LitElement, html, css, CSSResult, TemplateResult, PropertyValues, nothing } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import '@internetarchive/icon-donate';
@@ -19,33 +19,35 @@ export class MonthlyGivingCircle extends LitElement {
 
   @property({ type: Array }) activePlans: SubscriptionSummary[] = [];
 
-  @property({ type: Array }) recentDonations = [
-    {
-      status: 'pending',
-      amount: 20,
-      date: '2021-09-01',
-      id: '1'
-    },
-    {
-      status: 'completed',
-      amount: 50,
-      date: '2021-09-02',
-      id: '2'
-    },
-    {
-      status: 'completed',
-      amount: 100,
-      date: '2021-09-03',
-      id: '3'
-    }
-  ];
+  @property({ type: Array }) recentDonations = [];
 
   @property({ type: String, reflect: true }) planIdToDisplay = ''; // do we need?
 
   @property({ type: Object }) planToDisplay?: SubscriptionSummary;
 
-protected createRenderRoot() {
+  protected createRenderRoot() {
     return this;
+  }
+
+  updated(changed: PropertyValues) {
+    if (changed.has('seeRecentDonations')) {
+      if (this.seeRecentDonations && !changed.get('seeRecentDonations')) {
+        this.dispatchEvent(new Event('viewChange-recentDonations'));
+      }
+    }
+    if (changed.has('activePlans')) {
+      if(this.activePlans.length && !changed.get('planIdToDisplay')?.length) {
+        this.dispatchEvent(new Event('viewChange-summary'));
+      }
+    }
+    if (changed.has('planIdToDisplay')) {
+      if(this.planIdToDisplay && !changed.get('planIdToDisplay')) {
+        this.dispatchEvent(new Event('viewChange-edit'));
+      }
+    }
+    if (changed.has('foo')) {
+      this.dispatchEvent(new Event('viewChange-welcome'));
+    }
   }
 
   protected render() {
@@ -88,30 +90,6 @@ protected createRenderRoot() {
     `;
   }
 
-  protected get renderReturnToAccountSettingsButton() {
-    return html`
-      <button class="primary" @click=${() => this.seeRecentDonations = false}>Back to account settings
-      </button>`;
-  }
-
-  protected get renderSeeRecentDonationsButton() {
-    if (!this.recentDonations.length) {
-      return nothing;
-    }
-
-    return html`
-     <button class="link"  @click=${() => {
-        this.seeRecentDonations = true;
-          if (this.recentDonations.length) { 
-          } else {
-            this.seeRecentDonations = true;
-            this.dispatchEvent(new Event('mgc-recent-donations-request'));
-            console.log('View recent donation history');
-          }
-      }}>View recent donation history</button>
-    `;
-  }
-
   protected renderBody() {
     if (this.planIdToDisplay) {
       return html`
@@ -121,6 +99,20 @@ protected createRenderRoot() {
           @closeEditSubscription=${() => {
             this.planIdToDisplay = '';
           }}
+          @editAmount=${
+            (e: CustomEvent) => {
+              console.log('updateAmount mgc!', e.detail);
+              const originalPlanDetails = e.detail.originalPlanDetails;
+              const newDonationInfo = e.detail.newDonationInfo;
+              const newAmount = e.detail.newAmount;
+
+              this.dispatchEvent(new CustomEvent('editAmount', { detail: {
+                originalPlanDetails,
+                newDonationInfo,
+                newAmount,
+              }}));
+            }
+          }
         ></iaux-mgc-edit-subscription>
       `;
     }
@@ -135,6 +127,7 @@ protected createRenderRoot() {
             console.log('displaySubscriptionDetails', e.detail);
             this.planToDisplay = e.detail.plan;
             this.planIdToDisplay = e.detail.plan.id;
+            this.dispatchEvent(new Event('showEditView'));
           }}
           @cancelPlan=${(e: CustomEvent) => {
             console.log('MGC - cancelPlan', e.detail);
@@ -145,7 +138,35 @@ protected createRenderRoot() {
       `;
     }
 
-
     return html`<iaux-mgc-welcome .patronName=${this.giverId}></iaux-mgc-welcome>`;
+  }
+
+  protected get renderReturnToAccountSettingsButton() {
+    return html`
+      <button class="ia-button primary" @click=${() => {
+        this.seeRecentDonations = false;
+        this.planIdToDisplay = '';
+        this.planToDisplay = undefined;
+        this.dispatchEvent(new Event('closeEditView'));
+      }}>Back to account settings
+      </button>`;
+  }
+
+  protected get renderSeeRecentDonationsButton() {
+    if (!this.recentDonations.length) {
+      return nothing;
+    }
+
+    return html`
+     <button class="ia-button link"  @click=${() => {
+        this.seeRecentDonations = true;
+          if (this.recentDonations.length) { 
+          } else {
+            this.seeRecentDonations = true;
+            this.dispatchEvent(new Event('mgc-recent-donations-request'));
+            console.log('View recent donation history');
+          }
+      }}>View recent donation history</button>
+    `;
   }
 }

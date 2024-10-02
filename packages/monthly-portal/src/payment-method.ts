@@ -2,8 +2,13 @@ import { LitElement, html, css, CSSResult, TemplateResult, PropertyValues, nothi
 import { customElement, property, query } from 'lit/decorators.js';
 import type SubscriptionSummary from './models/subscription-summary';
 
-import './form-elements/contact-form/contact-form';
-import './form-elements/payment-selector';
+// import '@internetarchive/donation-form/dist/src/form-elements/contact-form/contact-form';
+// import './form-elements/payment-selector';
+
+/**
+NONCE CALL - from braintree
+braintree sandbox id: 
+ */
 
 @customElement('iaux-mgc-edit-plan-payment-method')
 export class MonthlyGivingCircle extends LitElement {
@@ -48,7 +53,7 @@ export class MonthlyGivingCircle extends LitElement {
           @googlePaySelected=${this.paymentSelected}
           @paypalBlockerSelected=${this.paymentSelected}
           @resetPaymentMethod=${async () => {
-            debugger;
+            debugger
             // this.selectedPaymentProvider = undefined;
             // this.contactFormVisible = false;
             // this.requestUpdate();

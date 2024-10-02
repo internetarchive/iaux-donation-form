@@ -9,20 +9,6 @@ body {
   color: #333;
 }
 
-a:link, a:visited {
-  color: black;
-}
-
-a:hover {
-  text-decoration: none;
-}
-
-header {
-  font-size: 1.5rem;
-  background-color: lightgray;
-  padding: 0.5em;
-}
-
 #demo {
   margin: 0;
   padding: 1em;

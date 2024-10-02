@@ -54,24 +54,28 @@ export class MGCEditSubscription extends LitElement {
 
     /*
 
-
+originalPlanDetails: this.plan,
+                newDonationInfo: this.donationPaymentInfo,
+                newAmount: Numbe
 
     */
     return html`
       <section id="edit-subscription" planId=${this.plan?.id ?? nothing}>
         <iaux-mgc-edit-plan-amount
-          .displayAmount=${this.displayAmount}
           .plan=${this.plan}
           @updateAmount=${(e: CustomEvent) => {
             console.log('updateAmount', e.detail);
+            const originalPlanDetails = e.detail.originalPlanDetails;
+            const newDonationInfo = e.detail.newDonationInfo;
             const newAmount = e.detail.newAmount;
-            const plan = e.detail.plan;
-            this.dispatchEvent(new CustomEvent('editAmount', { detail: { newAmount, plan } }));
-            debugger;
+            this.dispatchEvent(new CustomEvent('editAmount', { detail: {
+              originalPlanDetails,
+              newDonationInfo,
+              newAmount
+            }}));
           }}>
         </iaux-mgc-edit-plan-amount>
-        <hr>
-        <iaux-mgc-edit-plan-payment-method
+        <iaux-mgc-edit-plan-payment-methodz
           .plan=${this.plan}
           @editPaymentMethod=${(e: CustomEvent) => {
             alert('Payment method edited');
@@ -80,9 +84,8 @@ export class MGCEditSubscription extends LitElement {
             const plan = e.detail.plan;
             this.dispatchEvent(new CustomEvent('editPaymentMethod', { detail: { newPaymentMethod, plan } }));
           }}
-        ></iaux-mgc-edit-plan-payment-method>
-        <hr>
-        <iaux-mgc-edit-donation-date
+        ></iaux-mgc-edit-plan-payment-methodz>
+        <iaux-mgc-edit-donation-datez
           .plan=${this.plan}
           @editDate=${(e: CustomEvent) => {
             alert('Date edited');
@@ -92,9 +95,9 @@ export class MGCEditSubscription extends LitElement {
             this.dispatchEvent(new CustomEvent('editDate', { detail: { newDate, plan } }));
           }}
         >
-        </iaux-mgc-edit-donation-date>
+        </iaux-mgc-edit-donation-datez>
         <hr>
-        <iaux-mgc-cancel-plan
+        <iaux-mgc-cancel-planz
           .plan=${this.plan}
           @cancelPlan=${(e: CustomEvent) => {
             alert('Plan cancelled');
@@ -102,7 +105,7 @@ export class MGCEditSubscription extends LitElement {
             const plan = e.detail.plan;
             this.dispatchEvent(new CustomEvent('cancelPlan', { detail: { plan } }));
           }}
-        ></iaux-mgc-cancel-plan>
+        ></iaux-mgc-cancel-planz>
       </section>
     `;
   }
