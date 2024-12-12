@@ -398,7 +398,7 @@ export class DonationFlowModalManager implements DonationFlowModalManagerInterfa
   static getDefaultUpsellAmount(oneTimeAmount: number): number {
     let amount = 5;
 
-    if (oneTimeAmount <= 10) amount = 5;
+    if (oneTimeAmount <= 10) amount = 7.71;
     else if (oneTimeAmount > 10 && oneTimeAmount <= 25) amount = 10;
     else if (oneTimeAmount > 25 && oneTimeAmount <= 100) amount = 25;
     else if (oneTimeAmount > 100) amount = 50;
