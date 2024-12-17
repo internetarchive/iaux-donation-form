@@ -35,7 +35,7 @@ export class UpsellModalContent extends LitElement {
       <h3>Thank you for donating!</h3>
       <button @click=${this.noThanksSelected} class="cta-button" id="no-button">Continue</button>
       <p class="or_separator"><span>or</span></p>
-      <h3>Consider donating monthly</h3>
+      <h3>Join our Monthly Giving Circle</h3>
       <p class="appeal">Monthly support helps us reliably plan for the future.</p>
       <div class="monthly-amount">
         <h1>Enter your monthly amount</h1>
