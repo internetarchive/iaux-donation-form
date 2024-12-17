@@ -87,10 +87,8 @@ export class PaymentSelector extends LitElement {
           </button>
 
           <div
-            class="paypal-container provider-button ${this.payPalMode} ${this
-              .paymentModeSelected === 'paypal'
-              ? 'selected'
-              : ''}"
+            class="paypal-container provider-button ${this.payPalMode}
+              ${this.paymentModeSelected === 'paypal' ? 'selected' : ''}"
             tabindex="0"
           >
             <div class="payment-image">
