@@ -185,9 +185,10 @@ export class DonationForm extends LitElement {
   }
 
   get contactFormSectionTemplate(): TemplateResult {
-    const headline = this.selectedPaymentProvider === PaymentProvider.Venmo
-      ? 'Help us stay in touch'
-      : 'Enter payment information';
+    const headline =
+      this.selectedPaymentProvider === PaymentProvider.Venmo
+        ? 'Help us stay in touch'
+        : 'Enter payment information';
 
     return html`
       <donation-form-section
