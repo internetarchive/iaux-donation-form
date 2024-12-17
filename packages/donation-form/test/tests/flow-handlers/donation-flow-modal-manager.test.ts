@@ -41,10 +41,11 @@ describe('Donation Flow Modal Manager', () => {
   });
 
   it('can calculate the proper default upsell amount', async () => {
+    const defaultAmount = 7.71;
     let amount = DonationFlowModalManager.getDefaultUpsellAmount(1);
-    expect(amount).to.equal(5);
+    expect(amount).to.equal(defaultAmount);
     amount = DonationFlowModalManager.getDefaultUpsellAmount(10);
-    expect(amount).to.equal(5);
+    expect(amount).to.equal(defaultAmount);
     amount = DonationFlowModalManager.getDefaultUpsellAmount(10.01);
     expect(amount).to.equal(10);
     amount = DonationFlowModalManager.getDefaultUpsellAmount(25);
