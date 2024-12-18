@@ -22,7 +22,7 @@ describe('Donation Payment Info', () => {
   it('calculates the proper total for fees coverage', async () => {
     const baseAmount = 3.5;
     const expectedFee = calculateFee(baseAmount);
-    const expectedTotal = baseAmount + expectedFee;
+    const expectedTotal = Math.round((baseAmount + expectedFee) * 100) / 100;
 
     const donationInfo = new DonationPaymentInfo({
       donationType: DonationType.OneTime,
