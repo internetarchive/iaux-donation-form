@@ -7,7 +7,7 @@
 
   <link rel="stylesheet" href="assets/style.css" />
 
-  <style>
+  <!-- <style>
     body {
       color: #333;
       font-family: sans-serif;
@@ -42,7 +42,7 @@
       padding-bottom: 0.6rem;
     }
 
-    donation-form-controller.custom-colors {      
+    donation-form-controller.custom-colors {
       /* CSS vars to set */
       /* Donate Button */
       --donateButtonColor: pink;
@@ -84,15 +84,18 @@
   div#options button {
     margin: 2px 5px;
   }
-  </style>
+  </style> -->
 
 </head>
 <body>
-  <header>
+  <!-- <header>
     <a href="recaptcha.html">Recaptcha Demo</a>
-  </header>
+  </header> -->
+  
+  <app-root></app-root>
+  <script src="../dist/demo/app-root.js" type="module"></script>
 
-  <div class="dev-tools">
+  <!-- <div class="dev-tools">
     <div id="options">
       <button id="show-regular-upsell-button">Show Regular Upsell</button> |
       <button id="show-paypal-upsell-button">Show PayPal Upsell</button> |
@@ -119,7 +122,7 @@
   </div>
 
   <script type="module">
-    import { render, html } from 'https://offshoot.prod.archive.org/lit.js';
+        import { render, html } from 'lit';
     import '../dist/index.js';
     import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-form-data-models';
     import { BraintreeEndpointManager } from '../dist/demo/braintree-endpoint-manager.js';
@@ -262,10 +265,6 @@
     render(
       html`
         <modal-manager>
-          <!--
-            The PayPal buttons cannot exist in the shadowDOM so they have to be slotted
-            from the top.
-          -->
           <div slot="paypal-upsell-button">
             <div id="paypal-upsell-button"></div>
           </div>
@@ -303,6 +302,6 @@
     formController.addEventListener('paymentProvidersHostedFieldsFailed', (event) => {
       console.log('paymentProvidersHostedFieldsFailed', event);
   });
-</script>
+</script> -->
 </body>
 </html>
