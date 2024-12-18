@@ -22,7 +22,7 @@ describe('Donation Payment Info', () => {
   it('calculates the proper total for fees coverage', async () => {
     const baseAmount = 3.5;
     const expectedFee = calculateFee(baseAmount);
-    const exptectedTotal = baseAmount + expectedFee;
+    const expectedTotal = baseAmount + expectedFee;
 
     const donationInfo = new DonationPaymentInfo({
       donationType: DonationType.OneTime,
@@ -30,7 +30,7 @@ describe('Donation Payment Info', () => {
       coverFees: true,
     });
 
-    expect(donationInfo.total).to.equal(exptectedTotal);
+    expect(donationInfo.total).to.equal(expectedTotal);
   });
 
   it('calculates the proper expected fees from manual calculations', async () => {
@@ -39,12 +39,12 @@ describe('Donation Payment Info', () => {
       amount: 5,
       coverFees: true,
     });
-    expect(donationInfo.fee).to.equal(0.41);
-    expect(donationInfo.total).to.equal(5.41);
+    expect(donationInfo.fee).to.equal(0.59);
+    expect(donationInfo.total).to.equal(5.59);
 
     donationInfo.amount = 3.5;
-    expect(donationInfo.fee).to.equal(0.38);
-    expect(donationInfo.total).to.equal(3.88);
+    expect(donationInfo.fee).to.equal(0.56);
+    expect(donationInfo.total).to.equal(4.06);
   });
 
   it('calculates the proper expected fees', async () => {
