@@ -5,7 +5,7 @@ import { DonationType } from '../src/donation-info/donation-type';
 // this is a separate calculation from the one in DonationPaymentInfo
 // to have a second verification independent of it
 function calculateFee(amount: number): number {
-  return Math.round((amount * 0.022 + 0.3) * 100) / 100;
+  return Math.round((amount * 0.02 + 0.49) * 100) / 100;
 }
 
 describe('Donation Payment Info', () => {
