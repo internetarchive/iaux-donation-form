@@ -32,6 +32,11 @@ module.exports = config => {
         },
       },
 
+      coverageReporter: {
+        dir: 'coverage',
+        subdir: '.',
+        type: 'lcovonly',
+      },
       // you can overwrite/extend the config further
     }),
   );
