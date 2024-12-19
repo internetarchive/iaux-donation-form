@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { html } from 'lit';
 import { ModalConfig, ModalManagerInterface } from '@internetarchive/modal-manager';
 import { UpsellModalCTAMode } from '../modals/upsell-modal-content';

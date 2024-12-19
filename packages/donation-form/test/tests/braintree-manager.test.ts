@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { expect } from '@open-wc/testing';
 
 import { BraintreeManager } from '../../src/braintree-manager/braintree-manager';
