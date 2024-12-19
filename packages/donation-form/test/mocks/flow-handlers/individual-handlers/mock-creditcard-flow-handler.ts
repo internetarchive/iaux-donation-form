@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Emitter, createNanoEvents, Unsubscribe } from 'nanoevents';
 import {
   CreditCardFlowHandlerInterface,

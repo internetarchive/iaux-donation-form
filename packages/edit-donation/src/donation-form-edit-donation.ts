@@ -89,17 +89,11 @@ export class DonationFormEditDonation extends LitElement {
   frequencySelectionMode: EditDonationFrequencySelectionMode =
     EditDonationFrequencySelectionMode.Button;
 
-  @property({ type: String, reflect: true }) customAmountMode:
-    | 'display'
-    | 'hide' = 'display';
+  @property({ type: String, reflect: true }) customAmountMode: 'display' | 'hide' = 'display';
 
-  @property({ type: String, reflect: true }) customFeesCheckboxMode:
-    | 'display'
-    | 'hide' = 'display';
+  @property({ type: String, reflect: true }) customFeesCheckboxMode: 'display' | 'hide' = 'display';
 
-  @property({ type: String, reflect: true }) amountTitleDisplayMode:
-    | 'default'
-    | 'slot' = 'default';
+  @property({ type: String, reflect: true }) amountTitleDisplayMode: 'default' | 'slot' = 'default';
 
   @property({ type: Object }) private error?: TemplateResult;
 
@@ -114,8 +108,7 @@ export class DonationFormEditDonation extends LitElement {
   /** @inheritdoc */
   render(): TemplateResult {
     const defaultAmountTitle = 'Choose an amount (USD)';
-    const amountTitle =
-      this.amountTitleDisplayMode === 'default' ? defaultAmountTitle : '';
+    const amountTitle = this.amountTitleDisplayMode === 'default' ? defaultAmountTitle : '';
     return html`
       ${this.frequencySelectionMode ===
       EditDonationFrequencySelectionMode.Button
@@ -127,27 +120,26 @@ export class DonationFormEditDonation extends LitElement {
         headline=${amountTitle}
         badgeMode=${this.formSectionNumberMode}
       >
-        ${this.amountTitleDisplayMode === 'slot'
-          ? html`<slot name="edit-donation-amount-title"></slot>`
-          : nothing}
+        ${this.amountTitleDisplayMode === 'slot' ? html`<slot name="edit-donation-amount-title"></slot>` : nothing}
         <ul class="amount-selector">
           ${this.presetAmountsTemplate}
-          ${this.customAmountMode === 'display'
+          ${ this.customAmountMode === 'display'
             ? html`<li class="custom-amount">${this.customAmountTemplate}</li>`
-            : nothing}
+            : nothing }
         </ul>
 
         <div class="errors">${this.error}</div>
 
-        ${this.customFeesCheckboxMode === 'display'
-          ? html` <div class="checkbox-options">
-              ${this.customFeesCheckboxTemplate}
-              ${this.frequencySelectionMode ===
-              EditDonationFrequencySelectionMode.Checkbox
-                ? this.frequencyCheckboxTemplate
-                : nothing}
-            </div>`
-          : nothing}
+        ${ this.customFeesCheckboxMode === 'display'
+          ? html`
+          <div class="checkbox-options">
+            ${this.customFeesCheckboxTemplate}
+            ${this.frequencySelectionMode === EditDonationFrequencySelectionMode.Checkbox
+              ? this.frequencyCheckboxTemplate
+              : nothing
+            }
+          </div>`
+          : nothing }
       </donation-form-section>
     `;
   }
@@ -250,9 +242,9 @@ export class DonationFormEditDonation extends LitElement {
    */
   private setupAmountColumnsLayoutConfig(): void {
     const minimalView =
-      this.customAmountMode === 'hide' &&
-      this.customFeesCheckboxMode === 'hide' &&
-      this.frequencySelectionMode === EditDonationFrequencySelectionMode.Hide;
+      this.customAmountMode === 'hide'
+      && this.customFeesCheckboxMode === 'hide'
+      && this.frequencySelectionMode === EditDonationFrequencySelectionMode.Hide;
     const amountCount = this.amountOptions.length;
     let columnCount = 5;
     let customAmountSpan = 3;
@@ -294,11 +286,11 @@ export class DonationFormEditDonation extends LitElement {
 
     this.style.setProperty(
       '--paymentSelectorAmountColumnCount',
-      `${columnCount}`,
+      `${columnCount}`
     );
     this.style.setProperty(
       '--paymentSelectorCustomAmountColSpan',
-      `${customAmountSpan}`,
+      `${customAmountSpan}`
     );
   }
 
@@ -308,7 +300,7 @@ export class DonationFormEditDonation extends LitElement {
       this.amountOptions.includes(this.donationInfo.amount)
     ) {
       const radioButton = this.shadowRoot?.querySelector(
-        `input[type="radio"][name="${EditDonationSelectionGroup.Amount}"][value="${this.donationInfo.amount}"]`,
+        `input[type="radio"][name="${EditDonationSelectionGroup.Amount}"][value="${this.donationInfo.amount}"]`
       ) as HTMLInputElement;
       radioButton.checked = true;
       this.customAmountSelected = false;
@@ -322,7 +314,7 @@ export class DonationFormEditDonation extends LitElement {
       if (this.shadowRoot?.activeElement !== this.customAmountInput) {
         this.customAmountInput.value = `${this.donationInfo.amount}`;
         const donationInfoStatus = this.getDonationInfoStatus(
-          this.donationInfo.amount,
+          this.donationInfo.amount
         );
         this.handleDonationInfoStatus(donationInfoStatus);
       }
@@ -418,14 +410,12 @@ export class DonationFormEditDonation extends LitElement {
           .checked=${options.checked}
           @change=${this.radioSelected}
           @click=${(e: Event): void => {
-            const isAmountSelection =
-              options.group === EditDonationSelectionGroup.Amount;
+            const isAmountSelection = options.group === EditDonationSelectionGroup.Amount;
             if (isAmountSelection) {
               // catch click here that @change cannot
-              const isSameValue =
-                parseFloat(options.value) === this.donationInfo.amount;
+              const isSameValue = parseFloat(options.value) === this.donationInfo.amount;
               if (isSameValue) {
-                console.log('SAME VALUE');
+                console.log("SAME VALUE");
                 this.radioSelected(e);
               }
             }
@@ -438,7 +428,7 @@ export class DonationFormEditDonation extends LitElement {
 
   private get customAmountTemplate(): TemplateResult {
     const isCustomAmount = !this.amountOptions.includes(
-      this.donationInfo.amount,
+      this.donationInfo.amount
     );
     const value = isCustomAmount ? this.donationInfo.amount : '';
 
@@ -496,7 +486,7 @@ export class DonationFormEditDonation extends LitElement {
     const amount = parseFloat(value);
     if (isNaN(amount)) {
       this.dispatchEditDonationError(
-        EditDonationInfoStatus.InvalidDonationAmount,
+        EditDonationInfoStatus.InvalidDonationAmount
       );
     } else {
       this.amountChanged(amount);
@@ -635,10 +625,7 @@ export class DonationFormEditDonation extends LitElement {
 
     return css`
       :host {
-        --formSectionContentBackgroundColor: var(
-          --editFormBgColor,
-          transparent
-        );
+        --formSectionContentBackgroundColor: var(--editFormBgColor, transparent);
         --formSectionBadgeBackgroundColor: var(--editFormBadgeBgColor, #333);
         --formSectionBadgeFontColor: var(--editFormBadgeFontColor, #fff);
         --formSectionTextColor: var(--editFormTextColor, #333);

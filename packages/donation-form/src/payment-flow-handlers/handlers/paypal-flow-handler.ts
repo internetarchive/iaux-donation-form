@@ -109,8 +109,9 @@ export class PayPalFlowHandler
   }
 
   async payPalPaymentStarted(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     dataSource: PayPalButtonDataSourceInterface,
-
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options: object,
   ): Promise<void> {
     this.emitter.emit('payPalPaymentStarted', dataSource, options);
@@ -215,8 +216,9 @@ export class PayPalFlowHandler
   }
 
   async payPalPaymentCancelled(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     dataSource: PayPalButtonDataSourceInterface,
-
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     data: object,
   ): Promise<void> {
     this.emitter.emit('payPalPaymentCancelled', dataSource, data);

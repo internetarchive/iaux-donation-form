@@ -131,6 +131,7 @@ export class PaymentClients implements PaymentClientsInterface {
     this.environment = environment;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async loadBraintreeScript(scriptName: string): Promise<void> {
     const extension = this.environment === HostingEnvironment.Production ? 'min.js' : 'js';
     const scriptWithSuffix = `${scriptName}.${extension}`;

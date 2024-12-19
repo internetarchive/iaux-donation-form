@@ -27,10 +27,10 @@ describe('DonationBannerThermometer', () => {
     `);
 
     const goalMessage = el.shadowRoot?.querySelector(
-      '.donate-goal',
+      '.donate-goal'
     ) as HTMLDivElement;
     const currentValue = el.shadowRoot?.querySelector(
-      '.thermometer-value',
+      '.thermometer-value'
     ) as HTMLDivElement;
     expect(goalMessage.innerText).to.equal('$1MM GOAL');
     expect(currentValue.innerText).to.equal('$0.5MM');
@@ -76,7 +76,7 @@ describe('DonationBannerThermometer', () => {
     `);
 
     const goalMessage = el.shadowRoot?.querySelector(
-      '.donate-goal',
+      '.donate-goal'
     ) as HTMLDivElement;
     expect(goalMessage.innerText).to.equal('GOAL MET');
   });
@@ -93,7 +93,7 @@ describe('DonationBannerThermometer', () => {
     `);
 
     const goalMessage = el.shadowRoot?.querySelector(
-      '.donate-goal',
+      '.donate-goal'
     ) as HTMLDivElement;
     expect(goalMessage.innerText).to.equal('GOAL NEAR');
   });
@@ -108,7 +108,7 @@ describe('DonationBannerThermometer', () => {
     `);
 
     const currentAmountMessage = el.shadowRoot?.querySelector(
-      '.thermometer-value',
+      '.thermometer-value'
     ) as HTMLDivElement;
     expect(currentAmountMessage.innerText).to.equal('$35MM');
   });
@@ -122,10 +122,10 @@ describe('DonationBannerThermometer', () => {
     `);
 
     const thermometerValue = el.shadowRoot?.querySelector(
-      '.thermometer-value',
+      '.thermometer-value'
     ) as HTMLDivElement;
     const thermometerFill = el.shadowRoot?.querySelector(
-      '.thermometer-fill',
+      '.thermometer-fill'
     ) as HTMLDivElement;
 
     const sizes = new Map<Element, DOMRectReadOnly>();
@@ -165,7 +165,7 @@ describe('DonationBannerThermometer', () => {
 
     await el.updateComplete;
     const thermometerBackground = el.shadowRoot?.querySelector(
-      '.thermometer-background',
+      '.thermometer-background'
     ) as HTMLDivElement;
     expect(thermometerBackground.classList.contains('value-right')).to.be.true;
   });
@@ -179,10 +179,10 @@ describe('DonationBannerThermometer', () => {
     `);
 
     const thermometerValue = el.shadowRoot?.querySelector(
-      '.thermometer-value',
+      '.thermometer-value'
     ) as HTMLDivElement;
     const thermometerFill = el.shadowRoot?.querySelector(
-      '.thermometer-fill',
+      '.thermometer-fill'
     ) as HTMLDivElement;
 
     const sizes = new Map<Element, DOMRectReadOnly>();
@@ -222,7 +222,7 @@ describe('DonationBannerThermometer', () => {
 
     await el.updateComplete;
     const thermometerBackground = el.shadowRoot?.querySelector(
-      '.thermometer-background',
+      '.thermometer-background'
     ) as HTMLDivElement;
     expect(thermometerBackground.classList.contains('value-left')).to.be.true;
   });
@@ -264,7 +264,7 @@ describe('DonationBannerThermometer', () => {
 
     await el.updateComplete;
     const styleProperty = el.style.getPropertyValue(
-      '--bannerThermometerHeight',
+      '--bannerThermometerHeight'
     );
     expect(styleProperty).to.equal('35px');
   });

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ModalManager, ModalConfig, ModalManagerMode } from '@internetarchive/modal-manager';
 import { TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
