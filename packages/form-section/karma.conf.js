@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable import/no-extraneous-dependencies */
 const { createDefaultConfig } = require('@open-wc/testing-karma');
 const merge = require('deepmerge');
 
@@ -21,7 +21,7 @@ module.exports = config => {
         nodeResolve: true,
       },
       // you can overwrite/extend the config further
-    }),
+    })
   );
   return config;
 };

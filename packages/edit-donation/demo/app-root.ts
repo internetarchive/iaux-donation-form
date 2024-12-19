@@ -3,8 +3,14 @@ import {
   DonationPaymentInfo,
   DonationType,
 } from '@internetarchive/donation-form-data-models';
-import { css, CSSResult, html, LitElement, TemplateResult } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import {
+  css,
+  CSSResult,
+  html,
+  LitElement,
+  TemplateResult,
+} from 'lit';
+import { customElement, property, query } from 'lit/decorators';
 import {
   DonationFormEditDonation,
   DonationFormEditDonationStepNumberMode,
@@ -53,9 +59,7 @@ export class AppRoot extends LitElement {
         stepNumberMode="shownumbers"
         class=${this.showCustomColors ? 'custom-color' : ''}
       >
-        <p slot="edit-donation-amount-title">
-          <b>Can you chip in?</b> <span>(USD)</span>
-        </p>
+        <p slot="edit-donation-amount-title"><b>Can you chip in?</b> <span>(USD)</span></p>
       </donation-form-edit-donation>
 
       <hr />
@@ -74,9 +78,9 @@ export class AppRoot extends LitElement {
         <h2>Dev Tools:</h2>
 
         <button @click=${this.toggleColors}>Toggle Colors</button>
-        <br />
+        <br>
         <button @click=${this.toggleNumbers}>Toggle Number Visibility</button>
-        <br />
+        <br>
         <button @click=${this.toggleMinimalView}>Toggle Minimal View</button>
 
         <div class="amount">
@@ -187,20 +191,10 @@ export class AppRoot extends LitElement {
 
   /* Shows only prefix amount options */
   private toggleMinimalView(): void {
-    this.editDonation.customAmountMode =
-      this.editDonation.customAmountMode === 'display' ? 'hide' : 'display';
-    this.editDonation.customFeesCheckboxMode =
-      this.editDonation.customFeesCheckboxMode === 'display'
-        ? 'hide'
-        : 'display';
-    this.editDonation.frequencySelectionMode =
-      this.editDonation.frequencySelectionMode === 'hide'
-        ? EditDonationFrequencySelectionMode.Button
-        : EditDonationFrequencySelectionMode.Hide;
-    this.editDonation.amountTitleDisplayMode =
-      this.editDonation.amountTitleDisplayMode === 'default'
-        ? 'slot'
-        : 'default';
+    this.editDonation.customAmountMode = this.editDonation.customAmountMode === 'display' ? 'hide' : 'display';
+    this.editDonation.customFeesCheckboxMode = this.editDonation.customFeesCheckboxMode === 'display' ? 'hide' : 'display';
+    this.editDonation.frequencySelectionMode = this.editDonation.frequencySelectionMode === 'hide' ? EditDonationFrequencySelectionMode.Button : EditDonationFrequencySelectionMode.Hide;
+    this.editDonation.amountTitleDisplayMode = this.editDonation.amountTitleDisplayMode === 'default' ? 'slot' : 'default';
     this.editDonation.amountOptions = [5, 55, 155, 255];
     this.toggleNumbers();
 
