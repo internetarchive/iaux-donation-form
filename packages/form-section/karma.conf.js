@@ -20,6 +20,12 @@ module.exports = config => {
       esm: {
         nodeResolve: true,
       },
+
+      coverageReporter: {
+        dir: 'coverage',
+        subdir: '.',
+        type: 'lcovonly',
+      },
       // you can overwrite/extend the config further
     }),
   );
