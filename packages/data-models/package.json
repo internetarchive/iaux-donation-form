@@ -12,8 +12,8 @@
   "scripts": {
     "prepare": "tsc",
     "tsc:watch": "tsc --watch",
-    "lint:eslint": "eslint --ext .ts,.html . --ignore-path .gitignore",
-    "format:eslint": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
+    "lint:eslint": "eslint .",
+    "format:eslint": "eslint . --fix",
     "lint:prettier": "prettier \"**/*.js\" \"**/*.ts\" --check --ignore-path .gitignore",
     "format:prettier": "prettier \"**/*.js\" \"**/*.ts\" --write --ignore-path .gitignore",
     "lint": "yarn run lint:eslint && yarn run lint:prettier",
