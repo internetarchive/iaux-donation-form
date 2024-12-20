@@ -1,4 +1,4 @@
-import typescriptEslint, { rules } from '@typescript-eslint/eslint-plugin';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import html from 'eslint-plugin-html';
 import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
@@ -36,6 +36,7 @@ export default [
     },
 
     rules: {
+      rules,
       '@typescript-eslint/no-unused-expressions': 'warn',
       '@typescript-eslint/no-unsafe-function-type': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',
