@@ -258,7 +258,7 @@ export class AppRoot extends LitElement {
     const value = (e.target as HTMLInputElement).value;
     this.thermometer.style.setProperty(
       '--bannerThermometerProgressColor',
-      value
+      value,
     );
   }
 
@@ -267,7 +267,7 @@ export class AppRoot extends LitElement {
     const value = (e.target as HTMLInputElement).value;
     this.thermometer.style.setProperty(
       '--bannerThermometerBackgroundColor',
-      value
+      value,
     );
   }
 
@@ -276,7 +276,7 @@ export class AppRoot extends LitElement {
     const value = (e.target as HTMLInputElement).value;
     this.thermometer.style.setProperty(
       '--bannerThermometerMarkerBorder',
-      value
+      value,
     );
   }
 

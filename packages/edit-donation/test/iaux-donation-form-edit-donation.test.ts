@@ -44,7 +44,7 @@ describe('EditDonation', () => {
       ></donation-form-edit-donation>
     `)) as DonationFormEditDonation;
     const monthlyButton = el.shadowRoot?.querySelector(
-      '#donationType-monthly-option'
+      '#donationType-monthly-option',
     );
     const clickEvent = new MouseEvent('click');
     setTimeout(() => {
@@ -63,7 +63,7 @@ describe('EditDonation', () => {
       ></donation-form-edit-donation>
     `)) as DonationFormEditDonation;
     const customRadioButton = el.shadowRoot?.querySelector(
-      '#custom-amount-button'
+      '#custom-amount-button',
     );
     const clickEvent = new MouseEvent('click');
     customRadioButton?.dispatchEvent(clickEvent);
@@ -80,7 +80,7 @@ describe('EditDonation', () => {
       ></donation-form-edit-donation>
     `)) as DonationFormEditDonation;
     const customRadioButton = el.shadowRoot?.querySelector(
-      '#custom-amount-button'
+      '#custom-amount-button',
     ) as HTMLInputElement;
     const customInput = el.shadowRoot?.querySelector('#custom-amount-input');
     const focusEvent = new FocusEvent('focus');
@@ -137,10 +137,10 @@ describe('EditDonation', () => {
       ></donation-form-edit-donation>
     `)) as DonationFormEditDonation;
     const customInput = el.shadowRoot?.querySelector(
-      '#custom-amount-input'
+      '#custom-amount-input',
     ) as HTMLInputElement;
     const customRadioButton = el.shadowRoot?.querySelector(
-      '#custom-amount-button'
+      '#custom-amount-button',
     ) as HTMLInputElement;
     customInput.value = '3.50';
     expect(customRadioButton?.checked).to.be.false;
@@ -157,7 +157,7 @@ describe('EditDonation', () => {
       ></donation-form-edit-donation>
     `)) as DonationFormEditDonation;
     const customInput = el.shadowRoot?.querySelector(
-      '#custom-amount-input'
+      '#custom-amount-input',
     ) as HTMLInputElement;
     customInput.value = '0.50';
     const inputEvent = new Event('input');
@@ -176,7 +176,7 @@ describe('EditDonation', () => {
       ></donation-form-edit-donation>
     `)) as DonationFormEditDonation;
     const customInput = el.shadowRoot?.querySelector(
-      '#custom-amount-input'
+      '#custom-amount-input',
     ) as HTMLInputElement;
     customInput.value = '0.50';
     const inputEvent = new Event('input');
@@ -192,7 +192,7 @@ describe('EditDonation', () => {
       ></donation-form-edit-donation>
     `)) as DonationFormEditDonation;
     const customInput = el.shadowRoot?.querySelector(
-      '#custom-amount-input'
+      '#custom-amount-input',
     ) as HTMLInputElement;
     customInput.value = '10000';
     const inputEvent = new Event('input');
@@ -211,7 +211,7 @@ describe('EditDonation', () => {
       ></donation-form-edit-donation>
     `)) as DonationFormEditDonation;
     const customInput = el.shadowRoot?.querySelector(
-      '#custom-amount-input'
+      '#custom-amount-input',
     ) as HTMLInputElement;
     customInput.value = '';
     const inputEvent = new Event('input');
@@ -230,11 +230,11 @@ describe('EditDonation', () => {
       ></donation-form-edit-donation>
     `)) as DonationFormEditDonation;
     const errorsContainer = el.shadowRoot?.querySelector(
-      '.errors'
+      '.errors',
     ) as HTMLDivElement;
     expect(errorsContainer.innerText).to.be.empty;
     const customInput = el.shadowRoot?.querySelector(
-      '#custom-amount-input'
+      '#custom-amount-input',
     ) as HTMLInputElement;
     customInput.value = '10000';
     const inputEvent = new Event('input');
@@ -257,7 +257,7 @@ describe('EditDonation', () => {
     expect(sections?.length).to.equal(2);
     sections?.forEach(section => {
       expect((section as DonationFormSection).badgeMode).to.equal(
-        DonationFormSectionBadgeMode.HideBadge
+        DonationFormSectionBadgeMode.HideBadge,
       );
     });
   });
@@ -287,13 +287,13 @@ describe('EditDonation', () => {
 
     // Make sure the default amount preset is selected
     const presetToCheck = el.shadowRoot?.querySelector(
-      '.amount-selector input[type=radio][value="5.45"]'
+      '.amount-selector input[type=radio][value="5.45"]',
     );
     expect((presetToCheck as HTMLInputElement).checked).to.be.true;
 
     // Make sure the custom amount is not filled in
     const customInput = el.shadowRoot?.querySelector(
-      '#custom-amount-input'
+      '#custom-amount-input',
     ) as HTMLInputElement;
     expect(customInput?.value).to.equal('');
   });
@@ -310,13 +310,13 @@ describe('EditDonation', () => {
       const amountList = el.shadowRoot?.querySelectorAll('.amount-selector li');
       expect(amountList?.length).to.equal(5); // 4 amounts + 1 custom
       expect((amountList?.item(0) as HTMLLIElement).innerText).to.equal(
-        '$2.50'
+        '$2.50',
       );
       expect((amountList?.item(1) as HTMLLIElement).innerText).to.equal(
-        '$3.70'
+        '$3.70',
       );
       expect((amountList?.item(2) as HTMLLIElement).innerText).to.equal(
-        '$5.45'
+        '$5.45',
       );
       expect((amountList?.item(3) as HTMLLIElement).innerText).to.equal('$20');
     });
@@ -344,10 +344,10 @@ describe('EditDonation', () => {
         el.amountOptions = Array.from(Array(layout.count).keys());
         await el.updateComplete;
         const colCount = el.style.getPropertyValue(
-          '--paymentSelectorAmountColumnCount'
+          '--paymentSelectorAmountColumnCount',
         );
         const customColSpan = el.style.getPropertyValue(
-          '--paymentSelectorCustomAmountColSpan'
+          '--paymentSelectorCustomAmountColSpan',
         );
         expect(colCount).to.equal(`${layout.columns}`);
         expect(customColSpan).to.equal(`${layout.customColSpan}`);

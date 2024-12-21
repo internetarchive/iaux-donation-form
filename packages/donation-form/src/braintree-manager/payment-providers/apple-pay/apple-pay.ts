@@ -20,7 +20,6 @@ export class ApplePayHandler implements ApplePayHandlerInterface {
     this.applePayClient = options.applePayClient;
     this.applePaySessionManager = options.applePaySessionManager;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.instance =
       options.instancePromisedSingleton ??
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

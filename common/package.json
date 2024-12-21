@@ -1,0 +1,10 @@
+{
+  "license": "AGPL-3.0-only",
+  "devDependencies": {
+    "@open-wc/eslint-config": "^12.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.1",
+    "eslint": "^9.17.0",
+    "typescript": "^5.7.2"
+  }
+}

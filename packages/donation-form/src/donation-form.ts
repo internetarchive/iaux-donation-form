@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { LitElement, html, css, CSSResult, TemplateResult, PropertyValues } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
@@ -264,8 +263,9 @@ export class DonationForm extends LitElement {
     }
 
     const originalEvent = e.detail.originalEvent;
-    this.donationInfo &&
+    if (this.donationInfo) {
       this.paymentFlowHandlers?.applePayHandler?.paymentInitiated(this.donationInfo, originalEvent);
+    }
     this.emitPaymentFlowStartedEvent();
   }
 
@@ -277,8 +277,9 @@ export class DonationForm extends LitElement {
     if (!this.donationInfoValid) {
       this.showInvalidDonationInfoAlert();
     } else {
-      this.donationInfo &&
+      if (this.donationInfo) {
         this.paymentFlowHandlers?.googlePayHandler?.paymentInitiated(this.donationInfo);
+      }
       this.emitPaymentFlowStartedEvent();
     }
   }
@@ -418,8 +419,9 @@ export class DonationForm extends LitElement {
       return;
     }
     this.paypalButtonNeedsRender = false;
-    this.donationInfo &&
-      (await this.paymentFlowHandlers?.paypalHandler?.renderPayPalButton(this.donationInfo));
+    if (this.donationInfo) {
+      await this.paymentFlowHandlers?.paypalHandler?.renderPayPalButton(this.donationInfo);
+    }
     this.paymentSelector.showPaypalButton();
   }
 
@@ -463,8 +465,9 @@ export class DonationForm extends LitElement {
     this.flowHandlersConfigured = true;
     this.bindFlowListenerEvents();
     this.renderPayPalButtonIfNeeded();
-    this.donationInfo &&
+    if (this.donationInfo) {
       this.paymentFlowHandlers?.paypalHandler?.updateDonationInfo(this.donationInfo);
+    }
   }
 
   private flowHandlerListenersBound = false;
