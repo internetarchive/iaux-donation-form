@@ -36,7 +36,6 @@ export default [
     },
 
     rules: {
-      '@typescript-eslint/no-unused-expressions': 'warn',
       '@typescript-eslint/no-unsafe-function-type': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
@@ -44,5 +43,11 @@ export default [
   },
   {
     ignores: ['**/*.js', '**/*.mjs'],
+  },
+  {
+    files: ['**/*.test.ts'],
+    rules: {
+      '@typescript-eslint/no-unused-expressions': 'off',
+    },
   },
 ];

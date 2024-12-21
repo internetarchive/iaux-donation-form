@@ -235,7 +235,6 @@ describe('DonationBannerThermometer', () => {
       ></donation-banner-thermometer>
     `);
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const host = el.shadowRoot!.host;
 
     const sizes = new Map<Element, DOMRectReadOnly>();
