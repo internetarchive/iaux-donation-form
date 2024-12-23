@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/donation-form",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "The Internet Archive Donation Form",
   "license": "AGPL-3.0-only",
   "main": "dist/index.js",
@@ -30,8 +30,8 @@
   "dependencies": {
     "@internetarchive/analytics-manager": "^0.1.2",
     "@internetarchive/donation-form-currency-validator": "^0.3.0",
-    "@internetarchive/donation-form-data-models": "^0.3.3",
-    "@internetarchive/donation-form-edit-donation": "^1.0.2",
+    "@internetarchive/donation-form-data-models": "^0.3.4",
+    "@internetarchive/donation-form-edit-donation": "^1.1.2",
     "@internetarchive/donation-form-section": "^0.3.5",
     "@internetarchive/icon-applepay": "^1.3.2",
     "@internetarchive/icon-calendar": "^1.3.2",
