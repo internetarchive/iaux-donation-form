@@ -972,10 +972,10 @@
   resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-currency-validator/-/donation-form-currency-validator-0.3.0.tgz#a1d9e4cdba93b49e75059a1913e2dff77370e1b1"
   integrity sha512-IsIuy9dXpZmDEeQpgpdxqUTQ6URCWkx0W2qMoaFtOFqKJSnE5/+19NCoP7Il4xGqA2wm/Px9RLwMCGwTpuXPRA==
 
-"@internetarchive/donation-form-data-models@^0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-data-models/-/donation-form-data-models-0.3.3.tgz#10fe5ca116cecef19a061c830389ef3146b94dd0"
-  integrity sha512-EZVCJNQxmZRxSu7vFtLhr/wktUaVTIlSmsUI6Pc0Zccio5lYWMxSXJVEZ6UEn0q7Y/UJavwpne5G56f2jfAWsw==
+"@internetarchive/donation-form-data-models@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-data-models/-/donation-form-data-models-0.3.4.tgz#678b66127c4e0868cdfd1fd01ea24990373648fa"
+  integrity sha512-21uD2OLSo3QssKuWYIT1TXpwHpCBHgRivgJbKWzfsP+hLux/5C3vOH0q/wQxyct5xJb6ehZg8hFDTlKDl5H6Vw==
 
 "@internetarchive/donation-form-section@0.3.5":
   version "0.3.5"
