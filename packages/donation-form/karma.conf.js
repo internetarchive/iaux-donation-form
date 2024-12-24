@@ -35,7 +35,7 @@ module.exports = config => {
       coverageReporter: {
         dir: 'coverage',
         subdir: '.',
-        type: 'lcovonly',
+        type: 'lcov',
       },
       // you can overwrite/extend the config further
     }),
