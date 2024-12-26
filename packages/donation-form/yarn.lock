@@ -290,33 +290,33 @@
   resolved "https://registry.yarnpkg.com/@internetarchive/analytics-manager/-/analytics-manager-0.1.4.tgz#611291dfd66a92d0c010ea6dfe9916fafa5e52bf"
   integrity sha512-2GcEkotsWduirbFoTiNXWzNnzLQArYfJIlW67/alqEKKl95G5jUepYu6FYCd4fj9PwCiPRAp1gDbRSnF9+GsIA==
 
-"@internetarchive/donation-form-currency-validator@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-currency-validator/-/donation-form-currency-validator-0.3.0.tgz#a1d9e4cdba93b49e75059a1913e2dff77370e1b1"
-  integrity sha512-IsIuy9dXpZmDEeQpgpdxqUTQ6URCWkx0W2qMoaFtOFqKJSnE5/+19NCoP7Il4xGqA2wm/Px9RLwMCGwTpuXPRA==
+"@internetarchive/donation-form-currency-validator@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-currency-validator/-/donation-form-currency-validator-0.3.1.tgz#ddba2a68b6cabca7bcf5c6c3e141b9ee52c73f1d"
+  integrity sha512-bxK7nPoXaxz6y+xfZ7PnRXXC/3g00W9AJ2SVlzUkqFIIi/P6qgc8m/RJ0VThw8fo9A96E0LueFlXXbFo4wwfig==
 
-"@internetarchive/donation-form-data-models@^0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-data-models/-/donation-form-data-models-0.3.4.tgz#678b66127c4e0868cdfd1fd01ea24990373648fa"
-  integrity sha512-21uD2OLSo3QssKuWYIT1TXpwHpCBHgRivgJbKWzfsP+hLux/5C3vOH0q/wQxyct5xJb6ehZg8hFDTlKDl5H6Vw==
-
-"@internetarchive/donation-form-edit-donation@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-edit-donation/-/donation-form-edit-donation-1.1.2.tgz#7d380db6e800fe0d4c6eb61f32738d983c878594"
-  integrity sha512-9B7Q2uxfISPA7tqPMUYfwoLlVEXIHCShiAUMyR93Fx+bQ70GY5xsp6JxqCZW9w+/2nPJ1JEpKQkedL2w4eIapg==
-  dependencies:
-    "@internetarchive/donation-form-currency-validator" "^0.3.0"
-    "@internetarchive/donation-form-data-models" "^0.3.4"
-    "@internetarchive/donation-form-section" "0.3.5"
-    currency.js "^2.0.3"
-    lit "^2.0.2"
-
-"@internetarchive/donation-form-section@0.3.5", "@internetarchive/donation-form-section@^0.3.5":
+"@internetarchive/donation-form-data-models@^0.3.5":
   version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-section/-/donation-form-section-0.3.5.tgz#ed840d30a56bd301eeee6d47d016e549926399cd"
-  integrity sha512-m/F03l/Qw/tFaaSmub50KGChiVqMvqHh+q81wXzbTmfMeIYI1g1p72fkKJLIWnkDspcGBurRZJMntWV824g8wQ==
+  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-data-models/-/donation-form-data-models-0.3.5.tgz#a3d2d09e6a1f3be22a4da2c5f1cf791bc92bd771"
+  integrity sha512-ctDUOnHifFBZn7aERddZaqBvL+SraO08t2FANr2S+lEFJbZCzqOANKuwOMiuezbJ8zpOX2Hm1O7U51KSb/2jCA==
+
+"@internetarchive/donation-form-edit-donation@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-edit-donation/-/donation-form-edit-donation-1.1.3.tgz#54f118f1ecb5099882462ab54513f37b1ec540d9"
+  integrity sha512-RCOTrp7jFQXlGt+x7rAlIN9G96LyO1TS5xD11yOKrf4fkfGJyCDGxDdQWMtfJJUCSFdS4x9Y5B50bMq/9S572Q==
   dependencies:
-    lit "^2.0.2"
+    "@internetarchive/donation-form-currency-validator" "^0.3.1"
+    "@internetarchive/donation-form-data-models" "^0.3.5"
+    "@internetarchive/donation-form-section" "^0.3.6"
+    currency.js "^2.0.4"
+    lit "^2.8.0"
+
+"@internetarchive/donation-form-section@^0.3.6":
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/@internetarchive/donation-form-section/-/donation-form-section-0.3.6.tgz#8c96ef54b1894320644c9e48d4595ea38047194a"
+  integrity sha512-RQlgJJbGEhmQk8Pg9hQYyQZ6MEQU6jgl/a+q7v3HdepgUpKfI3ha4FIlcdUqShMPpdwCetbI3b+h7Zbbe8BkAg==
+  dependencies:
+    lit "^2.8.0"
 
 "@internetarchive/ia-activity-indicator@^0.0.4":
   version "0.0.4"
@@ -2136,7 +2136,7 @@ cross-spawn@^7.0.3, cross-spawn@^7.0.6:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-currency.js@^2.0.2, currency.js@^2.0.3:
+currency.js@^2.0.2, currency.js@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/currency.js/-/currency.js-2.0.4.tgz#a8a4d69be3b2e509bf67a560c78220bc04809cf1"
   integrity sha512-6/OplJYgJ0RUlli74d93HJ/OsKVBi8lB1+Z6eJYS1YZzBuIp4qKKHpJ7ad+GvTlWmLR/hLJOWTykN5Nm8NJ7+w==

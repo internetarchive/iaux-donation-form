@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/donation-form-currency-validator",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A currency input validator for the Internet Archive donation form",
   "license": "AGPL-3.0-only",
   "main": "dist/index.js",
