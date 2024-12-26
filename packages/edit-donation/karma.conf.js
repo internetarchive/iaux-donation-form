@@ -1,4 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { createDefaultConfig } = require('@open-wc/testing-karma');
 const merge = require('deepmerge');
 
@@ -21,8 +21,15 @@ module.exports = config => {
         nodeResolve: true,
         preserveSymlinks: true,
       },
+
+      coverageReporter: {
+        dir: 'coverage',
+        subdir: '.',
+        type: 'lcov',
+      },
+
       // you can overwrite/extend the config further
-    })
+    }),
   );
   return config;
 };

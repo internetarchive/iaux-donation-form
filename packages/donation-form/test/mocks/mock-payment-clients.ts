@@ -109,7 +109,7 @@ export class MockPaymentClients implements PaymentClientsInterface {
             resolve(mockGooglePayLibrary);
           }),
       });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     this.paypalLibrary =
       generators?.paypalLibrary ??
       new PromisedSingleton<any>({

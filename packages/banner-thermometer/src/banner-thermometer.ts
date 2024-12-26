@@ -20,7 +20,8 @@ export type CurrentAmountMode = 'on' | 'off';
 @customElement('donation-banner-thermometer')
 export class DonationBannerThermometer
   extends LitElement
-  implements SharedResizeObserverResizeHandlerInterface {
+  implements SharedResizeObserverResizeHandlerInterface
+{
   @property({ type: String }) goalMessageMode: GoalMessageMode = 'amount';
 
   @property({ type: String }) goalNearMessage =
@@ -101,7 +102,7 @@ export class DonationBannerThermometer
   updated(changed: PropertyValues): void {
     if (changed.has('resizeObserver')) {
       const oldObserver = changed.get(
-        'resizeObserver'
+        'resizeObserver',
       ) as SharedResizeObserverInterface;
       this.disconnectResizeObserver(oldObserver);
       this.setupResizeObserver(this.resizeObserver);
@@ -124,7 +125,7 @@ export class DonationBannerThermometer
       case this.shadowRoot?.host:
         this.style.setProperty(
           '--bannerThermometerHeight',
-          entry.contentRect.height + 'px'
+          entry.contentRect.height + 'px',
         );
         break;
       case this.thermometerValue:
@@ -153,7 +154,7 @@ export class DonationBannerThermometer
   }
 
   private disconnectResizeObserver(
-    observer?: SharedResizeObserverInterface
+    observer?: SharedResizeObserverInterface,
   ): void {
     /* istanbul ignore next */
     if (!this.shadowRoot?.host || !observer) return;
@@ -171,7 +172,7 @@ export class DonationBannerThermometer
   }
 
   private observeCurrentAmountResize(
-    observer?: SharedResizeObserverInterface
+    observer?: SharedResizeObserverInterface,
   ): void {
     if (!this.thermometerValue || !observer) return;
     observer?.addObserver({
@@ -181,7 +182,7 @@ export class DonationBannerThermometer
   }
 
   private unobserveCurrentAmountResize(
-    observer?: SharedResizeObserverInterface
+    observer?: SharedResizeObserverInterface,
   ): void {
     if (!this.thermometerValue || !observer) return;
     observer?.removeObserver({
