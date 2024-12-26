@@ -428,10 +428,10 @@
     lit "^2.8.0"
     throttle-debounce "^5.0.0"
 
-"@internetarchive/promised-singleton@^0.3.0-alpha.1":
-  version "0.3.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/@internetarchive/promised-singleton/-/promised-singleton-0.3.0-alpha.1.tgz#42a186148a5c3291f91496948066e31c36da81d1"
-  integrity sha512-o4cUSkTDrWXn7lP1tuMrJ8xxCoD8pCKVgdvv7gtlnCJsCpsFcBr3aTFkMF3O0G+Dm5VZ/Jmsw7pINKRXm226Lg==
+"@internetarchive/promised-singleton@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@internetarchive/promised-singleton/-/promised-singleton-0.2.1.tgz#71abeffc85036055a289e5cd00c03806ec8b07b1"
+  integrity sha512-HR0bg3AuY0ffJ3m2vQyFo1qXhg12olAlef0L2nD05xr+7z3qZb5K3/NBcN16k523f9Y6z5T/ELf3U+IVHAVF7w==
 
 "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.8"
