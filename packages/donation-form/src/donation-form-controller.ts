@@ -470,8 +470,9 @@ export class DonationFormController extends LitElement {
     return this;
   }
 
-  private donationInfoChanged(): void {
+  private donationInfoChanged(e: CustomEvent): void {
     this.logEvent('DonationInfoChanged');
+    this.donationInfo = e.detail.donationInfo;
   }
 
   private trackViewedEvent(): void {

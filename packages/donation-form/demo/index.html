@@ -42,7 +42,7 @@
       padding-bottom: 0.6rem;
     }
 
-    donation-form-controller.custom-colors {      
+    donation-form-controller.custom-colors {
       /* CSS vars to set */
       /* Donate Button */
       --donateButtonColor: pink;
@@ -119,7 +119,7 @@
   </div>
 
   <script type="module">
-    import { render, html } from 'https://offshoot.prod.archive.org/lit.js';
+    import { render, html } from 'lit';
     import '../dist/index.js';
     import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-form-data-models';
     import { BraintreeEndpointManager } from '../dist/demo/braintree-endpoint-manager.js';
@@ -144,7 +144,7 @@
     document.querySelector('#show-regular-upsell-button').addEventListener('click', () => {
       const formController = document.querySelector('donation-form-controller');
       formController.showUpsellModalDev({
-        oneTimeAmount: 5,
+        oneTimeAmount: formController.donationInfo.amount,
         ctaMode: 'YesButton'
       });
     });
@@ -152,7 +152,7 @@
     document.querySelector('#show-paypal-upsell-button').addEventListener('click', () => {
       const formController = document.querySelector('donation-form-controller');
       formController.showUpsellModalDev({
-        oneTimeAmount: 5,
+        oneTimeAmount: formController.donationInfo.amount,
         ctaMode: 'PayPalUpsellSlot'
       });
     });
