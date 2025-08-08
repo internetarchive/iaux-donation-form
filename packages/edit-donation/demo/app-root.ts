@@ -4,7 +4,7 @@ import {
   DonationType,
 } from '@internetarchive/donation-form-data-models';
 import { css, CSSResult, html, LitElement, TemplateResult } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 import {
   DonationFormEditDonation,
   DonationFormEditDonationStepNumberMode,
@@ -81,7 +81,7 @@ export class AppRoot extends LitElement {
 
         <div class="amount">
           Total:
-          <div id="total">$5.00</div>
+          <div id="total">$10.00</div>
         </div>
         <fieldset>
           <legend>Donation Info</legend>
@@ -96,7 +96,7 @@ export class AppRoot extends LitElement {
               One Time
               <input type="radio" name="donationType" value="monthly" /> Monthly
             </li>
-            <li>$ <input type="text" id="amount-input" value="5.00" /></li>
+            <li>$ <input type="text" id="amount-input" value="10.00" /></li>
             <li>
               <input type="checkbox" id="coverfees-checkbox" /> Cover fees
             </li>
@@ -202,6 +202,11 @@ export class AppRoot extends LitElement {
         ? 'slot'
         : 'default';
     this.editDonation.amountOptions = [5, 55, 155, 255];
+    this.editDonation.donationInfo = new DonationPaymentInfo({
+      amount: 5,
+      donationType: DonationType.OneTime,
+      coverFees: false,
+    });
     this.toggleNumbers();
 
     if (!this.editDonation.classList.contains('minimal')) {
