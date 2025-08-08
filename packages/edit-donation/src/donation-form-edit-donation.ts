@@ -7,7 +7,7 @@ import {
   PropertyValues,
   nothing,
 } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 
 import currency from 'currency.js';
 
@@ -101,9 +101,9 @@ export class DonationFormEditDonation extends LitElement {
     | 'default'
     | 'slot' = 'default';
 
-  @property({ type: Object }) private error?: TemplateResult;
+  @state() private error?: TemplateResult;
 
-  @property({ type: Boolean }) private customAmountSelected = false;
+  @state() private customAmountSelected = false;
 
   @query('#custom-amount-button') private customAmountButton!: HTMLInputElement;
 
@@ -303,10 +303,7 @@ export class DonationFormEditDonation extends LitElement {
   }
 
   private updateSelectedDonationInfo(): void {
-    if (
-      !this.customAmountSelected &&
-      this.amountOptions.includes(this.donationInfo.amount)
-    ) {
+    if (!this.customAmountSelected && !this.isCustomAmount) {
       const radioButton = this.shadowRoot?.querySelector(
         `input[type="radio"][name="${EditDonationSelectionGroup.Amount}"][value="${this.donationInfo.amount}"]`,
       ) as HTMLInputElement;
@@ -320,7 +317,7 @@ export class DonationFormEditDonation extends LitElement {
       // don't update the value if it currently has focus
       // since the user may be typing in it at the time
       if (this.shadowRoot?.activeElement !== this.customAmountInput) {
-        this.customAmountInput.value = `${this.donationInfo.amount}`;
+        this.customAmountInput.value = this.customAmountDisplayValue;
         const donationInfoStatus = this.getDonationInfoStatus(
           this.donationInfo.amount,
         );
@@ -425,7 +422,6 @@ export class DonationFormEditDonation extends LitElement {
               const isSameValue =
                 parseFloat(options.value) === this.donationInfo.amount;
               if (isSameValue) {
-                console.log('SAME VALUE');
                 this.radioSelected(e);
               }
             }
@@ -436,12 +432,16 @@ export class DonationFormEditDonation extends LitElement {
     `;
   }
 
-  private get customAmountTemplate(): TemplateResult {
-    const isCustomAmount = !this.amountOptions.includes(
-      this.donationInfo.amount,
-    );
-    const value = isCustomAmount ? this.donationInfo.amount : '';
+  private get isCustomAmount(): boolean {
+    return !this.amountOptions.includes(this.donationInfo.amount);
+  }
 
+  private get customAmountDisplayValue(): string {
+    if (!this.isCustomAmount) return '';
+    return currency(this.donationInfo.amount, { symbol: '' }).format();
+  }
+
+  private get customAmountTemplate(): TemplateResult {
     return html`
       <div class="selection-button">
         <input
@@ -459,10 +459,14 @@ export class DonationFormEditDonation extends LitElement {
             type="text"
             id="custom-amount-input"
             tabindex="-1"
-            value=${value}
+            .value=${this.customAmountDisplayValue}
             @input=${this.customAmountChanged}
             @keydown=${this.currencyValidator.keydown}
             @focus=${this.customAmountFocused}
+            @blur=${(e: Event): void => {
+              const target = e.target as HTMLInputElement;
+              target.value = this.customAmountDisplayValue;
+            }}
           />
         </label>
       </div>
