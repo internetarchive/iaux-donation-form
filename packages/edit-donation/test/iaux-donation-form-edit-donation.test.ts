@@ -122,6 +122,7 @@ describe('EditDonation', () => {
       '#custom-amount-input',
     ) as HTMLInputElement;
     customInput.value = '2.4';
+    expect(customInput?.value).to.equal('2.4');
     const blurEvent = new FocusEvent('blur');
     customInput.dispatchEvent(blurEvent);
     await elementUpdated(el);
