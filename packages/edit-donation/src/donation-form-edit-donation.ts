@@ -93,7 +93,7 @@ export class DonationFormEditDonation extends LitElement {
     | 'display'
     | 'hide' = 'display';
 
-  @property({ type: String, reflect: true }) customFeesCheckboxMode:
+  @property({ type: String, reflect: true }) coverFeesCheckboxMode:
     | 'display'
     | 'hide' = 'display';
 
@@ -139,9 +139,9 @@ export class DonationFormEditDonation extends LitElement {
 
         <div class="errors">${this.error}</div>
 
-        ${this.customFeesCheckboxMode === 'display'
+        ${this.coverFeesCheckboxMode === 'display'
           ? html` <div class="checkbox-options">
-              ${this.customFeesCheckboxTemplate}
+              ${this.coverFeesCheckboxTemplate}
               ${this.frequencySelectionMode ===
               EditDonationFrequencySelectionMode.Checkbox
                 ? this.frequencyCheckboxTemplate
@@ -211,7 +211,7 @@ export class DonationFormEditDonation extends LitElement {
     `;
   }
 
-  private get customFeesCheckboxTemplate(): TemplateResult {
+  private get coverFeesCheckboxTemplate(): TemplateResult {
     return html`
       <div class="checkbox-option-container">
         <input
@@ -251,7 +251,7 @@ export class DonationFormEditDonation extends LitElement {
   private setupAmountColumnsLayoutConfig(): void {
     const minimalView =
       this.customAmountMode === 'hide' &&
-      this.customFeesCheckboxMode === 'hide' &&
+      this.coverFeesCheckboxMode === 'hide' &&
       this.frequencySelectionMode === EditDonationFrequencySelectionMode.Hide;
     const amountCount = this.amountOptions.length;
     let columnCount = 5;

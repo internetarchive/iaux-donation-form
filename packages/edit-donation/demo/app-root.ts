@@ -189,8 +189,8 @@ export class AppRoot extends LitElement {
   private toggleMinimalView(): void {
     this.editDonation.customAmountMode =
       this.editDonation.customAmountMode === 'display' ? 'hide' : 'display';
-    this.editDonation.customFeesCheckboxMode =
-      this.editDonation.customFeesCheckboxMode === 'display'
+    this.editDonation.coverFeesCheckboxMode =
+      this.editDonation.coverFeesCheckboxMode === 'display'
         ? 'hide'
         : 'display';
     this.editDonation.frequencySelectionMode =
