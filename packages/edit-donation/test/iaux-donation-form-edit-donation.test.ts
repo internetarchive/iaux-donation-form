@@ -90,7 +90,7 @@ describe('EditDonation', () => {
     expect(customRadioButton.checked).to.be.true;
   });
 
-  it('displays trailing 0 in custom amount where there is a 0 at the end', async () => {
+  it('displays trailing 0s in custom amount when appropriate', async () => {
     const el = (await fixture(html`
       <donation-form-edit-donation
         .donationInfo=${new DonationPaymentInfo({
