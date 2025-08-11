@@ -19,6 +19,7 @@ import {
   DonationFormSectionBadgeMode,
   DonationFormSection,
 } from '@internetarchive/donation-form-section';
+import { promisedSleep } from './promised-sleep';
 
 describe('EditDonation', () => {
   it('emits donationInfoChanged event when preset amount selected', async () => {
@@ -68,6 +69,11 @@ describe('EditDonation', () => {
     const clickEvent = new MouseEvent('click');
     customRadioButton?.dispatchEvent(clickEvent);
     await elementUpdated(el);
+    // this promisedSleep is necessary because we have to do a setTimeout
+    // in the component to focus the input, and we need to wait for that
+    // to complete before we can check the focused element.
+    // See the `customRadioSelected` method in the component.
+    await promisedSleep(100);
     const focusedElement = el.shadowRoot?.activeElement;
     const customInput = el.shadowRoot?.querySelector('#custom-amount-input');
     expect(customInput).to.equal(focusedElement);
