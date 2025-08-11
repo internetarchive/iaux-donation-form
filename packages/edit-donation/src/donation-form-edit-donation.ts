@@ -478,7 +478,7 @@ export class DonationFormEditDonation extends LitElement {
     // that prevents programmatic focus on a text input
     setTimeout((): void => {
       this.customAmountInput.focus();
-    }, 0)
+    }, 0);
   }
 
   private customAmountFocused(e: Event): void {
