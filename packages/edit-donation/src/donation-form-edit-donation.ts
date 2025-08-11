@@ -474,7 +474,11 @@ export class DonationFormEditDonation extends LitElement {
   }
 
   private customRadioSelected(): void {
-    this.customAmountInput.focus();
+    // this setTimeout is a workaround for a security feature in Safari
+    // that prevents programmatic focus on a text input
+    setTimeout((): void => {
+      this.customAmountInput.focus();
+    }, 0)
   }
 
   private customAmountFocused(e: Event): void {
