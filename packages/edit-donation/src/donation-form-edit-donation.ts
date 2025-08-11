@@ -459,7 +459,7 @@ export class DonationFormEditDonation extends LitElement {
             type="text"
             id="custom-amount-input"
             tabindex="-1"
-            .value=${this.customAmountDisplayValue}
+            value=${this.customAmountDisplayValue}
             @input=${this.customAmountChanged}
             @keydown=${this.currencyValidator.keydown}
             @focus=${this.customAmountFocused}
