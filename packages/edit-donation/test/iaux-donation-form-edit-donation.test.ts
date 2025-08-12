@@ -90,6 +90,45 @@ describe('EditDonation', () => {
     expect(customRadioButton.checked).to.be.true;
   });
 
+  it('displays trailing 0s in custom amount when appropriate', async () => {
+    const el = (await fixture(html`
+      <donation-form-edit-donation
+        .donationInfo=${new DonationPaymentInfo({
+          amount: 2.4,
+          donationType: DonationType.OneTime,
+          coverFees: false,
+        })}
+        .amountOptions=${[2, 4, 6, 8]}
+      ></donation-form-edit-donation>
+    `)) as DonationFormEditDonation;
+    const customInput = el.shadowRoot?.querySelector(
+      '#custom-amount-input',
+    ) as HTMLInputElement;
+    expect(customInput?.value).to.equal('2.40');
+  });
+
+  it('updates custom amount with trailing 0 on blur', async () => {
+    const el = (await fixture(html`
+      <donation-form-edit-donation
+        .donationInfo=${new DonationPaymentInfo({
+          amount: 2.4,
+          donationType: DonationType.OneTime,
+          coverFees: false,
+        })}
+        .amountOptions=${[2, 4, 6, 8]}
+      ></donation-form-edit-donation>
+    `)) as DonationFormEditDonation;
+    const customInput = el.shadowRoot?.querySelector(
+      '#custom-amount-input',
+    ) as HTMLInputElement;
+    customInput.value = '2.4';
+    expect(customInput?.value).to.equal('2.4');
+    const blurEvent = new FocusEvent('blur');
+    customInput.dispatchEvent(blurEvent);
+    await elementUpdated(el);
+    expect(customInput?.value).to.equal('2.40');
+  });
+
   it('emits donationInfoChanged event when cover fees checked', async () => {
     const el = (await fixture(html`
       <donation-form-edit-donation
