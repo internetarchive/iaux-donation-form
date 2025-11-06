@@ -4,7 +4,7 @@ import { DonationPaymentInfo, DonationType } from '@internetarchive/donation-for
 // this is a separate calculation from the one in DonationPaymentInfo
 // to have a second verification independent of it
 function calculateFee(amount: number): number {
-  return Math.round((amount * 0.02 + 0.49) * 100) / 100;
+  return Math.round((amount * 0.0219 + 0.29) * 100) / 100;
 }
 
 describe('Donation Payment Info', () => {
@@ -38,12 +38,12 @@ describe('Donation Payment Info', () => {
       amount: 5,
       coverFees: true,
     });
-    expect(donationInfo.fee).to.equal(0.59);
-    expect(donationInfo.total).to.equal(5.59);
+    expect(donationInfo.fee).to.equal(0.4);
+    expect(donationInfo.total).to.equal(5.4);
 
     donationInfo.amount = 3.5;
-    expect(donationInfo.fee).to.equal(0.56);
-    expect(donationInfo.total).to.equal(4.06);
+    expect(donationInfo.fee).to.equal(0.37);
+    expect(donationInfo.total).to.equal(3.87);
   });
 
   it('calculates the proper expected fees', async () => {
