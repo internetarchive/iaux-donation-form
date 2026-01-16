@@ -40,50 +40,66 @@ describe('ContactForm', () => {
     expect(lastNameInput.minLength).to.equal(1);
   });
 
-  it('defaults selectedCountry to US', async () => {
-    const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
-    expect(el.selectedCountry).to.equal('US');
-  });
-
-  it('country selector dropdown updates selectedCountry property', async () => {
-    const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
-    const countrySelect = el.querySelector(
-      '#donation-contact-form-countryCodeAlpha2',
-    ) as HTMLSelectElement;
-    countrySelect.value = 'CA';
-    countrySelect.dispatchEvent(new Event('change'));
-    await elementUpdated(el);
-    expect(el.selectedCountry).to.equal('CA');
-  });
-
   it('requires email by default', async () => {
     const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
     const emailInput = el.querySelector('#donation-contact-form-email') as HTMLInputElement;
     expect(emailInput.required).to.be.true;
   });
 
-  it('makes state and postal code required for US address', async () => {
-    const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
-    el.selectedCountry = 'US';
-    await elementUpdated(el);
-    const regionInput = el.querySelector('#donation-contact-form-region') as HTMLInputElement;
-    const postalCodeInput = el.querySelector(
-      '#donation-contact-form-postal-code',
-    ) as HTMLInputElement;
-    expect(regionInput.required).to.be.true;
-    expect(postalCodeInput.required).to.be.true;
+  describe('region and postal code requirements', () => {
+    it('state and postal code required for US address', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      el.selectedCountry = 'US';
+      await elementUpdated(el);
+      const regionInput = el.querySelector('#donation-contact-form-region') as HTMLInputElement;
+      const postalCodeInput = el.querySelector(
+        '#donation-contact-form-postal-code',
+      ) as HTMLInputElement;
+      expect(regionInput.required).to.be.true;
+      expect(postalCodeInput.required).to.be.true;
+    });
+
+    it('state and postal code optional for non-US address', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      el.selectedCountry = 'CA';
+      await elementUpdated(el);
+      const regionInput = el.querySelector('#donation-contact-form-region') as HTMLInputElement;
+      const postalCodeInput = el.querySelector(
+        '#donation-contact-form-postal-code',
+      ) as HTMLInputElement;
+      expect(regionInput.required).to.be.false;
+      expect(postalCodeInput.required).to.be.false;
+    });
   });
 
-  it('makes state and postal code optional for non-US address', async () => {
-    const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
-    el.selectedCountry = 'CA';
-    await elementUpdated(el);
-    const regionInput = el.querySelector('#donation-contact-form-region') as HTMLInputElement;
-    const postalCodeInput = el.querySelector(
-      '#donation-contact-form-postal-code',
-    ) as HTMLInputElement;
-    expect(regionInput.required).to.be.false;
-    expect(postalCodeInput.required).to.be.false;
+  describe('country selector', () => {
+    it('defaults selectedCountry to US', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      expect(el.selectedCountry).to.equal('US');
+    });
+
+    it('dropdown updates selectedCountry property', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      const countrySelect = el.querySelector(
+        '#donation-contact-form-countryCodeAlpha2',
+      ) as HTMLSelectElement;
+      countrySelect.value = 'CA';
+      countrySelect.dispatchEvent(new Event('change'));
+      await elementUpdated(el);
+      expect(el.selectedCountry).to.equal('CA');
+    });
+
+    it('does not update selectedCountry property for invalid country code', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      const countrySelect = el.querySelector(
+        '#donation-contact-form-countryCodeAlpha2',
+      ) as HTMLSelectElement;
+      const initialCountry = el.selectedCountry;
+      countrySelect.value = 'XX'; // Invalid country code
+      countrySelect.dispatchEvent(new Event('change'));
+      await elementUpdated(el);
+      expect(el.selectedCountry).to.equal(initialCountry);
+    });
   });
 
   describe('reportValidity()', () => {

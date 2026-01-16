@@ -51,7 +51,6 @@ export class ContactForm extends LitElement {
   @query('#donation-contact-form-error-message') errorMessage!: HTMLDivElement;
   @query('form') form!: HTMLFormElement;
 
-  /** @keyof countries */
   @property({ type: String }) selectedCountry = 'US';
 
   @property({ type: String }) donorEmail = '';
@@ -217,8 +216,7 @@ export class ContactForm extends LitElement {
           id="donation-contact-form-countryCodeAlpha2"
           @change=${(e: Event) => {
             const newValue = (e.target as HTMLSelectElement).value;
-            if (!newValue) return;
-            this.selectedCountry = newValue;
+            if (countries[newValue]) this.selectedCountry = newValue;
           }}
         >
           ${Object.keys(countries).map(key => {
