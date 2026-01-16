@@ -36,14 +36,30 @@ describe('ContactForm', () => {
       '#donation-contact-form-first-name',
     ) as HTMLInputElement;
     const lastNameInput = el.querySelector('#donation-contact-form-last-name') as HTMLInputElement;
-    expect(firstNameInput.minLength).to.equal(1);
-    expect(lastNameInput.minLength).to.equal(1);
+    firstNameInput.value = 'A';
+    lastNameInput.value = 'B';
+    await elementUpdated(el);
+    expect(firstNameInput.checkValidity()).to.be.false;
+    expect(lastNameInput.checkValidity()).to.be.false;
   });
 
   it('requires email by default', async () => {
     const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
     const emailInput = el.querySelector('#donation-contact-form-email') as HTMLInputElement;
     expect(emailInput.required).to.be.true;
+  });
+
+  it('street address requires minimum number of characters', async () => {
+    const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+    const streetAddressInput = el.querySelector(
+      '#donation-contact-form-street-address',
+    ) as HTMLInputElement;
+    streetAddressInput.value = '1 b';
+    await elementUpdated(el);
+    expect(streetAddressInput.checkValidity()).to.be.false;
+    streetAddressInput.value = '1 st';
+    await elementUpdated(el);
+    expect(streetAddressInput.checkValidity()).to.be.true;
   });
 
   describe('region and postal code requirements', () => {

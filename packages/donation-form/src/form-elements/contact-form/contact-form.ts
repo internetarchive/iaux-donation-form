@@ -122,8 +122,7 @@ export class ContactForm extends LitElement {
               placeholder: 'First name',
               name: 'fname',
               required: true,
-              validationPattern: '.*\\S.*',
-              minlength: 1,
+              validationPattern: '.*\\S{2,}.*',
               maxlength: 255,
               autocomplete: 'given-name',
               icon: userIcon,
@@ -136,8 +135,7 @@ export class ContactForm extends LitElement {
               name: 'lname',
               autocomplete: 'family-name',
               required: true,
-              validationPattern: '.*\\S.*',
-              minlength: 1,
+              validationPattern: '.*\\S{2,}.*',
               maxlength: 255,
             })}
           </div>
@@ -151,8 +149,7 @@ export class ContactForm extends LitElement {
               autocomplete: 'address-line1',
               icon: localePinImg,
               name: 'street-address',
-              minlength: 5,
-              validationPattern: '.*\\S.*',
+              validationPattern: '.*?\\S.{2,}\\S.*?',
             })}
           </div>
           <div class="row">
@@ -171,8 +168,7 @@ export class ContactForm extends LitElement {
               autocomplete: 'address-level2',
               required: true,
               name: 'locality',
-              minlength: 2,
-              validationPattern: '.*\\S.*',
+              validationPattern: '.*\\S{2,}.*',
             })}
           </div>
           <div class="row">
@@ -182,8 +178,7 @@ export class ContactForm extends LitElement {
               autocomplete: 'address-level1',
               required: this.regionAndPostalCodeRequired,
               name: 'region',
-              minlength: 2,
-              validationPattern: '.*\\S.*',
+              validationPattern: '.*\\S{2,}.*',
             })}
             ${this.generateInput({
               id: 'donation-contact-form-postal-code',
