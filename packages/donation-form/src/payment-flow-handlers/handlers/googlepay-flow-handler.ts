@@ -86,6 +86,8 @@ export class GooglePayFlowHandler implements GooglePayFlowHandlerInterface {
       });
 
       const billing = new BillingInfo({
+        firstName,
+        lastName,
         streetAddress: billingInfo?.address1,
         extendedAddress: billingInfo?.address2,
         locality: billingInfo?.locality,

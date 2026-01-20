@@ -208,6 +208,8 @@ describe('Donation Flow Modal Manager', () => {
       value: {
         amount: 5,
         billing: {
+          firstName: 'Fooey',
+          lastName: 'McBarrison',
           countryCodeAlpha2: 'US',
           extendedAddress: 'Apt 123',
           locality: 'San Francisco',

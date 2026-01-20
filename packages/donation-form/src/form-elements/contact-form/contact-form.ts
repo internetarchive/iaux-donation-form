@@ -297,6 +297,8 @@ export class ContactForm extends LitElement {
 
   get billingInfo(): BillingInfo {
     const billingInfo = new BillingInfo({
+      firstName: this.firstNameField.value,
+      lastName: this.lastNameField.value,
       streetAddress: this.streetAddressField.value,
       extendedAddress: this.extendedAddressField.value,
       locality: this.localityField.value,

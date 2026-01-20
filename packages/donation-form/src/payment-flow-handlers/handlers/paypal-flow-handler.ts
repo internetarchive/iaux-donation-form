@@ -159,6 +159,8 @@ export class PayPalFlowHandler
     const shippingAddress = details.shippingAddress;
 
     const billingInfo = new BillingInfo({
+      firstName: details?.firstName,
+      lastName: details?.lastName,
       streetAddress: shippingAddress?.line1,
       extendedAddress: shippingAddress?.line2,
       locality: shippingAddress?.city,

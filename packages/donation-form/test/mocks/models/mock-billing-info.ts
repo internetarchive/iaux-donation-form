@@ -1,6 +1,8 @@
 import { BillingInfo } from '@internetarchive/donation-form-data-models';
 
 export const mockBillingInfo = new BillingInfo({
+  firstName: 'Fooey',
+  lastName: 'McBarrison',
   streetAddress: '123 Fake St',
   extendedAddress: 'Apt 123',
   locality: 'San Francisco',
