@@ -83,7 +83,7 @@ describe('Donation Payment Info', () => {
     const expectedTotal = baseAmount + expectedFee;
     const calculatedTotal = DonationPaymentInfo.calculateTotal(
       baseAmount,
-      true
+      true,
     );
     expect(expectedTotal).to.equal(calculatedTotal);
   });

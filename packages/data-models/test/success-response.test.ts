@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { SuccessResponse } from '../src/response-models/success-models/success-response';
 import { PaymentProvider } from '../src/common/payment-provider-name';
 import { DonationType } from '../src/donation-info/donation-type';
@@ -26,6 +25,8 @@ describe('SuccessResponse', () => {
         lastName: 'bar',
       }),
       billing: new BillingInfo({
+        firstName: 'foo',
+        lastName: 'bar',
         streetAddress: '123 Fake St',
         extendedAddress: 'Apt 123',
         locality: 'SF',

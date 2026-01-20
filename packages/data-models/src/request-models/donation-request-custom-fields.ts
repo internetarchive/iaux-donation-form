@@ -29,10 +29,8 @@ export class DonationRequestCustomFields {
     fee_amount_covered?: number;
     origin?: string;
   }) {
-    // eslint-disable-next-line @typescript-eslint/camelcase
     this.logged_in_user = options?.logged_in_user;
     this.referrer = options?.referrer;
-    // eslint-disable-next-line @typescript-eslint/camelcase
     this.fee_amount_covered = options?.fee_amount_covered;
     this.origin = options?.origin;
   }

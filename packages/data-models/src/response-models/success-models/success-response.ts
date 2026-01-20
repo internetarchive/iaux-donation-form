@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { CustomerInfo } from '../../common/customer-info';
 import { BillingInfo } from '../../common/billing-info';
 import { SubscriptionResponse } from './subscription-response';

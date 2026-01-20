@@ -14,9 +14,7 @@ describe('Donation Payment Info', () => {
       paymentMethodNonce: 'foo',
       amount: 12.34,
       donationType: DonationType.OneTime,
-      // eslint-disable-next-line @typescript-eslint/camelcase
       transaction_id: 'bar',
-      // eslint-disable-next-line @typescript-eslint/camelcase
       customer_id: '12345',
       customer: new CustomerInfo(),
       billing: new BillingInfo(),

@@ -5,10 +5,9 @@ import { DonationType } from '../donation-info/donation-type';
 export const defaultDonationAmounts: number[] = [5, 10, 25, 50, 100, 500, 1000];
 
 // the default amount selected
-export const defaultSelectedDonationInfo: DonationPaymentInfo = new DonationPaymentInfo(
-  {
+export const defaultSelectedDonationInfo: DonationPaymentInfo =
+  new DonationPaymentInfo({
     donationType: DonationType.OneTime,
     amount: 10,
     coverFees: false,
-  }
-);
+  });
