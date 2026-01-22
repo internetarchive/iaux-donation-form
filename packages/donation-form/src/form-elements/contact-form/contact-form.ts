@@ -51,6 +51,7 @@ export class ContactForm extends LitElement {
   @query('#donation-contact-form-error-message') errorMessage!: HTMLDivElement;
   @query('form') form!: HTMLFormElement;
 
+  /** @keyof countries */
   @property({ type: String }) selectedCountry = 'US';
 
   @property({ type: String }) donorEmail = '';
