@@ -82,7 +82,7 @@ export class ContactForm extends LitElement {
     });
 
     if (!isValid) {
-      this.errorMessage.innerText = 'Please enter any missing contact information below';
+      this.errorMessage.innerText = 'Please enter any missing or invalid contact information below';
     } else {
       this.errorMessage.innerText = '';
     }
