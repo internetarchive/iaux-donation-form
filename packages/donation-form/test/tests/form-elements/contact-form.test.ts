@@ -88,6 +88,32 @@ describe('ContactForm', () => {
     });
   });
 
+  describe('postal code validation pattern', () => {
+    it('validates US postal codes correctly', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      el.selectedCountry = 'US';
+      await elementUpdated(el);
+      const postalCodeInput = el.querySelector(
+        '#donation-contact-form-postal-code',
+      ) as HTMLInputElement;
+
+      const validPostalCodes = ['12345', '12345-6789'];
+      const invalidPostalCodes = ['1234', '123456', '1234A', 'ABCDE', '12345-678'];
+
+      for (const code of validPostalCodes) {
+        postalCodeInput.value = code;
+        await elementUpdated(el);
+        expect(postalCodeInput.checkValidity(), `Expected ${code} to be valid`).to.be.true;
+      }
+
+      for (const code of invalidPostalCodes) {
+        postalCodeInput.value = code;
+        await elementUpdated(el);
+        expect(postalCodeInput.checkValidity(), `Expected ${code} to be invalid`).to.be.false;
+      }
+    });
+  });
+
   describe('country selector', () => {
     it('defaults selectedCountry to US', async () => {
       const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
