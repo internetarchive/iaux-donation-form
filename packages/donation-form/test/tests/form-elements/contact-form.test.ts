@@ -97,7 +97,7 @@ describe('ContactForm', () => {
         '#donation-contact-form-postal-code',
       ) as HTMLInputElement;
 
-      const validPostalCodes = ['12345', '12345-6789'];
+      const validPostalCodes = ['12345', '12345-6789', '123456789'];
       const invalidPostalCodes = ['1234', '123456', '1234A', 'ABCDE', '12345-678'];
 
       for (const code of validPostalCodes) {

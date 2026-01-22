@@ -186,7 +186,7 @@ export class ContactForm extends LitElement {
               autocomplete: 'postal-code',
               required: this.regionAndPostalCodeRequired,
               name: 'postal',
-              validationPattern: '^\\d{5}(-\\d{4})?$',
+              validationPattern: '^\\d{5}(-?\\d{4})?$',
               iconSpaceOption: SpacerOption.CompressSpace,
             })}
           </div>
