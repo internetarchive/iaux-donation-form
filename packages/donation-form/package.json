@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/donation-form",
-  "version": "1.0.3-webdev-8114.1",
+  "version": "1.0.3-webdev-8114.2",
   "description": "The Internet Archive Donation Form",
   "license": "AGPL-3.0-only",
   "main": "dist/index.js",
