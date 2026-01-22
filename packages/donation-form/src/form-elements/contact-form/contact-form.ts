@@ -95,6 +95,15 @@ export class ContactForm extends LitElement {
     this.emailField.focus();
   }
 
+  // minimum two non-whitespace characters
+  private minTwoCharPattern = '.*\\S{2,}.*';
+
+  // at least two non-whitespace characters with at least two characters in between them
+  private streetAddressPattern = '.*?\\S.{2,}\\S.*?';
+
+  // matches 12345 or 12345-6789 or 123456789
+  private zipCodePattern = '^\\d{5}(-?\\d{4})?$';
+
   /** @inheritdoc */
   render(): TemplateResult {
     return html`
@@ -123,7 +132,7 @@ export class ContactForm extends LitElement {
               placeholder: 'First name',
               name: 'fname',
               required: true,
-              validationPattern: '.*\\S{2,}.*',
+              validationPattern: this.minTwoCharPattern,
               maxlength: 255,
               autocomplete: 'given-name',
               icon: userIcon,
@@ -136,7 +145,7 @@ export class ContactForm extends LitElement {
               name: 'lname',
               autocomplete: 'family-name',
               required: true,
-              validationPattern: '.*\\S{2,}.*',
+              validationPattern: this.minTwoCharPattern,
               maxlength: 255,
             })}
           </div>
@@ -150,7 +159,7 @@ export class ContactForm extends LitElement {
               autocomplete: 'address-line1',
               icon: localePinImg,
               name: 'street-address',
-              validationPattern: '.*?\\S.{2,}\\S.*?',
+              validationPattern: this.streetAddressPattern,
             })}
           </div>
           <div class="row">
@@ -169,7 +178,7 @@ export class ContactForm extends LitElement {
               autocomplete: 'address-level2',
               required: true,
               name: 'locality',
-              validationPattern: '.*\\S{2,}.*',
+              validationPattern: this.minTwoCharPattern,
             })}
           </div>
           <div class="row">
@@ -179,7 +188,7 @@ export class ContactForm extends LitElement {
               autocomplete: 'address-level1',
               required: this.regionAndPostalCodeRequired,
               name: 'region',
-              validationPattern: '.*\\S{2,}.*',
+              validationPattern: this.minTwoCharPattern,
             })}
             ${this.generateInput({
               id: 'donation-contact-form-postal-code',
@@ -187,7 +196,7 @@ export class ContactForm extends LitElement {
               autocomplete: 'postal-code',
               required: this.regionAndPostalCodeRequired,
               name: 'postal',
-              validationPattern: '^\\d{5}(-?\\d{4})?$',
+              validationPattern: this.zipCodePattern,
               iconSpaceOption: SpacerOption.CompressSpace,
             })}
           </div>
