@@ -64,6 +64,32 @@ export class ContactForm extends LitElement {
   }
 
   reportValidity(): boolean {
+    this.validateFormFields();
+    return this.validateForm();
+  }
+
+  // validate each field and set the error state on the badged-inputs
+  private validateFormFields(): void {
+    const fields: {
+      badgedInput: BadgedInput;
+      inputField: HTMLInputElement;
+    }[] = [
+        { badgedInput: this.emailBadgedInput, inputField: this.emailField },
+        { badgedInput: this.firstNameBadgedInput, inputField: this.firstNameField },
+        { badgedInput: this.lastNameBadgedInput, inputField: this.lastNameField },
+        { badgedInput: this.streetAddressBadgedInput, inputField: this.streetAddressField },
+        { badgedInput: this.extendedAddressBadgedInput, inputField: this.extendedAddressField },
+        { badgedInput: this.localityBadgedInput, inputField: this.localityField },
+        { badgedInput: this.regionBadgedInput, inputField: this.regionField },
+        { badgedInput: this.postalBadgedInput, inputField: this.postalCodeField },
+      ];
+    fields.forEach(({ badgedInput, inputField }) => {
+      badgedInput.error = !inputField.checkValidity();
+    });
+  }
+
+  // validate the overall form and show error messages
+  private validateForm(): boolean {
     const isValid = this.form.reportValidity();
 
     if (!isValid) {
