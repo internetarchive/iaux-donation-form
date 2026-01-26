@@ -17,6 +17,7 @@ import localePinImg from '@internetarchive/icon-locale-pin/index.js';
 import userIcon from '@internetarchive/icon-user/index.js';
 
 import { countries } from './countries';
+import { msg } from '@lit/localize';
 
 @customElement('contact-form')
 export class ContactForm extends LitElement {
@@ -63,27 +64,12 @@ export class ContactForm extends LitElement {
   }
 
   reportValidity(): boolean {
-    const fieldBadgedInputs: Array<[HTMLInputElement, BadgedInput]> = [
-      [this.emailField, this.emailBadgedInput],
-      [this.firstNameField, this.firstNameBadgedInput],
-      [this.lastNameField, this.lastNameBadgedInput],
-      [this.regionField, this.regionBadgedInput],
-      [this.localityField, this.localityBadgedInput],
-      [this.streetAddressField, this.streetAddressBadgedInput],
-      [this.postalCodeField, this.postalBadgedInput],
-    ];
-
-    let isValid = true;
-    fieldBadgedInputs.forEach(([inputElement, badgedInput]) => {
-      const fieldValid = inputElement.checkValidity();
-      isValid = isValid && fieldValid;
-      if (!fieldValid) {
-        badgedInput.error = true;
-      }
-    });
+    const isValid = this.form.reportValidity();
 
     if (!isValid) {
-      this.errorMessage.innerText = 'Please enter any missing or invalid contact information below';
+      this.errorMessage.innerText = msg(
+        'Please enter any missing or invalid contact information below',
+      );
     } else {
       this.errorMessage.innerText = '';
     }
@@ -97,12 +83,15 @@ export class ContactForm extends LitElement {
 
   // minimum two non-whitespace characters
   private minTwoCharPattern = '.*\\S{2,}.*';
+  private minTwoCharValidationMessage = msg('Enter at least two characters');
 
   // at least two non-whitespace characters with at least two characters in between them
   private streetAddressPattern = '.*?\\S.{2,}\\S.*?';
+  private streetAddressValidationMessage = msg('Enter at least four characters');
 
   // matches 12345 or 12345-6789 or 123456789
   private zipCodePattern = '^\\d{5}(-?\\d{4})?$';
+  private zipCodeValidationMessage = msg('Enter a valid 5 or 9 digit zip/postal code');
 
   /** @inheritdoc */
   render(): TemplateResult {
@@ -133,6 +122,7 @@ export class ContactForm extends LitElement {
               name: 'fname',
               required: true,
               validationPattern: this.minTwoCharPattern,
+              validationMessage: this.minTwoCharValidationMessage,
               maxlength: 255,
               autocomplete: 'given-name',
               icon: userIcon,
@@ -146,6 +136,7 @@ export class ContactForm extends LitElement {
               autocomplete: 'family-name',
               required: true,
               validationPattern: this.minTwoCharPattern,
+              validationMessage: this.minTwoCharValidationMessage,
               maxlength: 255,
             })}
           </div>
@@ -160,6 +151,7 @@ export class ContactForm extends LitElement {
               icon: localePinImg,
               name: 'street-address',
               validationPattern: this.streetAddressPattern,
+              validationMessage: this.streetAddressValidationMessage,
             })}
           </div>
           <div class="row">
@@ -179,6 +171,7 @@ export class ContactForm extends LitElement {
               required: true,
               name: 'locality',
               validationPattern: this.minTwoCharPattern,
+              validationMessage: this.minTwoCharValidationMessage,
             })}
           </div>
           <div class="row">
@@ -189,6 +182,7 @@ export class ContactForm extends LitElement {
               required: this.regionAndPostalCodeRequired,
               name: 'region',
               validationPattern: this.minTwoCharPattern,
+              validationMessage: this.minTwoCharValidationMessage,
             })}
             ${this.generateInput({
               id: 'donation-contact-form-postal-code',
@@ -197,6 +191,7 @@ export class ContactForm extends LitElement {
               required: this.regionAndPostalCodeRequired,
               name: 'postal',
               validationPattern: this.zipCodePattern,
+              validationMessage: this.zipCodeValidationMessage,
               iconSpaceOption: SpacerOption.CompressSpace,
             })}
           </div>
@@ -262,6 +257,7 @@ export class ContactForm extends LitElement {
     icon?: TemplateResult;
     iconSpaceOption?: SpacerOption;
     validationPattern?: string;
+    validationMessage?: string;
   }): TemplateResult {
     const required = options.required ?? true;
     const fieldType = options.fieldType ?? 'text';
@@ -286,6 +282,7 @@ export class ContactForm extends LitElement {
           minlength=${ifDefined(options.minlength)}
           autocomplete=${options.autocomplete ?? 'on'}
           pattern=${ifDefined(options.validationPattern)}
+          title=${ifDefined(options.validationMessage)}
           @focus=${this.inputFocused}
           ?required=${required}
         />
