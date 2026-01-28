@@ -17,6 +17,7 @@ import localePinImg from '@internetarchive/icon-locale-pin/index.js';
 import userIcon from '@internetarchive/icon-user/index.js';
 
 import { countries } from './countries';
+import { msg } from '@lit/localize';
 
 @customElement('contact-form')
 export class ContactForm extends LitElement {
@@ -63,27 +64,38 @@ export class ContactForm extends LitElement {
   }
 
   reportValidity(): boolean {
-    const fieldBadgedInputs: Array<[HTMLInputElement, BadgedInput]> = [
-      [this.emailField, this.emailBadgedInput],
-      [this.firstNameField, this.firstNameBadgedInput],
-      [this.lastNameField, this.lastNameBadgedInput],
-      [this.regionField, this.regionBadgedInput],
-      [this.localityField, this.localityBadgedInput],
-      [this.streetAddressField, this.streetAddressBadgedInput],
-      [this.postalCodeField, this.postalBadgedInput],
-    ];
+    this.validateFormFields();
+    return this.validateForm();
+  }
 
-    let isValid = true;
-    fieldBadgedInputs.forEach(([inputElement, badgedInput]) => {
-      const fieldValid = inputElement.checkValidity();
-      isValid = isValid && fieldValid;
-      if (!fieldValid) {
-        badgedInput.error = true;
-      }
+  // validate each field and set the error state on the badged-inputs
+  private validateFormFields(): void {
+    const fields: {
+      badgedInput: BadgedInput;
+      inputField: HTMLInputElement;
+    }[] = [
+      { badgedInput: this.emailBadgedInput, inputField: this.emailField },
+      { badgedInput: this.firstNameBadgedInput, inputField: this.firstNameField },
+      { badgedInput: this.lastNameBadgedInput, inputField: this.lastNameField },
+      { badgedInput: this.streetAddressBadgedInput, inputField: this.streetAddressField },
+      { badgedInput: this.extendedAddressBadgedInput, inputField: this.extendedAddressField },
+      { badgedInput: this.localityBadgedInput, inputField: this.localityField },
+      { badgedInput: this.regionBadgedInput, inputField: this.regionField },
+      { badgedInput: this.postalBadgedInput, inputField: this.postalCodeField },
+    ];
+    fields.forEach(({ badgedInput, inputField }) => {
+      badgedInput.error = !inputField.checkValidity();
     });
+  }
+
+  // validate the overall form and show error messages
+  private validateForm(): boolean {
+    const isValid = this.form.reportValidity();
 
     if (!isValid) {
-      this.errorMessage.innerText = 'Please enter any missing contact information below';
+      this.errorMessage.innerText = msg(
+        'Please enter any missing or invalid contact information below',
+      );
     } else {
       this.errorMessage.innerText = '';
     }
@@ -94,6 +106,18 @@ export class ContactForm extends LitElement {
   focus(): void {
     this.emailField.focus();
   }
+
+  // minimum two non-whitespace characters
+  private minTwoCharPattern = '.*\\S{2,}.*';
+  private minTwoCharValidationMessage = msg('Enter at least two characters');
+
+  // at least two non-whitespace characters with at least two characters in between them
+  private streetAddressPattern = '.*?\\S.{2,}\\S.*?';
+  private streetAddressValidationMessage = msg('Enter at least four characters');
+
+  // matches 12345 or 12345-6789 or 123456789
+  private zipCodePattern = '^\\d{5}(-?\\d{4})?$';
+  private zipCodeValidationMessage = msg('Enter a valid 5 or 9 digit zip/postal code');
 
   /** @inheritdoc */
   render(): TemplateResult {
@@ -109,6 +133,7 @@ export class ContactForm extends LitElement {
               fieldType: 'email',
               name: 'email',
               autocomplete: 'email',
+              minlength: 5,
               maxlength: 255,
               icon: emailImg,
             })}
@@ -122,6 +147,8 @@ export class ContactForm extends LitElement {
               placeholder: 'First name',
               name: 'fname',
               required: true,
+              validationPattern: this.minTwoCharPattern,
+              validationMessage: this.minTwoCharValidationMessage,
               maxlength: 255,
               autocomplete: 'given-name',
               icon: userIcon,
@@ -134,6 +161,8 @@ export class ContactForm extends LitElement {
               name: 'lname',
               autocomplete: 'family-name',
               required: true,
+              validationPattern: this.minTwoCharPattern,
+              validationMessage: this.minTwoCharValidationMessage,
               maxlength: 255,
             })}
           </div>
@@ -147,6 +176,8 @@ export class ContactForm extends LitElement {
               autocomplete: 'address-line1',
               icon: localePinImg,
               name: 'street-address',
+              validationPattern: this.streetAddressPattern,
+              validationMessage: this.streetAddressValidationMessage,
             })}
           </div>
           <div class="row">
@@ -165,6 +196,8 @@ export class ContactForm extends LitElement {
               autocomplete: 'address-level2',
               required: true,
               name: 'locality',
+              validationPattern: this.minTwoCharPattern,
+              validationMessage: this.minTwoCharValidationMessage,
             })}
           </div>
           <div class="row">
@@ -172,18 +205,19 @@ export class ContactForm extends LitElement {
               id: 'donation-contact-form-region',
               placeholder: 'State / Province',
               autocomplete: 'address-level1',
-              required: true,
+              required: this.regionAndPostalCodeRequired,
               name: 'region',
+              validationPattern: this.minTwoCharPattern,
+              validationMessage: this.minTwoCharValidationMessage,
             })}
             ${this.generateInput({
               id: 'donation-contact-form-postal-code',
               placeholder: 'Zip / Postal',
               autocomplete: 'postal-code',
-              required: true,
+              required: this.regionAndPostalCodeRequired,
               name: 'postal',
-              maxlength: 9,
-              // must start with a character, then may contain spaces
-              validationPattern: '[a-zA-Z\\-\\d]+[a-zA-Z\\-\\d\\s]*',
+              validationPattern: this.zipCodePattern,
+              validationMessage: this.zipCodeValidationMessage,
               iconSpaceOption: SpacerOption.CompressSpace,
             })}
           </div>
@@ -194,28 +228,18 @@ export class ContactForm extends LitElement {
     `;
   }
 
+  private get regionAndPostalCodeRequired(): boolean {
+    return this.selectedCountry === 'US';
+  }
+
   private get countrySelectorTemplate(): TemplateResult {
     return html`
       <badged-input>
         <select
           id="donation-contact-form-countryCodeAlpha2"
           @change=${(e: Event) => {
-            const currCountry = this.selectedCountry;
-            this.selectedCountry = (e.target as HTMLInputElement)?.value
-              ? ((e.target as HTMLInputElement)?.value as string)
-              : currCountry;
-            // update required visual cue on region/state/province & postal code fields
-            if (this.selectedCountry === 'US') {
-              this.postalBadgedInput?.setAttribute('required', '');
-              this.postalCodeField?.setAttribute('required', '');
-              this.regionBadgedInput?.setAttribute('required', '');
-              this.regionField?.setAttribute('required', '');
-            } else {
-              this.postalBadgedInput?.removeAttribute('required');
-              this.postalCodeField?.removeAttribute('required');
-              this.regionBadgedInput?.removeAttribute('required');
-              this.regionField?.removeAttribute('required');
-            }
+            const newValue = (e.target as HTMLSelectElement).value;
+            if (countries[newValue]) this.selectedCountry = newValue;
           }}
         >
           ${Object.keys(countries).map(key => {
@@ -253,11 +277,13 @@ export class ContactForm extends LitElement {
     required?: boolean;
     fieldType?: 'text' | 'email';
     autocomplete?: AutoCompleteFieldOptions;
+    minlength?: number;
     maxlength?: number;
     name: string;
     icon?: TemplateResult;
     iconSpaceOption?: SpacerOption;
     validationPattern?: string;
+    validationMessage?: string;
   }): TemplateResult {
     const required = options.required ?? true;
     const fieldType = options.fieldType ?? 'text';
@@ -279,8 +305,10 @@ export class ContactForm extends LitElement {
           aria-label=${options.placeholder}
           placeholder=${options.placeholder}
           maxlength=${ifDefined(options.maxlength)}
+          minlength=${ifDefined(options.minlength)}
           autocomplete=${options.autocomplete ?? 'on'}
           pattern=${ifDefined(options.validationPattern)}
+          title=${ifDefined(options.validationMessage)}
           @focus=${this.inputFocused}
           ?required=${required}
         />
