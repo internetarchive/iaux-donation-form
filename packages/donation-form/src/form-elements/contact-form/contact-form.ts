@@ -116,8 +116,8 @@ export class ContactForm extends LitElement {
   private streetAddressValidationMessage = msg('Enter at least four characters');
 
   // matches 12345 or 12345-6789 or 123456789
-  private zipCodePattern = '^\\d{5}(-?\\d{4})?$';
-  private zipCodeValidationMessage = msg('Enter a valid 5 or 9 digit zip/postal code');
+  private usZipCodePattern = '^\\d{5}(-?\\d{4})?$';
+  private usZipCodeValidationMessage = msg('Enter a valid 5 or 9 digit zip/postal code');
 
   /** @inheritdoc */
   render(): TemplateResult {
@@ -207,8 +207,12 @@ export class ContactForm extends LitElement {
               autocomplete: 'address-level1',
               required: this.regionAndPostalCodeRequired,
               name: 'region',
-              validationPattern: this.minTwoCharPattern,
-              validationMessage: this.minTwoCharValidationMessage,
+              validationPattern: this.regionAndPostalCodeRequired
+                ? this.minTwoCharPattern
+                : undefined,
+              validationMessage: this.regionAndPostalCodeRequired
+                ? this.minTwoCharValidationMessage
+                : undefined,
             })}
             ${this.generateInput({
               id: 'donation-contact-form-postal-code',
@@ -216,8 +220,12 @@ export class ContactForm extends LitElement {
               autocomplete: 'postal-code',
               required: this.regionAndPostalCodeRequired,
               name: 'postal',
-              validationPattern: this.zipCodePattern,
-              validationMessage: this.zipCodeValidationMessage,
+              validationPattern: this.regionAndPostalCodeRequired
+                ? this.usZipCodePattern
+                : undefined,
+              validationMessage: this.regionAndPostalCodeRequired
+                ? this.usZipCodeValidationMessage
+                : undefined,
               iconSpaceOption: SpacerOption.CompressSpace,
             })}
           </div>

@@ -86,6 +86,27 @@ describe('ContactForm', () => {
       expect(regionInput.required).to.be.false;
       expect(postalCodeInput.required).to.be.false;
     });
+
+    it('only validates zip code pattern for US addresses', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      const postalCodeInput = el.querySelector(
+        '#donation-contact-form-postal-code',
+      ) as HTMLInputElement;
+
+      // Test for US
+      el.selectedCountry = 'US';
+      await elementUpdated(el);
+      postalCodeInput.value = '1234'; // Invalid US zip
+      await elementUpdated(el);
+      expect(postalCodeInput.checkValidity()).to.be.false;
+
+      // Test for CA
+      el.selectedCountry = 'CA';
+      await elementUpdated(el);
+      postalCodeInput.value = '1234'; // Should be valid since pattern is not applied
+      await elementUpdated(el);
+      expect(postalCodeInput.checkValidity()).to.be.true;
+    });
   });
 
   describe('postal code validation pattern', () => {
