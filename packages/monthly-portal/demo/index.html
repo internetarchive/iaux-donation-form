@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+<head>
+  <title>Donation Form Demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="../src/mgc-style.css" />
+
+  <style>
+    body {
+      color: #333;
+      font-family: var(--ia-theme-base-font-family, "Helvetica Neue", Helvetica, Arial, sans-serif);
+      font-size: 14px;
+    }
+
+    body.modal-manager-open {
+      overflow: hidden;
+    }
+
+    modal-manager {
+      display: none;
+      --modalTopMargin: 4rem;
+      --modalBottomMargin: 0.25rem;
+    }
+
+    modal-manager[mode='open'] {
+      display: block;
+    }
+
+    donation-form-controller {
+      display: block;
+      width: 32rem;
+    }
+
+    .dev-tools {
+      background-color: lightblue;
+      padding: 1rem 1rem;
+    }
+
+    #paypal-upsell-button {
+      opacity: 0.01;
+      padding-bottom: 0.6rem;
+    }
+
+  div#options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  </style>
+
+</head>
+<body>
+  <header>
+    <a href="recaptcha.html">Recaptcha Demo</a>
+  </header>
+
+  <div class="dev-tools">
+    <div id="options">
+    </div>
+    <p><b>Latest analytic event: </b><span id="latest-analytic"></span></p>
+    <div>
+      <form id="preload-email">
+        <label for="email"><b>Pre-load Email:</b></label>
+          <input type="email" id="email" name="email" required>
+        <button type="submit">Preload Email</button>
+        <button id="clear-email">Clear Email</button>
+      </form>
+      <br>
+      <button id="load-summaries">Load multiple Summaries</button>
+    </div>
+  </div>
+
+  <div id="demo">
+    <iaux-monthly-giving-circle></iaux-monthly-giving-circle>
+  </div>
+
+  <script type="module">
+    import '../dist/src/monthly-giving-circle.js';
+    import SubscriptionSummary from '../dist/src/models/subscription-summary.js';
+    import { LazyLoaderService } from '@internetarchive/lazy-loader-service';
+
+    const lazyLoader = new LazyLoaderService();
+
+    lazyLoader.on(
+      'scriptLoadRetried',
+      async (src, retryNumber) => {
+        console.debug('scriptLoadRetried', src, retryNumber);
+      },
+    );
+
+    lazyLoader.on('scriptLoadFailed', async (src) => {
+      console.debug('scriptLoadFailed', src);
+    });
+
+    const webComponent = document.querySelector('iaux-monthly-giving-circle');
+    const loadSummariesButton = document.querySelector('#load-summaries');
+
+    const x = await fetch('./data.json');
+    // const x = await fetch('./demo/data-short.json');
+    const data = await x.json();
+    const allSubscriptions = data.value;
+    console.log(data);
+    window.data = data;
+
+    // get keys
+    const keys = Object.keys(data.value);
+    // make array of summaries
+    const summaries = keys.map((id) => {
+      const _summary = allSubscriptions[id];
+      const summary = new SubscriptionSummary({ ..._summary, id });
+      console.log('Summary payment data', summary.payment);
+      return summary;
+    });
+
+    console.log('Summaries!', summaries);
+    window.summaries = summaries
+
+    loadSummariesButton.addEventListener('click', async () => {
+      webComponent.activePlans = summaries;
+      webComponent.giverId = 'giver-123';
+    });
+</script>
+</body>
+</html>
+
+<!----->
+<!-- [
+    {
+      status: 'pending',
+      amount: 20,
+      date: '2021-09-01',
+      id: '1'
+    },
+    {
+      status: 'completed',
+      amount: 50,
+      date: '2021-09-02',
+      id: '2'
+    },
+    {
+      status: 'completed',
+      amount: 100,
+      date: '2021-09-03',
+      id: '3'
+    }
+  ]; -->
