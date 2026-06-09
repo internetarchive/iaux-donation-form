@@ -325,7 +325,7 @@ export class DonationFormEditDonation extends LitElement {
       this.customAmountSelected = true;
       // don't update the value if it currently has focus
       // since the user may be typing in it at the time
-      if (this.shadowRoot?.activeElement !== this.customAmountInput) {
+      if (!typingInCustomAmount) {
         this.customAmountInput.value = this.customAmountDisplayValue;
         const donationInfoStatus = this.getDonationInfoStatus(
           this.donationInfo.amount,
