@@ -405,6 +405,40 @@ describe('EditDonation', () => {
       expect(preset5.checked).to.be.false;
     });
 
+    it('selects the matching preset on blur when the typed custom amount equals a preset', async () => {
+      const el = await fixture<DonationFormEditDonation>(html`
+        <donation-form-edit-donation
+          .donationInfo=${new MockDonationInfo()}
+        ></donation-form-edit-donation>
+      `);
+      const customRadioButton = el.shadowRoot?.querySelector(
+        '#custom-amount-button',
+      ) as HTMLInputElement;
+      const customInput = el.shadowRoot?.querySelector(
+        '#custom-amount-input',
+      ) as HTMLInputElement;
+
+      // type a preset-equal amount; custom stays selected while focused
+      customInput.focus();
+      customInput.value = '10';
+      customInput.dispatchEvent(new Event('input'));
+      await elementUpdated(el);
+      await elementUpdated(el);
+      expect(customRadioButton.checked).to.be.true;
+
+      // once focus leaves, the selection moves to the matching preset
+      customInput.blur();
+      await elementUpdated(el);
+      await elementUpdated(el);
+
+      const preset10 = el.shadowRoot?.querySelector(
+        '.amount-selector input[type=radio][value="10"]',
+      ) as HTMLInputElement;
+      expect(preset10.checked).to.be.true;
+      expect(customRadioButton.checked).to.be.false;
+      expect(customInput.value).to.equal('');
+    });
+
     it('keeps the custom amount selected while typing a preset-equal value', async () => {
       const el = await fixture<DonationFormEditDonation>(html`
         <donation-form-edit-donation

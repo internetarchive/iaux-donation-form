@@ -472,10 +472,7 @@ export class DonationFormEditDonation extends LitElement {
             @input=${this.customAmountChanged}
             @keydown=${this.currencyValidator.keydown}
             @focus=${this.customAmountFocused}
-            @blur=${(e: Event): void => {
-              const target = e.target as HTMLInputElement;
-              target.value = this.customAmountDisplayValue;
-            }}
+            @blur=${this.customAmountBlurred}
           />
         </label>
       </div>
@@ -490,6 +487,14 @@ export class DonationFormEditDonation extends LitElement {
     const target = e.target as HTMLInputElement;
     this.customAmountSelected = true;
     this.handleCustomAmountInput(target.value);
+  }
+
+  private customAmountBlurred(): void {
+    // the mid-keystroke typing protection no longer applies once focus
+    // leaves the field, so re-sync the UI with the donation info:
+    // demotes to the matching preset if the typed amount equals one,
+    // and re-formats the custom amount otherwise
+    this.updateSelectedDonationInfo();
   }
 
   private coverFeesChecked(e: Event): void {
