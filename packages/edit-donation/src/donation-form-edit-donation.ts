@@ -303,12 +303,21 @@ export class DonationFormEditDonation extends LitElement {
   }
 
   private updateSelectedDonationInfo(): void {
-    if (!this.customAmountSelected && !this.isCustomAmount) {
+    // keep the custom amount selected while the user is typing in it,
+    // even if the value matches a preset, so the selection doesn't
+    // jump to the preset radio mid-keystroke
+    const typingInCustomAmount =
+      this.shadowRoot?.activeElement === this.customAmountInput;
+    if (
+      !this.isCustomAmount &&
+      !(this.customAmountSelected && typingInCustomAmount)
+    ) {
       const radioButton = this.shadowRoot?.querySelector(
         `input[type="radio"][name="${EditDonationSelectionGroup.Amount}"][value="${this.donationInfo.amount}"]`,
       ) as HTMLInputElement;
       radioButton.checked = true;
       this.customAmountSelected = false;
+      this.error = undefined;
       if (this.customAmountInput) {
         this.customAmountInput.value = '';
       }
