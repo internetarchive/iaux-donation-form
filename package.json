@@ -1,0 +1,11 @@
+{
+  "name": "iaux-donation-form",
+  "private": true,
+  "description": "Root tooling for building the GitHub Pages demo site. Packages are installed per-directory via scripts/bootstrap.sh.",
+  "scripts": {
+    "ghpages:build": "vite build --config vite.config.ghpages.ts && touch ghpages/.nojekyll && cp packages/form-section/demo/puppy.jpg ghpages/packages/form-section/demo/puppy.jpg"
+  },
+  "devDependencies": {
+    "vite": "^7.2.2"
+  }
+}

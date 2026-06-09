@@ -1,0 +1,46 @@
+# Generates the static demo site at the root of the `ghpages` branch
+# on every push to `main`.
+
+name: Deploy demos to GitHub Pages
+permissions:
+  contents: write
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Node 🟢
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: yarn
+          cache-dependency-path: '**/yarn.lock'
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "Github Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Install and Build 🔧
+        run: |
+          ./scripts/bootstrap.sh
+          yarn install --frozen-lockfile
+          yarn run ghpages:build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: ghpages
+          folder: ghpages
+          clean-exclude: pr/
+          force: false
