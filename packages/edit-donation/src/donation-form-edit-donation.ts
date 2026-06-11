@@ -303,12 +303,21 @@ export class DonationFormEditDonation extends LitElement {
   }
 
   private updateSelectedDonationInfo(): void {
-    if (!this.customAmountSelected && !this.isCustomAmount) {
+    // keep the custom amount selected while the user is typing in it,
+    // even if the value matches a preset, so the selection doesn't
+    // jump to the preset radio mid-keystroke
+    const typingInCustomAmount =
+      this.shadowRoot?.activeElement === this.customAmountInput;
+    if (
+      !this.isCustomAmount &&
+      !(this.customAmountSelected && typingInCustomAmount)
+    ) {
       const radioButton = this.shadowRoot?.querySelector(
         `input[type="radio"][name="${EditDonationSelectionGroup.Amount}"][value="${this.donationInfo.amount}"]`,
       ) as HTMLInputElement;
       radioButton.checked = true;
       this.customAmountSelected = false;
+      this.error = undefined;
       if (this.customAmountInput) {
         this.customAmountInput.value = '';
       }
@@ -316,7 +325,7 @@ export class DonationFormEditDonation extends LitElement {
       this.customAmountSelected = true;
       // don't update the value if it currently has focus
       // since the user may be typing in it at the time
-      if (this.shadowRoot?.activeElement !== this.customAmountInput) {
+      if (!typingInCustomAmount) {
         this.customAmountInput.value = this.customAmountDisplayValue;
         const donationInfoStatus = this.getDonationInfoStatus(
           this.donationInfo.amount,
@@ -463,10 +472,7 @@ export class DonationFormEditDonation extends LitElement {
             @input=${this.customAmountChanged}
             @keydown=${this.currencyValidator.keydown}
             @focus=${this.customAmountFocused}
-            @blur=${(e: Event): void => {
-              const target = e.target as HTMLInputElement;
-              target.value = this.customAmountDisplayValue;
-            }}
+            @blur=${this.customAmountBlurred}
           />
         </label>
       </div>
@@ -481,6 +487,14 @@ export class DonationFormEditDonation extends LitElement {
     const target = e.target as HTMLInputElement;
     this.customAmountSelected = true;
     this.handleCustomAmountInput(target.value);
+  }
+
+  private customAmountBlurred(): void {
+    // the mid-keystroke typing protection no longer applies once focus
+    // leaves the field, so re-sync the UI with the donation info:
+    // demotes to the matching preset if the typed amount equals one,
+    // and re-formats the custom amount otherwise
+    this.updateSelectedDonationInfo();
   }
 
   private coverFeesChecked(e: Event): void {

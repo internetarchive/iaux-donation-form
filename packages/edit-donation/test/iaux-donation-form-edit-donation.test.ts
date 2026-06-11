@@ -337,6 +337,138 @@ describe('EditDonation', () => {
     expect(customInput?.value).to.equal('');
   });
 
+  describe('programmatic donationInfo updates', () => {
+    it('checks the matching preset when donationInfo is set while custom is selected', async () => {
+      // boot with a non-preset amount so the custom amount is selected
+      const el = await fixture<DonationFormEditDonation>(html`
+        <donation-form-edit-donation
+          defaultSelectedAmount="14"
+        ></donation-form-edit-donation>
+      `);
+      // let the cascading defaultSelectedAmount -> donationInfo ->
+      // customAmountSelected updates settle
+      await elementUpdated(el);
+      await elementUpdated(el);
+
+      const customRadioButton = el.shadowRoot?.querySelector(
+        '#custom-amount-button',
+      ) as HTMLInputElement;
+      const customInput = el.shadowRoot?.querySelector(
+        '#custom-amount-input',
+      ) as HTMLInputElement;
+      expect(customRadioButton.checked).to.be.true;
+      expect(customInput.value).to.equal('14.00');
+
+      el.donationInfo = new DonationPaymentInfo({
+        amount: 50,
+        donationType: DonationType.OneTime,
+        coverFees: false,
+      });
+      await elementUpdated(el);
+      await elementUpdated(el);
+
+      const preset50 = el.shadowRoot?.querySelector(
+        '.amount-selector input[type=radio][value="50"]',
+      ) as HTMLInputElement;
+      expect(preset50.checked).to.be.true;
+      expect(customRadioButton.checked).to.be.false;
+      expect(customInput.value).to.equal('');
+    });
+
+    it('selects the custom amount when donationInfo is set to a non-preset amount', async () => {
+      const el = await fixture<DonationFormEditDonation>(html`
+        <donation-form-edit-donation
+          .donationInfo=${new MockDonationInfo()}
+        ></donation-form-edit-donation>
+      `);
+      const customRadioButton = el.shadowRoot?.querySelector(
+        '#custom-amount-button',
+      ) as HTMLInputElement;
+      const customInput = el.shadowRoot?.querySelector(
+        '#custom-amount-input',
+      ) as HTMLInputElement;
+      expect(customRadioButton.checked).to.be.false;
+
+      el.donationInfo = new DonationPaymentInfo({
+        amount: 37,
+        donationType: DonationType.OneTime,
+        coverFees: false,
+      });
+      await elementUpdated(el);
+      await elementUpdated(el);
+
+      const preset5 = el.shadowRoot?.querySelector(
+        '.amount-selector input[type=radio][value="5"]',
+      ) as HTMLInputElement;
+      expect(customRadioButton.checked).to.be.true;
+      expect(customInput.value).to.equal('37.00');
+      expect(preset5.checked).to.be.false;
+    });
+
+    it('selects the matching preset on blur when the typed custom amount equals a preset', async () => {
+      const el = await fixture<DonationFormEditDonation>(html`
+        <donation-form-edit-donation
+          .donationInfo=${new MockDonationInfo()}
+        ></donation-form-edit-donation>
+      `);
+      const customRadioButton = el.shadowRoot?.querySelector(
+        '#custom-amount-button',
+      ) as HTMLInputElement;
+      const customInput = el.shadowRoot?.querySelector(
+        '#custom-amount-input',
+      ) as HTMLInputElement;
+
+      // type a preset-equal amount; custom stays selected while focused
+      customInput.focus();
+      customInput.value = '10';
+      customInput.dispatchEvent(new Event('input'));
+      await elementUpdated(el);
+      await elementUpdated(el);
+      expect(customRadioButton.checked).to.be.true;
+
+      // once focus leaves, the selection moves to the matching preset
+      customInput.blur();
+      await elementUpdated(el);
+      await elementUpdated(el);
+
+      const preset10 = el.shadowRoot?.querySelector(
+        '.amount-selector input[type=radio][value="10"]',
+      ) as HTMLInputElement;
+      expect(preset10.checked).to.be.true;
+      expect(customRadioButton.checked).to.be.false;
+      expect(customInput.value).to.equal('');
+    });
+
+    it('keeps the custom amount selected while typing a preset-equal value', async () => {
+      const el = await fixture<DonationFormEditDonation>(html`
+        <donation-form-edit-donation
+          .donationInfo=${new MockDonationInfo()}
+        ></donation-form-edit-donation>
+      `);
+      const customRadioButton = el.shadowRoot?.querySelector(
+        '#custom-amount-button',
+      ) as HTMLInputElement;
+      const customInput = el.shadowRoot?.querySelector(
+        '#custom-amount-input',
+      ) as HTMLInputElement;
+
+      // user types "5" into the custom amount field; 5 is a preset,
+      // but the selection should not jump to the preset mid-keystroke
+      customInput.focus();
+      customInput.value = '5';
+      customInput.dispatchEvent(new Event('input'));
+      await elementUpdated(el);
+      await elementUpdated(el);
+
+      const preset5 = el.shadowRoot?.querySelector(
+        '.amount-selector input[type=radio][value="5"]',
+      ) as HTMLInputElement;
+      expect(customRadioButton.checked).to.be.true;
+      expect(customInput.value).to.equal('5');
+      expect(preset5.checked).to.be.false;
+    });
+  });
+
   describe('configurable dollar amounts', () => {
     it('supports configurable dollar amounts', async () => {
       const el = await fixture<DonationFormEditDonation>(html`
