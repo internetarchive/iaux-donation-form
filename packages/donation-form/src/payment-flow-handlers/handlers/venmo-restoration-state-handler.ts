@@ -64,13 +64,10 @@ export class VenmoRestorationStateHandler implements VenmoRestorationStateHandle
   private storageSystem?: Storage;
 
   constructor(options?: { storageSystem?: Storage }) {
-    if (options?.storageSystem) {
-      this.storageSystem = options.storageSystem;
-    } else if (this.storageSystemAvailable(localStorage)) {
-      this.storageSystem = localStorage;
-    } else if (this.storageSystemAvailable(sessionStorage)) {
-      this.storageSystem = sessionStorage;
-    }
+    this.storageSystem =
+      options?.storageSystem ??
+      this.getAvailableStorageSystem(() => localStorage) ??
+      this.getAvailableStorageSystem(() => sessionStorage);
   }
 
   /** @inheritdoc */
@@ -108,20 +105,23 @@ export class VenmoRestorationStateHandler implements VenmoRestorationStateHandle
   }
 
   /**
-   * Check if a particular storage system (localStorage/sessionStorage) is availble
+   * Resolve and probe a storage system (localStorage/sessionStorage), returning it if
+   * usable. Guards against browsers (e.g. Safari private browsing) that throw
+   * synchronously just from accessing the storage global, not only from using it.
    *
    * @private
-   * @param {Storage} system
-   * @returns {boolean}
+   * @param {() => Storage} getSystem
+   * @returns {(Storage | undefined)}
    * @memberof VenmoRestorationStateHandler
    */
-  private storageSystemAvailable(system: Storage): boolean {
+  private getAvailableStorageSystem(getSystem: () => Storage): Storage | undefined {
     try {
+      const system = getSystem();
       system.setItem('foo', 'bar');
       system.removeItem('foo');
-      return true;
+      return system;
     } catch (exception) {
-      return false;
+      return undefined;
     }
   }
 }
