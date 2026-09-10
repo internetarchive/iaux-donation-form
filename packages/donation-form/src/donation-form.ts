@@ -38,6 +38,7 @@ import {
 } from '@internetarchive/donation-form-section';
 import { UpsellModalCTAMode } from './modals/upsell-modal-content';
 import { ContactForm } from './form-elements/contact-form/contact-form';
+import { HostedFieldName } from './braintree-manager/payment-providers/credit-card/hosted-field-container';
 import './form-elements/total-amount';
 
 @customElement('donation-form')
@@ -116,6 +117,12 @@ export class DonationForm extends LitElement {
           tabindex="0"
         >
           <slot name="paypal-button" slot="paypal-button"></slot>
+          <div
+            class="credit-card-fields ${this.creditCardVisible ? '' : 'hidden'}"
+            slot="credit-card-fields"
+          >
+            <slot name="braintree-hosted-fields"></slot>
+          </div>
         </payment-selector>
       </donation-form-section>
 
@@ -187,7 +194,7 @@ export class DonationForm extends LitElement {
     const headline =
       this.selectedPaymentProvider === PaymentProvider.Venmo
         ? 'Help us stay in touch'
-        : 'Enter payment information';
+        : 'Enter contact information';
 
     return html`
       <donation-form-section
@@ -196,9 +203,6 @@ export class DonationForm extends LitElement {
         id="contactFormSection"
       >
         <slot name="contact-form"></slot>
-        <div class="credit-card-fields" class="${this.creditCardVisible ? '' : 'hidden'}">
-          <slot name="braintree-hosted-fields"></slot>
-        </div>
       </donation-form-section>
 
       <donation-form-section .sectionBadge=${this.paymentSelectorNumberingStart + 2}>
@@ -292,7 +296,7 @@ export class DonationForm extends LitElement {
     this.selectedPaymentProvider = PaymentProvider.CreditCard;
     this.contactFormVisible = true;
     this.creditCardVisible = true;
-    this.focusContactForm();
+    this.focusCreditCardNumberField();
   }
 
   private async venmoSelected(): Promise<void> {
@@ -317,6 +321,12 @@ export class DonationForm extends LitElement {
     if (this.contactFormSection) {
       this.contactForm?.focus();
     }
+  }
+
+  private async focusCreditCardNumberField(): Promise<void> {
+    await this.updateComplete;
+    const creditCardHandler = await this.braintreeManager?.paymentProviders.creditCardHandler.get();
+    creditCardHandler?.focusField(HostedFieldName.Number);
   }
 
   private async donateClicked(): Promise<void> {

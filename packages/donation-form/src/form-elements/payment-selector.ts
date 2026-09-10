@@ -135,6 +135,8 @@ export class PaymentSelector extends LitElement {
             >
               Change payment method
             </button>
+
+            <slot name="credit-card-fields"></slot>
           `
         : nothing}
     `;

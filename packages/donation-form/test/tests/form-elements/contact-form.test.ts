@@ -165,6 +165,82 @@ describe('ContactForm', () => {
     });
   });
 
+  describe('accessible labels', () => {
+    it('renders a real, visible label associated with every text field', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+
+      const fieldsAndLabels: [string, string][] = [
+        ['donation-contact-form-email', 'Email'],
+        ['donation-contact-form-first-name', 'First name'],
+        ['donation-contact-form-last-name', 'Last name'],
+        ['donation-contact-form-street-address', 'Address'],
+        ['donation-contact-form-locality', 'City'],
+        ['donation-contact-form-region', 'State / Province'],
+        ['donation-contact-form-postal-code', 'Zip / Postal'],
+      ];
+
+      fieldsAndLabels.forEach(([id, text]) => {
+        const label = el.querySelector(`label[for="${id}"]`) as HTMLLabelElement;
+        expect(label, `expected a label for #${id}`).to.exist;
+        expect(label.textContent?.trim()).to.equal(text);
+
+        // the label must actually be visible, not sr-only clipped off-screen
+        const style = getComputedStyle(label);
+        expect(style.position, `label for #${id} should not be visually hidden`).to.not.equal(
+          'absolute',
+        );
+      });
+    });
+
+    it('has a real, visible label for the country selector', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      const label = el.querySelector(
+        'label[for="donation-contact-form-countryCodeAlpha2"]',
+      ) as HTMLLabelElement;
+      expect(label).to.exist;
+      expect(label.textContent?.trim()).to.equal('Country');
+    });
+
+    it('does not use placeholder text on any field', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      const inputs = el.querySelectorAll('input.donation-contact-form-input');
+      expect(inputs.length).to.be.greaterThan(0);
+      inputs.forEach(input => {
+        expect((input as HTMLInputElement).placeholder).to.equal('');
+      });
+    });
+  });
+
+  describe('field layout', () => {
+    it('renders First name and Last name side by side in the same row', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      const firstNameField = el.querySelector('.donation-contact-form-first-name') as HTMLElement;
+      const lastNameField = el.querySelector('.donation-contact-form-last-name') as HTMLElement;
+
+      expect(firstNameField.closest('.row')).to.equal(lastNameField.closest('.row'));
+    });
+
+    it('renders the Country row above the Region/Zip row', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      const countryRow = (
+        el.querySelector('#donation-contact-form-countryCodeAlpha2') as HTMLElement
+      ).closest('.row') as HTMLElement;
+      const regionRow = (el.querySelector('#donation-contact-form-region') as HTMLElement).closest(
+        '.row',
+      ) as HTMLElement;
+
+      expect(
+        countryRow.compareDocumentPosition(regionRow) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ).to.be.greaterThan(0);
+    });
+
+    it('no longer has an Address Line 2 field', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      expect(el.querySelector('#donation-contact-form-extended-address')).to.be.null;
+      expect(el.billingInfo.extendedAddress).to.be.undefined;
+    });
+  });
+
   describe('reportValidity()', () => {
     it('returns false if required fields are empty and shows validation messages', async () => {
       const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;

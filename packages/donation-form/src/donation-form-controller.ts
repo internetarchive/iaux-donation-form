@@ -23,18 +23,14 @@ import {
 
 import { RecaptchaManager, RecaptchaManagerInterface } from './recaptcha-manager/recaptcha-manager';
 import { HostedFieldConfiguration } from './braintree-manager/payment-providers/credit-card/hosted-field-configuration';
-import {
-  HostedFieldContainerInterface,
-  HostedFieldContainer,
-} from './braintree-manager/payment-providers/credit-card/hosted-field-container';
+import { HostedFieldContainerInterface } from './braintree-manager/payment-providers/credit-card/hosted-field-container';
 
 import './form-elements/badged-input';
 import { ContactForm } from './form-elements/contact-form/contact-form';
 import './form-elements/contact-form/contact-form';
+import { CreditCardFields } from './form-elements/credit-card-fields';
+import './form-elements/credit-card-fields';
 
-import creditCardImg from '@internetarchive/icon-credit-card/index.js';
-import calendarImg from '@internetarchive/icon-calendar/index.js';
-import lockImg from '@internetarchive/icon-lock/index.js';
 import { DonationControllerEventLoggerInterface } from './@types/analytics-handler';
 import { AnalyticsManagerInterface, AnalyticsEvent } from '@internetarchive/analytics-manager';
 import {
@@ -112,13 +108,7 @@ export class DonationFormController extends LitElement {
 
   @query('donation-form') private donationForm!: DonationForm;
 
-  @query('#braintree-creditcard') private braintreeNumberInput!: HTMLDivElement;
-
-  @query('#braintree-cvv') private braintreeCVVInput!: HTMLDivElement;
-
-  @query('#braintree-expiration') private braintreeExpirationDateInput!: HTMLDivElement;
-
-  @query('#braintree-error-message') private braintreeErrorMessage!: HTMLDivElement;
+  @query('credit-card-fields') private creditCardFieldsElement!: CreditCardFields;
 
   @query('contact-form') private contactForm?: ContactForm;
 
@@ -376,12 +366,8 @@ export class DonationFormController extends LitElement {
       },
     };
 
-    const hostedFieldContainer: HostedFieldContainerInterface = new HostedFieldContainer({
-      number: this.braintreeNumberInput,
-      cvv: this.braintreeCVVInput,
-      expirationDate: this.braintreeExpirationDateInput,
-      errorContainer: this.braintreeErrorMessage,
-    });
+    const hostedFieldContainer: HostedFieldContainerInterface =
+      this.creditCardFieldsElement.hostedFieldContainer;
 
     const config: HostedFieldConfiguration = new HostedFieldConfiguration({
       hostedFieldStyle,
@@ -424,20 +410,7 @@ export class DonationFormController extends LitElement {
             - https://github.com/paypal/paypal-checkout-components/issues/353#issuecomment-595956216
           -->
           <div slot="braintree-hosted-fields">
-            <div id="braintree-error-message"></div>
-            <div class="braintree-row">
-              <badged-input .icon=${creditCardImg} ?required=${true} class="creditcard">
-                <div class="braintree-input" id="braintree-creditcard"></div>
-              </badged-input>
-            </div>
-            <div class="braintree-row">
-              <badged-input .icon=${calendarImg} ?required=${true} class="expiration">
-                <div class="braintree-input" id="braintree-expiration"></div>
-              </badged-input>
-              <badged-input .icon=${lockImg} ?required=${true} class="cvv">
-                <div class="braintree-input" id="braintree-cvv"></div>
-              </badged-input>
-            </div>
+            <credit-card-fields></credit-card-fields>
           </div>
 
           <!--
@@ -588,30 +561,6 @@ export class DonationFormController extends LitElement {
           width: 5rem;
           height: 3rem;
           overflow: hidden;
-        }
-
-        .donation-form-controller-container .braintree-row {
-          display: flex;
-          margin-top: -1px;
-        }
-
-        .donation-form-controller-container badged-input {
-          width: 100%;
-        }
-
-        .donation-form-controller-container badged-input.cvv {
-          margin-left: -1px;
-        }
-
-        .donation-form-controller-container .braintree-input {
-          width: 100%;
-          height: 100%;
-        }
-
-        .donation-form-controller-container #braintree-error-message {
-          color: red;
-          font-size: 1.4rem;
-          margin-bottom: 0.6rem;
         }
 
         .donation-form-controller-container div[slot='braintree-hosted-fields'] {

@@ -354,6 +354,17 @@ export interface HostedFields {
   clear(field: string, callback?: callback): void;
 
   /**
+   * Programmatically focus a {@link module:braintree-web/hosted-fields~field field}.
+   * @example
+   * hostedFieldsInstance.focus('number', function (focusErr) {
+   *   if (focusErr) {
+   *     console.error(focusErr);
+   *   }
+   * });
+   */
+  focus(field: string, callback?: callback): void;
+
+  /**
    * Returns an {@link HostedFields~stateObject|object} that includes the state of all fields and possible card types.
    * @example <caption>Check if all fields are valid</caption>
    * var state = hostedFields.getState();

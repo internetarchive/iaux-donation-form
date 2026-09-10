@@ -76,6 +76,10 @@ export class MockHostedFieldsClient implements braintree.HostedFields {
     throw new Error('Method not implemented.');
   }
 
+  focus(field: string, callback?: braintree.callback | undefined): void {
+    // no-op for tests
+  }
+
   getState(): any {
     throw new Error('Method not implemented.');
   }

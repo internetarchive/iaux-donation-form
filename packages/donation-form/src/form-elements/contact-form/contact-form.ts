@@ -37,10 +37,6 @@ export class ContactForm extends LitElement {
   streetAddressBadgedInput!: BadgedInput;
   @query('#donation-contact-form-street-address') streetAddressField!: HTMLInputElement;
 
-  @query('badged-input.donation-contact-form-extended-address')
-  extendedAddressBadgedInput!: BadgedInput;
-  @query('#donation-contact-form-extended-address') extendedAddressField!: HTMLInputElement;
-
   @query('badged-input.donation-contact-form-locality') localityBadgedInput!: BadgedInput;
   @query('#donation-contact-form-locality') localityField!: HTMLInputElement;
 
@@ -78,7 +74,6 @@ export class ContactForm extends LitElement {
       { badgedInput: this.firstNameBadgedInput, inputField: this.firstNameField },
       { badgedInput: this.lastNameBadgedInput, inputField: this.lastNameField },
       { badgedInput: this.streetAddressBadgedInput, inputField: this.streetAddressField },
-      { badgedInput: this.extendedAddressBadgedInput, inputField: this.extendedAddressField },
       { badgedInput: this.localityBadgedInput, inputField: this.localityField },
       { badgedInput: this.regionBadgedInput, inputField: this.regionField },
       { badgedInput: this.postalBadgedInput, inputField: this.postalCodeField },
@@ -128,7 +123,7 @@ export class ContactForm extends LitElement {
           <div class="row">
             ${this.generateInput({
               id: 'donation-contact-form-email',
-              placeholder: 'Email',
+              label: 'Email',
               required: true,
               fieldType: 'email',
               name: 'email',
@@ -144,7 +139,7 @@ export class ContactForm extends LitElement {
           <div class="row">
             ${this.generateInput({
               id: 'donation-contact-form-first-name',
-              placeholder: 'First name',
+              label: 'First name',
               name: 'fname',
               required: true,
               validationPattern: this.minTwoCharPattern,
@@ -153,11 +148,9 @@ export class ContactForm extends LitElement {
               autocomplete: 'given-name',
               icon: userIcon,
             })}
-          </div>
-          <div class="row">
             ${this.generateInput({
               id: 'donation-contact-form-last-name',
-              placeholder: 'Last name',
+              label: 'Last name',
               name: 'lname',
               autocomplete: 'family-name',
               required: true,
@@ -171,7 +164,7 @@ export class ContactForm extends LitElement {
           <div class="row">
             ${this.generateInput({
               id: 'donation-contact-form-street-address',
-              placeholder: 'Address Line 1',
+              label: 'Address',
               required: true,
               autocomplete: 'address-line1',
               icon: localePinImg,
@@ -182,17 +175,8 @@ export class ContactForm extends LitElement {
           </div>
           <div class="row">
             ${this.generateInput({
-              id: 'donation-contact-form-extended-address',
-              placeholder: 'Address Line 2 (optional)',
-              autocomplete: 'address-line2',
-              required: false,
-              name: 'extended-address',
-            })}
-          </div>
-          <div class="row">
-            ${this.generateInput({
               id: 'donation-contact-form-locality',
-              placeholder: 'City',
+              label: 'City',
               autocomplete: 'address-level2',
               required: true,
               name: 'locality',
@@ -200,10 +184,11 @@ export class ContactForm extends LitElement {
               validationMessage: this.minTwoCharValidationMessage,
             })}
           </div>
+          <div class="row">${this.countrySelectorTemplate}</div>
           <div class="row">
             ${this.generateInput({
               id: 'donation-contact-form-region',
-              placeholder: 'State / Province',
+              label: 'State / Province',
               autocomplete: 'address-level1',
               required: this.regionAndPostalCodeRequired,
               name: 'region',
@@ -216,7 +201,7 @@ export class ContactForm extends LitElement {
             })}
             ${this.generateInput({
               id: 'donation-contact-form-postal-code',
-              placeholder: 'Zip / Postal',
+              label: 'Zip / Postal',
               autocomplete: 'postal-code',
               required: this.regionAndPostalCodeRequired,
               name: 'postal',
@@ -229,7 +214,6 @@ export class ContactForm extends LitElement {
               iconSpaceOption: SpacerOption.CompressSpace,
             })}
           </div>
-          <div class="row">${this.countrySelectorTemplate}</div>
         </fieldset>
       </form>
       ${this.getStyles}
@@ -242,22 +226,25 @@ export class ContactForm extends LitElement {
 
   private get countrySelectorTemplate(): TemplateResult {
     return html`
-      <badged-input>
-        <select
-          id="donation-contact-form-countryCodeAlpha2"
-          @change=${(e: Event) => {
-            const newValue = (e.target as HTMLSelectElement).value;
-            if (countries[newValue]) this.selectedCountry = newValue;
-          }}
-        >
-          ${Object.keys(countries).map(key => {
-            const name = countries[key];
-            return html`
-              <option value=${key} ?selected=${key === this.selectedCountry}>${name}</option>
-            `;
-          })}
-        </select>
-      </badged-input>
+      <div class="field">
+        <label for="donation-contact-form-countryCodeAlpha2" class="field-label">Country</label>
+        <badged-input>
+          <select
+            id="donation-contact-form-countryCodeAlpha2"
+            @change=${(e: Event) => {
+              const newValue = (e.target as HTMLSelectElement).value;
+              if (countries[newValue]) this.selectedCountry = newValue;
+            }}
+          >
+            ${Object.keys(countries).map(key => {
+              const name = countries[key];
+              return html`
+                <option value=${key} ?selected=${key === this.selectedCountry}>${name}</option>
+              `;
+            })}
+          </select>
+        </badged-input>
+      </div>
     `;
   }
 
@@ -281,7 +268,7 @@ export class ContactForm extends LitElement {
 
   private generateInput(options: {
     id: string;
-    placeholder: string;
+    label: string;
     required?: boolean;
     fieldType?: 'text' | 'email';
     autocomplete?: AutoCompleteFieldOptions;
@@ -298,29 +285,29 @@ export class ContactForm extends LitElement {
     const iconOption = options.iconSpaceOption ?? SpacerOption.LeaveSpace;
 
     return html`
-      <badged-input
-        class=${options.id}
-        .icon=${options.icon}
-        .iconSpaceOption=${iconOption}
-        ?required=${options.required}
-      >
-        <label for=${options.id}>${options.placeholder}</label>
-        <input
-          type=${fieldType}
-          id=${options.id}
-          class="donation-contact-form-input"
-          name=${options.name}
-          aria-label=${options.placeholder}
-          placeholder=${options.placeholder}
-          maxlength=${ifDefined(options.maxlength)}
-          minlength=${ifDefined(options.minlength)}
-          autocomplete=${options.autocomplete ?? 'on'}
-          pattern=${ifDefined(options.validationPattern)}
-          title=${ifDefined(options.validationMessage)}
-          @focus=${this.inputFocused}
-          ?required=${required}
-        />
-      </badged-input>
+      <div class="field ${options.id}">
+        <label for=${options.id} class="field-label">${options.label}</label>
+        <badged-input
+          class=${options.id}
+          .icon=${options.icon}
+          .iconSpaceOption=${iconOption}
+          ?required=${options.required}
+        >
+          <input
+            type=${fieldType}
+            id=${options.id}
+            class="donation-contact-form-input"
+            name=${options.name}
+            maxlength=${ifDefined(options.maxlength)}
+            minlength=${ifDefined(options.minlength)}
+            autocomplete=${options.autocomplete ?? 'on'}
+            pattern=${ifDefined(options.validationPattern)}
+            title=${ifDefined(options.validationMessage)}
+            @focus=${this.inputFocused}
+            ?required=${required}
+          />
+        </badged-input>
+      </div>
     `;
   }
 
@@ -334,7 +321,6 @@ export class ContactForm extends LitElement {
   get billingInfo(): BillingInfo {
     const billingInfo = new BillingInfo({
       streetAddress: this.streetAddressField.value,
-      extendedAddress: this.extendedAddressField.value,
       locality: this.localityField.value,
       region: this.regionField.value,
       postalCode: this.postalCodeField.value,
@@ -369,9 +355,15 @@ export class ContactForm extends LitElement {
     const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 5rem)`;
 
     const fieldSetSpacing = css`var(--fieldSetSpacing, 1rem)`;
+    const fieldRowGap = css`var(--fieldRowGap, 5px)`;
     const fieldFontFamily = css`var(--fontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
-    const fieldFontSize = css`var(--contactFieldFontSize, 1.6rem)`;
-    const fieldFontColor = css`var(--inputFieldFontColor, #333)`;
+    const fieldFontSize = css`var(--contactFieldFontSize, 14px)`;
+    const fieldFontColor = css`var(--inputFieldFontColor, #2c2c2c)`;
+
+    const fieldLabelFontFamily = css`var(--fieldLabelFontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
+    const fieldLabelFontSize = css`var(--fieldLabelFontSize, 14px)`;
+    const fieldLabelColor = css`var(--fieldLabelColor, #2c2c2c)`;
+    const fieldLabelMarginBottom = css`var(--fieldLabelMarginBottom, 5px)`;
 
     const iconFieldWidth = css`calc(100% - ${iconSpacerWidth})`;
     const noIconFieldWidth = css`calc(100% - ${noIconSpacerWidth})`;
@@ -395,6 +387,7 @@ export class ContactForm extends LitElement {
         double outlines caused by the fields being right next to each other */
         contact-form .row {
           display: flex;
+          gap: ${fieldRowGap};
           margin: -1px 0 0 0;
         }
 
@@ -402,12 +395,30 @@ export class ContactForm extends LitElement {
           margin-top: 0;
         }
 
-        contact-form badged-input.donation-contact-form-region {
-          width: 60%;
+        contact-form .field {
+          flex: 1;
         }
 
+        contact-form .field-label {
+          display: block;
+          font-family: ${fieldLabelFontFamily};
+          font-size: ${fieldLabelFontSize};
+          font-weight: bold;
+          color: ${fieldLabelColor};
+          margin-bottom: ${fieldLabelMarginBottom};
+        }
+
+        contact-form div.donation-contact-form-region {
+          flex: 0 1 60%;
+        }
+
+        contact-form div.donation-contact-form-postal-code {
+          flex: 0 1 40%;
+        }
+
+        contact-form badged-input.donation-contact-form-region,
         contact-form badged-input.donation-contact-form-postal-code {
-          width: 40%;
+          width: 100%;
         }
 
         contact-form #donation-contact-form-region {
@@ -428,16 +439,6 @@ export class ContactForm extends LitElement {
           width: ${noIconFieldWidth};
         }
 
-        /* only show for screen readers */
-        contact-form label {
-          position: absolute;
-          left: -10000px;
-          top: auto;
-          width: 1px;
-          height: 1px;
-          overflow: hidden;
-        }
-
         contact-form .donation-contact-form-input {
           width: ${iconFieldWidth};
           border: 0;
@@ -450,16 +451,13 @@ export class ContactForm extends LitElement {
           font-family: ${fieldFontFamily};
         }
 
-        contact-form .donation-contact-form-input::placeholder {
-          color: revert;
-        }
-
         contact-form #donation-contact-form-countryCodeAlpha2 {
           width: calc(100%);
           height: 100%;
           box-sizing: border-box;
           font-weight: bold;
           font-size: ${fieldFontSize};
+          color: ${fieldFontColor};
           font-family: ${fieldFontFamily};
           border: 0;
           background: #fff;
