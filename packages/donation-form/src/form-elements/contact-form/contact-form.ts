@@ -178,7 +178,7 @@ export class ContactForm extends LitElement {
             })}
           </div>
           <div class="row">${this.countrySelectorTemplate}</div>
-          <div class="row">
+          <div class="row region-postal-row">
             ${this.generateInput({
               id: 'donation-contact-form-region',
               label: 'State / Province',
@@ -376,10 +376,23 @@ export class ContactForm extends LitElement {
 
         /* These 1px and 0 margins in the next few selectors are to account for the
         double outlines caused by the fields being right next to each other */
+        /*
+          Grid (not flex) so that a label wrapping to two lines in one column
+          doesn't push that column's input out of alignment with its siblings -
+          all labels share row-line 1 and all inputs share row-line 2, each
+          sized to the tallest content in that line.
+        */
         contact-form .row {
-          display: flex;
-          gap: ${fieldRowGap};
+          display: grid;
+          grid-auto-flow: column;
+          grid-auto-columns: 1fr;
+          grid-template-rows: auto auto;
+          column-gap: ${fieldRowGap};
           margin: -1px 0 0 0;
+        }
+
+        contact-form .row.region-postal-row {
+          grid-template-columns: 60% 40%;
         }
 
         contact-form fieldset .row:first-child {
@@ -387,7 +400,7 @@ export class ContactForm extends LitElement {
         }
 
         contact-form .field {
-          flex: 1;
+          display: contents;
         }
 
         contact-form .field-label {
@@ -401,14 +414,6 @@ export class ContactForm extends LitElement {
 
         contact-form .required-asterisk {
           color: ${requiredAsteriskColor};
-        }
-
-        contact-form div.donation-contact-form-region {
-          flex: 0 1 60%;
-        }
-
-        contact-form div.donation-contact-form-postal-code {
-          flex: 0 1 40%;
         }
 
         contact-form badged-input.donation-contact-form-region,

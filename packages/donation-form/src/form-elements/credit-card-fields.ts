@@ -129,19 +129,26 @@ export class CreditCardFields extends LitElement {
           color: ${requiredAsteriskColor};
         }
 
+        /*
+          Grid (not flex) so that a label wrapping to two lines in one column
+          doesn't push that column's input out of alignment with its sibling -
+          both labels share row-line 1 and both inputs share row-line 2.
+        */
         credit-card-fields .braintree-row {
-          display: flex;
-          gap: ${fieldRowGap};
+          display: grid;
+          grid-auto-flow: column;
+          grid-auto-columns: 1fr;
+          grid-template-rows: auto auto;
+          column-gap: ${fieldRowGap};
           margin-top: -1px;
         }
 
-        credit-card-fields fieldset .braintree-row:first-child,
         credit-card-fields .braintree-row:first-child {
           margin-top: 0;
         }
 
         credit-card-fields .field {
-          flex: 1;
+          display: contents;
         }
 
         credit-card-fields badged-input {
