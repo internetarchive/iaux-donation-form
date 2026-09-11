@@ -108,12 +108,7 @@ export interface HostedFieldsHostedFieldsFieldData {
  * - `"postalCode"`
  */
 export type HostedFieldsHostedFieldsFieldName =
-  | 'number'
-  | 'cvv'
-  | 'expirationDate'
-  | 'expirationMonth'
-  | 'expirationYear'
-  | 'postalCode';
+  'number' | 'cvv' | 'expirationDate' | 'expirationMonth' | 'expirationYear' | 'postalCode';
 
 export type HostedFieldsFieldDataFields = {
   [key in HostedFieldsHostedFieldsFieldName]: HostedFieldsHostedFieldsFieldData;
@@ -126,12 +121,7 @@ export interface HostedFieldsStateObject {
 }
 
 export type HostedFieldEventType =
-  | 'blur'
-  | 'focus'
-  | 'empty'
-  | 'notEmpty'
-  | 'cardTypeChange'
-  | 'validityChange';
+  'blur' | 'focus' | 'empty' | 'notEmpty' | 'cardTypeChange' | 'validityChange';
 
 export interface HostedFieldsAccountDetails {
   bin: string;

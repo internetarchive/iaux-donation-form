@@ -170,19 +170,19 @@ describe('ContactForm', () => {
       const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
 
       const fieldsAndLabels: [string, string][] = [
-        ['donation-contact-form-email', 'Email'],
-        ['donation-contact-form-first-name', 'First name'],
-        ['donation-contact-form-last-name', 'Last name'],
-        ['donation-contact-form-street-address', 'Address'],
-        ['donation-contact-form-locality', 'City'],
-        ['donation-contact-form-region', 'State / Province'],
-        ['donation-contact-form-postal-code', 'Zip / Postal'],
+        ['donation-contact-form-email', 'Email *'],
+        ['donation-contact-form-first-name', 'First name *'],
+        ['donation-contact-form-last-name', 'Last name *'],
+        ['donation-contact-form-street-address', 'Address *'],
+        ['donation-contact-form-locality', 'City *'],
+        ['donation-contact-form-region', 'State / Province *'],
+        ['donation-contact-form-postal-code', 'Zip / Postal Code *'],
       ];
 
       fieldsAndLabels.forEach(([id, text]) => {
         const label = el.querySelector(`label[for="${id}"]`) as HTMLLabelElement;
         expect(label, `expected a label for #${id}`).to.exist;
-        expect(label.textContent?.trim()).to.equal(text);
+        expect(label.textContent?.replace(/\s+/g, ' ').trim()).to.equal(text);
 
         // the label must actually be visible, not sr-only clipped off-screen
         const style = getComputedStyle(label);
@@ -198,7 +198,7 @@ describe('ContactForm', () => {
         'label[for="donation-contact-form-countryCodeAlpha2"]',
       ) as HTMLLabelElement;
       expect(label).to.exist;
-      expect(label.textContent?.trim()).to.equal('Country');
+      expect(label.textContent?.replace(/\s+/g, ' ').trim()).to.equal('Country *');
     });
 
     it('does not use placeholder text on any field', async () => {

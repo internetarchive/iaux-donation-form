@@ -28,28 +28,22 @@ export class PaymentSelector extends LitElement {
   @property({ type: String }) private payPalMode: PaymentButtonMode = PaymentButtonMode.Loading;
 
   @property({ type: String }) private paymentModeSelected:
-    | 'apple'
-    | 'google'
-    | 'venmo'
-    | 'cc'
-    | 'paypal'
-    | undefined = undefined;
+    'apple' | 'google' | 'venmo' | 'cc' | 'paypal' | undefined = undefined;
 
   /** @inheritdoc */
   render(): TemplateResult {
     const paymentSelectedCss = this.paymentModeSelected ? 'payment-selected' : '';
     return html`
       <div
-        class="payment-container ${this.donationInfoValid
-          ? 'donation-info-valid'
-          : 'donation-info-invalid'} ${paymentSelectedCss}"
+        class="payment-container ${
+          this.donationInfoValid ? 'donation-info-valid' : 'donation-info-invalid'
+        } ${paymentSelectedCss}"
       >
         <div class="payment-provider-container">
           <button
-            class="applepay provider-button ${this.applePayMode} ${this.paymentModeSelected ===
-            'apple'
-              ? 'selected'
-              : ''}"
+            class="applepay provider-button ${this.applePayMode} ${
+              this.paymentModeSelected === 'apple' ? 'selected' : ''
+            }"
             @click=${(e: Event) => {
               this.paymentModeSelected = 'apple';
               this.applePaySelected(e);
@@ -60,10 +54,9 @@ export class PaymentSelector extends LitElement {
           </button>
 
           <button
-            class="googlepay provider-button ${this.googlePayMode} ${this.paymentModeSelected ===
-            'google'
-              ? 'selected'
-              : ''}"
+            class="googlepay provider-button ${this.googlePayMode} ${
+              this.paymentModeSelected === 'google' ? 'selected' : ''
+            }"
             @click=${() => {
               this.paymentModeSelected = 'google';
               this.googlePaySelected();
@@ -74,9 +67,9 @@ export class PaymentSelector extends LitElement {
           </button>
 
           <button
-            class="venmo provider-button ${this.venmoMode} ${this.paymentModeSelected === 'venmo'
-              ? 'selected'
-              : ''}"
+            class="venmo provider-button ${this.venmoMode} ${
+              this.paymentModeSelected === 'venmo' ? 'selected' : ''
+            }"
             @click=${() => {
               this.paymentModeSelected = 'venmo';
               this.venmoSelected();
@@ -112,9 +105,9 @@ export class PaymentSelector extends LitElement {
               this.paymentModeSelected = 'cc';
               this.creditCardSelected();
             }}
-            class="button-style credit-card-button ${this.paymentModeSelected === 'cc'
-              ? 'selected'
-              : ''}"
+            class="button-style credit-card-button ${
+              this.paymentModeSelected === 'cc' ? 'selected' : ''
+            }"
             tabindex="0"
           >
             <div class="cc-title">Credit Card</div>
@@ -123,22 +116,24 @@ export class PaymentSelector extends LitElement {
         </div>
       </div>
 
-      ${this.paymentModeSelected
-        ? html`
-            <button
-              id="change-payment-method"
-              @click=${() => {
-                this.paymentModeSelected = undefined;
-                this.dispatchEvent(new Event('resetPaymentMethod'));
-                this.setButtonVisibility();
-              }}
-            >
-              Change payment method
-            </button>
+      ${
+        this.paymentModeSelected
+          ? html`
+              <button
+                id="change-payment-method"
+                @click=${() => {
+                  this.paymentModeSelected = undefined;
+                  this.dispatchEvent(new Event('resetPaymentMethod'));
+                  this.setButtonVisibility();
+                }}
+              >
+                Change payment method
+              </button>
 
-            <slot name="credit-card-fields"></slot>
-          `
-        : nothing}
+              <slot name="credit-card-fields"></slot>
+            `
+          : nothing
+      }
     `;
   }
 

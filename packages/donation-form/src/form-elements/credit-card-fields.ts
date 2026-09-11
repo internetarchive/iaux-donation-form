@@ -1,6 +1,7 @@
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
 
+import { SpacerOption } from './badged-input';
 import './badged-input';
 
 import creditCardImg from '@internetarchive/icon-credit-card/index.js';
@@ -47,22 +48,36 @@ export class CreditCardFields extends LitElement {
       <div id="braintree-error-message"></div>
       <div class="braintree-row">
         <div class="field">
-          <label class="field-label">Card number</label>
-          <badged-input .icon=${creditCardImg} ?required=${true} class="creditcard">
+          <label class="field-label">Card Number<span class="required-asterisk"> *</span></label>
+          <badged-input
+            .icon=${creditCardImg}
+            .requiredIndicatorSpaceOption=${SpacerOption.CompressSpace}
+            class="creditcard"
+          >
             <div class="braintree-input" id="braintree-creditcard"></div>
           </badged-input>
         </div>
       </div>
       <div class="braintree-row">
         <div class="field">
-          <label class="field-label">Expiration</label>
-          <badged-input .icon=${calendarImg} ?required=${true} class="expiration">
+          <label class="field-label"
+            >Expiration (MM / YY)<span class="required-asterisk"> *</span></label
+          >
+          <badged-input
+            .icon=${calendarImg}
+            .requiredIndicatorSpaceOption=${SpacerOption.CompressSpace}
+            class="expiration"
+          >
             <div class="braintree-input" id="braintree-expiration"></div>
           </badged-input>
         </div>
         <div class="field">
-          <label class="field-label">CVC</label>
-          <badged-input .icon=${lockImg} ?required=${true} class="cvv">
+          <label class="field-label">CVC<span class="required-asterisk"> *</span></label>
+          <badged-input
+            .icon=${lockImg}
+            .requiredIndicatorSpaceOption=${SpacerOption.CompressSpace}
+            class="cvv"
+          >
             <div class="braintree-input" id="braintree-cvv"></div>
           </badged-input>
         </div>
@@ -92,6 +107,7 @@ export class CreditCardFields extends LitElement {
     const fieldLabelColor = css`var(--fieldLabelColor, #2c2c2c)`;
     const fieldLabelMarginBottom = css`var(--fieldLabelMarginBottom, 5px)`;
     const fieldRowGap = css`var(--fieldRowGap, 5px)`;
+    const requiredAsteriskColor = css`var(--badgedInputRequiredIndicatorColor, red)`;
 
     return html`
       <style>
@@ -107,6 +123,10 @@ export class CreditCardFields extends LitElement {
           font-weight: bold;
           color: ${fieldLabelColor};
           margin-bottom: ${fieldLabelMarginBottom};
+        }
+
+        credit-card-fields .required-asterisk {
+          color: ${requiredAsteriskColor};
         }
 
         credit-card-fields .braintree-row {

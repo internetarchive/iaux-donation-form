@@ -10,11 +10,11 @@ describe('CreditCardFields', () => {
     const el = (await fixture(html`<credit-card-fields></credit-card-fields>`)) as CreditCardFields;
 
     const labels = Array.from(el.querySelectorAll('.field-label')) as HTMLElement[];
-    const labelTexts = labels.map(label => label.textContent?.trim());
+    const labelTexts = labels.map(label => label.textContent?.replace(/\s+/g, ' ').trim());
 
-    expect(labelTexts).to.include('Card number');
-    expect(labelTexts).to.include('Expiration');
-    expect(labelTexts).to.include('CVC');
+    expect(labelTexts).to.include('Card Number *');
+    expect(labelTexts).to.include('Expiration (MM / YY) *');
+    expect(labelTexts).to.include('CVC *');
 
     // labels must actually be visible (not sr-only clipped off-screen)
     labels.forEach(label => {

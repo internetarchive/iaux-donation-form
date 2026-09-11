@@ -1,4 +1,4 @@
-import { LitElement, html, css, TemplateResult, PropertyValues } from 'lit';
+import { LitElement, html, css, TemplateResult, PropertyValues, nothing } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
@@ -11,10 +11,6 @@ import { AutoCompleteFieldOptions } from './autocomplete-field-options';
 import { SpacerOption } from '../badged-input';
 import { BadgedInput } from '../badged-input';
 import '../badged-input';
-
-import emailImg from '@internetarchive/icon-email/index.js';
-import localePinImg from '@internetarchive/icon-locale-pin/index.js';
-import userIcon from '@internetarchive/icon-user/index.js';
 
 import { countries } from './countries';
 import { msg } from '@lit/localize';
@@ -130,7 +126,6 @@ export class ContactForm extends LitElement {
               autocomplete: 'email',
               minlength: 5,
               maxlength: 255,
-              icon: emailImg,
             })}
           </div>
         </fieldset>
@@ -146,7 +141,6 @@ export class ContactForm extends LitElement {
               validationMessage: this.minTwoCharValidationMessage,
               maxlength: 255,
               autocomplete: 'given-name',
-              icon: userIcon,
             })}
             ${this.generateInput({
               id: 'donation-contact-form-last-name',
@@ -167,7 +161,6 @@ export class ContactForm extends LitElement {
               label: 'Address',
               required: true,
               autocomplete: 'address-line1',
-              icon: localePinImg,
               name: 'street-address',
               validationPattern: this.streetAddressPattern,
               validationMessage: this.streetAddressValidationMessage,
@@ -201,7 +194,7 @@ export class ContactForm extends LitElement {
             })}
             ${this.generateInput({
               id: 'donation-contact-form-postal-code',
-              label: 'Zip / Postal',
+              label: 'Zip / Postal Code',
               autocomplete: 'postal-code',
               required: this.regionAndPostalCodeRequired,
               name: 'postal',
@@ -211,7 +204,6 @@ export class ContactForm extends LitElement {
               validationMessage: this.regionAndPostalCodeRequired
                 ? this.usZipCodeValidationMessage
                 : undefined,
-              iconSpaceOption: SpacerOption.CompressSpace,
             })}
           </div>
         </fieldset>
@@ -227,8 +219,10 @@ export class ContactForm extends LitElement {
   private get countrySelectorTemplate(): TemplateResult {
     return html`
       <div class="field">
-        <label for="donation-contact-form-countryCodeAlpha2" class="field-label">Country</label>
-        <badged-input>
+        <label for="donation-contact-form-countryCodeAlpha2" class="field-label">
+          Country<span class="required-asterisk"> *</span>
+        </label>
+        <badged-input .iconSpaceOption=${SpacerOption.CompressSpace}>
           <select
             id="donation-contact-form-countryCodeAlpha2"
             @change=${(e: Event) => {
@@ -275,23 +269,21 @@ export class ContactForm extends LitElement {
     minlength?: number;
     maxlength?: number;
     name: string;
-    icon?: TemplateResult;
-    iconSpaceOption?: SpacerOption;
     validationPattern?: string;
     validationMessage?: string;
   }): TemplateResult {
     const required = options.required ?? true;
     const fieldType = options.fieldType ?? 'text';
-    const iconOption = options.iconSpaceOption ?? SpacerOption.LeaveSpace;
 
     return html`
       <div class="field ${options.id}">
-        <label for=${options.id} class="field-label">${options.label}</label>
+        <label for=${options.id} class="field-label">
+          ${options.label}${required ? html`<span class="required-asterisk"> *</span>` : nothing}
+        </label>
         <badged-input
           class=${options.id}
-          .icon=${options.icon}
-          .iconSpaceOption=${iconOption}
-          ?required=${options.required}
+          .iconSpaceOption=${SpacerOption.CompressSpace}
+          .requiredIndicatorSpaceOption=${SpacerOption.CompressSpace}
         >
           <input
             type=${fieldType}
@@ -352,7 +344,6 @@ export class ContactForm extends LitElement {
    */
   private get getStyles(): TemplateResult {
     const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 3rem)`;
-    const iconSpacerWidth = css`var(--badgedInputIconSpacerWidth, 5rem)`;
 
     const fieldSetSpacing = css`var(--fieldSetSpacing, 1rem)`;
     const fieldRowGap = css`var(--fieldRowGap, 5px)`;
@@ -364,8 +355,8 @@ export class ContactForm extends LitElement {
     const fieldLabelFontSize = css`var(--fieldLabelFontSize, 14px)`;
     const fieldLabelColor = css`var(--fieldLabelColor, #2c2c2c)`;
     const fieldLabelMarginBottom = css`var(--fieldLabelMarginBottom, 5px)`;
+    const requiredAsteriskColor = css`var(--badgedInputRequiredIndicatorColor, red)`;
 
-    const iconFieldWidth = css`calc(100% - ${iconSpacerWidth})`;
     const noIconFieldWidth = css`calc(100% - ${noIconSpacerWidth})`;
 
     return html`
@@ -408,6 +399,10 @@ export class ContactForm extends LitElement {
           margin-bottom: ${fieldLabelMarginBottom};
         }
 
+        contact-form .required-asterisk {
+          color: ${requiredAsteriskColor};
+        }
+
         contact-form div.donation-contact-form-region {
           flex: 0 1 60%;
         }
@@ -421,26 +416,14 @@ export class ContactForm extends LitElement {
           width: 100%;
         }
 
-        contact-form #donation-contact-form-region {
-          width: ${iconFieldWidth};
-        }
-
-        contact-form #donation-contact-form-postal-code {
-          width: ${noIconFieldWidth};
-        }
-
         contact-form #donation-contact-form-error-message {
           color: red;
           font-size: 1.4rem;
           margin-bottom: 0.6rem;
         }
 
-        contact-form #donation-contact-form-last-name {
-          width: ${noIconFieldWidth};
-        }
-
         contact-form .donation-contact-form-input {
-          width: ${iconFieldWidth};
+          width: ${noIconFieldWidth};
           border: 0;
           outline: 0;
           background: transparent;
@@ -452,7 +435,7 @@ export class ContactForm extends LitElement {
         }
 
         contact-form #donation-contact-form-countryCodeAlpha2 {
-          width: calc(100%);
+          width: ${noIconFieldWidth};
           height: 100%;
           box-sizing: border-box;
           font-weight: bold;
