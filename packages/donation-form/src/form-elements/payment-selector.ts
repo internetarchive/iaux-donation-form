@@ -343,6 +343,7 @@ export class PaymentSelector extends LitElement {
 
       button#change-payment-method {
         margin-top: 10px;
+        margin-bottom: 10px;
         background: white;
         border: 1px solid;
         border-radius: 3px;

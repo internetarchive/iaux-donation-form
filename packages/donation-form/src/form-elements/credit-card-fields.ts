@@ -140,11 +140,11 @@ export class CreditCardFields extends LitElement {
           grid-auto-columns: 1fr;
           grid-template-rows: auto auto;
           column-gap: ${fieldRowGap};
-          margin-top: -1px;
         }
 
-        credit-card-fields .braintree-row:first-child {
-          margin-top: 0;
+        /* uniform vertical rhythm between every field, regardless of grouping */
+        credit-card-fields .braintree-row + .braintree-row {
+          margin-top: ${fieldRowGap};
         }
 
         credit-card-fields .field {

@@ -115,98 +115,91 @@ export class ContactForm extends LitElement {
     return html`
       <div id="donation-contact-form-error-message"></div>
       <form>
-        <fieldset>
-          <div class="row">
-            ${this.generateInput({
-              id: 'donation-contact-form-email',
-              label: 'Email',
-              required: true,
-              fieldType: 'email',
-              name: 'email',
-              autocomplete: 'email',
-              minlength: 5,
-              maxlength: 255,
-            })}
-          </div>
-        </fieldset>
+        <div class="row">
+          ${this.generateInput({
+            id: 'donation-contact-form-email',
+            label: 'Email',
+            required: true,
+            fieldType: 'email',
+            name: 'email',
+            autocomplete: 'email',
+            minlength: 5,
+            maxlength: 255,
+          })}
+        </div>
 
-        <fieldset>
-          <div class="row">
-            ${this.generateInput({
-              id: 'donation-contact-form-first-name',
-              label: 'First name',
-              name: 'fname',
-              required: true,
-              validationPattern: this.minTwoCharPattern,
-              validationMessage: this.minTwoCharValidationMessage,
-              maxlength: 255,
-              autocomplete: 'given-name',
-            })}
-            ${this.generateInput({
-              id: 'donation-contact-form-last-name',
-              label: 'Last name',
-              name: 'lname',
-              autocomplete: 'family-name',
-              required: true,
-              validationPattern: this.minTwoCharPattern,
-              validationMessage: this.minTwoCharValidationMessage,
-              maxlength: 255,
-            })}
-          </div>
-        </fieldset>
-        <fieldset>
-          <div class="row">
-            ${this.generateInput({
-              id: 'donation-contact-form-street-address',
-              label: 'Address',
-              required: true,
-              autocomplete: 'address-line1',
-              name: 'street-address',
-              validationPattern: this.streetAddressPattern,
-              validationMessage: this.streetAddressValidationMessage,
-            })}
-          </div>
-          <div class="row">
-            ${this.generateInput({
-              id: 'donation-contact-form-locality',
-              label: 'City',
-              autocomplete: 'address-level2',
-              required: true,
-              name: 'locality',
-              validationPattern: this.minTwoCharPattern,
-              validationMessage: this.minTwoCharValidationMessage,
-            })}
-          </div>
-          <div class="row">${this.countrySelectorTemplate}</div>
-          <div class="row region-postal-row">
-            ${this.generateInput({
-              id: 'donation-contact-form-region',
-              label: 'State / Province',
-              autocomplete: 'address-level1',
-              required: this.regionAndPostalCodeRequired,
-              name: 'region',
-              validationPattern: this.regionAndPostalCodeRequired
-                ? this.minTwoCharPattern
-                : undefined,
-              validationMessage: this.regionAndPostalCodeRequired
-                ? this.minTwoCharValidationMessage
-                : undefined,
-            })}
-            ${this.generateInput({
-              id: 'donation-contact-form-postal-code',
-              label: 'Zip / Postal Code',
-              autocomplete: 'postal-code',
-              required: this.regionAndPostalCodeRequired,
-              name: 'postal',
-              validationPattern: this.regionAndPostalCodeRequired
-                ? this.usZipCodePattern
-                : undefined,
-              validationMessage: this.regionAndPostalCodeRequired
-                ? this.usZipCodeValidationMessage
-                : undefined,
-            })}
-          </div>
-        </fieldset>
+        <div class="row">
+          ${this.generateInput({
+            id: 'donation-contact-form-first-name',
+            label: 'First name',
+            name: 'fname',
+            required: true,
+            validationPattern: this.minTwoCharPattern,
+            validationMessage: this.minTwoCharValidationMessage,
+            maxlength: 255,
+            autocomplete: 'given-name',
+          })}
+          ${this.generateInput({
+            id: 'donation-contact-form-last-name',
+            label: 'Last name',
+            name: 'lname',
+            autocomplete: 'family-name',
+            required: true,
+            validationPattern: this.minTwoCharPattern,
+            validationMessage: this.minTwoCharValidationMessage,
+            maxlength: 255,
+          })}
+        </div>
+
+        <div class="row">
+          ${this.generateInput({
+            id: 'donation-contact-form-street-address',
+            label: 'Address',
+            required: true,
+            autocomplete: 'address-line1',
+            name: 'street-address',
+            validationPattern: this.streetAddressPattern,
+            validationMessage: this.streetAddressValidationMessage,
+          })}
+        </div>
+        <div class="row">
+          ${this.generateInput({
+            id: 'donation-contact-form-locality',
+            label: 'City',
+            autocomplete: 'address-level2',
+            required: true,
+            name: 'locality',
+            validationPattern: this.minTwoCharPattern,
+            validationMessage: this.minTwoCharValidationMessage,
+          })}
+        </div>
+        <div class="row">${this.countrySelectorTemplate}</div>
+        <div class="row region-postal-row">
+          ${this.generateInput({
+            id: 'donation-contact-form-region',
+            label: 'State / Province',
+            autocomplete: 'address-level1',
+            required: this.regionAndPostalCodeRequired,
+            name: 'region',
+            validationPattern: this.regionAndPostalCodeRequired
+              ? this.minTwoCharPattern
+              : undefined,
+            validationMessage: this.regionAndPostalCodeRequired
+              ? this.minTwoCharValidationMessage
+              : undefined,
+          })}
+          ${this.generateInput({
+            id: 'donation-contact-form-postal-code',
+            label: 'Zip / Postal Code',
+            autocomplete: 'postal-code',
+            required: this.regionAndPostalCodeRequired,
+            name: 'postal',
+            validationPattern: this.regionAndPostalCodeRequired ? this.usZipCodePattern : undefined,
+            validationMessage: this.regionAndPostalCodeRequired
+              ? this.usZipCodeValidationMessage
+              : undefined,
+          })}
+        </div>
       </form>
       ${this.getStyles}
     `;
@@ -345,7 +338,6 @@ export class ContactForm extends LitElement {
   private get getStyles(): TemplateResult {
     const noIconSpacerWidth = css`var(--badgedInputNoIconSpacerWidth, 3rem)`;
 
-    const fieldSetSpacing = css`var(--fieldSetSpacing, 1rem)`;
     const fieldRowGap = css`var(--fieldRowGap, 5px)`;
     const fieldFontFamily = css`var(--fontFamily, "Helvetica Neue", Helvetica, Arial, sans-serif)`;
     const fieldFontSize = css`var(--contactFieldFontSize, 14px)`;
@@ -366,16 +358,6 @@ export class ContactForm extends LitElement {
           This element is in the lightDOM so be sure to prefix all styles
           with "contact-form" so styles don't leak.
          */
-        contact-form fieldset {
-          border: 0;
-          padding: 0;
-          margin: 0;
-          margin-bottom: ${fieldSetSpacing};
-          background-color: white;
-        }
-
-        /* These 1px and 0 margins in the next few selectors are to account for the
-        double outlines caused by the fields being right next to each other */
         /*
           Grid (not flex) so that a label wrapping to two lines in one column
           doesn't push that column's input out of alignment with its siblings -
@@ -388,15 +370,15 @@ export class ContactForm extends LitElement {
           grid-auto-columns: 1fr;
           grid-template-rows: auto auto;
           column-gap: ${fieldRowGap};
-          margin: -1px 0 0 0;
         }
 
         contact-form .row.region-postal-row {
           grid-template-columns: 60% 40%;
         }
 
-        contact-form fieldset .row:first-child {
-          margin-top: 0;
+        /* uniform vertical rhythm between every field, regardless of grouping */
+        contact-form .row + .row {
+          margin-top: ${fieldRowGap};
         }
 
         contact-form .field {
