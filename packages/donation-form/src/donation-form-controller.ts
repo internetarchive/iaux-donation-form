@@ -335,6 +335,10 @@ export class DonationFormController extends LitElement {
   }
 
   private get hostedFieldConfig(): HostedFieldConfiguration {
+    // Field text color intentionally does not change on `.valid`/`.invalid` -
+    // per WEBDEV-8310 QA feedback, the red-on-invalid text color was confusing
+    // alongside the badged-input's own red border/label error styling. The
+    // border and error message already communicate the error state.
     const hostedFieldStyle: Record<string, Record<string, string>> = {
       input: {
         'font-size': '16px',
@@ -345,9 +349,11 @@ export class DonationFormController extends LitElement {
       ':focus': {
         color: '#333',
       },
-      '.valid': {},
+      '.valid': {
+        color: '#333',
+      },
       '.invalid': {
-        color: '#b00b00',
+        color: '#333',
       },
     };
 
