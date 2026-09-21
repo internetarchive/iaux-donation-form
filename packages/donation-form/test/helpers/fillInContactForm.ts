@@ -6,7 +6,6 @@ export async function fillInContactForm(contactForm: ContactForm): Promise<void>
   contactForm.firstNameField.value = 'Fooey';
   contactForm.lastNameField.value = 'McBarrison';
   contactForm.streetAddressField.value = '123 Fake St';
-  contactForm.extendedAddressField.value = 'Apt 123';
   contactForm.localityField.value = 'SF';
   contactForm.regionField.value = 'CA';
   contactForm.postalCodeField.value = '12345';

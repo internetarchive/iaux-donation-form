@@ -58,4 +58,44 @@ describe('Payment Selector', () => {
     const response = await oneEvent(el, 'googlePaySelected');
     expect(response).to.exist;
   });
+
+  describe('credit-card-fields slot', () => {
+    it('does not render the credit-card-fields slot before a payment method is selected', async () => {
+      const el = (await fixture(html`
+        <payment-selector>
+          <div slot="credit-card-fields" id="my-card-fields">card fields here</div>
+        </payment-selector>
+      `)) as PaymentSelector;
+
+      const slot = el.shadowRoot?.querySelector('slot[name="credit-card-fields"]');
+      expect(slot).to.not.exist;
+    });
+
+    it('renders the credit-card-fields slot below the Change payment method button once a payment method is selected', async () => {
+      const el = (await fixture(html`
+        <payment-selector>
+          <div slot="credit-card-fields" id="my-card-fields">card fields here</div>
+        </payment-selector>
+      `)) as PaymentSelector;
+
+      const creditCardButton = el.shadowRoot?.querySelector(
+        '.credit-card-button',
+      ) as HTMLButtonElement;
+      creditCardButton.click();
+      await elementUpdated(el);
+
+      const changeButton = el.shadowRoot?.querySelector('#change-payment-method');
+      const slot = el.shadowRoot?.querySelector('slot[name="credit-card-fields"]');
+      expect(slot).to.exist;
+
+      // the slot should come after the "Change payment method" button in DOM order
+      expect(changeButton?.compareDocumentPosition(slot as Node)).to.equal(
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+
+      // content passed into the slot is actually projected (assignedElements)
+      const assigned = (slot as HTMLSlotElement).assignedElements();
+      expect(assigned.map(node => node.id)).to.include('my-card-fields');
+    });
+  });
 });

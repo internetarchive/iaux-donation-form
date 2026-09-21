@@ -20,6 +20,19 @@ export class MockHostedFieldsClient implements braintree.HostedFields {
     handler(stateObject);
   }
 
+  emitEvent(
+    event: braintree.HostedFieldEventType,
+    stateObject: braintree.HostedFieldsStateObject,
+  ): void {
+    this.changeHandlers[event]?.(stateObject);
+  }
+
+  getHandler(
+    event: braintree.HostedFieldEventType,
+  ): ((event: braintree.HostedFieldsStateObject) => void) | undefined {
+    return this.changeHandlers[event];
+  }
+
   async create(options: {
     client?: braintree.Client | undefined;
     authorization?: string | undefined;
@@ -74,6 +87,10 @@ export class MockHostedFieldsClient implements braintree.HostedFields {
 
   clear(field: string, callback?: braintree.callback | undefined): void {
     throw new Error('Method not implemented.');
+  }
+
+  focus(field: string, callback?: braintree.callback | undefined): void {
+    // no-op for tests
   }
 
   getState(): any {

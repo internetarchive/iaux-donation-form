@@ -113,7 +113,14 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     // the `HostedFieldContainer` class. We use the `HostedFieldContainer` for
     // managing the hosted field error state in other parts of the form, but
     // since we can only get event callbacks from the hosted fields like this,
-    // this has to operate independently and modify the CSS styles by itself
+    // this has to operate independently and modify the CSS styles by itself.
+    //
+    // NOTE: a field is only marked errored on blur if it has content that's
+    // actually invalid - not merely empty. Per WEBDEV-8310 QA feedback, marking
+    // an untouched/empty field red on blur caused a confusing flash when
+    // clicking a nearby button (like "Change payment method") blurred it.
+    // Empty fields are still caught, just from an actual submit attempt (see
+    // handleHostedFieldTokenizationError below).
     instance?.on('focus', (event: braintree.HostedFieldsStateObject): void => {
       const { emittedBy, fields } = event;
       const fieldInFocus = fields[emittedBy];
@@ -126,7 +133,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       const { emittedBy, fields } = event;
       const fieldInFocus = fields[emittedBy];
       const { container, isEmpty, isValid } = fieldInFocus;
-      if (isEmpty || !isValid) {
+      if (!isEmpty && !isValid) {
         (container.parentElement as BadgedInput).error = true;
       }
     });

@@ -24,6 +24,12 @@ export class MockCreditCardHandler implements CreditCardHandlerInterface {
     return this.mockPayload;
   }
 
+  focusedField?: HostedFieldName;
+
+  async focusField(field: HostedFieldName): Promise<void> {
+    this.focusedField = field;
+  }
+
   markFieldErrors(fields: HostedFieldName[]): void {
     throw new Error('Method not implemented.');
   }

@@ -9,6 +9,8 @@ import {
 } from '@internetarchive/donation-form-data-models';
 import { PaymentSelector } from '../../src/form-elements/payment-selector';
 import { MockBraintreeManager } from '../mocks/mock-braintree-manager';
+import { MockCreditCardHandler } from '../mocks/payment-providers/individual-providers/mock-creditcard-handler';
+import { HostedFieldName } from '../../src/braintree-manager/payment-providers/credit-card/hosted-field-container';
 import { MockPaymentFlowHandlers } from '../mocks/flow-handlers/mock-payment-flow-handlers';
 import { promisedSleep } from '../../src/util/promisedSleep';
 import { MockDonationInfo } from '../mocks/mock-donation-info';
@@ -48,6 +50,59 @@ describe('Donation Form', () => {
     creditCardButton.dispatchEvent(clickEvent);
     await elementUpdated(el);
     expect(contactFormSection?.classList.contains('hidden')).to.be.false;
+  });
+
+  it('projects braintree-hosted-fields content into payment-selector, hidden until Credit Card is selected', async () => {
+    const el = (await fixture(html`
+      <donation-form>
+        <div slot="braintree-hosted-fields" id="my-braintree-fields">card fields</div>
+      </donation-form>
+    `)) as DonationForm;
+
+    const paymentSelector = el.shadowRoot?.querySelector('payment-selector') as PaymentSelector;
+    const creditCardFieldsWrapper = paymentSelector.querySelector(
+      '.credit-card-fields',
+    ) as HTMLElement;
+
+    // starts hidden, before any payment method is selected
+    expect(creditCardFieldsWrapper.classList.contains('hidden')).to.be.true;
+
+    // the old contact-info section should no longer carry the card fields
+    const contactFormSection = el.shadowRoot?.querySelector('#contactFormSection');
+    expect(contactFormSection?.querySelector('.credit-card-fields')).to.be.null;
+
+    const creditCardButton = paymentSelector.shadowRoot?.querySelector(
+      '.credit-card-button',
+    ) as HTMLButtonElement;
+    creditCardButton.dispatchEvent(new MouseEvent('click'));
+    await elementUpdated(el);
+
+    expect(creditCardFieldsWrapper.classList.contains('hidden')).to.be.false;
+
+    const innerSlot = creditCardFieldsWrapper.querySelector(
+      'slot[name="braintree-hosted-fields"]',
+    ) as HTMLSlotElement;
+    const assigned = innerSlot.assignedElements();
+    expect(assigned.map(node => node.id)).to.include('my-braintree-fields');
+  });
+
+  it('focuses the credit card number field when Credit Card is selected', async () => {
+    const el = (await fixture(html` <donation-form></donation-form> `)) as DonationForm;
+    const braintreeManager = new MockBraintreeManager();
+    el.braintreeManager = braintreeManager;
+    await elementUpdated(el);
+
+    const paymentSelector = el.shadowRoot?.querySelector('payment-selector') as PaymentSelector;
+    const creditCardButton = paymentSelector.shadowRoot?.querySelector(
+      '.credit-card-button',
+    ) as HTMLButtonElement;
+    creditCardButton.dispatchEvent(new MouseEvent('click'));
+    await elementUpdated(el);
+    await promisedSleep(50);
+
+    const creditCardHandler =
+      (await braintreeManager.paymentProviders.creditCardHandler.get()) as MockCreditCardHandler;
+    expect(creditCardHandler.focusedField).to.equal(HostedFieldName.Number);
   });
 
   it('shows the contact form when Venmo is selected', async () => {

@@ -112,6 +112,11 @@ export class CreditCardHandler implements CreditCardHandlerInterface {
     return hostedFields?.tokenize();
   }
 
+  async focusField(field: HostedFieldName): Promise<void> {
+    const hostedFields = await this.instance.get();
+    hostedFields?.focus(field);
+  }
+
   markFieldErrors(fields: HostedFieldName[]): void {
     this.hostedFieldConfig.hostedFieldContainer.markFieldErrors(fields);
   }
