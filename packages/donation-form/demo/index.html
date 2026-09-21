@@ -104,12 +104,6 @@
       <button id="reset-custom-colors">Reset Custom Color Skinning</button> |
       <button id="show-venmo-payment-method">Show VENMO Payment method</button> |
     </div>
-    <div>
-      <label for="form-width-slider"><b>Form width:</b></label>
-      <input type="range" id="form-width-slider" min="240" max="640" step="1" value="320">
-      <span id="form-width-value">320px</span>
-      <button id="reset-form-width">Reset to 320px</button>
-    </div>
     <details id="font-vars-panel">
       <summary><b>Font CSS vars</b></summary>
       <table>
@@ -335,18 +329,6 @@
     formController.modalManager = modalManager;
     formController.recaptchaElement = recaptchaElement;
     formController.analyticsHandler = analyticsHandler;
-
-    const formWidthSlider = document.querySelector('#form-width-slider');
-    const formWidthValue = document.querySelector('#form-width-value');
-
-    function setFormWidth(width) {
-      formWidthSlider.value = width;
-      formController.style.width = `${width}px`;
-      formWidthValue.textContent = `${width}px`;
-    }
-
-    formWidthSlider.addEventListener('input', (event) => setFormWidth(event.target.value));
-    document.querySelector('#reset-form-width').addEventListener('click', () => setFormWidth(320));
 
     const fontVarInputs = Array.from(document.querySelectorAll('#font-vars-panel [data-css-var]'));
 
