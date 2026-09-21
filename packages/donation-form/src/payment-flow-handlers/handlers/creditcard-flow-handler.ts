@@ -109,17 +109,17 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     const handler = await this.braintreeManager?.paymentProviders.creditCardHandler.get();
     const instance = await handler?.instance.get();
 
-    // NOTE: This `focus` callback logic must work in conjunction with the
-    // `HostedFieldContainer` class. We use the `HostedFieldContainer` for
+    // NOTE: The `focus` and `blur` callback logic must work in conjunction with
+    // the `HostedFieldContainer` class. We use the `HostedFieldContainer` for
     // managing the hosted field error state in other parts of the form, but
     // since we can only get event callbacks from the hosted fields like this,
     // this has to operate independently and modify the CSS styles by itself.
     //
-    // NOTE: fields are intentionally *not* marked as errored on blur (e.g.
-    // while empty/invalid) - per WEBDEV-8310 QA feedback, that caused a
-    // confusing red flash when clicking a nearby button (like "Change
-    // payment method") blurred an untouched field. Validation errors are
-    // only ever shown on an actual submit attempt (see
+    // NOTE: a field is only marked errored on blur if it has content that's
+    // actually invalid - not merely empty. Per WEBDEV-8310 QA feedback, marking
+    // an untouched/empty field red on blur caused a confusing flash when
+    // clicking a nearby button (like "Change payment method") blurred it.
+    // Empty fields are still caught, just from an actual submit attempt (see
     // handleHostedFieldTokenizationError below).
     instance?.on('focus', (event: braintree.HostedFieldsStateObject): void => {
       const { emittedBy, fields } = event;
@@ -127,6 +127,15 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
       const { container } = fieldInFocus;
       (container.parentElement as BadgedInput).error = false;
       handler.hideErrorMessage();
+    });
+
+    instance?.on('blur', (event: braintree.HostedFieldsStateObject): void => {
+      const { emittedBy, fields } = event;
+      const fieldInFocus = fields[emittedBy];
+      const { container, isEmpty, isValid } = fieldInFocus;
+      if (!isEmpty && !isValid) {
+        (container.parentElement as BadgedInput).error = true;
+      }
     });
 
     instance?.on('validityChange', (event: braintree.HostedFieldsStateObject): void => {

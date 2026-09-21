@@ -59,12 +59,11 @@ describe('CreditCardFlowHandler', () => {
     expect(hideErrorMessageCalled).to.be.true;
   });
 
-  it('never registers a blur handler - fields are not marked errored just from losing focus', async () => {
+  it('does not mark an empty field errored on blur', async () => {
     // Regression test for WEBDEV-8310 QA feedback: clicking a nearby button
-    // (e.g. "Change payment method") blurs a hosted field, which previously
-    // flagged it red the instant it lost focus if it was empty/invalid, even
-    // though it hadn't been touched. Errors should only ever appear from an
-    // actual submit/tokenize attempt.
+    // (e.g. "Change payment method") blurs a hosted field. An untouched/empty
+    // field shouldn't flash red just from that - only actually-invalid
+    // content should.
     const braintreeManager = new MockBraintreeManager();
     const creditCardHandler: CreditCardHandlerInterface =
       await braintreeManager.paymentProviders.creditCardHandler.get();
@@ -78,7 +77,60 @@ describe('CreditCardFlowHandler', () => {
 
     const instance = (await creditCardHandler.instance.get()) as MockHostedFieldsClient;
 
-    expect(instance.getHandler('blur')).to.be.undefined;
+    const badgedInput = (await fixture(html`<badged-input></badged-input>`)) as BadgedInput;
+    const container = document.createElement('div');
+    badgedInput.appendChild(container);
+
+    instance.emitEvent('blur', {
+      emittedBy: 'number',
+      cards: [],
+      fields: {
+        number: {
+          container,
+          isFocused: false,
+          isEmpty: true,
+          isPotentiallyValid: true,
+          isValid: false,
+        },
+      },
+    } as unknown as braintree.HostedFieldsStateObject);
+
+    expect(badgedInput.error).to.be.false;
+  });
+
+  it('marks a non-empty invalid field errored on blur', async () => {
+    const braintreeManager = new MockBraintreeManager();
+    const creditCardHandler: CreditCardHandlerInterface =
+      await braintreeManager.paymentProviders.creditCardHandler.get();
+
+    const flowHandler = new CreditCardFlowHandler({
+      braintreeManager,
+      donationFlowModalManager: stubModalManager,
+      recaptchaManager: new MockRecaptchaManager(),
+    });
+    await flowHandler.startup();
+
+    const instance = (await creditCardHandler.instance.get()) as MockHostedFieldsClient;
+
+    const badgedInput = (await fixture(html`<badged-input></badged-input>`)) as BadgedInput;
+    const container = document.createElement('div');
+    badgedInput.appendChild(container);
+
+    instance.emitEvent('blur', {
+      emittedBy: 'number',
+      cards: [],
+      fields: {
+        number: {
+          container,
+          isFocused: false,
+          isEmpty: false,
+          isPotentiallyValid: false,
+          isValid: false,
+        },
+      },
+    } as unknown as braintree.HostedFieldsStateObject);
+
+    expect(badgedInput.error).to.be.true;
   });
 
   it('emits validityChanged based on the combined validity of number/cvv/expirationDate', async () => {
