@@ -1611,15 +1611,15 @@ const Ne=window,ht=Ne.ShadowRoot&&(Ne.ShadyCSS===void 0||Ne.ShadyCSS.nativeShado
       </div>
 
       ${this.paymentModeSelected?g`
-              <button
-                id="change-payment-method"
-                @click=${()=>{this.paymentModeSelected=void 0,this.dispatchEvent(new Event("resetPaymentMethod")),this.setButtonVisibility()}}
-              >
-                Change payment method
-              </button>
+            <button
+              id="change-payment-method"
+              @click=${()=>{this.paymentModeSelected=void 0,this.dispatchEvent(new Event("resetPaymentMethod")),this.setButtonVisibility()}}
+            >
+              Change payment method
+            </button>
 
-              <slot name="credit-card-fields"></slot>
-            `:S}
+            <slot name="credit-card-fields"></slot>
+          `:S}
     `}firstUpdated(){this.dispatchEvent(new Event("firstUpdated"))}updated(e){e.has("paymentProviders")&&this.setButtonVisibility()}showPaypalButton(){this.payPalMode=M.Available}setButtonVisibility(){return m(this,void 0,void 0,function*(){var e,t,o;(e=this.paymentProviders)===null||e===void 0||e.venmoHandler.get().then(n=>{if(!n){this.venmoMode=M.Unavailable;return}n.isBrowserSupported().then(a=>{this.venmoMode=a?M.Available:M.Unavailable}).catch(a=>{console.error("error loading venmo",a),this.venmoMode=M.Unavailable})}).catch(n=>{console.error("venmo unavailable",n),this.venmoMode=M.Unavailable}),(t=this.paymentProviders)===null||t===void 0||t.applePayHandler.get().then(n=>{if(!n){console.error("applePayHandler unavailable"),this.applePayMode=M.Unavailable;return}n.isAvailable().then(a=>{this.applePayMode=a?M.Available:M.Unavailable}).catch(a=>{console.error("error loading applepay",a),this.applePayMode=M.Unavailable})}).catch(n=>{console.error("apple pay unavailable",n),this.applePayMode=M.Unavailable}),(o=this.paymentProviders)===null||o===void 0||o.googlePayHandler.get().then(n=>{if(!n){console.error("google pay handler unavailable"),this.googlePayMode=M.Unavailable;return}n.isBrowserSupported().then(a=>{this.googlePayMode=a?M.Available:M.Unavailable}).catch(a=>{console.error("error loading googlepay",a),this.googlePayMode=M.Unavailable})}).catch(n=>{console.error("google pay unavailable",n),this.googlePayMode=M.Unavailable})})}googlePaySelected(){this.dispatchEvent(new Event("googlePaySelected"))}applePaySelected(e){const t=new CustomEvent("applePaySelected",{detail:{originalEvent:e}});this.dispatchEvent(t)}venmoSelected(){this.dispatchEvent(new Event("venmoSelected"))}creditCardSelected(){this.dispatchEvent(new Event("creditCardSelected"))}localPaypalButtonClicked(){this.dispatchEvent(new Event("paypalBlockerSelected"))}static get styles(){const e=h`var(--paymentButtonWidth, 5rem)`,t=h`var(--paymentButtonHeight, 3.2rem)`,o=h`var(--creditCardFontSize, 1.8rem)`;return h`
       button {
         color: inherit;
