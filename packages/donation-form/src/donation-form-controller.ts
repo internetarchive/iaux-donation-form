@@ -351,18 +351,17 @@ export class DonationFormController extends LitElement {
       },
     };
 
+    // No placeholders: per WEBDEV-8310 QA feedback, only the visible labels
+    // above each field should appear - no hint text inside the box.
     const hostedFieldFieldOptions: braintree.HostedFieldFieldOptions = {
       number: {
         selector: '#braintree-creditcard',
-        placeholder: 'Card number',
       },
       cvv: {
         selector: '#braintree-cvv',
-        placeholder: 'CVC',
       },
       expirationDate: {
         selector: '#braintree-expiration',
-        placeholder: 'MM / YY',
       },
     };
 

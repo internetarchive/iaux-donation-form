@@ -372,8 +372,14 @@ export class ContactForm extends LitElement {
           column-gap: ${fieldRowGap};
         }
 
+        /*
+          Per WEBDEV-8310 QA feedback: State/Province gives up space to
+          Zip/Postal Code so "Zip / Postal Code" stops wrapping to two lines.
+          30px (not 10px) is what "Zip / Postal Code *" actually needs at this
+          width, measured against its rendered label width plus a safety margin.
+        */
         contact-form .row.region-postal-row {
-          grid-template-columns: 60% 40%;
+          grid-template-columns: calc(60% - 30px) calc(40% + 30px);
         }
 
         /* uniform vertical rhythm between every field, regardless of grouping */

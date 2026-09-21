@@ -20,8 +20,9 @@ import {
  *
  * Braintree renders the actual <input> inside a cross-origin iframe, so a real
  * <label for> association isn't possible here - the visible labels below are
- * decorative only. The accessible name still comes from Braintree's own
- * hosted-field `placeholder` config (see donation-form-controller.ts).
+ * decorative only. Per WEBDEV-8310 QA feedback, no placeholder text is
+ * configured on these fields either (donation-form-controller.ts) - only the
+ * visible label appears.
  */
 @customElement('credit-card-fields')
 export class CreditCardFields extends LitElement {
@@ -58,7 +59,7 @@ export class CreditCardFields extends LitElement {
           </badged-input>
         </div>
       </div>
-      <div class="braintree-row">
+      <div class="braintree-row expiration-cvv-row">
         <div class="field">
           <label class="field-label"
             >Expiration (MM / YY)<span class="required-asterisk"> *</span></label
@@ -140,6 +141,17 @@ export class CreditCardFields extends LitElement {
           grid-auto-columns: 1fr;
           grid-template-rows: auto auto;
           column-gap: ${fieldRowGap};
+        }
+
+        /*
+          Per WEBDEV-8310 QA feedback: CVC gives up space to Expiration so
+          "Expiration (MM / YY)" stops wrapping to two lines. 25px (not 10px)
+          is what it actually needs, measured against its rendered label
+          width plus a safety margin - CVC's own label has plenty of room to
+          spare.
+        */
+        credit-card-fields .braintree-row.expiration-cvv-row {
+          grid-template-columns: calc(50% + 25px) calc(50% - 25px);
         }
 
         /* uniform vertical rhythm between every field, regardless of grouping */
