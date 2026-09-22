@@ -2,6 +2,7 @@ import { fixture, elementUpdated, expect } from '@open-wc/testing';
 import { html } from 'lit';
 import '../../../src/form-elements/contact-form/contact-form';
 import type { ContactForm } from '../../../src/form-elements/contact-form/contact-form';
+import type { BadgedInput } from '../../../src/form-elements/badged-input';
 
 describe('ContactForm', () => {
   it('validates required fields', async () => {
@@ -297,6 +298,55 @@ describe('ContactForm', () => {
       expect(firstNameInput.validationMessage).to.equal('');
       expect(lastNameInput.validationMessage).to.equal('');
       expect(emailInput.validationMessage).to.equal('');
+    });
+  });
+
+  describe('on blur', () => {
+    it('flags a non-empty but invalid field as soon as it loses focus', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      const emailInput = el.querySelector('#donation-contact-form-email') as HTMLInputElement;
+      const emailBadgedInput = el.querySelector(
+        'badged-input.donation-contact-form-email',
+      ) as BadgedInput;
+
+      emailInput.value = 'not-an-email';
+      emailInput.dispatchEvent(new FocusEvent('blur'));
+      await elementUpdated(el);
+
+      expect(emailBadgedInput.error).to.be.true;
+    });
+
+    it('does not flag an empty required field just for being blurred', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      const emailInput = el.querySelector('#donation-contact-form-email') as HTMLInputElement;
+      const emailBadgedInput = el.querySelector(
+        'badged-input.donation-contact-form-email',
+      ) as BadgedInput;
+
+      emailInput.value = '';
+      emailInput.dispatchEvent(new FocusEvent('blur'));
+      await elementUpdated(el);
+
+      expect(emailBadgedInput.error).to.be.false;
+    });
+
+    it('clears the flag once the value is corrected and re-blurred', async () => {
+      const el = (await fixture(html`<contact-form></contact-form>`)) as ContactForm;
+      const emailInput = el.querySelector('#donation-contact-form-email') as HTMLInputElement;
+      const emailBadgedInput = el.querySelector(
+        'badged-input.donation-contact-form-email',
+      ) as BadgedInput;
+
+      emailInput.value = 'not-an-email';
+      emailInput.dispatchEvent(new FocusEvent('blur'));
+      await elementUpdated(el);
+      expect(emailBadgedInput.error).to.be.true;
+
+      emailInput.value = 'john.doe@example.com';
+      emailInput.dispatchEvent(new FocusEvent('blur'));
+      await elementUpdated(el);
+
+      expect(emailBadgedInput.error).to.be.false;
     });
   });
 });
