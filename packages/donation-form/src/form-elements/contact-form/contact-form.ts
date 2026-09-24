@@ -253,6 +253,17 @@ export class ContactForm extends LitElement {
     badgedInput.error = false;
   }
 
+  // flag a non-empty but invalid value as soon as the user leaves the field,
+  // rather than waiting for a full-form submit. An empty required field is
+  // not flagged here - that's the "required, not yet touched" case, and
+  // reportValidity() on submit already covers it.
+  private inputBlurred(e: FocusEvent): void {
+    const input = e.target as HTMLInputElement;
+    if (input.value === '') return;
+    const badgedInput = this.querySelector(`badged-input.${input.id}`) as BadgedInput;
+    badgedInput.error = !input.checkValidity();
+  }
+
   private generateInput(options: {
     id: string;
     label: string;
@@ -289,6 +300,7 @@ export class ContactForm extends LitElement {
             pattern=${ifDefined(options.validationPattern)}
             title=${ifDefined(options.validationMessage)}
             @focus=${this.inputFocused}
+            @blur=${this.inputBlurred}
             ?required=${required}
           />
         </badged-input>
