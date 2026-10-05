@@ -1,5 +1,13 @@
 # Donation Banner Thermometer
 
+> **Deprecated.** This package is no longer maintained. Use `<ia-donation-thermometer>` from [@internetarchive/elements](https://www.npmjs.com/package/@internetarchive/elements) instead.
+>
+> ```html
+> <script type="module">
+>   import '@internetarchive/elements/ia-donation-thermometer/ia-donation-thermometer';
+> </script>
+> ```
+
 The Internet Archive Donation Banner Thermometer
 
 ![Donation Banner Thermometer](./assets/screenshot.jpg "Donatino Banner Thermometer")
