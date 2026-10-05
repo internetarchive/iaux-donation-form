@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+  <title>Donation Form Demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <style>
+    body {
+      color: #333;
+      font-family: sans-serif;
+    }
+
+    body.modal-manager-open {
+      overflow: hidden;
+    }
+
+    modal-manager {
+      display: none;
+      --modalTopMargin: 4rem;
+      --modalBottomMargin: 0.25rem;
+    }
+
+    modal-manager[mode='open'] {
+      display: block;
+    }
+
+    donation-form-controller {
+      display: block;
+      width: 32rem;
+    }
+
+    .dev-tools {
+      background-color: lightblue;
+      padding: 1rem 1rem;
+    }
+
+    #paypal-upsell-button {
+      opacity: 0.01;
+      padding-bottom: 0.6rem;
+    }
+
+    donation-form-controller.custom-colors {
+      /* CSS vars to set */
+      /* Donate Button */
+      --donateButtonColor: pink;
+      --donateButtonTextColor: rebeccapurple;
+      --donateButtonHoverColor: deepskyblue;
+
+      /* Credit Card Button */
+      --ccButtonFontColor: darkblue;
+      --ccButtonColor: coral;
+
+      /* Form Background color */
+      --donateFormBgColor: turquoise;
+
+      /* Form Text color */
+      --donateFormTextColor: darkblue;
+
+      /* Flow Badges Background color `(1), (2), (3)` */
+      --donateFormBadgeBgColor: pink;
+      /* Flow Badges Text color `(1), (2), (3)` */
+      --donateFormBadgeTextColor: rebeccapurple;
+
+      /* Form Options Background color `[$5], [$10], [monthly]` */
+      --donateFormPaymentOptionTextColor: darkblue;
+      /* Form Options Text color `[$5], [$10], [monthly]` */
+      --donateFormPaymentOptionBgColor: lightblue;
+
+      /* Selected Option Background color `[$5], [$10], [monthly]` */
+      --donateFormSelectedOptionBgColor: green;
+      /* Selected Option Text color `[$5], [$10], [monthly]` */
+      --donateFormSelectedOptionTextColor: yellow;
+    }
+
+  div#options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  div#options button {
+    margin: 2px 5px;
+  }
+  </style>
+
+  <script type="module" crossorigin src="../../../assets/donation-form-B_8sOO2B.js"></script>
+  <link rel="modulepreload" crossorigin href="../../../assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="modulepreload" crossorigin href="../../../assets/donation-form-BA6DhRfE.js">
+  <link rel="stylesheet" crossorigin href="../../../assets/donation-form-Cpp1TGAZ.css">
+</head>
+<body>
+  <header>
+    <a href="recaptcha.html">Recaptcha Demo</a>
+  </header>
+
+  <div class="dev-tools">
+    <div id="options">
+      <button id="show-regular-upsell-button">Show Regular Upsell</button> |
+      <button id="show-paypal-upsell-button">Show PayPal Upsell</button> |
+      <button id="confirm-step-modal-onetime">Show Confirmation Step for 1x</button> |
+      <button id="confirm-step-modal-monthly">Show Confirmation Step for Monthly</button> |
+      <button id="confirm-step-modal-upsell">Show Confirmation Step for Upsell</button> |
+      <button id="change-donation-amounts">Change Donation Amounts</button> |
+      <button id="show-custom-colors">Show Custom Color Skinning</button> |
+      <button id="reset-custom-colors">Reset Custom Color Skinning</button> |
+      <button id="show-venmo-payment-method">Show VENMO Payment method</button> |
+    </div>
+    <details id="font-vars-panel">
+      <summary><b>Font CSS vars</b></summary>
+      <table>
+        <tr>
+          <td><label for="var-fieldLabelFontFamily">Label font family (--fieldLabelFontFamily)</label></td>
+          <td><input type="text" id="var-fieldLabelFontFamily" data-css-var="--fieldLabelFontFamily" data-default='"Helvetica Neue", Helvetica, Arial, sans-serif' size="40"></td>
+        </tr>
+        <tr>
+          <td><label for="var-fieldLabelFontSize">Label font size, px (--fieldLabelFontSize)</label></td>
+          <td><input type="number" id="var-fieldLabelFontSize" data-css-var="--fieldLabelFontSize" data-unit="px" data-default="14"></td>
+        </tr>
+        <tr>
+          <td><label for="var-fieldLabelColor">Label color (--fieldLabelColor)</label></td>
+          <td><input type="color" id="var-fieldLabelColor" data-css-var="--fieldLabelColor" data-default="#2c2c2c"></td>
+        </tr>
+        <tr>
+          <td><label for="var-fieldLabelMarginBottom">Label margin-bottom, px (--fieldLabelMarginBottom)</label></td>
+          <td><input type="number" id="var-fieldLabelMarginBottom" data-css-var="--fieldLabelMarginBottom" data-unit="px" data-default="5"></td>
+        </tr>
+        <tr>
+          <td><label for="var-fontFamily">Content font family (--fontFamily)</label></td>
+          <td><input type="text" id="var-fontFamily" data-css-var="--fontFamily" data-default='"Helvetica Neue", Helvetica, Arial, sans-serif' size="40"></td>
+        </tr>
+        <tr>
+          <td><label for="var-contactFieldFontSize">Content font size, px (--contactFieldFontSize)</label></td>
+          <td><input type="number" id="var-contactFieldFontSize" data-css-var="--contactFieldFontSize" data-unit="px" data-default="14"></td>
+        </tr>
+        <tr>
+          <td><label for="var-inputFieldFontColor">Content color (--inputFieldFontColor)</label></td>
+          <td><input type="color" id="var-inputFieldFontColor" data-css-var="--inputFieldFontColor" data-default="#2c2c2c"></td>
+        </tr>
+      </table>
+      <button id="reset-font-vars">Reset font vars</button>
+    </details>
+    <p><b>Latest analytic event: </b><span id="latest-analytic"></span></p>
+    <div>
+      <form id="preload-email">
+        <label for="email"><b>Pre-load Email:</b></label>
+          <input type="email" id="email" name="email" required>
+        <button type="submit">Preload Email</button>
+        <button id="clear-email">Clear Email</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="demo">
+  </div>
+
+</body>
+</html>
