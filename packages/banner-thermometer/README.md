@@ -4,7 +4,7 @@
 >
 > ```html
 > <script type="module">
->   import '@internetarchive/elements/ia-donation-thermometer';
+>   import '@internetarchive/elements/ia-donation-thermometer/ia-donation-thermometer';
 > </script>
 > ```
 
