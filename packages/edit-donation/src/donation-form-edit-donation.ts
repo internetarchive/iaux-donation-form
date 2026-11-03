@@ -19,6 +19,7 @@ import {
 } from '@internetarchive/donation-form-data-models';
 
 import { CurrencyValidator } from '@internetarchive/donation-form-currency-validator';
+import { parseAmount } from './parse-amount';
 
 import { DonationFormSectionBadgeMode } from '@internetarchive/donation-form-section';
 
@@ -447,7 +448,11 @@ export class DonationFormEditDonation extends LitElement {
 
   private get customAmountDisplayValue(): string {
     if (!this.isCustomAmount) return '';
-    return currency(this.donationInfo.amount, { symbol: '' }).format();
+    // No thousands separator: the field's text is read back as the amount
+    return currency(this.donationInfo.amount, {
+      symbol: '',
+      separator: '',
+    }).format();
   }
 
   private get customAmountTemplate(): TemplateResult {
@@ -511,7 +516,7 @@ export class DonationFormEditDonation extends LitElement {
   }
 
   private handleCustomAmountInput(value: string): void {
-    const amount = parseFloat(value);
+    const amount = parseAmount(value);
     if (isNaN(amount)) {
       this.dispatchEditDonationError(
         EditDonationInfoStatus.InvalidDonationAmount,

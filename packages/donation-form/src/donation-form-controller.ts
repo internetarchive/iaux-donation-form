@@ -1,7 +1,7 @@
 import { LitElement, html, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
-import currency from 'currency.js';
+import { parseAmount } from './util/parse-amount';
 import {
   LazyLoaderService,
   LazyLoaderServiceInterface,
@@ -266,7 +266,8 @@ export class DonationFormController extends LitElement {
     let amount = this.donationInfo.amount;
     const amountParam = urlParams.get('amt');
     if (amountParam) {
-      const parsedAmount = currency(amountParam).value;
+      // Links like ?amt=$10 or ?amt=10 USD have always worked
+      const parsedAmount = parseAmount(amountParam.replace(/usd|\$/gi, '').trim());
       if (parsedAmount > 0) {
         amount = parsedAmount;
       }
