@@ -266,7 +266,8 @@ export class DonationFormController extends LitElement {
     let amount = this.donationInfo.amount;
     const amountParam = urlParams.get('amt');
     if (amountParam) {
-      const parsedAmount = parseAmount(amountParam);
+      // Links like ?amt=$10 or ?amt=10 USD have always worked
+      const parsedAmount = parseAmount(amountParam.replace(/usd|\$/gi, '').trim());
       if (parsedAmount > 0) {
         amount = parsedAmount;
       }

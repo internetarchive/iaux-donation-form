@@ -1,9 +1,10 @@
 /**
  * Reads a typed, pasted or linked amount as a number, whatever the language.
  * A separator (comma or dot) followed by one or two digits at the end is the
- * decimal point, and one followed by exactly three digits is a thousands
- * separator: `10,50` and `10.50` are 10.50, `1,000` and `1.000` are 1000, and
- * `1.000,50` and `1,000.50` are 1000.50. A trailing separator, as in `10,`,
+ * decimal point, and a comma followed by exactly three digits is a thousands
+ * separator: `10,50` and `10.50` are 10.50, `1,000` is 1000, and `1.000,50`
+ * and `1,000.50` are 1000.50. A dot followed by exactly three digits, as in
+ * `1.000`, can't be told apart from a decimal, so it isn't an amount. A trailing separator, as in `10,`,
  * is a decimal point still being typed. Returns `NaN` for anything else, so a
  * value that can't be read is reported instead of guessed at.
  */
@@ -30,7 +31,9 @@ export function parseAmount(value: string): number {
     return parseFloat(`${whole.split(other).join('')}.${fraction || '0'}`);
   }
 
-  if (digitsAfter === 3 && grouped(text, separator)) {
+  // A dot before three digits could be a decimal or a thousands separator,
+  // so only a comma reads as a thousands separator.
+  if (digitsAfter === 3 && separator === ',' && grouped(text, separator)) {
     return parseFloat(text.split(separator).join(''));
   }
   return NaN;
