@@ -107,6 +107,69 @@ describe('EditDonation', () => {
     expect(customInput?.value).to.equal('2.40');
   });
 
+  it('keeps a custom amount of 1000 or more after the field is blurred and focused again', async () => {
+    const el = (await fixture(html`
+      <donation-form-edit-donation
+        .donationInfo=${new DonationPaymentInfo({
+          amount: 5,
+          donationType: DonationType.OneTime,
+          coverFees: false,
+        })}
+      ></donation-form-edit-donation>
+    `)) as DonationFormEditDonation;
+    const customInput = el.shadowRoot?.querySelector(
+      '#custom-amount-input',
+    ) as HTMLInputElement;
+    customInput.value = '1234.50';
+    customInput.dispatchEvent(new Event('input'));
+    await elementUpdated(el);
+    expect(el.donationInfo.amount).to.equal(1234.5);
+
+    customInput.dispatchEvent(new FocusEvent('blur'));
+    await elementUpdated(el);
+    expect(customInput.value).to.equal('1234.50');
+
+    customInput.dispatchEvent(new FocusEvent('focus'));
+    await elementUpdated(el);
+    expect(el.donationInfo.amount).to.equal(1234.5);
+    expect(customInput.value).to.equal('1234.50');
+  });
+
+  it('shows a custom amount of 2500 without a thousands separator', async () => {
+    const el = (await fixture(html`
+      <donation-form-edit-donation
+        .donationInfo=${new DonationPaymentInfo({
+          amount: 2500,
+          donationType: DonationType.OneTime,
+          coverFees: false,
+        })}
+      ></donation-form-edit-donation>
+    `)) as DonationFormEditDonation;
+    const customInput = el.shadowRoot?.querySelector(
+      '#custom-amount-input',
+    ) as HTMLInputElement;
+    expect(customInput.value).to.equal('2500.00');
+  });
+
+  it('reads a pasted 1,234.50 as 1234.50', async () => {
+    const el = (await fixture(html`
+      <donation-form-edit-donation
+        .donationInfo=${new DonationPaymentInfo({
+          amount: 5,
+          donationType: DonationType.OneTime,
+          coverFees: false,
+        })}
+      ></donation-form-edit-donation>
+    `)) as DonationFormEditDonation;
+    const customInput = el.shadowRoot?.querySelector(
+      '#custom-amount-input',
+    ) as HTMLInputElement;
+    customInput.value = '1,234.50';
+    customInput.dispatchEvent(new Event('input'));
+    await elementUpdated(el);
+    expect(el.donationInfo.amount).to.equal(1234.5);
+  });
+
   it('updates custom amount with trailing 0 on blur', async () => {
     const el = (await fixture(html`
       <donation-form-edit-donation

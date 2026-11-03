@@ -1,6 +1,7 @@
 import { LitElement, html, css, CSSResult, TemplateResult } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { CurrencyValidator } from '@internetarchive/donation-form-currency-validator';
+import { parseAmount } from '../util/parse-amount';
 
 export enum UpsellModalCTAMode {
   YesButton = 'YesButton',
@@ -92,7 +93,7 @@ export class UpsellModalContent extends LitElement {
   }
 
   private handleCustomAmountInput(value: string): void {
-    const amount = parseFloat(value);
+    const amount = parseAmount(value);
     if (isNaN(amount)) {
       this.error = html` Please enter a valid amount. `;
     } else {
